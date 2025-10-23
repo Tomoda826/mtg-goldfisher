@@ -1,6 +1,42 @@
 // Deck Analyzer - analyzes deck strategy and archetype
+// UPDATED: Now includes comprehensive error handling
 
-export const analyzeDeckStrategy = (deck) => {
+import { 
+  wrapSyncFunction, 
+  DeckAnalysisError 
+} from './errorHandler.js';
+
+// Safe array reduce that handles null/undefined
+const safeReduce = (arr, fn, initial) => {
+  if (!arr || !Array.isArray(arr)) return initial;
+  try {
+    return arr.reduce(fn, initial);
+  } catch (error) {
+    console.warn('Safe reduce error:', error.message);
+    return initial;
+  }
+};
+
+// Internal implementation with validation
+const analyzeDeckStrategyImpl = (deck) => {
+  // Validate input
+  if (!deck || typeof deck !== 'object') {
+    throw new DeckAnalysisError('Invalid deck object provided', null, { 
+      deckType: typeof deck 
+    });
+  }
+  
+  // Validate required arrays exist
+  const requiredArrays = ['creatures', 'instants', 'sorceries', 'artifacts', 'enchantments', 'planeswalkers', 'lands'];
+  for (const key of requiredArrays) {
+    if (!Array.isArray(deck[key])) {
+      throw new DeckAnalysisError(`Deck missing ${key} array`, null, { 
+        deck: Object.keys(deck),
+        missing: key 
+      });
+    }
+  }
+  
   const analysis = {
     archetype: 'Unknown',
     subArchetypes: [],
@@ -16,46 +52,58 @@ export const analyzeDeckStrategy = (deck) => {
     idealTurnWin: 0,
   };
 
-  // Calculate basic metrics
-  const totalNonLand = deck.totalDeck - deck.lands.reduce((sum, c) => sum + c.quantity, 0);
-  const creatureCount = deck.creatures.reduce((sum, c) => sum + c.quantity, 0);
+  // Calculate basic metrics with safe operations
+  const landQuantity = safeReduce(deck.lands, (sum, c) => sum + (c.quantity || 0), 0);
+  const totalDeck = deck.totalDeck || 100;
+  const totalNonLand = totalDeck - landQuantity;
+  const creatureCount = safeReduce(deck.creatures, (sum, c) => sum + (c.quantity || 0), 0);
   const instantSorceryCount = 
-    deck.instants.reduce((sum, c) => sum + c.quantity, 0) + 
-    deck.sorceries.reduce((sum, c) => sum + c.quantity, 0);
+    safeReduce(deck.instants, (sum, c) => sum + (c.quantity || 0), 0) + 
+    safeReduce(deck.sorceries, (sum, c) => sum + (c.quantity || 0), 0);
   
-  analysis.landCount = deck.lands.reduce((sum, c) => sum + c.quantity, 0);
+  analysis.landCount = landQuantity;
   analysis.creatureDensity = totalNonLand > 0 ? (creatureCount / totalNonLand) * 100 : 0;
   analysis.spellDensity = totalNonLand > 0 ? (instantSorceryCount / totalNonLand) * 100 : 0;
 
   // Calculate average CMC (excluding lands)
   let totalCMC = 0;
   let cardCount = 0;
-  [...deck.creatures, ...deck.instants, ...deck.sorceries, ...deck.artifacts, 
-   ...deck.enchantments, ...deck.planeswalkers].forEach(card => {
-    if (card.cmc !== undefined) {
-      totalCMC += card.cmc * card.quantity;
-      cardCount += card.quantity;
-    }
-  });
-  analysis.avgCMC = cardCount > 0 ? (totalCMC / cardCount).toFixed(2) : 0;
+  
+  try {
+    [...deck.creatures, ...deck.instants, ...deck.sorceries, ...deck.artifacts, 
+     ...deck.enchantments, ...deck.planeswalkers].forEach(card => {
+      if (card && typeof card.cmc === 'number') {
+        totalCMC += card.cmc * (card.quantity || 1);
+        cardCount += card.quantity || 1;
+      }
+    });
+  } catch (error) {
+    console.warn('CMC calculation error:', error.message);
+  }
+  
+  analysis.avgCMC = cardCount > 0 ? parseFloat((totalCMC / cardCount).toFixed(2)) : 3.5;
 
   // Detect Tribal
   const subtypeCounts = {};
-  deck.creatures.forEach(card => {
-    if (card.type_line) {
-      // Extract creature types (everything after "—")
-      const typeParts = card.type_line.split('—');
-      if (typeParts.length > 1) {
-        const subtypes = typeParts[1].trim().split(' ');
-        subtypes.forEach(subtype => {
-          const cleanType = subtype.trim();
-          if (cleanType) {
-            subtypeCounts[cleanType] = (subtypeCounts[cleanType] || 0) + card.quantity;
-          }
-        });
+  try {
+    deck.creatures.forEach(card => {
+      if (card && card.type_line && typeof card.type_line === 'string') {
+        // Extract creature types (everything after "—")
+        const typeParts = card.type_line.split('—');
+        if (typeParts.length > 1) {
+          const subtypes = typeParts[1].trim().split(' ');
+          subtypes.forEach(subtype => {
+            const cleanType = subtype.trim();
+            if (cleanType && cleanType.length > 0) {
+              subtypeCounts[cleanType] = (subtypeCounts[cleanType] || 0) + (card.quantity || 1);
+            }
+          });
+        }
       }
-    }
-  });
+    });
+  } catch (error) {
+    console.warn('Tribal detection error:', error.message);
+  }
 
   // Find dominant tribe
   const dominantTribe = Object.entries(subtypeCounts)
@@ -68,10 +116,16 @@ export const analyzeDeckStrategy = (deck) => {
   }
 
   // Keyword detection in card text
-  const allText = [...deck.creatures, ...deck.instants, ...deck.sorceries, 
-                   ...deck.artifacts, ...deck.enchantments, ...deck.commanders]
-    .map(c => (c.oracle_text || '').toLowerCase())
-    .join(' ');
+  let allText = '';
+  try {
+    allText = [...deck.creatures, ...deck.instants, ...deck.sorceries, 
+               ...deck.artifacts, ...deck.enchantments, ...deck.commanders]
+      .map(c => (c && c.oracle_text) ? c.oracle_text.toLowerCase() : '')
+      .join(' ');
+  } catch (error) {
+    console.warn('Text aggregation error:', error.message);
+    allText = '';
+  }
 
   const keywords = {
     control: ['counter', 'destroy', 'exile', 'return to hand', 'bounce'],
@@ -89,10 +143,14 @@ export const analyzeDeckStrategy = (deck) => {
   const patternScores = {};
   Object.entries(keywords).forEach(([pattern, words]) => {
     let score = 0;
-    words.forEach(word => {
-      const matches = (allText.match(new RegExp(word, 'g')) || []).length;
-      score += matches;
-    });
+    try {
+      words.forEach(word => {
+        const matches = (allText.match(new RegExp(word, 'g')) || []).length;
+        score += matches;
+      });
+    } catch (error) {
+      console.warn(`Pattern scoring error for ${pattern}:`, error.message);
+    }
     patternScores[pattern] = score;
   });
 
@@ -166,5 +224,54 @@ export const analyzeDeckStrategy = (deck) => {
     .sort((a, b) => b[1] - a[1])
     .map(([pattern, score]) => ({ pattern, score }));
 
-  return analysis;
+  return { analysis };
 };
+
+// Fallback function for errors
+const analyzeDeckStrategyFallback = (deck) => {
+  console.warn('⚠️ Using fallback deck analysis (minimal strategy)');
+  
+  // Try to extract commander name safely
+  let commanderName = 'Unknown';
+  try {
+    if (deck && deck.commanders && deck.commanders[0] && deck.commanders[0].name) {
+      commanderName = deck.commanders[0].name;
+    }
+  } catch {
+    // Ignore
+  }
+  
+  // Try to get land count safely
+  let landCount = 37;
+  try {
+    if (deck && deck.lands && Array.isArray(deck.lands)) {
+      landCount = deck.lands.length;
+    }
+  } catch {
+    // Ignore
+  }
+  
+  return {
+    analysis: {
+      archetype: 'Midrange',
+      subArchetypes: [],
+      avgCMC: 3.5,
+      creatureDensity: 40,
+      spellDensity: 30,
+      landCount: landCount,
+      keyPatterns: [],
+      tribalType: null,
+      tribalDensity: 0,
+      winConditions: ['Combat damage'],
+      gameplan: `Play ${commanderName} and attack with creatures`,
+      idealTurnWin: 10
+    }
+  };
+};
+
+// Export wrapped version with error handling
+export const analyzeDeckStrategy = wrapSyncFunction(
+  analyzeDeckStrategyImpl,
+  analyzeDeckStrategyFallback,
+  'analyzeDeckStrategy'
+);

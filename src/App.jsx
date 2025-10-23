@@ -1,27 +1,47 @@
 import React, { useState } from 'react';
-import { Upload, Play, BarChart3 } from 'lucide-react';
+import { Upload, Play, BarChart3, Brain, Settings } from 'lucide-react';
 import { runFullGame } from './gameEngine';
+import { runAIEnhancedGame } from './aiGameEngine';
+import { analyzeDeckStrategy } from './deckAnalyzer';
+import { analyzeWithAI } from './aiAnalyzer';
+import { 
+  initializeStatistics, 
+  recordGameResult, 
+  calculateSummary, 
+  generateReport,
+  getDeckHealthScore 
+} from './statisticsEngine';
+import DeckView from './components/DeckView.jsx';
+import SimulationView from './components/SimulationView.jsx';
+import AIAnalysisView from './components/AIAnalysisView.jsx';
+import { runEnhancedDetailedGame } from './enhancedStepByStepGame';  // NEW LINE
+import DetailedGameView from './components/DetailedGameView';
 
 export default function MTGGoldfisher() {
   const [commanderList, setCommanderList] = useState('');
   const [deckList, setDeckList] = useState('');
   const [parsedDeck, setParsedDeck] = useState(null);
   const [deckStrategy, setDeckStrategy] = useState(null);
+  const [aiAnalysis, setAiAnalysis] = useState(null);
   const [activeTab, setActiveTab] = useState('input');
   const [loading, setLoading] = useState(false);
   const [loadingStatus, setLoadingStatus] = useState('');
   const [cardDatabase, setCardDatabase] = useState(null);
   const [dbLoaded, setDbLoaded] = useState(false);
-  const [gameState, setGameState] = useState(null);
-const [isSimulating, setIsSimulating] = useState(false);
+  const [statistics, setStatistics] = useState(null);
+  const [isSimulating, setIsSimulating] = useState(false);
+  const [isAnalyzing, setIsAnalyzing] = useState(false);
+  const [currentGame, setCurrentGame] = useState(0);
+  const [totalGames, setTotalGames] = useState(0);
+  const [useAI, setUseAI] = useState(false);
+  const [showSettings, setShowSettings] = useState(false);
 
-// Load card database from CSV on mount
+  // Load card database from CSV on mount
   React.useEffect(() => {
     const loadCardDatabase = async () => {
       try {
         setLoadingStatus('Loading card database...');
         
-        // Fetch from public folder
         let response = await fetch('/data/Full card data.csv');
         
         if (!response.ok) {
@@ -34,7 +54,6 @@ const [isSimulating, setIsSimulating] = useState(false);
         
         const csvData = await response.text();
         
-        // Use PapaParse to parse CSV
         const Papa = await import('papaparse');
         const parsed = Papa.default.parse(csvData, {
           header: true,
@@ -42,12 +61,10 @@ const [isSimulating, setIsSimulating] = useState(false);
           skipEmptyLines: true,
         });
         
-        // Create a map for fast lookups (by lowercase name)
         const cardMap = {};
         parsed.data.forEach(card => {
           if (card.name) {
             const key = card.name.toLowerCase().trim();
-            // Keep only the first occurrence of each card name
             if (!cardMap[key]) {
               cardMap[key] = {
                 name: card.name,
@@ -81,189 +98,16 @@ const [isSimulating, setIsSimulating] = useState(false);
     loadCardDatabase();
   }, []);
 
-  // Look up card from local database
   const lookupCard = (cardName) => {
     if (!cardDatabase) return null;
-    
     const key = cardName.toLowerCase().trim();
     return cardDatabase[key] || null;
   };
 
-  // Analyze deck strategy and archetype
-  const analyzeDeckStrategy = (deck) => {
-    const analysis = {
-      archetype: 'Unknown',
-      subArchetypes: [],
-      avgCMC: 0,
-      creatureDensity: 0,
-      spellDensity: 0,
-      landCount: 0,
-      keyPatterns: [],
-      tribalType: null,
-      tribalDensity: 0,
-      winConditions: [],
-      gameplan: '',
-      idealTurnWin: 0,
-    };
-
-    // Calculate basic metrics
-    const totalNonLand = deck.totalDeck - deck.lands.reduce((sum, c) => sum + c.quantity, 0);
-    const creatureCount = deck.creatures.reduce((sum, c) => sum + c.quantity, 0);
-    const instantSorceryCount = 
-      deck.instants.reduce((sum, c) => sum + c.quantity, 0) + 
-      deck.sorceries.reduce((sum, c) => sum + c.quantity, 0);
-    
-    analysis.landCount = deck.lands.reduce((sum, c) => sum + c.quantity, 0);
-    analysis.creatureDensity = totalNonLand > 0 ? (creatureCount / totalNonLand) * 100 : 0;
-    analysis.spellDensity = totalNonLand > 0 ? (instantSorceryCount / totalNonLand) * 100 : 0;
-
-    // Calculate average CMC (excluding lands)
-    let totalCMC = 0;
-    let cardCount = 0;
-    [...deck.creatures, ...deck.instants, ...deck.sorceries, ...deck.artifacts, 
-     ...deck.enchantments, ...deck.planeswalkers].forEach(card => {
-      if (card.cmc !== undefined) {
-        totalCMC += card.cmc * card.quantity;
-        cardCount += card.quantity;
-      }
-    });
-    analysis.avgCMC = cardCount > 0 ? (totalCMC / cardCount).toFixed(2) : 0;
-
-    // Detect Tribal
-    const subtypeCounts = {};
-    deck.creatures.forEach(card => {
-      if (card.type_line) {
-        // Extract creature types (everything after "—")
-        const typeParts = card.type_line.split('—');
-        if (typeParts.length > 1) {
-          const subtypes = typeParts[1].trim().split(' ');
-          subtypes.forEach(subtype => {
-            const cleanType = subtype.trim();
-            if (cleanType) {
-              subtypeCounts[cleanType] = (subtypeCounts[cleanType] || 0) + card.quantity;
-            }
-          });
-        }
-      }
-    });
-
-    // Find dominant tribe
-    const dominantTribe = Object.entries(subtypeCounts)
-      .sort((a, b) => b[1] - a[1])[0];
-    
-    if (dominantTribe && dominantTribe[1] >= 8) {
-      analysis.tribalType = dominantTribe[0];
-      analysis.tribalDensity = dominantTribe[1];
-      analysis.subArchetypes.push('Tribal');
-    }
-
-    // Keyword detection in card text
-    const allText = [...deck.creatures, ...deck.instants, ...deck.sorceries, 
-                     ...deck.artifacts, ...deck.enchantments, ...deck.commanders]
-      .map(c => (c.oracle_text || '').toLowerCase())
-      .join(' ');
-
-    const keywords = {
-      control: ['counter', 'destroy', 'exile', 'return to hand', 'bounce'],
-      aggro: ['haste', 'double strike', 'first strike', 'combat damage'],
-      combo: ['infinite', 'win the game', 'search your library', 'tutor'],
-      ramp: ['search your library for a land', 'add mana', 'untap', 'mana ability'],
-      voltron: ['equip', 'attach', 'equipped creature', 'aura'],
-      graveyard: ['graveyard', 'reanimate', 'return from', 'flashback', 'unearth'],
-      tokens: ['create', 'token', 'populate'],
-      sacrifice: ['sacrifice', 'die', 'dies'],
-      lifegain: ['gain life', 'lifelink'],
-      card_draw: ['draw', 'draws'],
-    };
-
-    const patternScores = {};
-    Object.entries(keywords).forEach(([pattern, words]) => {
-      let score = 0;
-      words.forEach(word => {
-        const matches = (allText.match(new RegExp(word, 'g')) || []).length;
-        score += matches;
-      });
-      patternScores[pattern] = score;
-    });
-
-    // Determine primary archetype
-    if (analysis.tribalDensity >= 15) {
-      analysis.archetype = 'Tribal Aggro';
-      analysis.gameplan = `Flood the board with ${analysis.tribalType} creatures and overwhelm with tribal synergies.`;
-      analysis.idealTurnWin = 8;
-      analysis.winConditions.push(`Combat damage with ${analysis.tribalType} tribal`);
-    } else if (patternScores.voltron > 10 && deck.artifacts.length > 5) {
-      analysis.archetype = 'Voltron';
-      analysis.subArchetypes.push('Equipment');
-      analysis.gameplan = 'Suit up commander with equipment and deal commander damage.';
-      analysis.idealTurnWin = 7;
-      analysis.winConditions.push('21 Commander damage');
-    } else if (patternScores.combo > 5) {
-      analysis.archetype = 'Combo';
-      analysis.gameplan = 'Assemble combo pieces and win with infinite loops or alternate win conditions.';
-      analysis.idealTurnWin = 6;
-      analysis.winConditions.push('Combo finish');
-    } else if (analysis.avgCMC <= 2.5 && analysis.creatureDensity > 50) {
-      analysis.archetype = 'Aggro';
-      analysis.gameplan = 'Deploy threats quickly and win through early combat damage.';
-      analysis.idealTurnWin = 6;
-      analysis.winConditions.push('Early combat damage');
-    } else if (patternScores.control > 15 && analysis.spellDensity > 40) {
-      analysis.archetype = 'Control';
-      analysis.gameplan = 'Control the game with removal and counterspells, then win with late-game threats.';
-      analysis.idealTurnWin = 12;
-      analysis.winConditions.push('Late-game value');
-    } else if (patternScores.ramp > 10 && analysis.avgCMC > 4) {
-      analysis.archetype = 'Ramp';
-      analysis.gameplan = 'Accelerate mana production and cast high-impact threats.';
-      analysis.idealTurnWin = 9;
-      analysis.winConditions.push('Big threats');
-    } else if (patternScores.graveyard > 10) {
-      analysis.archetype = 'Graveyard';
-      analysis.subArchetypes.push('Reanimator');
-      analysis.gameplan = 'Fill graveyard and reanimate powerful creatures.';
-      analysis.idealTurnWin = 7;
-      analysis.winConditions.push('Reanimated threats');
-    } else if (analysis.creatureDensity > 40 && analysis.avgCMC >= 3 && analysis.avgCMC <= 4.5) {
-      analysis.archetype = 'Midrange';
-      analysis.gameplan = 'Play efficient creatures and out-value opponents in the mid-game.';
-      analysis.idealTurnWin = 10;
-      analysis.winConditions.push('Creature combat');
-    } else {
-      analysis.archetype = 'Midrange';
-      analysis.gameplan = 'Balanced strategy focusing on value and board presence.';
-      analysis.idealTurnWin = 10;
-      analysis.winConditions.push('General value');
-    }
-
-    // Add relevant sub-archetypes based on patterns
-    if (patternScores.control > 8 && analysis.archetype !== 'Control') {
-      analysis.subArchetypes.push('Control Elements');
-    }
-    if (patternScores.tokens > 8) {
-      analysis.subArchetypes.push('Token Generation');
-    }
-    if (patternScores.sacrifice > 8) {
-      analysis.subArchetypes.push('Sacrifice Theme');
-    }
-    if (patternScores.card_draw > 15) {
-      analysis.subArchetypes.push('Card Advantage');
-    }
-
-    // Store pattern scores for reference
-    analysis.keyPatterns = Object.entries(patternScores)
-      .filter(([, score]) => score > 5)
-      .sort((a, b) => b[1] - a[1])
-      .map(([pattern, score]) => ({ pattern, score }));
-
-    return analysis;
-  };
   const categorizeCard = (type) => {
     if (!type) return 'unknown';
-    
     const lower = type.toLowerCase();
     
-    // Check for multiple types (e.g., "Artifact Creature")
     if (lower.includes('creature')) return 'creature';
     if (lower.includes('land')) return 'land';
     if (lower.includes('artifact')) return 'artifact';
@@ -275,7 +119,6 @@ const [isSimulating, setIsSimulating] = useState(false);
     return 'unknown';
   };
 
-  // Parse deck list using local card database
   const parseDeckList = async (commanderText, deckText) => {
     if (!cardDatabase) {
       alert('Card database is still loading. Please wait a moment and try again.');
@@ -332,7 +175,6 @@ const [isSimulating, setIsSimulating] = useState(false);
       }
     };
     
-    // Process commanders
     if (commanderText.trim()) {
       const commanderLines = commanderText.split('\n').filter(line => line.trim());
       commanderLines.forEach(line => {
@@ -342,7 +184,6 @@ const [isSimulating, setIsSimulating] = useState(false);
       });
     }
     
-    // Process main deck
     if (deckText.trim()) {
       const deckLines = deckText.split('\n').filter(line => line.trim());
       deckLines.forEach(line => {
@@ -392,7 +233,6 @@ const [isSimulating, setIsSimulating] = useState(false);
     const parsed = await parseDeckList(commanderList, deckList);
     setParsedDeck(parsed);
     
-    // Analyze deck strategy
     if (parsed) {
       const strategy = analyzeDeckStrategy(parsed);
       setDeckStrategy(strategy);
@@ -400,6 +240,79 @@ const [isSimulating, setIsSimulating] = useState(false);
     }
     
     setActiveTab('deck');
+  };
+
+  const handleAIAnalysis = async () => {
+    if (!parsedDeck || !deckStrategy) {
+      alert('Please parse a deck first!');
+      return;
+    }
+
+    setIsAnalyzing(true);
+    setActiveTab('ai-analysis');
+
+    try {
+      const result = await analyzeWithAI(parsedDeck, deckStrategy);
+      setAiAnalysis(result);
+    } catch (error) {
+      console.error('AI Analysis failed:', error);
+      setAiAnalysis({
+        success: false,
+        error: error.message
+      });
+    } finally {
+      setIsAnalyzing(false);
+    }
+  };
+
+  const runMultipleGames = async (numGames) => {
+    if (!parsedDeck || !deckStrategy) {
+      alert('Please parse a deck first!');
+      return;
+    }
+    
+    setIsSimulating(true);
+    setTotalGames(numGames);
+    setActiveTab('simulation');
+    
+    const stats = initializeStatistics();
+    
+    // Run games sequentially
+    for (let i = 0; i < numGames; i++) {
+      setCurrentGame(i + 1);
+      
+      await new Promise(resolve => setTimeout(resolve, 100));
+      
+      let game;
+      if (useAI && aiAnalysis && aiAnalysis.success) {
+        // Use AI-enhanced game engine
+        game = await runAIEnhancedGame(parsedDeck, deckStrategy, aiAnalysis, 10, true);
+      } else {
+        // Use basic game engine
+        game = runFullGame(parsedDeck, deckStrategy, 10);
+      }
+      
+      recordGameResult(stats, game, i + 1);
+    }
+    
+    const summary = calculateSummary(stats);
+    const textReport = generateReport(stats);
+    const healthScore = getDeckHealthScore(stats);
+    
+    setStatistics({
+      raw: stats,
+      summary: summary,
+      textReport: textReport,
+      healthScore: healthScore
+    });
+    
+    setIsSimulating(false);
+    setCurrentGame(0);
+    setTotalGames(0);
+  };
+
+  const clearResults = () => {
+    setStatistics(null);
   };
 
   const exampleCommander = `1 Lord of the Nazgûl`;
@@ -485,19 +398,6 @@ const [isSimulating, setIsSimulating] = useState(false);
     setDeckList(exampleDeck);
   };
 
-  const runGameSimulation = () => {
-  if (!parsedDeck || !deckStrategy) {
-    alert('Please parse a deck first!');
-    return;
-  }
-  
-  setIsSimulating(true);
-  const game = runFullGame(parsedDeck, deckStrategy, 10);
-  setGameState(game);
-  setIsSimulating(false);
-  setActiveTab('simulation');
-};
-
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-purple-900 to-gray-900 text-white p-6">
       <div className="max-w-6xl mx-auto">
@@ -506,14 +406,50 @@ const [isSimulating, setIsSimulating] = useState(false);
           <h1 className="text-4xl font-bold mb-2 bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
             MTG Commander Goldfisher
           </h1>
-          <p className="text-gray-400">Automated deck testing and analysis</p>
+          <p className="text-gray-400">Automated deck testing with AI-powered analysis</p>
+          <div className="mt-2 flex items-center justify-center gap-2">
+            <button
+              onClick={() => setShowSettings(!showSettings)}
+              className="text-sm text-gray-400 hover:text-purple-400 transition-colors flex items-center gap-1"
+            >
+              <Settings size={16} />
+              Settings
+            </button>
+          </div>
         </div>
 
+        {/* Settings Panel */}
+        {showSettings && (
+          <div className="mb-6 p-4 bg-gray-800 border border-gray-700 rounded-lg">
+            <h3 className="text-lg font-semibold mb-3">⚙️ Settings</h3>
+            <div className="space-y-3">
+              <div className="flex items-center justify-between">
+                <div>
+                  <label className="font-medium text-sm">AI-Powered Simulation</label>
+                  <p className="text-xs text-gray-400">Use GPT-4o-mini for optimal gameplay decisions</p>
+                </div>
+                <button
+                  onClick={() => setUseAI(!useAI)}
+                  className={`px-4 py-2 rounded transition-all ${
+                    useAI ? 'bg-purple-600' : 'bg-gray-600'
+                  }`}
+                >
+                  {useAI ? '🤖 AI ON' : '🔧 Basic'}
+                </button>
+              </div>
+              <div className="text-xs text-gray-500 p-3 bg-gray-900 rounded">
+                <p><strong>Note:</strong> AI-powered features require an OpenAI API key.</p>
+                <p className="mt-1">Edit <code className="bg-gray-800 px-1">aiAnalyzer.js</code> to add your key.</p>
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* Navigation Tabs */}
-        <div className="flex gap-2 mb-6 border-b border-gray-700">
+        <div className="flex gap-2 mb-6 border-b border-gray-700 overflow-x-auto">
           <button
             onClick={() => setActiveTab('input')}
-            className={`px-6 py-3 font-semibold transition-all ${
+            className={`px-6 py-3 font-semibold transition-all whitespace-nowrap ${
               activeTab === 'input'
                 ? 'border-b-2 border-purple-400 text-purple-400'
                 : 'text-gray-400 hover:text-gray-200'
@@ -524,7 +460,7 @@ const [isSimulating, setIsSimulating] = useState(false);
           </button>
           <button
             onClick={() => setActiveTab('deck')}
-            className={`px-6 py-3 font-semibold transition-all ${
+            className={`px-6 py-3 font-semibold transition-all whitespace-nowrap ${
               activeTab === 'deck'
                 ? 'border-b-2 border-purple-400 text-purple-400'
                 : 'text-gray-400 hover:text-gray-200'
@@ -534,18 +470,33 @@ const [isSimulating, setIsSimulating] = useState(false);
             <BarChart3 className="inline mr-2" size={18} />
             View Deck ({parsedDeck?.total || 0})
           </button>
-<button
-  onClick={() => setActiveTab('simulation')}
-  className={`px-6 py-3 font-semibold transition-all ${
-    activeTab === 'simulation' 
-      ? 'border-b-2 border-purple-400 text-purple-400' 
-      : 'text-gray-400 hover:text-gray-200'
-  }`}
-  disabled={!parsedDeck}
->
-  <Play className="inline mr-2" size={18} />
-  Simulate Game
-</button>
+          <button
+            onClick={() => setActiveTab('ai-analysis')}
+            className={`px-6 py-3 font-semibold transition-all whitespace-nowrap ${
+              activeTab === 'ai-analysis' 
+                ? 'border-b-2 border-purple-400 text-purple-400' 
+                : 'text-gray-400 hover:text-gray-200'
+            }`}
+            disabled={!parsedDeck}
+          >
+            <Brain className="inline mr-2" size={18} />
+            AI Analysis
+          </button>
+          <button onClick={() => setActiveTab('detailed-game')}>
+        🎮 Detailed AI Game
+          </button>
+          <button
+            onClick={() => setActiveTab('simulation')}
+            className={`px-6 py-3 font-semibold transition-all whitespace-nowrap ${
+              activeTab === 'simulation' 
+                ? 'border-b-2 border-purple-400 text-purple-400' 
+                : 'text-gray-400 hover:text-gray-200'
+            }`}
+            disabled={!parsedDeck}
+          >
+            <Play className="inline mr-2" size={18} />
+            Simulate Game
+          </button>
         </div>
 
         {/* Content Area */}
@@ -566,7 +517,6 @@ const [isSimulating, setIsSimulating] = useState(false);
               </button>
 
               <div className="space-y-4">
-                {/* Commander Section */}
                 <div>
                   <label className="block text-lg font-semibold mb-2 text-purple-400">
                     Commander(s)
@@ -580,114 +530,8 @@ const [isSimulating, setIsSimulating] = useState(false);
                     placeholder="1 Lord of the Nazgûl"
                     className="w-full h-24 bg-gray-900 border border-gray-700 rounded p-4 font-mono text-sm focus:outline-none focus:border-purple-500"
                   />
-                 {activeTab === 'simulation' && (
-  <div>
-    <h2 className="text-2xl font-bold mb-4">Game Simulation</h2>
-    
-      {!gameState && (
-        <div className="text-center py-12">
-          <p className="text-gray-400 mb-6">Ready to simulate a game with your deck?</p>
-          <button
-            onClick={runGameSimulation}
-            disabled={isSimulating || !parsedDeck}
-            className="px-8 py-4 bg-purple-600 hover:bg-purple-700 disabled:bg-gray-600 rounded-lg font-bold text-lg transition-all"
-          >
-            {isSimulating ? 'Simulating...' : '▶ Run 10-Turn Simulation'}
-          </button>
-        </div>
-      )}
-    
-    {gameState && (
-      <div>
-        <div className="mb-6 grid grid-cols-2 md:grid-cols-4 gap-4">
-          <div className="p-4 bg-gray-900 rounded">
-            <p className="text-sm text-gray-400">Turn</p>
-            <p className="text-3xl font-bold text-purple-400">{gameState.turn}</p>
-          </div>
-          <div className="p-4 bg-gray-900 rounded">
-            <p className="text-sm text-gray-400">Life</p>
-            <p className="text-3xl font-bold text-red-400">{gameState.life}</p>
-          </div>
-          <div className="p-4 bg-gray-900 rounded">
-            <p className="text-sm text-gray-400">Lands</p>
-            <p className="text-3xl font-bold text-green-400">{gameState.battlefield.lands.length}</p>
-          </div>
-          <div className="p-4 bg-gray-900 rounded">
-            <p className="text-sm text-gray-400">Creatures</p>
-            <p className="text-3xl font-bold text-blue-400">{gameState.battlefield.creatures.length}</p>
-          </div>
-        </div>
-        
-        <div className="mb-6">
-          <h3 className="text-xl font-semibold mb-3">Battlefield</h3>
-          <div className="grid md:grid-cols-2 gap-4">
-            <div className="p-4 bg-gray-900 rounded">
-              <p className="text-sm text-gray-400 mb-2">Lands ({gameState.battlefield.lands.length})</p>
-              <div className="space-y-1 max-h-40 overflow-y-auto">
-                {gameState.battlefield.lands.map((card, idx) => (
-                  <p key={idx} className="text-xs text-gray-300">{card.name}</p>
-                ))}
-              </div>
-            </div>
-            <div className="p-4 bg-gray-900 rounded">
-              <p className="text-sm text-gray-400 mb-2">Creatures ({gameState.battlefield.creatures.length})</p>
-              <div className="space-y-1 max-h-40 overflow-y-auto">
-                {gameState.battlefield.creatures.map((card, idx) => (
-                  <p key={idx} className="text-xs text-gray-300">
-                    {card.name} {card.power && card.toughness && `(${card.power}/${card.toughness})`}
-                  </p>
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
-        
-        <div className="mb-6">
-          <h3 className="text-xl font-semibold mb-3">Hand ({gameState.hand.length})</h3>
-          <div className="p-4 bg-gray-900 rounded">
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
-              {gameState.hand.map((card, idx) => (
-                <div key={idx} className="p-2 bg-gray-800 rounded text-xs">
-                  <p className="font-semibold">{card.name}</p>
-                  <p className="text-gray-400">{card.type_line}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-        
-        <div>
-          <h3 className="text-xl font-semibold mb-3">Game Log</h3>
-          <div className="p-4 bg-gray-900 rounded font-mono text-xs max-h-96 overflow-y-auto">
-            {gameState.log.map((entry, idx) => (
-              <p key={idx} className={entry.startsWith('===') ? 'text-purple-400 font-bold' : 'text-gray-300'}>
-                {entry}
-              </p>
-            ))}
-          </div>
-        </div>
-        
-        <div className="mt-6 flex gap-4">
-          <button
-            onClick={runGameSimulation}
-            className="px-6 py-3 bg-purple-600 hover:bg-purple-700 rounded-lg font-semibold transition-all"
-          >
-            🔄 Run Another Simulation
-          </button>
-          <button
-            onClick={() => setGameState(null)}
-            className="px-6 py-3 bg-gray-700 hover:bg-gray-600 rounded-lg font-semibold transition-all"
-          >
-            Clear
-          </button>
-        </div>
-      </div>
-    )}
-  </div>
-)}
                 </div>
 
-                {/* Deck List Section */}
                 <div>
                   <label className="block text-lg font-semibold mb-2 text-purple-400">
                     Deck (99 or 98 cards)
@@ -719,255 +563,53 @@ const [isSimulating, setIsSimulating] = useState(false);
                   <p className="text-yellow-300 text-sm">
                     {loadingStatus || 'Loading card database...'}
                   </p>
-                  <p className="text-yellow-400 text-xs mt-2">
-                    Please ensure "Full card data.csv" has been uploaded to this conversation.
-                  </p>
-                </div>
-              )}
-              
-              {loading && (
-                <div className="mt-4 p-4 bg-blue-900/30 border border-blue-700 rounded">
-                  <p className="text-blue-300 text-sm">
-                    {loadingStatus}
-                  </p>
                 </div>
               )}
             </div>
           )}
 
+{activeTab === 'detailed-game' && (
+  <DetailedGameView 
+    parsedDeck={parsedDeck}
+    deckStrategy={deckStrategy}
+    aiAnalysis={aiAnalysis}
+    cardDatabase={cardDatabase}
+    runEnhancedDetailedGame={runEnhancedDetailedGame}
+  />
+)}
+
           {activeTab === 'deck' && parsedDeck && (
-            <div>
-              <h2 className="text-2xl font-bold mb-4">Deck Overview</h2>
-              
-              {/* Strategy Analysis Section */}
-              {deckStrategy && (
-                <div className="mb-6 p-6 bg-gradient-to-br from-purple-900/40 to-blue-900/40 border-2 border-purple-500 rounded-lg">
-                  <h3 className="text-2xl font-bold mb-3 text-purple-300">
-                    🎯 Deck Strategy Analysis
-                  </h3>
-                  
-                  <div className="grid md:grid-cols-2 gap-6">
-                    <div>
-                      <div className="mb-4">
-                        <p className="text-sm text-gray-400 mb-1">Primary Archetype</p>
-                        <p className="text-3xl font-bold text-purple-400">{deckStrategy.archetype}</p>
-                        {deckStrategy.tribalType && (
-                          <p className="text-lg text-purple-300 mt-1">
-                            ({deckStrategy.tribalType} Tribal - {deckStrategy.tribalDensity} cards)
-                          </p>
-                        )}
-                      </div>
-                      
-                      {deckStrategy.subArchetypes.length > 0 && (
-                        <div className="mb-4">
-                          <p className="text-sm text-gray-400 mb-2">Sub-themes</p>
-                          <div className="flex flex-wrap gap-2">
-                            {deckStrategy.subArchetypes.map((sub, idx) => (
-                              <span key={idx} className="px-3 py-1 bg-blue-900/50 border border-blue-700 rounded-full text-sm text-blue-300">
-                                {sub}
-                              </span>
-                            ))}
-                          </div>
-                        </div>
-                      )}
-                      
-                      <div className="mb-4">
-                        <p className="text-sm text-gray-400 mb-2">Win Conditions</p>
-                        <ul className="list-disc list-inside text-green-400">
-                          {deckStrategy.winConditions.map((condition, idx) => (
-                            <li key={idx}>{condition}</li>
-                          ))}
-                        </ul>
-                      </div>
-                    </div>
-                    
-                    <div>
-                      <div className="mb-4 p-4 bg-gray-900/50 rounded">
-                        <p className="text-sm text-gray-400 mb-2">Gameplan</p>
-                        <p className="text-sm text-gray-300">{deckStrategy.gameplan}</p>
-                      </div>
-                      
-                      <div className="grid grid-cols-2 gap-3">
-                        <div className="p-3 bg-gray-900/50 rounded">
-                          <p className="text-xs text-gray-400">Avg CMC</p>
-                          <p className="text-xl font-bold text-yellow-400">{deckStrategy.avgCMC}</p>
-                        </div>
-                        <div className="p-3 bg-gray-900/50 rounded">
-                          <p className="text-xs text-gray-400">Target Win Turn</p>
-                          <p className="text-xl font-bold text-green-400">~{deckStrategy.idealTurnWin}</p>
-                        </div>
-                        <div className="p-3 bg-gray-900/50 rounded">
-                          <p className="text-xs text-gray-400">Creature %</p>
-                          <p className="text-xl font-bold text-blue-400">{deckStrategy.creatureDensity.toFixed(0)}%</p>
-                        </div>
-                        <div className="p-3 bg-gray-900/50 rounded">
-                          <p className="text-xs text-gray-400">Spell %</p>
-                          <p className="text-xl font-bold text-red-400">{deckStrategy.spellDensity.toFixed(0)}%</p>
-                        </div>
-                      </div>
-                      
-                      {deckStrategy.keyPatterns.length > 0 && (
-                        <div className="mt-4">
-                          <p className="text-xs text-gray-400 mb-2">Key Patterns Detected</p>
-                          <div className="flex flex-wrap gap-2">
-                            {deckStrategy.keyPatterns.slice(0, 5).map((pattern, idx) => (
-                              <span key={idx} className="px-2 py-1 bg-gray-800 rounded text-xs text-gray-300">
-                                {pattern.pattern} ({pattern.score})
-                              </span>
-                            ))}
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                </div>
-              )}
-              
-              <div className="mb-6 p-4 bg-gray-900 rounded grid grid-cols-2 md:grid-cols-4 gap-4">
-                <div>
-                  <p className="text-gray-400 text-sm">Total Cards</p>
-                  <p className="text-2xl font-bold text-purple-400">{parsedDeck.total}</p>
-                </div>
-                <div>
-                  <p className="text-gray-400 text-sm">Creatures</p>
-                  <p className="text-2xl font-bold text-green-400">{parsedDeck.creatures.reduce((sum, c) => sum + c.quantity, 0)}</p>
-                </div>
-                <div>
-                  <p className="text-gray-400 text-sm">Instants/Sorceries</p>
-                  <p className="text-2xl font-bold text-blue-400">
-                    {parsedDeck.instants.reduce((sum, c) => sum + c.quantity, 0) + 
-                     parsedDeck.sorceries.reduce((sum, c) => sum + c.quantity, 0)}
-                  </p>
-                </div>
-                <div>
-                  <p className="text-gray-400 text-sm">Lands</p>
-                  <p className="text-2xl font-bold text-yellow-400">{parsedDeck.lands.reduce((sum, c) => sum + c.quantity, 0)}</p>
-                </div>
-              </div>
+            <DeckView parsedDeck={parsedDeck} deckStrategy={deckStrategy} />
+          )}
 
-              <div className="space-y-6">
-                {/* Commander Section */}
-                {parsedDeck.commanders.length > 0 && (
-                  <div>
-                    <h3 className="text-xl font-semibold border-b border-purple-700 pb-2 text-purple-400">
-                      Commander{parsedDeck.commanders.length > 1 ? 's' : ''} ({parsedDeck.commanders.length})
-                    </h3>
-                    <div className="grid gap-2 mt-3">
-                      {parsedDeck.commanders.map((card, idx) => (
-                        <div
-                          key={idx}
-                          className="bg-purple-900/30 border border-purple-700 p-3 rounded"
-                        >
-                          <div className="flex justify-between items-start">
-                            <div>
-                              <span className="font-bold text-lg">{card.name}</span>
-                              <p className="text-sm text-gray-400 mt-1">{card.type_line}</p>
-                              {card.oracle_text && (
-                                <p className="text-xs text-gray-500 mt-2 line-clamp-2">{card.oracle_text}</p>
-                              )}
-                            </div>
-                            <div className="text-right">
-                              {card.mana_cost && (
-                                <p className="text-sm font-mono mb-1">{card.mana_cost}</p>
-                              )}
-                              {card.power && card.toughness && (
-                                <p className="text-sm text-green-400">{card.power}/{card.toughness}</p>
-                              )}
-                            </div>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                )}
+          {activeTab === 'ai-analysis' && (
+            <AIAnalysisView 
+              aiAnalysis={aiAnalysis}
+              isAnalyzing={isAnalyzing}
+              onRunAnalysis={handleAIAnalysis}
+            />
+          )}
 
-                {/* Card Type Sections */}
-                {[
-                  { key: 'creatures', title: 'Creatures', color: 'green', icon: '🗡️' },
-                  { key: 'instants', title: 'Instants', color: 'blue', icon: '⚡' },
-                  { key: 'sorceries', title: 'Sorceries', color: 'red', icon: '🔥' },
-                  { key: 'artifacts', title: 'Artifacts', color: 'gray', icon: '⚙️' },
-                  { key: 'enchantments', title: 'Enchantments', color: 'purple', icon: '✨' },
-                  { key: 'planeswalkers', title: 'Planeswalkers', color: 'orange', icon: '👤' },
-                  { key: 'lands', title: 'Lands', color: 'yellow', icon: '🏔️' },
-                ].map(section => {
-                  const cards = parsedDeck[section.key];
-                  if (!cards || cards.length === 0) return null;
-                  
-                  const totalCount = cards.reduce((sum, c) => sum + c.quantity, 0);
-                  
-                  return (
-                    <div key={section.key}>
-                      <h3 className="text-xl font-semibold border-b border-gray-700 pb-2">
-                        {section.icon} {section.title} ({cards.length} unique, {totalCount} total)
-                      </h3>
-                      <div className="grid gap-2 mt-3">
-                        {cards.map((card, idx) => (
-                          <div
-                            key={idx}
-                            className="bg-gray-900 p-3 rounded hover:bg-gray-800 transition-all"
-                          >
-                            <div className="flex justify-between items-start">
-                              <div className="flex-1">
-                                <span className="font-medium">{card.name}</span>
-                                {card.quantity > 1 && (
-                                  <span className="ml-2 text-gray-400 text-sm">×{card.quantity}</span>
-                                )}
-                                <p className="text-xs text-gray-500 mt-1">{card.type_line}</p>
-                              </div>
-                              <div className="text-right ml-4">
-                                {card.mana_cost && (
-                                  <p className="text-xs font-mono">{card.mana_cost}</p>
-                                )}
-                                {card.power && card.toughness && (
-                                  <p className="text-xs text-green-400 mt-1">{card.power}/{card.toughness}</p>
-                                )}
-                              </div>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  );
-                })}
-
-                {/* Unknown Cards */}
-                {parsedDeck.unknown && parsedDeck.unknown.length > 0 && (
-                  <div>
-                    <h3 className="text-xl font-semibold border-b border-red-700 pb-2 text-red-400">
-                      ⚠️ Unknown/Not Found ({parsedDeck.unknown.length})
-                    </h3>
-                    <div className="grid gap-2 mt-3">
-                      {parsedDeck.unknown.map((card, idx) => (
-                        <div
-                          key={idx}
-                          className="bg-red-900/20 border border-red-800 p-3 rounded"
-                        >
-                          <span className="font-medium">{card.name}</span>
-                          <span className="ml-2 text-gray-400 text-sm">×{card.quantity}</span>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                )}
-              </div>
-
-              <div className="mt-6 p-4 bg-blue-900/30 border border-blue-700 rounded">
-                <p className="text-sm text-blue-300">
-                  <strong>✅ Deck Strategy Identified!</strong> The analyzer has determined your deck's archetype and optimal gameplan.
-                </p>
-                <p className="text-xs text-blue-400 mt-2">
-                  Next: Build the game engine to simulate games based on this strategy!
-                </p>
-              </div>
-            </div>
+          {activeTab === 'simulation' && (
+            <SimulationView 
+              statistics={statistics}
+              isSimulating={isSimulating}
+              parsedDeck={parsedDeck}
+              runMultipleGames={runMultipleGames}
+              clearResults={clearResults}
+              currentGame={currentGame}
+              totalGames={totalGames}
+            />
           )}
         </div>
 
         {/* Footer Info */}
-        <div className="mt-8 text-center text-gray-500 text-sm">
-          <p>Version 0.1 - Deck Parser</p>
-          <p>Next: Card database integration and basic game engine</p>
+        <div className="mt-8 text-center text-gray-500 text-sm space-y-1">
+          <p>Version 1.0 - AI-Powered Commander Goldfisher</p>
+          <p>✨ GPT-4o-mini deck analysis • 🤖 AI-powered optimal play • 📊 Advanced statistics</p>
+          {useAI && (
+            <p className="text-purple-400">🧠 AI Mode Active - Using GPT-4o-mini for gameplay decisions</p>
+          )}
         </div>
       </div>
     </div>
