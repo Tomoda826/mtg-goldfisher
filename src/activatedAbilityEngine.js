@@ -10,6 +10,8 @@
 // ✅ COMPREHENSIVE FIX: Import fetch land executor
 import { executeSingleFetchLand } from './fetchLandEngine';
 
+import { executeLandcycling, parseLandcyclingAbility } from './cyclingEngine';
+
 /**
  * Ability zones - where can this ability be activated from?
  */
@@ -88,7 +90,7 @@ export const parseActivatedAbilities = (card) => {
     
     if (!costPart || !effectPart) continue;
     
-    // Parse the ability
+ // Parse the ability
     const ability = {
       fullText: line,
       cost: parseCost(costPart),
@@ -96,6 +98,24 @@ export const parseActivatedAbilities = (card) => {
       name: generateAbilityName(effectPart, costPart, card.name),
       allowedZones: determineAllowedZones(line, costPart, effectPart) // ✅ CRITICAL
     };
+    
+    // ✅ NEW: Add landcycling detection flag (mirrors fetch land pattern)
+    const abilityName = ability.name;
+    if (abilityName && abilityName.includes('cycling') && abilityName !== 'Cycling') {
+      // This is landcycling (Plainscycling, Islandcycling, etc.) not regular cycling
+      const cyclingInfo = parseLandcyclingAbility(line);
+      if (cyclingInfo) {
+        ability.isLandcycling = true;  // ✅ Detection flag
+        ability.landType = cyclingInfo.landType;  // ✅ Which land to fetch
+        
+        // ⭐ CRITICAL: Use the cost from parenthetical rules text
+        // parseLandcyclingAbility now correctly extracts from "({1}, Discard this card: ...)"
+        // not from the ability name "Islandcycling {1}"
+        ability.cost = parseCost(cyclingInfo.cost);
+        
+        console.log(`[parseActivatedAbilities] Detected landcycling: ${card.name} → ${ability.landType} (cost: ${cyclingInfo.cost})`);
+      }
+    }
     
     abilities.push(ability);
   }
@@ -474,7 +494,9 @@ export const activateAbilityFromHand = (gameState, cardIndex, abilityIndex = 0) 
   }
   
   // ✅ VALIDATION 2: Check if we're in the right phase (main phase only for hand abilities)
-  if (gameState.phase !== 'main') {
+  // ⭐ FIXED: Accept 'main', 'main1', or 'main2' as valid phases
+  const validMainPhases = ['main', 'main1', 'main2'];
+  if (!validMainPhases.includes(gameState.phase)) {
     console.log(`[activateAbilityFromHand] Cannot activate during ${gameState.phase} phase`);
     
     gameState.detailedLog?.push({
@@ -544,10 +566,40 @@ export const activateAbilityFromHand = (gameState, cardIndex, abilityIndex = 0) 
   console.log(`   Cost: ${ability.cost.mana.total} mana`);
   console.log(`   Effect: ${ability.effect.substring(0, 50)}...`);
   
-  // Pay the cost
+// Pay the cost
   payAbilityCost(gameState, ability, card, ABILITY_ZONES.HAND);
   
+  // ============================================================================
+  // ✅ NEW: LANDCYCLING SPECIAL HANDLING (mirrors fetch land pattern)
+  // ============================================================================
+  if (ability.isLandcycling) {
+    console.log(`🔄 [activateAbilityFromHand] LANDCYCLING DETECTED: ${card.name}`);
+    console.log(`   Ability: ${ability.name}`);
+    console.log(`   Land type to fetch: ${ability.landType}`);
+    
+    // Execute landcycling (handles all state changes)
+    // This function will:
+    // - Remove card from hand
+    // - Add card to graveyard
+    // - Search library for land
+    // - Add land to hand
+    // - Shuffle library
+    // - Log everything
+    executeLandcycling(gameState, card, ability.landType);
+    
+    console.log(`🎉 [activateAbilityFromHand] Landcycling complete for ${card.name}`);
+    
+    // Return early - executeLandcycling already handled all state changes
+    // Don't execute generic executeAbilityEffect or do manual state changes
+    return gameState;
+  }
+   // ============================================================================
+  // END LANDCYCLING SPECIAL HANDLING
+  // ============================================================================
+  
+  // ⭐ FIX: For non-landcycling abilities, continue with standard flow
   // Remove card from hand and put in graveyard (cycling/channel goes to graveyard)
+  // NOTE: executeLandcycling already handles card removal for landcycling
   gameState.hand.splice(cardIndex, 1);
   gameState.graveyard.push(card);
   

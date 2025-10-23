@@ -239,7 +239,7 @@ export const getLandManaProduction = (land, manifest) => {
 };
 
 // Check if we can pay a mana cost
-export const canPayMana = (manaPool, manaCost) => {
+export const canPayMana = (manaPool, manaCost, actualTotalMana = null) => {
   const cost = parseMana(manaCost);
   
   // Check colored requirements
@@ -249,8 +249,12 @@ export const canPayMana = (manaPool, manaCost) => {
   if (cost.R > manaPool.R) return false;
   if (cost.G > manaPool.G) return false;
   
-  // Check total mana (generic can be paid with any color)
-  const availableTotal = manaPool.W + manaPool.U + manaPool.B + manaPool.R + manaPool.G + manaPool.C;
+  // ✅ CRITICAL FIX: Use actualTotalMana if provided (handles dual/filter lands correctly)
+  // Otherwise fall back to summing the pool (for backward compatibility)
+  const availableTotal = actualTotalMana !== null 
+    ? actualTotalMana 
+    : (manaPool.W + manaPool.U + manaPool.B + manaPool.R + manaPool.G + manaPool.C);
+  
   const requiredTotal = cost.total;
   
   return availableTotal >= requiredTotal;
@@ -288,6 +292,21 @@ export const payMana = (manaPool, manaCost) => {
   }
   
   return newPool;
+};
+
+// ========== MANA POOL SYNCHRONIZATION ==========
+
+/**
+ * Recalculate actualTotalMana from manaPool to keep them in sync
+ * CRITICAL: Call this after ANY mana expenditure (spell cast, ability activation)
+ * 
+ * This fixes the bug where actualTotalMana is incremented when generating mana
+ * but never decremented when spending mana, causing phantom mana tracking.
+ */
+export const syncActualTotalMana = (state) => {
+  const poolTotal = Object.values(state.manaPool).reduce((a, b) => a + b, 0);
+  state.actualTotalMana = poolTotal;
+  return state;
 };
 
 // ========== STRATEGIC AI DECISION MAKING ==========
@@ -583,14 +602,26 @@ export const generateMana = (state) => {
 state.battlefield.artifacts.forEach(artifact => {
   const production = getArtifactManaProduction(artifact, state.behaviorManifest);
   
-  // ✅ CRITICAL FIX: Artifacts with multiple mana abilities work like dual lands
-  // Example: Talisman of Dominance has "{T}: Add {C}" OR "{T}: Add {U} or {B}"
-  // You can only tap it ONCE per turn, so it produces 1 mana total (your choice)
+  // ✅ CRITICAL FIX: Detect if artifact produces multiple color choices
+  // Examples:
+  // - Arcane Signet: {T}: Add one mana of any color in your commander's color identity
+  // - Talisman of Dominance: {T}: Add {C} OR {T}, Pay 1 life: Add {U} or {B}
+  // - Sol Ring: {T}: Add {C}{C} (produces 2 colorless)
+  //
+  // If production has 2+ different colors with value > 0, it's a choice artifact
+  // Count how many colors this artifact can produce
+  const colorCount = Object.keys(production)
+    .filter(key => ['W','U','B','R','G','C'].includes(key) && production[key] > 0)
+    .length;
   
-  if (production.isDualLand || production.isChoiceManaArtifact) {
+  const isChoiceArtifact = production.isDualLand || 
+                          production.isChoiceManaArtifact || 
+                          colorCount >= 2;
+  
+  if (isChoiceArtifact) {
     // Multi-ability artifacts: add all colors to pool, but only count as 1 total
     Object.keys(production).forEach(color => {
-      if (['W','U','B','R','G','C'].includes(color)) {
+      if (['W','U','B','R','G','C'].includes(color) && production[color] > 0) {
         availableMana[color] += production[color];
       }
     });
@@ -599,13 +630,17 @@ state.battlefield.artifacts.forEach(artifact => {
     actualTotalMana += (production.actualManaProduced || 1);
     
   } else {
-    // Regular mana artifacts: add normally
+    // Regular mana artifacts (e.g., Sol Ring producing {C}{C}): 
+    // Count the TOTAL mana produced, not per-color
+    let artifactTotal = 0;
     Object.keys(production).forEach(color => {
-      if (['W','U','B','R','G','C'].includes(color)) {
+      if (['W','U','B','R','G','C'].includes(color) && production[color] > 0) {
         availableMana[color] += production[color];
-        actualTotalMana += production[color];
+        artifactTotal += production[color];  // Sum up the total
       }
     });
+    // Add the total once, not per-color
+    actualTotalMana += artifactTotal;
   }
 });
   
@@ -793,7 +828,7 @@ state.battlefield.lands.push(land);
 if (newMana.isDualLand || newMana.isFilterLand) {
       Object.keys(newMana).forEach(color => {
         if (['W', 'U', 'B', 'R', 'G', 'C'].includes(color) && newMana[color] > 0) {
-          state.manaPool[color] = (state.manaPool[color] || 0) + 1;
+          state.manaPool[color] = (state.manaPool[color] || 0) + newMana[color];
         }
       });
       
@@ -846,7 +881,7 @@ export const castSpell = (state, cardIndex) => {
   console.log(`[castSpell] Attempting to cast ${card.name} (cost: ${card.cmc || 0})`);
   console.log(`[castSpell] Current pool:`, state.manaPool, `Total: ${poolTotal}`);
   
-  if (!canPayMana(state.manaPool, card.mana_cost)) {
+  if (!canPayMana(state.manaPool, card.mana_cost, state.actualTotalMana)) {
     const totalAvailable = Object.values(state.manaPool).reduce((a, b) => a + b, 0);
     state.log.push(`⚠️ CANNOT CAST ${card.name}: Need ${card.cmc} mana, have ${totalAvailable}`);
     console.log(`[castSpell] ⚠️ Affordability check FAILED`);
@@ -858,10 +893,15 @@ export const castSpell = (state, cardIndex) => {
   // Pay mana
   state.manaPool = payMana(state.manaPool, card.mana_cost);
   
+  // ✅ CRITICAL: Sync actualTotalMana after spending mana (fixes phantom mana bug)
+  // ✅ CRITICAL: Manually decrement actualTotalMana (don't recalc from pool - breaks dual lands!)
+  const costPaid = parseMana(card.mana_cost).total;
+  state.actualTotalMana = Math.max(0, (state.actualTotalMana || 0) - costPaid);
+  
   //... rest of function
 
 // ✅ NEW: Log remaining mana after cast
-const totalRemaining = Object.values(state.manaPool).reduce((a, b) => a + b, 0);
+const totalRemaining = state.actualTotalMana; // Use synced value
 if (state.detailedLog) {
   state.detailedLog.push({
     turn: state.turn,
@@ -921,7 +961,7 @@ export const castCommander = (state) => {
     return state;
   }
   
-  if (!canPayMana(state.manaPool, commander.mana_cost)) {
+  if (!canPayMana(state.manaPool, commander.mana_cost, state.actualTotalMana)) {
     state.log.push(`⚠️ Cannot cast commander: wrong colors`);
     return state;
   }
@@ -929,6 +969,11 @@ export const castCommander = (state) => {
   // Pay mana
   state.manaPool = payMana(state.manaPool, commander.mana_cost);
   
+  
+  // ✅ CRITICAL: Manually decrement actualTotalMana by base cost + tax
+  const baseCost = parseMana(commander.mana_cost).total;
+  const totalCost = baseCost + additionalCost;
+  state.actualTotalMana = Math.max(0, (state.actualTotalMana || 0) - totalCost);
   // Pay commander tax from remaining mana
   let taxToPay = additionalCost;
   const colors = ['C', 'W', 'U', 'B', 'R', 'G'];
@@ -985,7 +1030,7 @@ export const aiMainPhase = (state) => {
       .map((card, idx) => ({ card, idx }))
       .filter(({ card }) => 
         card.category !== 'land' && 
-        canPayMana(state.manaPool, card.mana_cost)
+        canPayMana(state.manaPool, card.mana_cost, state.actualTotalMana)
       )
       .map(({ card, idx }) => ({
         card,

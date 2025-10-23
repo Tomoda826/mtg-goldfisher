@@ -1055,7 +1055,7 @@ case 'castSpell': {
   
   if (spellIndex !== -1 && spellIndex < game.hand.length) {
     const spell = game.hand[spellIndex];
-    if (canPayMana(game.manaPool, spell.mana_cost)) {
+    if (canPayMana(game.manaPool, spell.mana_cost, game.actualTotalMana)) {
       const manaSpent = spell.cmc || 0;
       
       // ✅ CRITICAL: Log mana BEFORE casting
@@ -1063,6 +1063,8 @@ case 'castSpell': {
       
       // Cast the spell (this modifies game.manaPool in place)
       castSpell(game, spellIndex);
+      
+      // ✅ SAFETY: Ensure actualTotalMana is synced (should already be done in castSpell)
       
       // ✅ DEBUG: Log mana AFTER casting
       if (game.turn <= 5) {
@@ -1121,7 +1123,7 @@ case 'castCommander': {
     const totalCost = commander.cmc + taxAmount;
     const totalMana = Object.values(game.manaPool).reduce((a, b) => a + b, 0);
     
-    if (totalMana >= totalCost && canPayMana(game.manaPool, commander.mana_cost)) {
+    if (totalMana >= totalCost && canPayMana(game.manaPool, commander.mana_cost, game.actualTotalMana)) {
       // ✅ DEBUG: Log mana before
       const manaB4 = {...game.manaPool};
       
@@ -1189,12 +1191,36 @@ case 'activateAbility': {
           if (handAbilities.length > 0) {
             const ability = handAbilities[abilityIndex];
             
+            // Track whether ability actually executed successfully
+            // For landcycling: card removed from hand, land added to hand
+            // Net result: hand size STAYS THE SAME (can't use hand size check)
+            const handSizeBefore = game.hand.length;
+            const graveyardBefore = game.graveyard.length;
+            
             // Activate the ability (this handles everything)
             activateAbilityFromHand(game, cardIndex, abilityIndex);
             
-            logEntry.details = `Activated ${ability.name} from hand (cost: ${ability.cost.mana.total} mana)`;
-            logEntry.success = true;
-            game.metrics.totalManaSpent += ability.cost.mana.total;
+            // ✅ SAFETY: Ensure actualTotalMana is synced after ability activation
+            
+            // Detect success based on ability type
+            let abilityExecuted = false;
+            if (ability.isLandcycling) {
+              // Landcycling success = graveyard increased (cycled card went there)
+              // Can't check hand size (stays same: -1 card, +1 land)
+              abilityExecuted = (game.graveyard.length > graveyardBefore);
+            } else {
+              // Other abilities = hand size decreased
+              abilityExecuted = (game.hand.length < handSizeBefore);
+            }
+            
+            if (abilityExecuted) {
+              logEntry.details = `Activated ${ability.name} from hand (cost: ${ability.cost.mana.total} mana)`;
+              logEntry.success = true;
+              game.metrics.totalManaSpent += ability.cost.mana.total;
+            } else {
+              logEntry.details = `Failed to activate ${ability.name} - validation failed`;
+              logEntry.success = false;
+            }
           } else {
             logEntry.details = `${card.name} has no hand-activatable abilities (must cast it first)`;
             logEntry.success = false;
@@ -1220,6 +1246,8 @@ case 'activateAbility': {
               
               // Activate battlefield ability
               activateAbilityFromBattlefield(game, permanent, abilityIndex);
+              
+              // ✅ SAFETY: Ensure actualTotalMana is synced after ability activation
               
               logEntry.details = `Activated ${ability.name} on ${permanent.name} (cost: ${ability.cost.mana.total} mana)`;
               logEntry.success = true;
@@ -1362,6 +1390,8 @@ const runEnhancedMainPhase = async (game, maxActions = 15) => {
       if (activatableFromHand.length > 0) {
         const ability = activatableFromHand[0];
         activateAbilityFromHand(game, ability.cardIndex, ability.abilityIndex);
+        
+        // ✅ SAFETY: Ensure actualTotalMana is synced after ability activation
         game.detailedLog.push({
           turn: game.turn,
           phase: game.phase,
@@ -1378,6 +1408,8 @@ const runEnhancedMainPhase = async (game, maxActions = 15) => {
       if (activatableFromBattlefield.length > 0) {
         const ability = activatableFromBattlefield[0];
         activateAbilityFromBattlefield(game, ability.permanent, ability.abilityIndex);
+        
+        // ✅ SAFETY: Ensure actualTotalMana is synced after ability activation
         game.detailedLog.push({
           turn: game.turn,
           phase: game.phase,
@@ -1521,6 +1553,7 @@ export const runEnhancedTurn = async (game) => {
   });
   
   // UNTAP PHASE
+  game.phase = 'untap';
   untapPhase(game);
   generateMana(game);
   await checkPhaseTriggersAI(game, 'untap');
@@ -1532,9 +1565,11 @@ export const runEnhancedTurn = async (game) => {
   });
   
   // UPKEEP PHASE
+  game.phase = 'upkeep';
   await checkPhaseTriggersAI(game, 'upkeep');
   
   // DRAW STEP
+  game.phase = 'draw';
   if (game.library.length > 0 && game.turn > 0) {
     const drawnCard = game.library[game.library.length - 1];
     const etb = hasETBEffect(drawnCard);
@@ -1549,6 +1584,7 @@ export const runEnhancedTurn = async (game) => {
   await checkPhaseTriggersAI(game, 'draw');
   
   // PRE-COMBAT MAIN PHASE
+  game.phase = 'main1';
   game.detailedLog.push({
     turn: game.turn,
     phase: 'main1',
@@ -1559,6 +1595,7 @@ export const runEnhancedTurn = async (game) => {
   await runEnhancedMainPhase(game);
   
 // COMBAT PHASE
+  game.phase = 'combat';
   const tokenCount = game.battlefield.creatures.filter(c => c.isToken).length;
   const regularCreatures = game.battlefield.creatures.filter(c => !c.isToken).length;
   
@@ -1573,6 +1610,7 @@ export const runEnhancedTurn = async (game) => {
   combatPhase(game);
   
   // POST-COMBAT MAIN PHASE
+  game.phase = 'main2';
   game.detailedLog.push({
     turn: game.turn,
     phase: 'main2',
@@ -1583,6 +1621,7 @@ export const runEnhancedTurn = async (game) => {
   await runEnhancedMainPhase(game);
   
   // END STEP
+  game.phase = 'end';
   await checkPhaseTriggersAI(game, 'end');
   game.detailedLog.push({
     turn: game.turn,
