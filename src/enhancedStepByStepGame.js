@@ -8,7 +8,6 @@ import {
   castCommander,
   drawCard,
   untapPhase,
-  combatPhase,
   generateMana
 } from './gameEngine';
 
@@ -30,6 +29,20 @@ import {
   checkScryTriggers,
   analyzeScryEffects
 } from './scryEngine';
+
+// ===== PHASE 2A: Spell Effects & Combat System =====
+import {
+  resolveSpellEffects,
+  cleanupEndOfTurnEffects,
+  getSpellEffectsSummary
+} from './spellEffects.js';
+
+import {
+  executeCombat,
+  getCombatSummary,
+  untapPermanents,
+  clearSummoningSickness
+} from './combatSystem.js';
 
 import {
   parseActivatedAbilities,
@@ -858,6 +871,8 @@ const getStrategicAIDecision = async (game) => {
   // Identify cards with synergy bonuses (for marking in hand display)
   const synergyCardIndices = new Set(synergies.synergyBonuses.map(b => b.cardIndex));
   
+  const combatSummary = getCombatSummary(game);
+
   const prompt = `You are an expert Magic: The Gathering Commander player executing optimal gameplay following professional sequencing principles.
 
 CURRENT GAME STATE:
@@ -873,6 +888,16 @@ BATTLEFIELD:
 Lands (${game.battlefield.lands.length}): ${game.battlefield.lands.map(l => l.name).join(', ') || 'None'}
 Creatures (${game.battlefield.creatures.length}): ${game.battlefield.creatures.map(c => `${c.name}${c.summoningSick ? ' (summoning sick)' : ''}`).join(', ') || 'None'}
 Other Permanents: ${game.battlefield.artifacts.length} artifacts, ${game.battlefield.enchantments.length} enchantments
+
+⚔️ COMBAT CAPABILITIES ⚔️
+${combatSummary.availableAttackers > 0 ? `
+Ready to Attack: ${combatSummary.availableAttackers} creature(s)
+Potential Damage: ${combatSummary.potentialDamage}
+Combat Keywords: ${combatSummary.keywords.length > 0 ? combatSummary.keywords.join(', ') : 'None'}
+${combatSummary.hasLifelink ? '❤️ Lifelink available - you will gain life' : ''}
+${combatSummary.hasVigilance ? '🛡️ Vigilance available - attackers stay untapped' : ''}
+${combatSummary.hasEvasion ? '🦅 Evasion available - flying/menace' : ''}
+` : 'No creatures ready to attack this turn'}
 
 ⭐⭐⭐ BATTLEFIELD SYNERGY ANALYSIS ⭐⭐⭐
 ${synergyInfo}
@@ -1265,6 +1290,11 @@ case 'castSpell': {
       if (hasSpellScry(spell)) {
         const scryAmount = getScryAmount(spell);
         executeScry(game, scryAmount, spell, 'spell');
+      }
+
+      // ===== PHASE 2A: RESOLVE SPELL EFFECTS =====
+      if (spell.category === 'instant' || spell.category === 'sorcery') {
+        await resolveSpellEffects(game, spell);
       }
 
          // CHECK FOR "WHENEVER YOU CAST" TRIGGERS FROM BATTLEFIELD
@@ -1760,6 +1790,9 @@ export const runEnhancedTurn = async (game) => {
   // UNTAP PHASE
   game.phase = 'untap';
   untapPhase(game);
+  
+  // ===== PHASE 2A: CLEAR SUMMONING SICKNESS =====
+  clearSummoningSickness(game);
   generateMana(game);
   await checkPhaseTriggersAI(game, 'untap');
   game.detailedLog.push({
@@ -1835,8 +1868,26 @@ export const runEnhancedTurn = async (game) => {
     details: `Entering combat with ${regularCreatures} creatures and ${tokenCount} tokens`
   });
   
-  await checkPhaseTriggersAI(game, 'combat');
-  combatPhase(game);
+await checkPhaseTriggersAI(game, 'combat');
+  
+  // ===== PHASE 2A: ENHANCED COMBAT SYSTEM =====
+  const combatResults = executeCombat(game);
+  
+  // Log combat details
+  if (combatResults.attackers.length > 0) {
+    const uniqueKeywords = [...new Set(combatResults.keywords)];
+    game.detailedLog.push({
+      turn: game.turn,
+      phase: 'combat',
+      action: '⚔️ Combat Results',
+      attackers: combatResults.attackers.length,
+      damage: combatResults.damage,
+      lifeGained: combatResults.lifeGained,
+      keywords: uniqueKeywords,
+      details: `${combatResults.attackers.length} attacker(s) dealt ${combatResults.damage} damage${combatResults.lifeGained > 0 ? `, gained ${combatResults.lifeGained} life` : ''}${uniqueKeywords.length > 0 ? ` (keywords: ${uniqueKeywords.join(', ')})` : ''}`,
+      success: true
+    });
+  }
   
   // POST-COMBAT MAIN PHASE
   game.phase = 'main2';
@@ -1849,9 +1900,13 @@ export const runEnhancedTurn = async (game) => {
   
   await runEnhancedMainPhase(game);
   
-  // END STEP
+// END STEP
   game.phase = 'end';
   await checkPhaseTriggersAI(game, 'end');
+  
+  // ===== PHASE 2A: CLEANUP TEMPORARY EFFECTS =====
+  cleanupEndOfTurnEffects(game);
+  
   game.detailedLog.push({
     turn: game.turn,
     phase: 'end',
