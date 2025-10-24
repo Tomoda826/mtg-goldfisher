@@ -56,6 +56,20 @@ import {
   logError
 } from './errorHandler.js';
 
+// ===== PHASE 1: Event System, Trigger Handler, Enhanced Permanent State =====
+import EventEmitter, { EVENT_TYPES, createEvent } from './eventSystem.js';
+import { 
+  detectTriggers, 
+  processTriggers 
+} from './triggerHandler.js';
+import { 
+  createEnhancedPermanent,
+  upgradeExistingPermanents,
+  updatePermanentState,
+  calculateEffectiveStats,
+  getPermanentStateSummary
+} from './permanentState.js';
+
 /**
  * Enrich deck cards with full database information
  */
@@ -356,6 +370,151 @@ const executeCastTriggers = (game, castSpell) => {
 /**
  * Initialize enhanced detailed game with enriched card data
  */
+
+/**
+ * ============================================================================
+ * PHASE 1: HELPER FUNCTIONS FOR EVENT & TRIGGER SYSTEM
+ * ============================================================================
+ */
+
+/**
+ * Enhance all permanents on battlefield with enhanced state tracking
+ */
+const enhancePermanentsOnBattlefield = (game) => {
+  game.battlefield.creatures = game.battlefield.creatures.map(creature => {
+    if (!creature.counters || !creature.modifications) {
+      const enhanced = createEnhancedPermanent(creature, game);
+      enhanced.triggers = detectTriggers(enhanced);
+      return enhanced;
+    }
+    return creature;
+  });
+  
+  game.battlefield.artifacts = game.battlefield.artifacts.map(artifact => {
+    if (!artifact.counters || !artifact.modifications) {
+      const enhanced = createEnhancedPermanent(artifact, game);
+      enhanced.triggers = detectTriggers(enhanced);
+      return enhanced;
+    }
+    return artifact;
+  });
+  
+  game.battlefield.enchantments = game.battlefield.enchantments.map(enchantment => {
+    if (!enchantment.counters || !enchantment.modifications) {
+      const enhanced = createEnhancedPermanent(enchantment, game);
+      enhanced.triggers = detectTriggers(enhanced);
+      return enhanced;
+    }
+    return enchantment;
+  });
+  
+  game.battlefield.planeswalkers = game.battlefield.planeswalkers.map(planeswalker => {
+    if (!planeswalker.counters || !planeswalker.modifications) {
+      const enhanced = createEnhancedPermanent(planeswalker, game);
+      enhanced.triggers = detectTriggers(enhanced);
+      return enhanced;
+    }
+    return planeswalker;
+  });
+};
+
+/**
+ * Emit events and process triggers for a spell cast
+ */
+const handleSpellCastEvents = async (game, card) => {
+  // Emit SPELL_CAST event
+  game.eventEmitter.emit(createEvent(
+    EVENT_TYPES.SPELL_CAST,
+    card,
+    { player: 'player', phase: game.phase, zone: 'stack' }
+  ));
+  
+  // If permanent, handle ETB
+  if (['creature', 'artifact', 'enchantment', 'planeswalker'].includes(card.category)) {
+    const allPermanents = [
+      ...game.battlefield.creatures,
+      ...game.battlefield.artifacts,
+      ...game.battlefield.enchantments,
+      ...game.battlefield.planeswalkers
+    ];
+    
+    const enteredPermanent = allPermanents
+      .filter(p => p.name === card.name && !p._etbEmittedThisTurn)
+      .pop();
+    
+    if (enteredPermanent) {
+      enteredPermanent._etbEmittedThisTurn = true;
+      
+      const enhanced = createEnhancedPermanent(enteredPermanent, game);
+      enhanced.triggers = detectTriggers(enhanced);
+      enhanced._etbEmittedThisTurn = true;
+      
+      // Replace in array
+      if (card.category === 'creature') {
+        const idx = game.battlefield.creatures.findIndex(c => c === enteredPermanent);
+        if (idx !== -1) game.battlefield.creatures[idx] = enhanced;
+      } else if (card.category === 'artifact') {
+        const idx = game.battlefield.artifacts.findIndex(a => a === enteredPermanent);
+        if (idx !== -1) game.battlefield.artifacts[idx] = enhanced;
+      } else if (card.category === 'enchantment') {
+        const idx = game.battlefield.enchantments.findIndex(e => e === enteredPermanent);
+        if (idx !== -1) game.battlefield.enchantments[idx] = enhanced;
+      } else if (card.category === 'planeswalker') {
+        const idx = game.battlefield.planeswalkers.findIndex(p => p === enteredPermanent);
+        if (idx !== -1) game.battlefield.planeswalkers[idx] = enhanced;
+      }
+      
+      // Emit ETB
+      game.eventEmitter.emit(createEvent(
+        EVENT_TYPES.PERMANENT_ENTERS_BATTLEFIELD,
+        enhanced,
+        { player: 'player', phase: game.phase, zone: 'battlefield' }
+      ));
+      
+      if (enhanced.triggers.length > 0) {
+        game.detailedLog.push({
+          turn: game.turn,
+          phase: game.phase,
+          action: '🎯 Triggers Detected',
+          source: enhanced.name,
+          count: enhanced.triggers.length,
+          triggers: enhanced.triggers.map(t => t.fullText)
+        });
+      }
+    }
+  }
+  
+  // Process queue and triggers
+  game.eventEmitter.processEventQueue();
+  const spellEvent = { type: EVENT_TYPES.SPELL_CAST, source: card, context: { phase: game.phase } };
+  await processTriggers(game, spellEvent);
+  
+  if (['creature', 'artifact', 'enchantment', 'planeswalker'].includes(card.category)) {
+    const etbEvent = { type: EVENT_TYPES.PERMANENT_ENTERS_BATTLEFIELD, source: card, context: { phase: game.phase } };
+    await processTriggers(game, etbEvent);
+  }
+};
+
+/**
+ * Update all permanents at start of turn
+ */
+const updateAllPermanents = (game) => {
+  const allPermanents = [
+    ...game.battlefield.creatures,
+    ...game.battlefield.artifacts,
+    ...game.battlefield.enchantments,
+    ...game.battlefield.planeswalkers
+  ];
+  
+  allPermanents.forEach(permanent => {
+    if (permanent._etbEmittedThisTurn) {
+      delete permanent._etbEmittedThisTurn;
+    }
+    updatePermanentState(permanent, game);
+  });
+};
+
+
 export const initializeEnhancedDetailedGame = (parsedDeck, deckStrategy, aiAnalysis, cardDatabase) => {
   // Enrich all cards with database info
   const enrichedDeck = enrichCardsWithData(parsedDeck, cardDatabase);
@@ -411,7 +570,9 @@ export const initializeEnhancedDetailedGame = (parsedDeck, deckStrategy, aiAnaly
     errors: [],
     fallbacksUsed: 0,
     successfulAICalls: 0,
-    failedAICalls: 0
+    failedAICalls: 0,
+    // ===== PHASE 1: Initialize Event System ===== 
+  eventEmitter: new EventEmitter()
   };
   
   // Draw opening hand
@@ -1004,7 +1165,7 @@ Respond with JSON:
 /**
  * Execute action with enhanced logging
  */
-const executeStrategicAction = (game, decision) => {
+const executeStrategicAction = async (game, decision) => {
   const logEntry = {
     turn: game.turn,
     phase: game.phase,
@@ -1062,7 +1223,14 @@ case 'castSpell': {
       const manaB4 = {...game.manaPool};
       
       // Cast the spell (this modifies game.manaPool in place)
+      // ===== PHASE 1: Save card before casting (it gets removed from hand) =====
+      const cardBeforeCast = {...game.hand[spellIndex]};
+      
       castSpell(game, spellIndex);
+      
+      // ===== PHASE 1: Handle spell cast events and triggers =====
+      await handleSpellCastEvents(game, cardBeforeCast);
+      
       
       // ✅ SAFETY: Ensure actualTotalMana is synced (should already be done in castSpell)
       
@@ -1128,6 +1296,43 @@ case 'castCommander': {
       const manaB4 = {...game.manaPool};
       
       castCommander(game);
+      
+      // ===== PHASE 1: Handle commander ETB =====
+      const commanderOnField = game.battlefield.creatures.find(c => 
+        c.name === game.deckList.commanders[0]?.name && !c._etbEmittedThisTurn
+      );
+      
+      if (commanderOnField) {
+        commanderOnField._etbEmittedThisTurn = true;
+        
+        const enhanced = createEnhancedPermanent(commanderOnField, game);
+        enhanced.triggers = detectTriggers(enhanced);
+        enhanced._etbEmittedThisTurn = true;
+        
+        const idx = game.battlefield.creatures.findIndex(c => c === commanderOnField);
+        if (idx !== -1) game.battlefield.creatures[idx] = enhanced;
+        
+        game.eventEmitter.emit(createEvent(
+          EVENT_TYPES.PERMANENT_ENTERS_BATTLEFIELD,
+          enhanced,
+          { player: 'player', phase: game.phase, zone: 'battlefield' }
+        ));
+        
+        game.eventEmitter.processEventQueue();
+        const etbEvent = { type: EVENT_TYPES.PERMANENT_ENTERS_BATTLEFIELD, source: enhanced, context: { phase: game.phase } };
+        await processTriggers(game, etbEvent);
+        
+        if (enhanced.triggers.length > 0) {
+          game.detailedLog.push({
+            turn: game.turn,
+            phase: game.phase,
+            action: '🎯 Commander Triggers',
+            source: enhanced.name,
+            count: enhanced.triggers.length
+          });
+        }
+      }
+      
       
       // ✅ DEBUG: Log mana after
       if (game.turn <= 5) {
@@ -1452,7 +1657,7 @@ const runEnhancedMainPhase = async (game, maxActions = 15) => {
         break;
       }
     } else {
-const success = executeStrategicAction(game, decision);
+const success = await executeStrategicAction(game, decision);
 if (success) {
   consecutivePasses = 0;  // Only reset on success
 } else {
@@ -1566,6 +1771,18 @@ export const runEnhancedTurn = async (game) => {
   
   // UPKEEP PHASE
   game.phase = 'upkeep';
+  
+  // ===== PHASE 1: Phase change event =====
+  game.eventEmitter.emit(createEvent(
+    EVENT_TYPES.PHASE_CHANGED,
+    null,
+    { player: 'player', phase: 'upkeep', turn: game.turn }
+  ));
+  
+  game.eventEmitter.processEventQueue();
+  const upkeepEvent = { type: EVENT_TYPES.PHASE_CHANGED, source: null, context: { phase: 'upkeep' } };
+  await processTriggers(game, upkeepEvent);
+  
   await checkPhaseTriggersAI(game, 'upkeep');
   
   // DRAW STEP
@@ -1574,6 +1791,18 @@ export const runEnhancedTurn = async (game) => {
     const drawnCard = game.library[game.library.length - 1];
     const etb = hasETBEffect(drawnCard);
     drawCard(game);
+    
+    // ===== PHASE 1: Card draw event =====
+    game.eventEmitter.emit(createEvent(
+      EVENT_TYPES.CARD_DRAWN,
+      drawnCard,
+      { player: 'player', phase: 'draw' }
+    ));
+    
+    game.eventEmitter.processEventQueue();
+    const drawEvent = { type: EVENT_TYPES.CARD_DRAWN, source: drawnCard, context: { phase: 'draw' } };
+    await processTriggers(game, drawEvent);
+    
     game.detailedLog.push({
       turn: game.turn,
       phase: 'draw',
