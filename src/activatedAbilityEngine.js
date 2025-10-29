@@ -273,24 +273,26 @@ const generateAbilityName = (effect, cost) => {
 const canPayAbilityCost = (gameState, ability, card) => {
   const cost = ability.cost;
   
-  // Check mana
-  const { W, U, B, R, G, total } = cost.mana;
+  // ✅ FIX: Handle 0-cost abilities (e.g., fetch lands with only {T}, Sacrifice)
+  const { W = 0, U = 0, B = 0, R = 0, G = 0, total = 0 } = cost.mana || {};
   
-  // Check colored mana requirements
-  if (gameState.manaPool.W < W) return false;
-  if (gameState.manaPool.U < U) return false;
-  if (gameState.manaPool.B < B) return false;
-  if (gameState.manaPool.R < R) return false;
-  if (gameState.manaPool.G < G) return false;
+  // Check colored mana requirements (only if > 0)
+  if (W > 0 && gameState.manaPool.W < W) return false;
+  if (U > 0 && gameState.manaPool.U < U) return false;
+  if (B > 0 && gameState.manaPool.B < B) return false;
+  if (R > 0 && gameState.manaPool.R < R) return false;
+  if (G > 0 && gameState.manaPool.G < G) return false;
   
-  // Check total mana (including generic)
-  const totalAvailable = Object.values(gameState.manaPool).reduce((a, b) => a + b, 0);
-  if (totalAvailable < total) return false;
+  // Check total mana (including generic) - only if > 0
+  if (total > 0) {
+    const totalAvailable = Object.values(gameState.manaPool).reduce((a, b) => a + b, 0);
+    if (totalAvailable < total) return false;
+  }
   
   // Check tap requirement (card must be untapped)
   if (cost.tap && card.tapped) return false;
   
-  // For now, assume we can pay other costs
+  // For now, assume we can pay other costs (sacrifice is checked elsewhere)
   return true;
 };
 

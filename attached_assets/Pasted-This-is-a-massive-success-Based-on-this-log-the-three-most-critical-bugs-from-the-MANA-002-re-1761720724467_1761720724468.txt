@@ -1,0 +1,71 @@
+This is a massive success.
+
+Based on this log, the three most critical bugs from the `MANA-002` report are **all fixed**. The core mana logic is now working as specified.
+
+### What's Fixed (The Great News!)
+
+1.  **FIXED: Mana Pool Updates After `playLand`**
+    * **Evidence (T1):** The engine started with 0 mana. The AI played `Command Tower`, and the engine *correctly* updated the pool, allowing the AI to identify "1 blue mana" and cast `Preordain` in the very next step.
+
+2.  **FIXED: Mana Pool is Persistent (Multi-Spell Turns)**
+    * **Evidence (T5):** The AI executed a perfect multi-spell turn, and the engine tracked the mana correctly at every step.
+        1.  Start: 4 mana (`{U:2, B:2}`).
+        2.  Cast `Preordain` (Cost 1). Pool is now 3 (`{U:1, B:2}`).
+        3.  Cast `Opt` (Cost 1). Pool is now 2 (`{B:2}`).
+        4.  Cast `Orcish Medicine` (Cost 2). Pool is now 0.
+        5.  `PASS` (Correct, 0 mana).
+    * This is a flawless execution of the specified logic.
+
+3.  **FIXED: `Untap` Mana Calculation is Correct**
+    * **Evidence (T5):** The untap step reports "4 lands = 3 mana available.". This is **perfectly correct**. The four lands on board were `Command Tower`, `Swamp`, `Swamp`, and `Evolving Wilds`. The engine correctly read their abilities and calculated that `Evolving Wilds` produces 0 mana, for a total of 3.
+
+---
+
+### The Last Remaining Bug
+
+The core mana tracking is solid, but the AI is now failing to activate `Evolving Wilds` for a new reason: the **engine is incorrectly rejecting the 0-cost activation.**
+
+Here is the new bug report.
+
+***
+
+## Bug Report: Engine Incorrectly Fails 0-Cost Ability Activations
+
+**ID:** ENGINE-003
+**Priority:** Critical
+**Status:** Open
+
+### Summary
+
+The AI (per `AI-LOGIC-001`) is now correctly identifying that it should activate the 0-cost sacrifice ability of `Evolving Wilds`. However, the engine is incorrectly rejecting this action with a "Cannot afford" error, even though the ability costs 0 mana.
+
+### Observed Behavior
+
+This bug pattern repeats on Turn 1, Turn 2, Turn 3, and Turn 5.
+
+* **Turn 1 (Main 2):**
+    1.  The AI correctly identifies the 0-cost ability: "Evolving Wilds has a 0-cost activated ability..."
+    2.  The engine rejects the action: "❌ Cannot Afford Fetch Land on Evolving Wilds"
+    3.  The log then *incorrectly* reports the action as successful: "MANA activateAbility: Evolving Wilds Activated Fetch Land on Evolving Wilds (cost: 0 mana) ✓"
+    4.  **This is a critical contradiction.** The "Cannot afford" error proves the activation failed, but the log proceeds as if it worked.
+
+* **Turn 2 (Main 1):**
+    1.  The AI correctly identifies the 0-cost ability.
+    2.  The engine rejects the action: "❌ Cannot Afford Fetch Land on Evolving Wilds"
+    3.  The log again *incorrectly* reports success: "MANA activateAbility: Evolving Wilds Activated Fetch Land on Evolving Wilds (cost: 0 mana) ✓"
+
+* **Turn 3 (Main 1):**
+    1.  The AI correctly identifies the 0-cost ability.
+    2.  The engine rejects the action: "❌ Cannot Afford Fetch Land on Evolving Wilds"
+    3.  The log *incorrectly* reports success.
+
+* **Turn 5 (Main 1):**
+    1.  The AI correctly identifies the 0-cost ability.
+    2.  The engine rejects the action: "❌ Cannot Afford Fetch Land on Evolving Wilds"
+    3.  The log *incorrectly* reports success.
+
+**Conclusion:** The engine's cost-checking logic is failing for 0-cost abilities. The AI is trying to make the correct play, but the engine is preventing it.
+
+### Recommendation
+
+Review the engine's cost-validation function for activated abilities. It appears to be failing on abilities that do not have a mana cost (i.e., `cost: 0`) and may also be incorrectly logging a "success" message immediately after an error.
