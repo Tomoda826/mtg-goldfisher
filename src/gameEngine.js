@@ -490,6 +490,9 @@ export const untapPhase = (state) => {
 // Generate available mana from lands AND artifacts
 // Generate available mana from lands AND artifacts
 export const generateMana = (state) => {
+  console.log(`🔍 [generateMana] Starting - Turn ${state.turn}`);
+  console.log(`🔍 [generateMana] Battlefield: ${state.battlefield.lands.length} lands, ${state.battlefield.artifacts.length} artifacts, ${state.battlefield.creatures.length} creatures`);
+  
   // Initialize mana pool manager if doesn't exist
   if (!state.manaPoolManager) {
     state.manaPoolManager = new ManaPool();
@@ -497,6 +500,7 @@ export const generateMana = (state) => {
   
   // Empty pool at start of each mana generation
   state.manaPoolManager.emptyPool();
+  console.log(`🔍 [generateMana] Pool emptied`);
   
   // Process lands
   state.battlefield.lands.forEach(land => {
@@ -691,6 +695,9 @@ export const generateMana = (state) => {
   // Update legacy fields for backwards compatibility
   state.manaPool = state.manaPoolManager.getPool();
   state.actualTotalMana = state.manaPoolManager.getTotal();
+  
+  console.log(`🔍 [generateMana] Final total: ${state.actualTotalMana}`);
+  console.log(`🔍 [generateMana] Final pool:`, state.manaPool);
   
   // Log
   if (state.actualTotalMana > 0) {

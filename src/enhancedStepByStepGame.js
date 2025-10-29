@@ -1877,11 +1877,16 @@ untapPhase(game);
     }
   });
   
+  console.log(`🔍 [untap] BEFORE generateMana - Expected: ${landManaProduced + artifactManaProduced + creatureManaProduced} (lands:${landManaProduced} + artifacts:${artifactManaProduced} + creatures:${creatureManaProduced})`);
+  console.log(`🔍 [untap] Land count: ${landCountBeforeTap}, Artifact count: ${artifactCountBeforeTap}, Creature count: ${creatureManaDorksBeforeTap}`);
+  
   generateMana(game);
   await checkPhaseTriggersAI(game, 'untap');
   
   const expectedMana = landManaProduced + artifactManaProduced + creatureManaProduced;
   const totalMana = game.actualTotalMana || 0;
+  
+  console.log(`🔍 [untap] AFTER generateMana - Expected: ${expectedMana}, Actual: ${totalMana}`);
   
   let manaSourcesDesc = `${landCountBeforeTap} lands`;
   if (artifactCountBeforeTap > 0) {
