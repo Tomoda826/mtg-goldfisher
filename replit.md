@@ -78,6 +78,14 @@ An AI-powered Magic: The Gathering Commander deck analyzer and simulator. This a
 - **Run**: `npx vite preview --host 0.0.0.0`
 
 ## Recent Changes
+- **2025-10-29**: Fixed untap mana calculation ignoring board state - MANA-006 resolved ✅
+  - **Root Cause**: getManaProductionFromManifest was not setting `actualManaProduced` for single-color and anyColor mana sources
+  - **Symptom**: Untap phase showed "0 lands" and ignored artifact mana, used flawed turn-based heuristic instead of counting actual permanents
+  - **Fix 1**: Updated getManaProductionFromManifest to ALWAYS set actualManaProduced for all source types (anyColor, multi-color, single-color)
+  - **Fix 2**: Updated getLandManaProduction to preserve actualManaProduced when using manifest data
+  - **Result**: Untap phase now correctly counts and displays all mana sources (e.g., "3 lands + 1 artifacts = 4 mana")
+  - This was the final piece needed for accurate untap mana calculation - all mana sources now properly tracked
+
 - **2025-10-29**: Fixed basic land counting regression - MANA-003 resolved ✅
   - **Root Cause**: Basic lands were missing `actualManaProduced` property in getLandManaProduction return object
   - **Symptom**: Untap phase logged "0 lands" every turn despite lands being played and untapped correctly
