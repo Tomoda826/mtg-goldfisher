@@ -78,6 +78,12 @@ An AI-powered Magic: The Gathering Commander deck analyzer and simulator. This a
 - **Run**: `npx vite preview --host 0.0.0.0`
 
 ## Recent Changes
+- **2025-10-29**: Fixed 0-cost ability validation - ENGINE-003 resolved ✅
+  - **Cost Validation Fix**: Updated canPayAbilityCost in activatedAbilityEngine.js to properly handle 0-cost abilities
+  - **Default Values**: Added default values for mana destructuring to handle abilities with no mana cost
+  - **Conditional Checks**: Only validate mana requirements if they're greater than 0
+  - Evolving Wilds and other {T}, Sacrifice abilities now activate successfully without "Cannot afford" errors
+
 - **2025-10-29**: Fixed AI fetch land activation priority - AI-LOGIC-001 resolved ✅
   - **Fetch Land Instructions**: Updated AI prompt to activate fetch lands IMMEDIATELY after playing them (same turn), not "next turn"
   - **Free Action Priority**: Added new decision priority step for 0-cost activated abilities before spell casting
