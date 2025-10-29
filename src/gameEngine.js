@@ -599,6 +599,61 @@ export const generateMana = (state) => {
     }
   });
   
+  // Process creatures with mana abilities (e.g., Birds of Paradise, mana dorks)
+  state.battlefield.creatures.forEach(creature => {
+    if (creature.tapped || creature.summoningSick) return;
+    
+    const manaAbilityData = state.behaviorManifest?.manaAbilities?.get(creature.name);
+    
+    if (manaAbilityData?.hasManaAbility) {
+      // NEW SYSTEM
+      manaAbilityData.abilities.forEach(ability => {
+        const canActivate = ability.activationCost.every(cost => {
+          if (cost === '{T}') return !creature.tapped && !creature.summoningSick;
+          return true;
+        });
+        
+        if (canActivate) {
+          ability.produces.forEach(production => {
+            state.manaPoolManager.addMana(production, state, creature);
+          });
+          
+          if (ability.activationCost.includes('{T}')) {
+            creature.tapped = true;
+          }
+        }
+      });
+    } else {
+      // FALLBACK: Old system - check oracle text for mana abilities
+      const text = (creature.oracle_text || '').toLowerCase();
+      if (text.includes('{t}:') && text.includes('add')) {
+        const production = getManaProductionFromManifest(creature, state.behaviorManifest);
+        
+        // Similar old logic as artifacts
+        const colors = ['W', 'U', 'B', 'R', 'G', 'C'];
+        let actualAmount = 0;
+        
+        const colorCount = colors.filter(c => production[c] > 0).length;
+        if (colorCount >= 2) {
+          actualAmount = production.actualManaProduced || 1;
+        } else {
+          actualAmount = colors.reduce((sum, c) => sum + (production[c] || 0), 0);
+        }
+        
+        if (actualAmount > 0) {
+          colors.forEach(color => {
+            if (production[color] > 0) {
+              state.manaPoolManager.pool[color] += production[color];
+            }
+          });
+          state.manaPoolManager.actualTotal += actualAmount;
+          
+          creature.tapped = true;
+        }
+      }
+    }
+  });
+  
   // Update legacy fields for backwards compatibility
   state.manaPool = state.manaPoolManager.getPool();
   state.actualTotalMana = state.manaPoolManager.getTotal();
@@ -756,7 +811,7 @@ export const castSpell = (state, cardIndex) => {
   console.log(`[castSpell] Attempting to cast ${card.name} (cost: ${card.cmc || 0})`);
   console.log(`[castSpell] Current pool:`, state.manaPool, `Total: ${poolTotal}`);
   
-  if (!canPayMana(state.manaPool, card.mana_cost, state.actualTotalMana)) {
+  if (!canPayMana(state.manaPool, card.mana_cost, state.actualTotalMana, state.manaPoolManager)) {
     const totalAvailable = Object.values(state.manaPool).reduce((a, b) => a + b, 0);
     state.log.push(`⚠️ CANNOT CAST ${card.name}: Need ${card.cmc} mana, have ${totalAvailable}`);
     console.log(`[castSpell] ⚠️ Affordability check FAILED`);
@@ -765,13 +820,17 @@ export const castSpell = (state, cardIndex) => {
   
   console.log(`[castSpell] ✅ Affordability check PASSED - proceeding with cast`);
   
-  // Pay mana
-  state.manaPool = payMana(state.manaPool, card.mana_cost);
-  
-  // ✅ CRITICAL: Sync actualTotalMana after spending mana (fixes phantom mana bug)
-  // ✅ CRITICAL: Manually decrement actualTotalMana (don't recalc from pool - breaks dual lands!)
-  const costPaid = parseMana(card.mana_cost).total;
-  state.actualTotalMana = Math.max(0, (state.actualTotalMana || 0) - costPaid);
+  // Pay mana - use manaPoolManager if available for proper color tracking
+  if (state.manaPoolManager) {
+    state.manaPoolManager.pay(card.mana_cost);
+    state.manaPool = state.manaPoolManager.getPool();
+    state.actualTotalMana = state.manaPoolManager.getTotal();
+  } else {
+    // Fallback to old system
+    state.manaPool = payMana(state.manaPool, card.mana_cost);
+    const costPaid = parseMana(card.mana_cost).total;
+    state.actualTotalMana = Math.max(0, (state.actualTotalMana || 0) - costPaid);
+  }
   
   //... rest of function
 
@@ -838,33 +897,53 @@ export const castCommander = (state) => {
     return state;
   }
   
-  if (!canPayMana(state.manaPool, commander.mana_cost, state.actualTotalMana)) {
+  if (!canPayMana(state.manaPool, commander.mana_cost, state.actualTotalMana, state.manaPoolManager)) {
     state.log.push(`⚠️ Cannot cast commander: wrong colors`);
     return state;
   }
   
-  // Pay mana
-  state.manaPool = payMana(state.manaPool, commander.mana_cost);
-  
-  
-  // ✅ CRITICAL: Manually decrement actualTotalMana by base cost + tax
-  const baseCost = parseMana(commander.mana_cost).total;
-  const totalCost = baseCost + additionalCost;
-  state.actualTotalMana = Math.max(0, (state.actualTotalMana || 0) - totalCost);
-  // Pay commander tax from remaining mana
-  let taxToPay = additionalCost;
-  const colors = ['C', 'W', 'U', 'B', 'R', 'G'];
-  for (const color of colors) {
-    if (taxToPay > 0 && state.manaPool[color] > 0) {
-      const payment = Math.min(taxToPay, state.manaPool[color]);
-      state.manaPool[color] -= payment;
-      taxToPay -= payment;
+  // Pay mana - use manaPoolManager if available
+  if (state.manaPoolManager) {
+    // Pay the base commander cost
+    state.manaPoolManager.pay(commander.mana_cost);
+    
+    // Pay commander tax (generic mana) using the pay() method
+    if (additionalCost > 0) {
+      const taxCost = `{${additionalCost}}`;
+      // Check if we can pay the tax
+      if (!state.manaPoolManager.canPay(taxCost)) {
+        state.log.push(`⚠️ Cannot pay commander tax: need ${additionalCost} more generic mana`);
+        return state;
+      }
+      state.manaPoolManager.pay(taxCost);
     }
-  }
-  
-  if (taxToPay > 0) {
-    state.log.push(`⚠️ Cannot pay commander tax: need ${additionalCost} more`);
-    return state;
+    
+    // Sync state with manager
+    state.manaPool = state.manaPoolManager.getPool();
+    state.actualTotalMana = state.manaPoolManager.getTotal();
+  } else {
+    // Fallback to old system
+    state.manaPool = payMana(state.manaPool, commander.mana_cost);
+    
+    const baseCost = parseMana(commander.mana_cost).total;
+    const totalCost = baseCost + additionalCost;
+    state.actualTotalMana = Math.max(0, (state.actualTotalMana || 0) - totalCost);
+    
+    // Pay commander tax from remaining mana
+    let taxToPay = additionalCost;
+    const colors = ['C', 'W', 'U', 'B', 'R', 'G'];
+    for (const color of colors) {
+      if (taxToPay > 0 && state.manaPool[color] > 0) {
+        const payment = Math.min(taxToPay, state.manaPool[color]);
+        state.manaPool[color] -= payment;
+        taxToPay -= payment;
+      }
+    }
+    
+    if (taxToPay > 0) {
+      state.log.push(`⚠️ Cannot pay commander tax: need ${additionalCost} more`);
+      return state;
+    }
   }
   
   // Cast commander

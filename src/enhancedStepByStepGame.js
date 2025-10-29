@@ -1828,16 +1828,26 @@ untapPhase(game);
   
   // ✅ FIX: Count BEFORE generateMana taps them
   const landCountBeforeTap = game.battlefield.lands.filter(l => !l.tapped).length;
-  const artifactCount = game.battlefield.artifacts.length;
+  const artifactCountBeforeTap = game.battlefield.artifacts.filter(a => !a.tapped).length;
+  const creatureManaDorksBeforeTap = game.battlefield.creatures.filter(c => {
+    if (c.tapped || c.summoningSick) return false;
+    const manaAbilityData = game.behaviorManifest?.manaAbilities?.get(c.name);
+    if (manaAbilityData?.hasManaAbility) return true;
+    const text = (c.oracle_text || '').toLowerCase();
+    return text.includes('{t}:') && text.includes('add');
+  }).length;
   
   generateMana(game);
   await checkPhaseTriggersAI(game, 'untap');
   
   const totalMana = game.actualTotalMana || 0;
   
-let manaSourcesDesc = `${landCountBeforeTap} lands`;
-  if (artifactCount > 0) {
-    manaSourcesDesc += ` + ${artifactCount} artifacts`;
+  let manaSourcesDesc = `${landCountBeforeTap} lands`;
+  if (artifactCountBeforeTap > 0) {
+    manaSourcesDesc += ` + ${artifactCountBeforeTap} artifacts`;
+  }
+  if (creatureManaDorksBeforeTap > 0) {
+    manaSourcesDesc += ` + ${creatureManaDorksBeforeTap} creatures`;
   }
   
   game.detailedLog.push({
