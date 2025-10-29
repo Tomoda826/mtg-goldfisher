@@ -30,3 +30,6 @@ outputType = "webview"
 deploymentTarget = "autoscale"
 run = ["npx", "vite", "preview", "--host", "0.0.0.0"]
 build = ["npm", "run", "build"]
+
+[[ports]]
+localPort = 5000
