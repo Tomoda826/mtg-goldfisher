@@ -516,6 +516,12 @@ export const generateMana = (state) => {
         const canActivate = ability.activationCost.every(cost => {
           if (cost === '{T}') return !land.tapped;
           if (cost === 'sacrifice') return true; // Handle separately
+          // ✅ FIX: Reject abilities that require paying mana (e.g., Great Hall of the Citadel)
+          // During untap, mana pool is empty, so we can't pay mana costs
+          if (cost.match(/^\{.*\}$/)) {
+            // This is a mana cost - we can't pay it during untap
+            return false;
+          }
           return true; // Other costs not common for lands
         });
         
@@ -578,6 +584,10 @@ export const generateMana = (state) => {
       manaAbilityData.abilities.forEach(ability => {
         const canActivate = ability.activationCost.every(cost => {
           if (cost === '{T}') return !artifact.tapped;
+          // ✅ FIX: Reject abilities that require paying mana during untap
+          if (cost.match(/^\{.*\}$/)) {
+            return false; // Can't pay mana costs during untap
+          }
           return true;
         });
         
@@ -638,6 +648,10 @@ export const generateMana = (state) => {
       manaAbilityData.abilities.forEach(ability => {
         const canActivate = ability.activationCost.every(cost => {
           if (cost === '{T}') return !creature.tapped && !creature.summoningSick;
+          // ✅ FIX: Reject abilities that require paying mana during untap
+          if (cost.match(/^\{.*\}$/)) {
+            return false; // Can't pay mana costs during untap
+          }
           return true;
         });
         
