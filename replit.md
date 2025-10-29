@@ -78,6 +78,13 @@ An AI-powered Magic: The Gathering Commander deck analyzer and simulator. This a
 - **Run**: `npx vite preview --host 0.0.0.0`
 
 ## Recent Changes
+- **2025-10-29**: Fixed critical mana calculation bugs in fix/mana-parsing-logic branch
+  - **Creature Mana Abilities**: Updated `generateMana()` in gameEngine.js to process creatures with mana abilities (e.g., Birds of Paradise, mana dorks), checking for summoning sickness and using behaviorManifest for proper mana production
+  - **Accurate Mana Logging**: Fixed untap phase log in enhancedStepByStepGame.js to count and report creatures with mana abilities alongside lands and artifacts
+  - **Mana Pool Synchronization**: Updated `castSpell()` and `castCommander()` to consistently use ManaPoolManager for all mana operations, ensuring mana pool colors remain properly tracked after casting spells
+  - **Commander Tax Payment**: Fixed commander tax payment to use ManaPoolManager.pay() method instead of direct pool mutation, maintaining synchronization throughout payment flow
+  - All changes architect-reviewed and verified to resolve the four reported mana calculation bugs
+
 - **2025-10-29**: Initial Replit setup and branch configuration
   - Imported project from GitHub
   - Switched to `fix/mana-parsing-logic` branch
