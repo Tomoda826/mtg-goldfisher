@@ -954,8 +954,9 @@ ${game.hand.map((c, i) => {
     if (isFetchLand && c.category === 'land') {
       cardInfo += `\n      📍 THIS IS A FETCH LAND - Special Instructions:`;
       cardInfo += `\n         1️⃣  Play it as your land drop (if available this turn)`;
-      cardInfo += `\n         2️⃣  NEXT turn, activate it from battlefield to search for a basic land`;
-      cardInfo += `\n         3️⃣  Do NOT try to "activate" it from your hand - that's illegal!`;
+      cardInfo += `\n         2️⃣  IMMEDIATELY activate it from battlefield (same turn!) to search for a basic land`;
+      cardInfo += `\n         3️⃣  Fetch land activation is FREE (0 cost) and should be done right away for color fixing`;
+      cardInfo += `\n         4️⃣  Do NOT try to "activate" it from your hand - that's illegal!`;
       
       // Show what the ability does
       const fetchAbility = battlefieldAbilities[0];
@@ -1070,7 +1071,12 @@ Decision Priority (MANA → ENGINE → THREAT Framework):
 
 1. **Land Drop**: Can I play a land this turn? → Play the optimal land first.
 
-2. **Main Phase Evaluation** (follow sequencePriority ranking):
+2. **FREE ACTIONS**: After playing a land, check for 0-cost activated abilities:
+   - ⚡ Fetch lands (Evolving Wilds, etc.): IMMEDIATELY activate to search for basic land
+   - ⚡ 0-cost abilities on battlefield: Activate these before casting spells
+   - These are free mana-fixing/card advantage - always prioritize them!
+
+3. **Main Phase Evaluation** (follow sequencePriority ranking):
    
    Step A - Identify highest-priority action type available:
    - MANA: Ramp spells, mana rocks, land tutors (accelerate to win condition)
@@ -1088,13 +1094,13 @@ Decision Priority (MANA → ENGINE → THREAT Framework):
    - ✅ Activate NON-MANA ability (cycling, tokens, card draw)
    - ❌ NEVER manually activate mana abilities (these are automatic!)
 
-3. **Re-evaluate After Each Action**:
+4. **Re-evaluate After Each Action**:
    - Did I use all my mana?
-   - Return to Step 2 to find next best action with remaining mana
+   - Return to Step 3 to find next best action with remaining mana
    - Continue until no more productive plays available
 
-4. **End Phase Properly**:
-   - If Steps 1 & 2 yield no more viable actions → Proceed to Combat/Pass
+5. **End Phase Properly**:
+   - If Steps 1-3 yield no more viable actions → Proceed to Combat/Pass
    - Do NOT tap lands for mana you can't use (mana pools empty between steps)
    - Floating unused mana is NOT a productive play
 
