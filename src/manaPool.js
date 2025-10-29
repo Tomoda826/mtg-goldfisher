@@ -1,0 +1,417 @@
+// Mana Pool Manager - Strategic mana management with AI-driven color choices
+// Based on comprehensive mana ability parsing guide
+
+/**
+ * ManaPool Class - Centralized mana pool management
+ * 
+ * Handles:
+ * - Adding mana from parsed abilities
+ * - Resolving variable amounts (X)
+ * - Strategic color choices based on hand analysis
+ * - Paying costs correctly (colored first, then generic)
+ * - Tracking actual total mana (no double-counting)
+ */
+export class ManaPool {
+  constructor() {
+    this.pool = { W: 0, U: 0, B: 0, R: 0, G: 0, C: 0 };
+    this.actualTotal = 0;
+    this.history = []; // For debugging
+  }
+  
+  /**
+   * Add mana from a parsed ability
+   * 
+   * @param {Object} production - Production object from parsed ability
+   *   { quantity: number|string, types: Array }
+   * @param {Object} game - Game state for context
+   * @param {Object} permanent - The permanent producing mana
+   */
+  addMana(production, game, permanent) {
+    const { quantity, types } = production;
+    
+    // Step 1: Resolve variable quantity (X)
+    let amount;
+    if (typeof quantity === 'string' && quantity.startsWith('X=')) {
+      amount = this.resolveQuantity(quantity, game, permanent);
+    } else {
+      amount = quantity;
+    }
+    
+    // Step 2: Handle different type structures
+    if (!types || types.length === 0) {
+      console.warn(`[ManaPool] No types specified for ${permanent.name}`);
+      return;
+    }
+    
+    // Type structure: [{ choice: [...] }]
+    if (types[0]?.choice) {
+      const color = this.chooseOptimalColor(types[0].choice, game, permanent);
+      this.pool[color] += amount;
+      this.actualTotal += amount;
+      
+      this.history.push({
+        source: permanent.name,
+        type: 'choice',
+        chosen: color,
+        amount,
+        options: types[0].choice
+      });
+      
+      return;
+    }
+    
+    // Type structure: [{ combination: [...], total: "X" }]
+    if (types[0]?.combination) {
+      const combo = this.chooseOptimalCombination(types[0].combination, amount, game);
+      combo.forEach(c => this.pool[c]++);
+      this.actualTotal += amount;
+      
+      this.history.push({
+        source: permanent.name,
+        type: 'combination',
+        chosen: combo,
+        amount
+      });
+      
+      return;
+    }
+    
+    // Type structure: ["G", "W"] (fixed colors)
+    if (Array.isArray(types) && types.every(t => typeof t === 'string')) {
+      types.forEach(color => {
+        if (['W', 'U', 'B', 'R', 'G', 'C'].includes(color)) {
+          this.pool[color]++;
+        }
+      });
+      this.actualTotal += types.length;
+      
+      this.history.push({
+        source: permanent.name,
+        type: 'fixed',
+        colors: types,
+        amount: types.length
+      });
+      
+      return;
+    }
+    
+    console.warn(`[ManaPool] Unknown type structure for ${permanent.name}:`, types);
+  }
+  
+  /**
+   * Resolve variable quantity (X rules)
+   */
+  resolveQuantity(rule, game, permanent) {
+    if (rule === 'X=count(defenders)') {
+      const count = (game.battlefield.creatures || []).filter(c => 
+        (c.oracle_text || '').toLowerCase().includes('defender')
+      ).length;
+      console.log(`[ManaPool] Resolved ${rule} = ${count}`);
+      return count;
+    }
+    
+    if (rule === 'X=power(this)') {
+      const power = permanent.power || 0;
+      console.log(`[ManaPool] Resolved ${rule} = ${power}`);
+      return power;
+    }
+    
+    if (rule === 'X=max_power(creatures)') {
+      const maxPower = Math.max(
+        0,
+        ...(game.battlefield.creatures || []).map(c => c.power || 0)
+      );
+      console.log(`[ManaPool] Resolved ${rule} = ${maxPower}`);
+      return maxPower;
+    }
+    
+    if (rule.includes('sacrificedMV')) {
+      const mv = game.lastSacrificed?.cmc || 0;
+      console.log(`[ManaPool] Resolved ${rule} = ${mv}`);
+      return mv;
+    }
+    
+    if (rule === 'X=count(artifacts)') {
+      const count = (game.battlefield.artifacts || []).length;
+      console.log(`[ManaPool] Resolved ${rule} = ${count}`);
+      return count;
+    }
+    
+    if (rule === 'X=count(creatures)') {
+      const count = (game.battlefield.creatures || []).length;
+      console.log(`[ManaPool] Resolved ${rule} = ${count}`);
+      return count;
+    }
+    
+    console.warn(`[ManaPool] Unknown X rule: ${rule}, defaulting to 1`);
+    return 1;
+  }
+  
+  /**
+   * Strategic color choice - analyze hand needs and choose optimally
+   */
+  chooseOptimalColor(colors, game, permanent) {
+    // Special case: Commander's color identity (Command Tower, Arcane Signet)
+    if (permanent.oracle_text?.toLowerCase().includes('commander')) {
+      return this.chooseFromCommanderIdentity(colors, game);
+    }
+    
+    // Analyze what colors are needed in hand
+    const handNeeds = this.analyzeHandColorNeeds(game.hand, game);
+    
+    // Find most-needed color that's available in choices
+    for (const color of colors) {
+      if (handNeeds[color] > 0) {
+        console.log(`[ManaPool] Chose ${color} from ${colors} (hand needs it)`);
+        return color;
+      }
+    }
+    
+    // No immediate need - choose based on overall deck colors
+    if (game.strategy?.colors) {
+      for (const color of game.strategy.colors) {
+        if (colors.includes(color)) {
+          console.log(`[ManaPool] Chose ${color} from ${colors} (deck primary color)`);
+          return color;
+        }
+      }
+    }
+    
+    // Default to first available
+    console.log(`[ManaPool] Chose ${colors[0]} from ${colors} (default)`);
+    return colors[0];
+  }
+  
+  /**
+   * Choose from commander's color identity
+   */
+  chooseFromCommanderIdentity(colors, game) {
+    const commander = game.commandZone?.[0] || game.battlefield.creatures?.find(c => c.isCommander);
+    
+    if (!commander?.mana_cost) {
+      return colors[0];
+    }
+    
+    // Extract commander's colors
+    const commanderColors = [];
+    const cost = commander.mana_cost;
+    if (cost.includes('{W}')) commanderColors.push('W');
+    if (cost.includes('{U}')) commanderColors.push('U');
+    if (cost.includes('{B}')) commanderColors.push('B');
+    if (cost.includes('{R}')) commanderColors.push('R');
+    if (cost.includes('{G}')) commanderColors.push('G');
+    
+    // Filter available colors to only those in identity
+    const validColors = colors.filter(c => commanderColors.includes(c));
+    
+    if (validColors.length > 0) {
+      // Choose based on hand needs from valid colors
+      const handNeeds = this.analyzeHandColorNeeds(game.hand, game);
+      for (const color of validColors) {
+        if (handNeeds[color] > 0) return color;
+      }
+      return validColors[0];
+    }
+    
+    // Shouldn't happen, but fallback
+    return colors[0];
+  }
+  
+  /**
+   * Strategic combination choice - greedy fill most-needed colors
+   */
+  chooseOptimalCombination(colors, amount, game) {
+    const handNeeds = this.analyzeHandColorNeeds(game.hand, game);
+    
+    // Sort colors by need (descending)
+    const sorted = colors.sort((a, b) => handNeeds[b] - handNeeds[a]);
+    
+    const combo = [];
+    for (let i = 0; i < amount; i++) {
+      // Greedy: fill most-needed colors first, cycling through if needed
+      combo.push(sorted[i % sorted.length]);
+    }
+    
+    console.log(`[ManaPool] Chose combination ${combo} for ${amount} mana`);
+    return combo;
+  }
+  
+  /**
+   * Analyze what colors are needed in hand
+   */
+  analyzeHandColorNeeds(hand, game) {
+    const needs = { W: 0, U: 0, B: 0, R: 0, G: 0, C: 0 };
+    
+    if (!hand) return needs;
+    
+    // Analyze hand
+    hand.forEach(card => {
+      if (card.category === 'land') return; // Skip lands
+      
+      const cost = card.mana_cost || '';
+      const matches = cost.match(/\{([WUBRGC])\}/g) || [];
+      
+      matches.forEach(match => {
+        const color = match.replace(/[{}]/g, '');
+        if (needs[color] !== undefined) {
+          needs[color]++;
+        }
+      });
+    });
+    
+    // Weight commander heavily if in command zone
+    if (game.commandZone?.[0]) {
+      const commander = game.commandZone[0];
+      const cost = commander.mana_cost || '';
+      const matches = cost.match(/\{([WUBRGC])\}/g) || [];
+      
+      matches.forEach(match => {
+        const color = match.replace(/[{}]/g, '');
+        if (needs[color] !== undefined) {
+          needs[color] += 3; // Heavy weight
+        }
+      });
+    }
+    
+    return needs;
+  }
+  
+  /**
+   * Check if we can pay a mana cost
+   */
+  canPay(manaCost) {
+    if (!manaCost) return true;
+    
+    const required = this.parseManaCostDetailed(manaCost);
+    
+    // Check colored requirements
+    for (const [color, amount] of Object.entries(required.colored)) {
+      if (this.pool[color] < amount) {
+        return false;
+      }
+    }
+    
+    // Check total availability for generic
+    const totalRequired = Object.values(required.colored).reduce((a, b) => a + b, 0) 
+                         + required.generic;
+    
+    return this.actualTotal >= totalRequired;
+  }
+  
+  /**
+   * Pay a mana cost
+   */
+  pay(manaCost) {
+    if (!manaCost) return;
+    
+    const required = this.parseManaCostDetailed(manaCost);
+    
+    // Pay colored first
+    for (const [color, amount] of Object.entries(required.colored)) {
+      this.pool[color] -= amount;
+      this.actualTotal -= amount;
+    }
+    
+    // Pay generic with remaining mana
+    let remaining = required.generic;
+    
+    // Prioritize colorless for generic
+    if (this.pool.C >= remaining) {
+      this.pool.C -= remaining;
+      this.actualTotal -= remaining;
+      remaining = 0;
+    } else {
+      remaining -= this.pool.C;
+      this.actualTotal -= this.pool.C;
+      this.pool.C = 0;
+    }
+    
+    // Use colored mana for generic if needed
+    const colorPriority = ['W', 'U', 'B', 'R', 'G'];
+    for (const color of colorPriority) {
+      if (remaining <= 0) break;
+      
+      const use = Math.min(this.pool[color], remaining);
+      this.pool[color] -= use;
+      this.actualTotal -= use;
+      remaining -= use;
+    }
+    
+    if (remaining > 0) {
+      console.error(`[ManaPool] Failed to pay ${remaining} generic mana - insufficient mana!`);
+    }
+  }
+  
+  /**
+   * Parse mana cost into colored and generic components
+   */
+  parseManaCostDetailed(manaCost) {
+    const colored = { W: 0, U: 0, B: 0, R: 0, G: 0, C: 0 };
+    let generic = 0;
+    
+    if (!manaCost) return { colored, generic };
+    
+    const symbols = manaCost.match(/\{([^}]+)\}/g) || [];
+    
+    symbols.forEach(symbol => {
+      const inner = symbol.replace(/[{}]/g, '');
+      
+      // Generic mana (numbers)
+      if (/^\d+$/.test(inner)) {
+        generic += parseInt(inner);
+      }
+      // Colored mana
+      else if (/^[WUBRGC]$/.test(inner)) {
+        colored[inner]++;
+      }
+      // Hybrid mana (simplified - count as 1 generic)
+      else if (inner.includes('/')) {
+        generic++;
+      }
+    });
+    
+    return { colored, generic };
+  }
+  
+  /**
+   * Empty the mana pool (called at end of phase)
+   */
+  emptyPool() {
+    this.pool = { W: 0, U: 0, B: 0, R: 0, G: 0, C: 0 };
+    this.actualTotal = 0;
+    this.history = [];
+  }
+  
+  /**
+   * Get current pool state (for backwards compatibility)
+   */
+  getPool() {
+    return { ...this.pool };
+  }
+  
+  /**
+   * Get actual total mana (for backwards compatibility)
+   */
+  getTotal() {
+    return this.actualTotal;
+  }
+  
+  /**
+   * Get detailed history (for debugging)
+   */
+  getHistory() {
+    return [...this.history];
+  }
+  
+  /**
+   * Debug string representation
+   */
+  toString() {
+    const colors = Object.entries(this.pool)
+      .filter(([, amount]) => amount > 0)
+      .map(([color, amount]) => `${color}:${amount}`)
+      .join(' ');
+    
+    return `Total: ${this.actualTotal} (${colors || 'none'})`;
+  }
+}

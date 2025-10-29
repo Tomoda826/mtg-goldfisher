@@ -148,6 +148,22 @@ if (filterLandPattern.test(text)) {
     production.requiresSacrifice = true;
   }
   
+  
+// Parse numeric amounts FIRST (e.g., "add {C}{C}" or "add {C}{C}{C}")
+  const tripleColorless = text.match(/\{c\}\{c\}\{c\}/gi);
+  if (tripleColorless) {
+    production.amount = 3;
+    production.colors = ['C'];
+    return production;
+  }
+  
+  const doubleColorless = text.match(/\{c\}\{c\}/gi);
+  if (doubleColorless) {
+    production.amount = 2;
+    production.colors = ['C'];
+    return production;
+  }
+
 // Parse mana symbols
 const manaSymbols = text.match(/\{[wubrgc]\}/gi) || [];
 const uniqueColors = new Set();
@@ -160,7 +176,7 @@ manaSymbols.forEach(symbol => {
 });
 
 production.colors = Array.from(uniqueColors);
-production.amount = 1;  // ✅ FIX: Lands produce 1 mana per tap (choose from colors)
+production.amount = 1;  // Default: single mana per tap
   
   // Check for "any color" text
   if (text.includes('any color') || text.includes('mana of any')) {
@@ -171,19 +187,6 @@ production.amount = 1;  // ✅ FIX: Lands produce 1 mana per tap (choose from co
   // Check for conditional mana (only usable for certain things)
   if (text.includes('spend this mana only') || text.includes('can be spent only')) {
     production.conditional = true;
-  }
-  
-  // Parse numeric amounts (e.g., "add {C}{C}")
-  const doubleColorless = text.match(/\{c\}\{c\}/gi);
-  if (doubleColorless) {
-    production.amount = 2;
-    production.colors = ['C'];
-  }
-  
-  const tripleColorless = text.match(/\{c\}\{c\}\{c\}/gi);
-  if (tripleColorless) {
-    production.amount = 3;
-    production.colors = ['C'];
   }
   
   return production;
@@ -518,6 +521,7 @@ const analyzeActivatedAbilities = (text) => {
  */
 export const createDeckBehaviorManifest = (parsedDeck) => {
   const manifest = {
+    manaAbilities: new Map(),
     manaProducers: [],
     fetchLands: [],
     tutors: [],
@@ -548,6 +552,11 @@ export const createDeckBehaviorManifest = (parsedDeck) => {
   ];
   
   allCards.forEach(card => {
+      // ✅ NEW: Parse and cache mana abilities
+  const manaAbilityData = parseManaAbility(card);
+  if (manaAbilityData.hasManaAbility) {
+    manifest.manaAbilities.set(card.name, manaAbilityData);
+  }
     const behavior = analyzeCardBehavior(card);
     
     if (behavior.manaProduction.produces) {
@@ -659,6 +668,401 @@ export const getManaProductionFromManifest = (card, manifest) => {
   }
   
   return manaPool;
+};
+
+/**
+ * COMPREHENSIVE MANA ABILITY PARSER
+ * Parse a card's oracle text to extract structured mana ability data
+ */
+const parseManaAbility = (card) => {
+  const text = card.oracle_text;
+  if (!text) return { hasManaAbility: false, abilities: [] };
+  
+  // Skip if it targets (not a mana ability per Magic rules)
+  if (text.toLowerCase().includes('target')) {
+    return { hasManaAbility: false, abilities: [] };
+  }
+  
+  // Skip planeswalker loyalty abilities
+  if (card.type_line?.includes('Planeswalker')) {
+    return { hasManaAbility: false, abilities: [] };
+  }
+  
+  // Skip fetch lands (they don't produce mana)
+  if (text.toLowerCase().includes('sacrifice') && 
+      text.toLowerCase().includes('search your library')) {
+    return { hasManaAbility: false, abilities: [] };
+  }
+  
+  const abilities = [];
+  
+  // Split by lines and look for mana-producing abilities
+  const lines = text.split('\n');
+  
+  for (const line of lines) {
+    if (!line.includes(':')) continue;
+    if (!line.toLowerCase().includes('add')) continue;
+    
+    // Split on first colon
+    const colonIndex = line.indexOf(':');
+    const costPart = line.substring(0, colonIndex).trim();
+    const effectPart = line.substring(colonIndex + 1).trim();
+    
+    // Try to parse this as a mana ability
+    const parsed = parseSingleManaAbility(costPart, effectPart, line);
+    
+    if (parsed) {
+      abilities.push(parsed);
+    }
+  }
+  
+  // Handle implicit basic land abilities (no text, just type line)
+  if (abilities.length === 0 && card.category === 'land') {
+    const implicitAbility = parseImplicitBasicLand(card);
+    if (implicitAbility) {
+      abilities.push(implicitAbility);
+    }
+  }
+  
+  return {
+    hasManaAbility: abilities.length > 0,
+    abilities: abilities
+  };
+};
+
+/**
+ * Parse a single mana ability line
+ */
+const parseSingleManaAbility = (costPart, effectPart, fullLine) => {
+  const lowerEffect = effectPart.toLowerCase();
+  
+  // Must contain "add" to be a mana ability
+  if (!lowerEffect.includes('add')) return null;
+  
+  let production = null;
+  
+  // Try parsing rules in priority order
+  
+  // Rule 6: Modal/Filter (must check first)
+  production = parseModalAbility(fullLine);
+  if (production) {
+    return {
+      abilityText: fullLine,
+      isManaAbility: true,
+      isModal: true,
+      activationCost: parseCost(costPart),
+      produces: production
+    };
+  }
+  
+  // Rule 5: Variable amount (X)
+  production = parseVariableAmount(effectPart);
+  if (production) {
+    return {
+      abilityText: fullLine,
+      isManaAbility: true,
+      activationCost: parseCost(costPart),
+      produces: [production]
+    };
+  }
+  
+  // Rule 3: Fixed amount, choice of color
+  production = parseFixedAmountChoice(effectPart);
+  if (production) {
+    return {
+      abilityText: fullLine,
+      isManaAbility: true,
+      activationCost: parseCost(costPart),
+      produces: [production]
+    };
+  }
+  
+  // Rule 2: Choice of one
+  production = parseChoiceOfOne(effectPart);
+  if (production) {
+    return {
+      abilityText: fullLine,
+      isManaAbility: true,
+      activationCost: parseCost(costPart),
+      produces: [production]
+    };
+  }
+  
+  // Rule 1: Simple fixed mana
+  production = parseSimpleFixedMana(effectPart);
+  if (production) {
+    return {
+      abilityText: fullLine,
+      isManaAbility: true,
+      activationCost: parseCost(costPart),
+      produces: [production]
+    };
+  }
+  
+  return null;
+};
+
+/**
+ * Rule 1: Simple Fixed Mana
+ * Pattern: "Add {C}{C}" or "Add {G}"
+ */
+const parseSimpleFixedMana = (text) => {
+  const pattern = /add\s+(\{[wubrgc]\}(?:\{[wubrgc]\})*)/i;
+  const match = text.match(pattern);
+  
+  if (!match) return null;
+  
+  const symbols = match[1].match(/\{([wubrgc])\}/gi);
+  if (!symbols) return null;
+  
+  const types = symbols.map(s => s.replace(/[{}]/g, '').toUpperCase());
+  
+  return {
+    quantity: types.length,
+    types: types
+  };
+};
+
+/**
+ * Rule 2: Choice of One Mana
+ * Pattern: "Add {G} or {W}" or "one mana of any color"
+ */
+const parseChoiceOfOne = (text) => {
+  const lowerText = text.toLowerCase();
+  
+  // Pattern: "{G} or {W}"
+  const orPattern = /add\s+\{([wubrgc])\}\s+or\s+\{([wubrgc])\}/i;
+  const orMatch = text.match(orPattern);
+  
+  if (orMatch) {
+    return {
+      quantity: 1,
+      types: [{
+        choice: [orMatch[1].toUpperCase(), orMatch[2].toUpperCase()]
+      }]
+    };
+  }
+  
+  // Pattern: "one mana of any color"
+  if (lowerText.includes('one mana of any color')) {
+    // Check for commander identity restriction
+    const hasCommanderRestriction = lowerText.includes('commander');
+    
+    return {
+      quantity: 1,
+      types: [{
+        choice: ['W', 'U', 'B', 'R', 'G'],
+        restriction: hasCommanderRestriction ? 'commander_identity' : null
+      }]
+    };
+  }
+  
+  // Pattern: "mana of any color" (without "one", defaults to 1)
+  if (lowerText.includes('mana of any') && !lowerText.includes('two') && !lowerText.includes('three')) {
+    return {
+      quantity: 1,
+      types: [{
+        choice: ['W', 'U', 'B', 'R', 'G']
+      }]
+    };
+  }
+  
+  return null;
+};
+
+/**
+ * Rule 3: Fixed Amount, Choice of Color
+ * Pattern: "Add two mana of any one color"
+ */
+const parseFixedAmountChoice = (text) => {
+  const lowerText = text.toLowerCase();
+  
+  const numberWords = {
+    'two': 2,
+    'three': 3,
+    'four': 4,
+    'five': 5
+  };
+  
+  const pattern = /(two|three|four|five)\s+mana\s+of\s+any\s+one\s+color/i;
+  const match = lowerText.match(pattern);
+  
+  if (!match) return null;
+  
+  const numberWord = match[1].toLowerCase();
+  const quantity = numberWords[numberWord];
+  
+  if (!quantity) return null;
+  
+  return {
+    quantity: quantity,
+    types: [{
+      choice: ['W', 'U', 'B', 'R', 'G'],
+      fixedQuantity: quantity
+    }]
+  };
+};
+
+/**
+ * Rule 5: Variable Amount (X)
+ * Pattern: "Add X mana" where X is defined by a condition
+ */
+const parseVariableAmount = (text) => {
+  const lowerText = text.toLowerCase();
+  
+  if (!lowerText.includes('x mana') && !lowerText.includes('amount of mana equal to')) {
+    return null;
+  }
+  
+  let xRule = 'X=1'; // Default
+  
+  // Parse X definitions
+  if (lowerText.includes('number of creatures with defender')) {
+    xRule = 'X=count(defenders)';
+  } else if (lowerText.includes('greatest power among creatures')) {
+    xRule = 'X=max_power(creatures)';
+  } else if (lowerText.includes('power') && (lowerText.includes('this creature') || lowerText.includes('its power'))) {
+    xRule = 'X=power(this)';
+  } else if (lowerText.includes('mana value') && lowerText.includes('sacrificed')) {
+    xRule = 'X=sacrificedMV(creature)';
+  } else if (lowerText.includes('number of artifacts')) {
+    xRule = 'X=count(artifacts)';
+  } else if (lowerText.includes('number of creatures')) {
+    xRule = 'X=count(creatures)';
+  }
+  
+  // Parse color restriction
+  let types;
+  
+  if (lowerText.includes('any one color')) {
+    types = [{
+      choice: ['W', 'U', 'B', 'R', 'G'],
+      total: 'X'
+    }];
+  } else if (lowerText.includes('any combination')) {
+    types = [{
+      combination: ['W', 'U', 'B', 'R', 'G'],
+      total: 'X'
+    }];
+  } else {
+    // Specific color
+    const colorMatch = text.match(/\{([wubrgc])\}/i);
+    if (colorMatch) {
+      const color = colorMatch[1].toUpperCase();
+      types = [color];
+    } else {
+      types = ['C']; // Default to colorless
+    }
+  }
+  
+  return {
+    quantity: xRule,
+    types: types
+  };
+};
+
+/**
+ * Rule 6: Modal/Filter Abilities
+ * Pattern: Multiple "Add" clauses in one ability
+ */
+const parseModalAbility = (text) => {
+  // Count "add" occurrences
+  
+  // Count "add" occurrences
+  const addMatches = text.match(/add\s+[^.,;]+/gi);
+  
+  if (!addMatches || addMatches.length <= 1) {
+    return null;
+  }
+  
+  const productions = [];
+  
+  addMatches.forEach(addClause => {
+    // Try each parsing rule
+    let prod = parseSimpleFixedMana(addClause);
+    if (!prod) prod = parseChoiceOfOne(addClause);
+    if (!prod) prod = parseFixedAmountChoice(addClause);
+    
+    if (prod) {
+      productions.push(prod);
+    }
+  });
+  
+  return productions.length > 1 ? productions : null;
+};
+
+/**
+ * Parse implicit basic land abilities
+ */
+const parseImplicitBasicLand = (card) => {
+  const typeLine = (card.type_line || '').toLowerCase();
+  const name = card.name.toLowerCase();
+  
+  const colorMap = {
+    'plains': 'W',
+    'island': 'U',
+    'swamp': 'B',
+    'mountain': 'R',
+    'forest': 'G'
+  };
+  
+  for (const [landType, color] of Object.entries(colorMap)) {
+    if (typeLine.includes(landType) || name.includes(landType)) {
+      return {
+        abilityText: `{T}: Add {${color}}`,
+        isManaAbility: true,
+        isImplicit: true,
+        activationCost: ['{T}'],
+        produces: [{
+          quantity: 1,
+          types: [color]
+        }]
+      };
+    }
+  }
+  
+  return null;
+};
+
+/**
+ * Parse activation cost
+ */
+const parseCost = (costText) => {
+  const costs = [];
+  const lowerCost = costText.toLowerCase();
+  
+  if (lowerCost.includes('{t}')) {
+    costs.push('{T}');
+  }
+  
+  if (lowerCost.includes('sacrifice')) {
+    costs.push('sacrifice');
+  }
+  
+  if (lowerCost.includes('pay') && lowerCost.includes('life')) {
+    const lifeMatch = costText.match(/pay (\d+) life/i);
+    if (lifeMatch) {
+      costs.push(`pay_life:${lifeMatch[1]}`);
+    }
+  }
+  
+  // Extract mana symbols
+  const manaPattern = /\{([wubrgc0-9/]+)\}/gi;
+  let match;
+  while ((match = manaPattern.exec(costText)) !== null) {
+    costs.push(`{${match[1].toUpperCase()}}`);
+  }
+  
+  return costs;
+};
+
+export {
+  parseManaAbility,
+  parseSimpleFixedMana,
+  parseChoiceOfOne,
+  parseFixedAmountChoice,
+  parseVariableAmount,
+  parseModalAbility
 };
 
 /**

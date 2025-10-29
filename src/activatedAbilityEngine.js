@@ -320,6 +320,10 @@ const payAbilityCost = (gameState, ability, card, zone) => {
       gameState.manaPool[color] -= take;
       remaining -= take;
     }
+    
+    // ✅ CRITICAL FIX FOR BUG #2: Re-sync actualTotalMana after spending mana
+    const poolTotal = Object.values(gameState.manaPool).reduce((a, b) => a + b, 0);
+    gameState.actualTotalMana = poolTotal;
   }
   
   // Tap the card if required
@@ -330,6 +334,7 @@ const payAbilityCost = (gameState, ability, card, zone) => {
   // ⚠️ NOTE: Sacrifice cost is handled separately (card moved to graveyard)
   // ⚠️ NOTE: Discard/exile costs not yet implemented
 };
+
 
 /**
  * ✅ Execute the effect of an activated ability

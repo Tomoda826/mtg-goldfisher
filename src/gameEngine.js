@@ -6,6 +6,8 @@ import {
   getManaProductionFromManifest,
 } from './cardBehaviorAnalyzer';
 
+import { ManaPool } from './manaPool.js';
+
 // Parse mana cost string like "{2}{U}{B}" into object
 export const parseMana = (manaCost) => {
   if (!manaCost) return { total: 0, W: 0, U: 0, B: 0, R: 0, G: 0, C: 0, generic: 0 };
@@ -239,7 +241,13 @@ export const getLandManaProduction = (land, manifest) => {
 };
 
 // Check if we can pay a mana cost
-export const canPayMana = (manaPool, manaCost, actualTotalMana = null) => {
+export const canPayMana = (manaPool, manaCost, actualTotalMana = null, manaPoolManager = null) => {
+  // NEW SYSTEM: Use ManaPool manager if available
+  if (manaPoolManager) {
+    return manaPoolManager.canPay(manaCost);
+  }
+  
+  // OLD SYSTEM: Backwards compatibility
   const cost = parseMana(manaCost);
   
   // Check colored requirements
@@ -249,8 +257,6 @@ export const canPayMana = (manaPool, manaCost, actualTotalMana = null) => {
   if (cost.R > manaPool.R) return false;
   if (cost.G > manaPool.G) return false;
   
-  // ✅ CRITICAL FIX: Use actualTotalMana if provided (handles dual/filter lands correctly)
-  // Otherwise fall back to summing the pool (for backward compatibility)
   const availableTotal = actualTotalMana !== null 
     ? actualTotalMana 
     : (manaPool.W + manaPool.U + manaPool.B + manaPool.R + manaPool.G + manaPool.C);
@@ -261,7 +267,15 @@ export const canPayMana = (manaPool, manaCost, actualTotalMana = null) => {
 };
 
 // Pay mana from pool
-export const payMana = (manaPool, manaCost) => {
+// Pay mana from pool
+export const payMana = (manaPool, manaCost, manaPoolManager = null) => {
+  // NEW SYSTEM: Use ManaPool manager if available
+  if (manaPoolManager) {
+    manaPoolManager.pay(manaCost);
+    return manaPoolManager.getPool();
+  }
+  
+  // OLD SYSTEM: Backwards compatibility
   const cost = parseMana(manaCost);
   const newPool = { ...manaPool };
   
@@ -470,188 +484,129 @@ export const untapPhase = (state) => {
 };
 
 // Generate available mana from lands AND artifacts
+// Generate available mana from lands AND artifacts
 export const generateMana = (state) => {
-  const availableMana = { W: 0, U: 0, B: 0, R: 0, G: 0, C: 0 };
+  // Initialize mana pool manager if doesn't exist
+  if (!state.manaPoolManager) {
+    state.manaPoolManager = new ManaPool();
+  }
   
-  // ✅ DEBUG: Track each land's production
-  const landDetails = [];
+  // Empty pool at start of each mana generation
+  state.manaPoolManager.emptyPool();
   
-  // ✅ CRITICAL: Track actual total mana separately (fixes dual land double-counting)
-  let actualTotalMana = 0;
-  
-  // Count UNTAPPED lands only
+  // Process lands
   state.battlefield.lands.forEach(land => {
-    // Skip tapped lands
-    if (land.tapped) {
-      landDetails.push({ name: land.name, status: 'TAPPED', mana: 'none' });
-      return;
-    }
+    if (land.tapped) return;
     
-    const production = getLandManaProduction(land, state.behaviorManifest);
-
-    // ✅ NEW: Track dual/filter lands separately for correct total calculation
-    if (!state.dualLandManaTracking) {
-      state.dualLandManaTracking = [];
-    }
+    // Try new system first (cached abilities)
+    const manaAbilityData = state.behaviorManifest?.manaAbilities?.get(land.name);
     
-    if (production.isDualLand || production.isFilterLand) {
-      state.dualLandManaTracking.push({
-        landName: land.name,
-        actualMana: production.actualManaProduced || 1,
-        colors: Object.keys(production).filter(k => 
-          ['W','U','B','R','G','C'].includes(k) && production[k] > 0
-        )
-      });
-    }
-
-    // ✅ CRITICAL FIX #1: Filter lands produce 1 mana (choose mode), not sum of all abilities
-    if (production.isFilterLand) {
-      // For filter lands, add mana to multiple colors but DON'T double count
-      Object.keys(production).forEach(color => {
-        if (color !== 'isFilterLand' && color !== 'actualManaProduced') {
-          availableMana[color] += production[color];
+    if (manaAbilityData?.hasManaAbility) {
+      // NEW SYSTEM: Use cached structured data
+      manaAbilityData.abilities.forEach(ability => {
+        // Check if we can activate (usually just needs tap)
+        const canActivate = ability.activationCost.every(cost => {
+          if (cost === '{T}') return !land.tapped;
+          if (cost === 'sacrifice') return true; // Handle separately
+          return true; // Other costs not common for lands
+        });
+        
+        if (canActivate) {
+          // Add mana for each production option
+          ability.produces.forEach(production => {
+            state.manaPoolManager.addMana(production, state, land);
+          });
+          
+          // Tap the land
+          if (ability.activationCost.includes('{T}')) {
+            land.tapped = true;
+          }
         }
-      });
-      
-      // ✅ Add ACTUAL mana produced (1) to total
-      actualTotalMana += (production.actualManaProduced || 1);
-      
-      // Log correctly
-      const colors = Object.entries(production)
-        .filter(([key, val]) => val > 0 && key !== 'isFilterLand' && key !== 'actualManaProduced')
-        .map(([color]) => color)
-        .join(' or ');
-      
-      landDetails.push({ 
-        name: land.name, 
-        status: 'UNTAPPED', 
-        mana: `1 (choose ${colors})`,
-        isFilter: true,
-        actualMana: 1
-      });
-    }
-    // ✅ CRITICAL FIX #2: Dual lands produce 1 mana (choose color), not sum of both colors
-    else if (production.isDualLand) {
-      // For dual lands, add mana to both colors but DON'T double count
-      Object.keys(production).forEach(color => {
-        if (color !== 'isDualLand' && color !== 'actualManaProduced') {
-          availableMana[color] += production[color];
-        }
-      });
-      
-      // ✅ Add ACTUAL mana produced (1) to total
-      actualTotalMana += (production.actualManaProduced || 1);
-      
-      // Log correctly
-      const colors = Object.entries(production)
-        .filter(([key, val]) => val > 0 && key !== 'isDualLand' && key !== 'actualManaProduced')
-        .map(([color]) => color)
-        .join(' or ');
-      
-      landDetails.push({ 
-        name: land.name, 
-        status: 'UNTAPPED', 
-        mana: `1 (choose ${colors})`,
-        isDual: true,
-        actualMana: 1
       });
     } else {
-      // Regular lands: add all colors normally
-      Object.keys(production).forEach(color => {
-        if (color !== 'isDualLand' && color !== 'actualManaProduced' && color !== 'isFilterLand') {
-          availableMana[color] += production[color];
+      // FALLBACK: Old system for backwards compatibility
+      const production = getLandManaProduction(land, state.behaviorManifest);
+      
+      // Old logic for adding to pool
+      const colors = ['W', 'U', 'B', 'R', 'G', 'C'];
+      let actualAmount = 0;
+      
+      if (production.isDualLand || production.isFilterLand) {
+        actualAmount = production.actualManaProduced || 1;
+      } else {
+        actualAmount = colors.reduce((sum, c) => sum + (production[c] || 0), 0);
+      }
+      
+      // Add to new manager
+      colors.forEach(color => {
+        if (production[color] > 0) {
+          state.manaPoolManager.pool[color] += production[color];
         }
       });
+      state.manaPoolManager.actualTotal += actualAmount;
       
-      // ✅ Add sum of production to total (for regular lands, this is typically 1)
-      const landTotal = Object.keys(production)
-        .filter(k => ['W','U','B','R','G','C'].includes(k))
-        .reduce((sum, color) => sum + production[color], 0);
-      
-      actualTotalMana += landTotal;
-      
-      // Log normally
-      const manaString = Object.entries(production)
-        .filter(([key, val]) => val > 0 && key !== 'isDualLand' && key !== 'actualManaProduced' && key !== 'isFilterLand')
-        .map(([color, amount]) => `${color}:${amount}`)
-        .join(', ');
-      
-      landDetails.push({ 
-        name: land.name, 
-        status: 'UNTAPPED', 
-        mana: manaString || 'none',
-        actualMana: landTotal
-      });
+      land.tapped = true;
     }
   });
   
-  // ✅ DEBUG: Log on early turns
-  if (state.detailedLog && state.turn <= 5) {
-    state.detailedLog.push({
-      turn: state.turn,
-      phase: state.phase,
-      action: '🔍 DEBUG: Mana Generation',
-      details: `${state.battlefield.lands.length} lands, ${landDetails.filter(l => l.status === 'UNTAPPED').length} untapped`,
-      lands: landDetails,
-      landTotal: actualTotalMana,
-      totalAvailable: availableMana
-    });
-  }
-  
-// ✅ Count mana-producing artifacts (assume they untap normally)
-state.battlefield.artifacts.forEach(artifact => {
-  const production = getArtifactManaProduction(artifact, state.behaviorManifest);
-  
-  // ✅ CRITICAL FIX: Detect if artifact produces multiple color choices
-  // Examples:
-  // - Arcane Signet: {T}: Add one mana of any color in your commander's color identity
-  // - Talisman of Dominance: {T}: Add {C} OR {T}, Pay 1 life: Add {U} or {B}
-  // - Sol Ring: {T}: Add {C}{C} (produces 2 colorless)
-  //
-  // If production has 2+ different colors with value > 0, it's a choice artifact
-  // Count how many colors this artifact can produce
-  const colorCount = Object.keys(production)
-    .filter(key => ['W','U','B','R','G','C'].includes(key) && production[key] > 0)
-    .length;
-  
-  const isChoiceArtifact = production.isDualLand || 
-                          production.isChoiceManaArtifact || 
-                          colorCount >= 2;
-  
-  if (isChoiceArtifact) {
-    // Multi-ability artifacts: add all colors to pool, but only count as 1 total
-    Object.keys(production).forEach(color => {
-      if (['W','U','B','R','G','C'].includes(color) && production[color] > 0) {
-        availableMana[color] += production[color];
-      }
-    });
+  // Process artifacts (similar logic)
+  state.battlefield.artifacts.forEach(artifact => {
+    if (artifact.tapped) return;
     
-    // ✅ Only add 1 to actual total (artifact can only be tapped once)
-    actualTotalMana += (production.actualManaProduced || 1);
+    const manaAbilityData = state.behaviorManifest?.manaAbilities?.get(artifact.name);
     
-  } else {
-    // Regular mana artifacts (e.g., Sol Ring producing {C}{C}): 
-    // Count the TOTAL mana produced, not per-color
-    let artifactTotal = 0;
-    Object.keys(production).forEach(color => {
-      if (['W','U','B','R','G','C'].includes(color) && production[color] > 0) {
-        availableMana[color] += production[color];
-        artifactTotal += production[color];  // Sum up the total
+    if (manaAbilityData?.hasManaAbility) {
+      // NEW SYSTEM
+      manaAbilityData.abilities.forEach(ability => {
+        const canActivate = ability.activationCost.every(cost => {
+          if (cost === '{T}') return !artifact.tapped;
+          return true;
+        });
+        
+        if (canActivate) {
+          ability.produces.forEach(production => {
+            state.manaPoolManager.addMana(production, state, artifact);
+          });
+          
+          if (ability.activationCost.includes('{T}')) {
+            artifact.tapped = true;
+          }
+        }
+      });
+    } else {
+      // FALLBACK: Old system
+      const production = getArtifactManaProduction(artifact, state.behaviorManifest);
+      
+      // Similar old logic as lands
+      const colors = ['W', 'U', 'B', 'R', 'G', 'C'];
+      let actualAmount = 0;
+      
+      const colorCount = colors.filter(c => production[c] > 0).length;
+      if (colorCount >= 2 || production.isDualLand) {
+        actualAmount = production.actualManaProduced || 1;
+      } else {
+        actualAmount = colors.reduce((sum, c) => sum + (production[c] || 0), 0);
       }
-    });
-    // Add the total once, not per-color
-    actualTotalMana += artifactTotal;
-  }
-});
+      
+      colors.forEach(color => {
+        if (production[color] > 0) {
+          state.manaPoolManager.pool[color] += production[color];
+        }
+      });
+      state.manaPoolManager.actualTotal += actualAmount;
+      
+      artifact.tapped = true;
+    }
+  });
   
-  // ✅ Set the mana pool to the availableMana object
-  state.manaPool = { ...availableMana };
+  // Update legacy fields for backwards compatibility
+  state.manaPool = state.manaPoolManager.getPool();
+  state.actualTotalMana = state.manaPoolManager.getTotal();
   
-  state.actualTotalMana = actualTotalMana;
-
-  // ✅ CRITICAL: Log using ACTUAL total, not sum of colors
-  if (actualTotalMana > 0) {
-    state.log.push(`💎 Generated ${actualTotalMana} mana (W:${availableMana.W} U:${availableMana.U} B:${availableMana.B} R:${availableMana.R} G:${availableMana.G} C:${availableMana.C})`);
+  // Log
+  if (state.actualTotalMana > 0) {
+    const pool = state.manaPool;
+    state.log.push(`💎 Generated ${state.actualTotalMana} mana (W:${pool.W} U:${pool.U} B:${pool.B} R:${pool.R} G:${pool.G} C:${pool.C})`);
   }
   
   return state;
@@ -680,91 +635,6 @@ export const playLand = (state, landIndex) => {
   // Check if land enters tapped
   const text = (land.oracle_text || '').toLowerCase();
   // Note: name variable removed - no longer needed with new check land logic
-
-//   // ✅ FILTER LANDS: Check for filter land pattern
-// // Pattern: "{T}: Add {C}." followed by "{X/Y}, {T}: Add {XX}, {XY}, or {YY}."
-// // These lands produce 1 mana (either {C} or filtered colors), NOT the sum of both abilities
-
-// // Common filter lands and their patterns
-// const filterLandPatterns = [
-//   // Sunken Ruins (U/B filter)
-//   /\{t\}:\s*add\s*\{c\}.*\{[ub]\/[ub]\},\s*\{t\}:\s*add\s*\{[ub]\}\{[ub]\}/i,
-  
-//   // Generic filter pattern: {T}: Add {C}. {X/Y}, {T}: Add {XX}, {XY}, or {YY}
-//   /\{t\}:\s*add\s*\{c\}.*\{[wubrgc]\/[wubrgc]\},\s*\{t\}:\s*add/i
-// ];
-
-// const isFilterLand = filterLandPatterns.some(pattern => pattern.test(text));
-
-// if (isFilterLand) {
-//   // For filter lands, determine which colors they can produce
-//   // In goldfishing, we assume optimal play (can use filter mode when beneficial)
-//   // But it still only produces 1 mana total
-  
-//   let colors = { W: 0, U: 0, B: 0, R: 0, G: 0, C: 0 };
-  
-//   // Parse which color combinations this filter land offers
-//   if (text.includes('{u}{u}') || text.includes('{u}{b}') || text.includes('{b}{b}')) {
-//     // Sunken Ruins: can produce U or B
-//     colors.U = 1;
-//     colors.B = 1;
-//     colors.C = 1; // Can also tap for {C}
-//   } else if (text.includes('{w}{w}') || text.includes('{w}{u}') || text.includes('{u}{u}')) {
-//     // Mystic Gate: can produce W or U
-//     colors.W = 1;
-//     colors.U = 1;
-//     colors.C = 1;
-//   } else if (text.includes('{w}{w}') || text.includes('{w}{b}') || text.includes('{b}{b}')) {
-//     // Fetid Heath: can produce W or B
-//     colors.W = 1;
-//     colors.B = 1;
-//     colors.C = 1;
-//   } else if (text.includes('{u}{u}') || text.includes('{u}{r}') || text.includes('{r}{r}')) {
-//     // Cascade Bluffs: can produce U or R
-//     colors.U = 1;
-//     colors.R = 1;
-//     colors.C = 1;
-//   } else if (text.includes('{b}{b}') || text.includes('{b}{r}') || text.includes('{r}{r}')) {
-//     // Graven Cairns: can produce B or R
-//     colors.B = 1;
-//     colors.R = 1;
-//     colors.C = 1;
-//   } else if (text.includes('{b}{b}') || text.includes('{b}{g}') || text.includes('{g}{g}')) {
-//     // Twilight Mire: can produce B or G
-//     colors.B = 1;
-//     colors.G = 1;
-//     colors.C = 1;
-//   } else if (text.includes('{r}{r}') || text.includes('{r}{g}') || text.includes('{g}{g}')) {
-//     // Fire-Lit Thicket: can produce R or G
-//     colors.R = 1;
-//     colors.G = 1;
-//     colors.C = 1;
-//   } else if (text.includes('{r}{r}') || text.includes('{r}{w}') || text.includes('{w}{w}')) {
-//     // Rugged Prairie: can produce R or W
-//     colors.R = 1;
-//     colors.W = 1;
-//     colors.C = 1;
-//   } else if (text.includes('{g}{g}') || text.includes('{g}{w}') || text.includes('{w}{w}')) {
-//     // Wooded Bastion: can produce G or W
-//     colors.G = 1;
-//     colors.W = 1;
-//     colors.C = 1;
-//   } else if (text.includes('{g}{g}') || text.includes('{g}{u}') || text.includes('{u}{u}')) {
-//     // Flooded Grove: can produce G or U
-//     colors.G = 1;
-//     colors.U = 1;
-//     colors.C = 1;
-//   } else {
-//     // Generic filter land - default to colorless
-//     colors.C = 1;
-//   }
-  
-//   return {
-//     ...colors,
-//     isFilterLand: true,
-//     actualManaProduced: 1  // ✅ CRITICAL: Filter lands produce 1 mana total
-//   };
-// }
   
   // ✅ CHECK LANDS: "enters tapped unless you control [land type]"
   const isCheckLand = text.includes('enters') && text.includes('tapped') && text.includes('unless you control');
@@ -842,10 +712,15 @@ if (newMana.isDualLand || newMana.isFilterLand) {
         }
       });
       
-      // ✅ BUG #1 FIX: Update actualTotalMana for regular lands
-      const landTotal = Object.keys(newMana)
-        .filter(k => ['W','U','B','R','G','C'].includes(k))
-        .reduce((sum, color) => sum + newMana[color], 0);
+// ✅ BUG #1 FIX: Update actualTotalMana for regular lands
+      let landTotal;
+      if (newMana.actualManaProduced !== undefined) {
+        landTotal = newMana.actualManaProduced;
+      } else {
+        landTotal = Object.keys(newMana)
+          .filter(k => ['W','U','B','R','G','C'].includes(k))
+          .reduce((sum, color) => sum + newMana[color], 0);
+      }
       state.actualTotalMana = (state.actualTotalMana || 0) + landTotal;
     }
     
@@ -950,7 +825,9 @@ export const castCommander = (state) => {
   
   // Commander tax is (2 * number of times PREVIOUSLY cast)
   const additionalCost = commander.commanderCastCount * 2;  // This is CORRECT
-  const totalCMC = commander.cmc + additionalCost;
+  // ✅ FIX: Calculate actual CMC from mana_cost
+  const actualCMC = parseMana(commander.mana_cost).total;
+  const totalCMC = actualCMC + additionalCost;
   
   // Check if we can afford commander tax
   const totalMana = state.manaPool.W + state.manaPool.U + state.manaPool.B + 
