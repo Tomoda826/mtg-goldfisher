@@ -511,32 +511,44 @@ export const generateMana = (state) => {
     
     if (manaAbilityData?.hasManaAbility) {
       // NEW SYSTEM: Use cached structured data
-      manaAbilityData.abilities.forEach(ability => {
-        // Check if we can activate (usually just needs tap)
-        const canActivate = ability.activationCost.every(cost => {
+      // ✅ FIX: For lands with multiple abilities (e.g., Underground River has {T}:Add{C} AND {T}:Add{U}or{B}),
+      // we should activate the BEST one, not try all of them (which would fail after first tap)
+      
+      // Filter to only activatable abilities
+      const activatableAbilities = manaAbilityData.abilities.filter(ability => {
+        return ability.activationCost.every(cost => {
           if (cost === '{T}') return !land.tapped;
           if (cost === 'sacrifice') return true; // Handle separately
-          // ✅ FIX: Reject abilities that require paying mana (e.g., Great Hall of the Citadel)
-          // During untap, mana pool is empty, so we can't pay mana costs
-          if (cost.match(/^\{.*\}$/)) {
-            // This is a mana cost - we can't pay it during untap
-            return false;
-          }
-          return true; // Other costs not common for lands
+          // Reject abilities that require paying mana during untap
+          if (cost.match(/^\{.*\}$/)) return false;
+          return true;
+        });
+      });
+      
+      if (activatableAbilities.length > 0) {
+        // Choose the best ability: prefer color-producing over colorless
+        const bestAbility = activatableAbilities.reduce((best, current) => {
+          // Prefer abilities that produce colored mana over colorless
+          const currentHasChoice = current.produces.some(p => p.types && p.types.some(t => t.choice));
+          const bestHasChoice = best.produces.some(p => p.types && p.types.some(t => t.choice));
+          
+          if (currentHasChoice && !bestHasChoice) return current;
+          if (bestHasChoice && !currentHasChoice) return best;
+          
+          // If both have choices or both don't, prefer the first one
+          return best;
+        }, activatableAbilities[0]);
+        
+        // Activate the best ability
+        bestAbility.produces.forEach(production => {
+          state.manaPoolManager.addMana(production, state, land);
         });
         
-        if (canActivate) {
-          // Add mana for each production option
-          ability.produces.forEach(production => {
-            state.manaPoolManager.addMana(production, state, land);
-          });
-          
-          // Tap the land
-          if (ability.activationCost.includes('{T}')) {
-            land.tapped = true;
-          }
+        // Tap the land
+        if (bestAbility.activationCost.includes('{T}')) {
+          land.tapped = true;
         }
-      });
+      }
     } else {
       // FALLBACK: Old system for backwards compatibility
       const production = getLandManaProduction(land, state.behaviorManifest);
@@ -580,27 +592,32 @@ export const generateMana = (state) => {
     const manaAbilityData = state.behaviorManifest?.manaAbilities?.get(artifact.name);
     
     if (manaAbilityData?.hasManaAbility) {
-      // NEW SYSTEM
-      manaAbilityData.abilities.forEach(ability => {
-        const canActivate = ability.activationCost.every(cost => {
+      // NEW SYSTEM: Choose best activatable ability
+      const activatableAbilities = manaAbilityData.abilities.filter(ability => {
+        return ability.activationCost.every(cost => {
           if (cost === '{T}') return !artifact.tapped;
-          // ✅ FIX: Reject abilities that require paying mana during untap
-          if (cost.match(/^\{.*\}$/)) {
-            return false; // Can't pay mana costs during untap
-          }
+          if (cost.match(/^\{.*\}$/)) return false;
           return true;
         });
-        
-        if (canActivate) {
-          ability.produces.forEach(production => {
-            state.manaPoolManager.addMana(production, state, artifact);
-          });
-          
-          if (ability.activationCost.includes('{T}')) {
-            artifact.tapped = true;
-          }
-        }
       });
+      
+      if (activatableAbilities.length > 0) {
+        const bestAbility = activatableAbilities.reduce((best, current) => {
+          const currentHasChoice = current.produces.some(p => p.types && p.types.some(t => t.choice));
+          const bestHasChoice = best.produces.some(p => p.types && p.types.some(t => t.choice));
+          if (currentHasChoice && !bestHasChoice) return current;
+          if (bestHasChoice && !currentHasChoice) return best;
+          return best;
+        }, activatableAbilities[0]);
+        
+        bestAbility.produces.forEach(production => {
+          state.manaPoolManager.addMana(production, state, artifact);
+        });
+        
+        if (bestAbility.activationCost.includes('{T}')) {
+          artifact.tapped = true;
+        }
+      }
     } else {
       // FALLBACK: Old system
       const production = getArtifactManaProduction(artifact, state.behaviorManifest);
@@ -644,27 +661,32 @@ export const generateMana = (state) => {
     const manaAbilityData = state.behaviorManifest?.manaAbilities?.get(creature.name);
     
     if (manaAbilityData?.hasManaAbility) {
-      // NEW SYSTEM
-      manaAbilityData.abilities.forEach(ability => {
-        const canActivate = ability.activationCost.every(cost => {
+      // NEW SYSTEM: Choose best activatable ability
+      const activatableAbilities = manaAbilityData.abilities.filter(ability => {
+        return ability.activationCost.every(cost => {
           if (cost === '{T}') return !creature.tapped && !creature.summoningSick;
-          // ✅ FIX: Reject abilities that require paying mana during untap
-          if (cost.match(/^\{.*\}$/)) {
-            return false; // Can't pay mana costs during untap
-          }
+          if (cost.match(/^\{.*\}$/)) return false;
           return true;
         });
-        
-        if (canActivate) {
-          ability.produces.forEach(production => {
-            state.manaPoolManager.addMana(production, state, creature);
-          });
-          
-          if (ability.activationCost.includes('{T}')) {
-            creature.tapped = true;
-          }
-        }
       });
+      
+      if (activatableAbilities.length > 0) {
+        const bestAbility = activatableAbilities.reduce((best, current) => {
+          const currentHasChoice = current.produces.some(p => p.types && p.types.some(t => t.choice));
+          const bestHasChoice = best.produces.some(p => p.types && p.types.some(t => t.choice));
+          if (currentHasChoice && !bestHasChoice) return current;
+          if (bestHasChoice && !currentHasChoice) return best;
+          return best;
+        }, activatableAbilities[0]);
+        
+        bestAbility.produces.forEach(production => {
+          state.manaPoolManager.addMana(production, state, creature);
+        });
+        
+        if (bestAbility.activationCost.includes('{T}')) {
+          creature.tapped = true;
+        }
+      }
     } else {
       // FALLBACK: Old system - check oracle text for mana abilities
       const text = (creature.oracle_text || '').toLowerCase();
