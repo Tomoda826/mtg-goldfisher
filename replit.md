@@ -78,6 +78,14 @@ An AI-powered Magic: The Gathering Commander deck analyzer and simulator. This a
 - **Run**: `npx vite preview --host 0.0.0.0`
 
 ## Recent Changes
+- **2025-10-29**: Fixed multi-ability permanents only producing from first ability - MANA-009 resolved ✅
+  - **Root Cause**: generateMana used `.forEach()` to process all abilities sequentially. For Underground River with TWO abilities ({T}:Add{C} AND {T}:Add{U}or{B}), the first ability would tap the land, causing the second ability's `!land.tapped` check to fail
+  - **Symptom**: Underground River only produced {C} instead of {U}/{B}; all dual-lands with colorless mode produced only colorless
+  - **Discovery**: Card data revealed Underground River has two separate mana abilities on different lines, parsed as separate abilities in manifest
+  - **Fix**: Changed from sequential `.forEach()` to: (1) filter activatable abilities, (2) choose BEST ability (prefer colored mana over colorless), (3) activate only ONE ability
+  - **Result**: Underground River and similar pain lands now correctly produce colored mana; applied to lands, artifacts, and creatures
+  - Architect-reviewed and verified
+
 - **2025-10-29**: Fixed lands with mana-cost abilities producing free mana - MANA-008 resolved ✅
   - **Root Cause**: generateMana activation cost validation had fallback `return true` for unknown costs, allowing mana abilities with mana costs (like Great Hall of the Citadel's `{1}, {T}`) to activate during untap when pool is empty
   - **Symptom**: Turn 3 with 2 lands + 1 artifact produced 3 mana instead of 2; Turn 5 with 4 lands + 2 artifacts produced 6 instead of 5
