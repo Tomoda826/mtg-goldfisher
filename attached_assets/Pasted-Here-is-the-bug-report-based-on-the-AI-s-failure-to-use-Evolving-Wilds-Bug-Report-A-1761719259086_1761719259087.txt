@@ -1,0 +1,37 @@
+Here is the bug report based on the AI's failure to use `Evolving Wilds`.
+
+***
+
+## Bug Report: AI Fails to Activate Zero-Cost Mana-Fixing Ability
+
+**ID:** AI-LOGIC-001
+**Priority:** High
+**Status:** Open
+
+### Summary
+
+The AI correctly played `Evolving Wilds` on Turn 4 but then failed to activate its 0-cost sacrifice ability. This is a significant logical failure, as the AI left a "free" mana-fixing action unused, which is critical for an early-game setup.
+
+The engine correctly handled the `Evolving Wilds` in a previous log (from `Nazgul Game File 7.txt`), so the activation logic exists. This bug is purely with the AI's decision-making.
+
+### Observed Behavior
+
+1.  **Turn 4, Main 1:** The AI drew `Scroll of Isildur`. Its hand contained `Evolving Wilds`.
+2.  **Turn 4, Main 1:** The AI correctly identified `Evolving Wilds` as its priority land drop and played it.
+3.  **Turn 4, Main 1:** The AI's *very next* action was to cast `Scroll of Isildur` for 3 mana.
+4.  **Failure:** The AI completely skipped the opportunity to activate `Evolving Wilds` after playing it. It should have immediately activated the fetch land to get a basic land *before* deciding to cast any spells.
+
+### Expected Behavior
+
+The AI's decision-making should prioritize 0-cost, high-value actions like activating a fetch land immediately after it is played.
+
+The correct sequence on Turn 4 should have been:
+1.  **AI Action:** `playLand: Evolving Wilds`.
+2.  **AI Action:** `activateAbility: Evolving Wilds` (to fetch a basic land, likely an `Island` to help cast `Counterspell`).
+3.  **AI Action:** (Re-evaluate) Cast `Scroll of Isildur`.
+
+This failure to act resulted in `Evolving Wilds` sitting uselessly on the battlefield for the rest of the game, delaying the deck's color-fixing and mana development.
+
+### Recommendation
+
+The AI's decision-making logic must be updated to ensure it scans for and prioritizes 0-cost activatable abilities (especially mana-fixing ones) immediately after a relevant permanent enters the battlefield.

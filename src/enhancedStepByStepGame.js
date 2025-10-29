@@ -8,7 +8,9 @@ import {
   castCommander,
   drawCard,
   untapPhase,
-  generateMana
+  generateMana,
+  getLandManaProduction,
+  getArtifactManaProduction
 } from './gameEngine';
 
 import {
@@ -60,6 +62,7 @@ import {
 
 import {
   createDeckBehaviorManifest,
+  getManaProductionFromManifest
 } from './cardBehaviorAnalyzer';
 
 import { callOpenAI, SYSTEM_PROMPTS } from './apiClient.js';
@@ -1826,20 +1829,52 @@ untapPhase(game);
   // ===== PHASE 2A: CLEAR SUMMONING SICKNESS =====
   clearSummoningSickness(game);
   
-  // ✅ FIX: Count BEFORE generateMana taps them
-  const landCountBeforeTap = game.battlefield.lands.filter(l => !l.tapped).length;
-  const artifactCountBeforeTap = game.battlefield.artifacts.filter(a => !a.tapped).length;
-  const creatureManaDorksBeforeTap = game.battlefield.creatures.filter(c => {
-    if (c.tapped || c.summoningSick) return false;
-    const manaAbilityData = game.behaviorManifest?.manaAbilities?.get(c.name);
-    if (manaAbilityData?.hasManaAbility) return true;
-    const text = (c.oracle_text || '').toLowerCase();
-    return text.includes('{t}:') && text.includes('add');
-  }).length;
+  // ✅ FIX: Calculate ACTUAL mana production BEFORE generateMana taps them
+  let landCountBeforeTap = 0;
+  let landManaProduced = 0;
+  game.battlefield.lands.filter(l => !l.tapped).forEach(land => {
+    const production = getLandManaProduction(land, game.behaviorManifest);
+    const manaAmount = production.actualManaProduced || 0;
+    if (manaAmount > 0) {
+      landCountBeforeTap++;
+      landManaProduced += manaAmount;
+    }
+  });
+  
+  let artifactCountBeforeTap = 0;
+  let artifactManaProduced = 0;
+  game.battlefield.artifacts.filter(a => !a.tapped).forEach(artifact => {
+    const production = getArtifactManaProduction(artifact, game.behaviorManifest);
+    const manaAmount = production.actualManaProduced || 0;
+    if (manaAmount > 0) {
+      artifactCountBeforeTap++;
+      artifactManaProduced += manaAmount;
+    }
+  });
+  
+  let creatureManaDorksBeforeTap = 0;
+  let creatureManaProduced = 0;
+  game.battlefield.creatures.filter(c => !c.tapped && !c.summoningSick).forEach(creature => {
+    // Check both manifest and oracle text for mana abilities
+    const manaAbilityData = game.behaviorManifest?.manaAbilities?.get(creature.name);
+    const text = (creature.oracle_text || '').toLowerCase();
+    const hasManaAbility = manaAbilityData?.hasManaAbility || 
+                           (text.includes('{t}:') && text.includes('add'));
+    
+    if (hasManaAbility) {
+      const production = getManaProductionFromManifest(creature, game.behaviorManifest);
+      const manaAmount = production.actualManaProduced || 0;
+      if (manaAmount > 0) {
+        creatureManaDorksBeforeTap++;
+        creatureManaProduced += manaAmount;
+      }
+    }
+  });
   
   generateMana(game);
   await checkPhaseTriggersAI(game, 'untap');
   
+  const expectedMana = landManaProduced + artifactManaProduced + creatureManaProduced;
   const totalMana = game.actualTotalMana || 0;
   
   let manaSourcesDesc = `${landCountBeforeTap} lands`;
