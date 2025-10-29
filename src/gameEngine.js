@@ -527,23 +527,33 @@ export const generateMana = (state) => {
       // FALLBACK: Old system for backwards compatibility
       const production = getLandManaProduction(land, state.behaviorManifest);
       
-      // Old logic for adding to pool
+      // Convert to manaPoolManager format for smart color choice
       const colors = ['W', 'U', 'B', 'R', 'G', 'C'];
-      let actualAmount = 0;
       
       if (production.isDualLand || production.isFilterLand) {
-        actualAmount = production.actualManaProduced || 1;
-      } else {
-        actualAmount = colors.reduce((sum, c) => sum + (production[c] || 0), 0);
-      }
-      
-      // Add to new manager
-      colors.forEach(color => {
-        if (production[color] > 0) {
-          state.manaPoolManager.pool[color] += production[color];
+        // Dual lands: use manaPoolManager.addMana for smart color choice
+        const availableColors = colors.filter(c => production[c] > 0);
+        const amount = production.actualManaProduced || 1;
+        
+        if (availableColors.length > 0) {
+          // Use manaPoolManager with choice structure for optimal color selection
+          state.manaPoolManager.addMana(
+            { quantity: amount, types: [{ choice: availableColors }] },
+            state,
+            land
+          );
         }
-      });
-      state.manaPoolManager.actualTotal += actualAmount;
+      } else {
+        // Basic lands: add the produced color directly
+        const actualAmount = colors.reduce((sum, c) => sum + (production[c] || 0), 0);
+        
+        colors.forEach(color => {
+          if (production[color] > 0) {
+            state.manaPoolManager.pool[color] += production[color];
+          }
+        });
+        state.manaPoolManager.actualTotal += actualAmount;
+      }
       
       land.tapped = true;
     }
@@ -577,23 +587,33 @@ export const generateMana = (state) => {
       // FALLBACK: Old system
       const production = getArtifactManaProduction(artifact, state.behaviorManifest);
       
-      // Similar old logic as lands
+      // Convert to manaPoolManager format for smart color choice
       const colors = ['W', 'U', 'B', 'R', 'G', 'C'];
-      let actualAmount = 0;
-      
       const colorCount = colors.filter(c => production[c] > 0).length;
-      if (colorCount >= 2 || production.isDualLand) {
-        actualAmount = production.actualManaProduced || 1;
-      } else {
-        actualAmount = colors.reduce((sum, c) => sum + (production[c] || 0), 0);
-      }
       
-      colors.forEach(color => {
-        if (production[color] > 0) {
-          state.manaPoolManager.pool[color] += production[color];
+      if (colorCount >= 2 || production.isDualLand) {
+        // Multi-color artifacts: use manaPoolManager for smart color choice
+        const availableColors = colors.filter(c => production[c] > 0);
+        const amount = production.actualManaProduced || 1;
+        
+        if (availableColors.length > 0) {
+          state.manaPoolManager.addMana(
+            { quantity: amount, types: [{ choice: availableColors }] },
+            state,
+            artifact
+          );
         }
-      });
-      state.manaPoolManager.actualTotal += actualAmount;
+      } else {
+        // Single-color artifacts: add the produced color directly
+        const actualAmount = colors.reduce((sum, c) => sum + (production[c] || 0), 0);
+        
+        colors.forEach(color => {
+          if (production[color] > 0) {
+            state.manaPoolManager.pool[color] += production[color];
+          }
+        });
+        state.manaPoolManager.actualTotal += actualAmount;
+      }
       
       artifact.tapped = true;
     }
@@ -629,26 +649,36 @@ export const generateMana = (state) => {
       if (text.includes('{t}:') && text.includes('add')) {
         const production = getManaProductionFromManifest(creature, state.behaviorManifest);
         
-        // Similar old logic as artifacts
+        // Convert to manaPoolManager format for smart color choice
         const colors = ['W', 'U', 'B', 'R', 'G', 'C'];
-        let actualAmount = 0;
-        
         const colorCount = colors.filter(c => production[c] > 0).length;
-        if (colorCount >= 2) {
-          actualAmount = production.actualManaProduced || 1;
-        } else {
-          actualAmount = colors.reduce((sum, c) => sum + (production[c] || 0), 0);
-        }
         
-        if (actualAmount > 0) {
-          colors.forEach(color => {
-            if (production[color] > 0) {
-              state.manaPoolManager.pool[color] += production[color];
-            }
-          });
-          state.manaPoolManager.actualTotal += actualAmount;
+        if (colorCount >= 2) {
+          // Multi-color creatures: use manaPoolManager for smart color choice
+          const availableColors = colors.filter(c => production[c] > 0);
+          const amount = production.actualManaProduced || 1;
           
-          creature.tapped = true;
+          if (availableColors.length > 0) {
+            state.manaPoolManager.addMana(
+              { quantity: amount, types: [{ choice: availableColors }] },
+              state,
+              creature
+            );
+            creature.tapped = true;
+          }
+        } else {
+          // Single-color creatures: add the produced color directly
+          const actualAmount = colors.reduce((sum, c) => sum + (production[c] || 0), 0);
+          
+          if (actualAmount > 0) {
+            colors.forEach(color => {
+              if (production[color] > 0) {
+                state.manaPoolManager.pool[color] += production[color];
+              }
+            });
+            state.manaPoolManager.actualTotal += actualAmount;
+            creature.tapped = true;
+          }
         }
       }
     }
@@ -777,21 +807,30 @@ state.battlefield.lands.push(land);
       const newMana = getLandManaProduction(land, state.behaviorManifest);
       
       const colors = ['W', 'U', 'B', 'R', 'G', 'C'];
-      let actualAmount = 0;
       
       if (newMana.isDualLand || newMana.isFilterLand) {
-        actualAmount = newMana.actualManaProduced || 1;
-      } else {
-        actualAmount = colors.reduce((sum, c) => sum + (newMana[c] || 0), 0);
-      }
-      
-      // Add to manaPoolManager
-      colors.forEach(color => {
-        if (newMana[color] > 0) {
-          state.manaPoolManager.pool[color] += newMana[color];
+        // Dual lands: use manaPoolManager for smart color choice
+        const availableColors = colors.filter(c => newMana[c] > 0);
+        const amount = newMana.actualManaProduced || 1;
+        
+        if (availableColors.length > 0) {
+          state.manaPoolManager.addMana(
+            { quantity: amount, types: [{ choice: availableColors }] },
+            state,
+            land
+          );
         }
-      });
-      state.manaPoolManager.actualTotal += actualAmount;
+      } else {
+        // Basic lands: add the produced color directly
+        const actualAmount = colors.reduce((sum, c) => sum + (newMana[c] || 0), 0);
+        
+        colors.forEach(color => {
+          if (newMana[color] > 0) {
+            state.manaPoolManager.pool[color] += newMana[color];
+          }
+        });
+        state.manaPoolManager.actualTotal += actualAmount;
+      }
       
       land.tapped = true;
     }
@@ -811,25 +850,40 @@ state.battlefield.lands.push(land);
     
     state.log.push(`💎 Mana pool after land: ${totalMana} total (W:${state.manaPool.W} U:${state.manaPool.U} B:${state.manaPool.B} R:${state.manaPool.R} G:${state.manaPool.G} C:${state.manaPool.C})`);
   } else if (!land.tapped) {
-    // Fallback for systems without manaPoolManager
+    // Fallback for systems without manaPoolManager  (should rarely be used)
     const newMana = getLandManaProduction(land, state.behaviorManifest);
+    const colors = ['W', 'U', 'B', 'R', 'G', 'C'];
     
     if (newMana.isDualLand || newMana.isFilterLand) {
-      Object.keys(newMana).forEach(color => {
-        if (['W', 'U', 'B', 'R', 'G', 'C'].includes(color) && newMana[color] > 0) {
-          state.manaPool[color] = (state.manaPool[color] || 0) + newMana[color];
+      // Dual lands: Choose based on deck colors (simple heuristic)
+      const actualAmount = newMana.actualManaProduced || 1;
+      const availableColors = colors.filter(c => newMana[c] > 0);
+      
+      if (availableColors.length > 0) {
+        // Simple heuristic: choose color we have least of in pool
+        let chosenColor = availableColors[0];
+        let minAmount = state.manaPool[chosenColor] || 0;
+        for (const color of availableColors) {
+          const amount = state.manaPool[color] || 0;
+          if (amount < minAmount) {
+            minAmount = amount;
+            chosenColor = color;
+          }
         }
-      });
-      state.actualTotalMana = (state.actualTotalMana || 0) + (newMana.actualManaProduced || 1);
+        state.manaPool[chosenColor] = (state.manaPool[chosenColor] || 0) + actualAmount;
+      }
+      
+      state.actualTotalMana = (state.actualTotalMana || 0) + actualAmount;
     } else {
+      // Basic lands: add the produced color
       Object.keys(newMana).forEach(color => {
-        if (['W', 'U', 'B', 'R', 'G', 'C'].includes(color)) {
+        if (colors.includes(color)) {
           state.manaPool[color] = (state.manaPool[color] || 0) + (newMana[color] || 0);
         }
       });
       let landTotal = newMana.actualManaProduced !== undefined 
         ? newMana.actualManaProduced
-        : Object.keys(newMana).filter(k => ['W','U','B','R','G','C'].includes(k)).reduce((sum, color) => sum + newMana[color], 0);
+        : colors.filter(k => newMana[k]).reduce((sum, color) => sum + newMana[color], 0);
       state.actualTotalMana = (state.actualTotalMana || 0) + landTotal;
     }
     
