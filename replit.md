@@ -78,12 +78,14 @@ An AI-powered Magic: The Gathering Commander deck analyzer and simulator. This a
 - **Run**: `npx vite preview --host 0.0.0.0`
 
 ## Recent Changes
-- **2025-10-29**: Fixed critical mana calculation bugs in fix/mana-parsing-logic branch
+- **2025-10-29**: Completed MANA-002 fixes - all mana calculation bugs resolved
+  - **Dual-Land Smart Color Choice**: Updated all fallback code paths in `generateMana()` and `playLand()` to use `manaPoolManager.addMana()` with choice structure instead of hardcoded color selection. Command Tower and similar dual lands now choose optimal colors based on game state via `chooseOptimalColor()` helper
+  - **PlayLand Synchronization**: Updated `playLand()` to use manaPoolManager for adding mana from land drops, matching generateMana pattern and ensuring mid-turn mana pool persistence
   - **Creature Mana Abilities**: Updated `generateMana()` in gameEngine.js to process creatures with mana abilities (e.g., Birds of Paradise, mana dorks), checking for summoning sickness and using behaviorManifest for proper mana production
   - **Accurate Mana Logging**: Fixed untap phase log in enhancedStepByStepGame.js to count and report creatures with mana abilities alongside lands and artifacts
   - **Mana Pool Synchronization**: Updated `castSpell()` and `castCommander()` to consistently use ManaPoolManager for all mana operations, ensuring mana pool colors remain properly tracked after casting spells
   - **Commander Tax Payment**: Fixed commander tax payment to use ManaPoolManager.pay() method instead of direct pool mutation, maintaining synchronization throughout payment flow
-  - All changes architect-reviewed and verified to resolve the four reported mana calculation bugs
+  - All changes architect-reviewed and verified to resolve all MANA-002 bugs (playLand sync, castSpell persistence, dual-land color choice)
 
 - **2025-10-29**: Initial Replit setup and branch configuration
   - Imported project from GitHub
