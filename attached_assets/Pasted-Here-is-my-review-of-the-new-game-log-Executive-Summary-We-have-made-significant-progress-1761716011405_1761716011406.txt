@@ -1,0 +1,80 @@
+Here is my review of the new game log.
+
+### Executive Summary
+
+We have made significant progress. The engine is now **correctly counting lands at the start of each turn** (e.g., T2, T3, T4), which fixes a major part of the original bug.
+
+However, this has revealed two **new critical bugs** in the mana logic:
+1.  The mana pool is **not updating** after a `playLand` action. It only updates at the start of the next turn.
+2.  The mana pool is **not persistent** after a `castSpell` action. After one spell is cast, the pool incorrectly resets to 0, preventing any further plays in that phase.
+
+The core issue remains: the mana pool is not being treated as a persistent, "live" resource that is tracked *within* a phase.
+
+---
+
+### Bug Report: MANA-002
+
+**Priority:** Critical
+**Status:** Open (Replaces `MANA-001`)
+
+#### Status of Previous Bugs
+
+* **Partially Fixed: Land Counting.**
+    * **Previous:** The engine reported "0 lands" every turn.
+    * **Current:** The engine now correctly counts lands at the *start* of the untap step.
+    * **Evidence:**
+        * T2: "1 lands = 1 mana available." (Correct)
+        * T3: "2 lands = 2 mana available." (Correct)
+        * T4: "3 lands = 3 mana available." (Correct)
+
+* **Still Present (CRITICAL): Mana Pool Not Persistent After `castSpell`**
+    * **Description:** After a single spell is cast, the mana pool incorrectly drops to 0, even if there was mana leftover. This prevents multi-spell turns.
+    * **Evidence (Turn 2):**
+        1.  **Untap:** 1 land = 1 mana.
+        2.  **Action:** `playLand: Swamp`. (Board is now 2 lands, Mana pool *should* be 2).
+        3.  **Action:** `castSpell: Birthday Escape ({U})`. (Cost 1).
+        4.  **AI Decision:** "You have 0 available mana".
+        5.  **Failure:** This is incorrect. Casting a 1-cost spell with 2 available mana should leave 1 mana in the pool (specifically, 1 `{B}`).
+    * **Evidence (Turn 6):**
+        1.  **Untap:** Log incorrectly states "5 lands = 4 mana available" (this is a separate bug, see below). Let's assume 4 mana.
+        2.  **Action:** `castSpell: Brainstorm ({U})`. (Cost 1. Mana *should* be 3).
+        3.  **Action:** `playLand: Rivendell`.
+        4.  **Action:** `castSpell: Consider ({U})`. (Cost 1. Mana *should* be 2).
+        5.  **Action:** `castSpell: Orcish Medicine ({1}{B})`. (Cost 2. Mana *should* be 0).
+        6.  **AI Decision:** "Auto-Pass. 0 mana available".
+        7.  **Analysis:** The log on Turn 6 *looks* correct, but it's an accident. The AI cast three spells that coincidentally added up to the (incorrectly) available 4 mana. The bug from Turn 2 (mana resetting to 0) is the more common behavior. The T7 log also works *only* because the AI spent its *entire* 5-mana pool on a 5-cost spell, leaving 0. The logic fails as soon as there is leftover mana.
+
+#### New Critical Bugs Found
+
+* **CRITICAL: Mana Pool Not Updated After `playLand`**
+    * **Description:** The mana pool is only calculated at the untap step. When a `playLand` action occurs, the mana pool is *not* updated for the current phase. This causes the AI and Engine to desynchronize immediately.
+    * **Evidence (Turn 3):**
+        1.  **Untap:** "2 lands = 2 mana available." (Correct).
+        2.  **Action:** `playLand: Island`. (Board is now 3 lands. Mana pool *should* be 3).
+        3.  **AI Decision:** The AI correctly believes it has 3 mana ("uses my full available mana (U2, B1 = 3)") and tries to cast `Sauron's Ransom` (Cost 3).
+        4.  **Engine Failure:** "Cannot afford Sauron's Ransom".
+        5.  **Conclusion:** The engine is still operating on the 2 mana from the untap step and is unaware of the land that was just played.
+
+* **CRITICAL: Untap Mana Calculation is Incorrect**
+    * **Description:** The `Untap & Generate Mana` function, while now counting lands, is using an incorrect formula. It appears to be calculating `mana = lands - 1` starting from Turn 6.
+    * **Evidence:**
+        * T6: "5 lands = 4 mana available." (Should be 5 lands = 5 mana).
+        * T7: "6 lands = 5 mana available." (Should be 6 lands = 6 mana).
+
+#### New Secondary Bugs Found
+
+* **AI Hallucinates Land Play**
+    * **Description:** The AI is attempting to play a land when it has no lands in its hand, causing an engine error.
+    * **Evidence (Turn 5):**
+        1.  **Draw:** `Brainstorm` (No land drawn).
+        2.  **AI Decision:** "Priority rule #1: take my land drop first..."
+        3.  **Engine Failure:** "Error: Cannot read properties of undefined (reading 'name')".
+
+### Recommendations
+
+1.  **Fix the Mana Pool Update Logic:** The mana pool cannot be a static value calculated only at untap. It must be a "live" object that is immediately updated by:
+    * `playLand` (incrementing the pool)
+    * `castSpell` (decrementing the pool)
+2.  **Fix the `castSpell` Decrement Logic:** When a spell is cast, the engine must *subtract* its cost from the pool, not set the pool to 0.
+3.  **Fix the `Untap` Calculation:** The formula must be `mana = lands` (and eventually, `mana = lands + mana_creatures + mana_artifacts`). The `mana = lands - 1` logic is incorrect.
+4.  **Fix AI Hallucination:** The AI must be constrained to only play lands that are actually in its `hand` array.

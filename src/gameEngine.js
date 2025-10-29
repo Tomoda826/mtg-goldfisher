@@ -745,42 +745,62 @@ export const playLand = (state, landIndex) => {
 state.battlefield.lands.push(land);
   state.hasPlayedLand = true;
   
-  // ✅ FIX: Add new land's mana to existing pool (don't regenerate entire pool)
-  if (!land.tapped) {
-    const newMana = getLandManaProduction(land, state.behaviorManifest);
+  // ✅ FIX: Add new land's mana using manaPoolManager for proper synchronization
+  if (!land.tapped && state.manaPoolManager) {
+    // Check for mana ability data first
+    const manaAbilityData = state.behaviorManifest?.manaAbilities?.get(land.name);
     
-    // Add the new land's mana production to the current pool
-if (newMana.isDualLand || newMana.isFilterLand) {
-      Object.keys(newMana).forEach(color => {
-        if (['W', 'U', 'B', 'R', 'G', 'C'].includes(color) && newMana[color] > 0) {
-          state.manaPool[color] = (state.manaPool[color] || 0) + newMana[color];
+    if (manaAbilityData?.hasManaAbility) {
+      // NEW SYSTEM: Use cached structured data
+      manaAbilityData.abilities.forEach(ability => {
+        // Check if we can activate (land is untapped)
+        const canActivate = ability.activationCost.every(cost => {
+          if (cost === '{T}') return !land.tapped;
+          if (cost === 'sacrifice') return true;
+          return true;
+        });
+        
+        if (canActivate) {
+          // Add mana for each production option
+          ability.produces.forEach(production => {
+            state.manaPoolManager.addMana(production, state, land);
+          });
+          
+          // Tap the land
+          if (ability.activationCost.includes('{T}')) {
+            land.tapped = true;
+          }
         }
       });
-      
-      // ✅ BUG #1 FIX: Update actualTotalMana for dual/filter lands
-      state.actualTotalMana = (state.actualTotalMana || 0) + (newMana.actualManaProduced || 1);
-      
     } else {
-      Object.keys(newMana).forEach(color => {
-        if (['W', 'U', 'B', 'R', 'G', 'C'].includes(color)) {
-          state.manaPool[color] = (state.manaPool[color] || 0) + (newMana[color] || 0);
+      // FALLBACK: Old system using getLandManaProduction
+      const newMana = getLandManaProduction(land, state.behaviorManifest);
+      
+      const colors = ['W', 'U', 'B', 'R', 'G', 'C'];
+      let actualAmount = 0;
+      
+      if (newMana.isDualLand || newMana.isFilterLand) {
+        actualAmount = newMana.actualManaProduced || 1;
+      } else {
+        actualAmount = colors.reduce((sum, c) => sum + (newMana[c] || 0), 0);
+      }
+      
+      // Add to manaPoolManager
+      colors.forEach(color => {
+        if (newMana[color] > 0) {
+          state.manaPoolManager.pool[color] += newMana[color];
         }
       });
+      state.manaPoolManager.actualTotal += actualAmount;
       
-// ✅ BUG #1 FIX: Update actualTotalMana for regular lands
-      let landTotal;
-      if (newMana.actualManaProduced !== undefined) {
-        landTotal = newMana.actualManaProduced;
-      } else {
-        landTotal = Object.keys(newMana)
-          .filter(k => ['W','U','B','R','G','C'].includes(k))
-          .reduce((sum, color) => sum + newMana[color], 0);
-      }
-      state.actualTotalMana = (state.actualTotalMana || 0) + landTotal;
+      land.tapped = true;
     }
     
-    // ✅ BUG #1 FIX: Use actualTotalMana instead of sum
-    const totalMana = state.actualTotalMana || Object.values(state.manaPool).reduce((a, b) => a + b, 0);
+    // Sync state with manager
+    state.manaPool = state.manaPoolManager.getPool();
+    state.actualTotalMana = state.manaPoolManager.getTotal();
+    
+    const totalMana = state.actualTotalMana;
     
     // Log with reason
     if (entryReason) {
@@ -789,6 +809,36 @@ if (newMana.isDualLand || newMana.isFilterLand) {
       state.log.push(`🏔️ Played land: ${land.name}`);
     }
     
+    state.log.push(`💎 Mana pool after land: ${totalMana} total (W:${state.manaPool.W} U:${state.manaPool.U} B:${state.manaPool.B} R:${state.manaPool.R} G:${state.manaPool.G} C:${state.manaPool.C})`);
+  } else if (!land.tapped) {
+    // Fallback for systems without manaPoolManager
+    const newMana = getLandManaProduction(land, state.behaviorManifest);
+    
+    if (newMana.isDualLand || newMana.isFilterLand) {
+      Object.keys(newMana).forEach(color => {
+        if (['W', 'U', 'B', 'R', 'G', 'C'].includes(color) && newMana[color] > 0) {
+          state.manaPool[color] = (state.manaPool[color] || 0) + newMana[color];
+        }
+      });
+      state.actualTotalMana = (state.actualTotalMana || 0) + (newMana.actualManaProduced || 1);
+    } else {
+      Object.keys(newMana).forEach(color => {
+        if (['W', 'U', 'B', 'R', 'G', 'C'].includes(color)) {
+          state.manaPool[color] = (state.manaPool[color] || 0) + (newMana[color] || 0);
+        }
+      });
+      let landTotal = newMana.actualManaProduced !== undefined 
+        ? newMana.actualManaProduced
+        : Object.keys(newMana).filter(k => ['W','U','B','R','G','C'].includes(k)).reduce((sum, color) => sum + newMana[color], 0);
+      state.actualTotalMana = (state.actualTotalMana || 0) + landTotal;
+    }
+    
+    const totalMana = state.actualTotalMana || Object.values(state.manaPool).reduce((a, b) => a + b, 0);
+    if (entryReason) {
+      state.log.push(`🏔️ Played land: ${land.name} ${entryReason}`);
+    } else {
+      state.log.push(`🏔️ Played land: ${land.name}`);
+    }
     state.log.push(`💎 Mana pool after land: ${totalMana} total (W:${state.manaPool.W} U:${state.manaPool.U} B:${state.manaPool.B} R:${state.manaPool.R} G:${state.manaPool.G} C:${state.manaPool.C})`);
   } else {
     // Land entered tapped, no mana added
