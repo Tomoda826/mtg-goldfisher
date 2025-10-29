@@ -230,11 +230,11 @@ export const getLandManaProduction = (land, manifest) => {
   }
   
   // Fall back to basic land type detection
-  if (name.includes('plains') || text.includes('(plains)')) return { W: 1, U: 0, B: 0, R: 0, G: 0, C: 0 };
-  if (name.includes('island') || text.includes('(island)')) return { U: 1, W: 0, B: 0, R: 0, G: 0, C: 0 };
-  if (name.includes('swamp') || text.includes('(swamp)')) return { B: 1, W: 0, U: 0, R: 0, G: 0, C: 0 };
-  if (name.includes('mountain') || text.includes('(mountain)')) return { R: 1, W: 0, U: 0, B: 0, G: 0, C: 0 };
-  if (name.includes('forest') || text.includes('(forest)')) return { G: 1, W: 0, U: 0, B: 0, R: 0, C: 0 };
+  if (name.includes('plains') || text.includes('(plains)')) return { W: 1, U: 0, B: 0, R: 0, G: 0, C: 0, actualManaProduced: 1 };
+  if (name.includes('island') || text.includes('(island)')) return { U: 1, W: 0, B: 0, R: 0, G: 0, C: 0, actualManaProduced: 1 };
+  if (name.includes('swamp') || text.includes('(swamp)')) return { B: 1, W: 0, U: 0, R: 0, G: 0, C: 0, actualManaProduced: 1 };
+  if (name.includes('mountain') || text.includes('(mountain)')) return { R: 1, W: 0, U: 0, B: 0, G: 0, C: 0, actualManaProduced: 1 };
+  if (name.includes('forest') || text.includes('(forest)')) return { G: 1, W: 0, U: 0, B: 0, R: 0, C: 0, actualManaProduced: 1 };
   
   console.warn('⚠️ Could not determine mana production for:', land.name);
   return { W: 0, U: 0, B: 0, R: 0, G: 0, C: 0 };
