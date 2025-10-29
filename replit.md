@@ -78,6 +78,14 @@ An AI-powered Magic: The Gathering Commander deck analyzer and simulator. This a
 - **Run**: `npx vite preview --host 0.0.0.0`
 
 ## Recent Changes
+- **2025-10-29**: Fixed lands with mana-cost abilities producing free mana - MANA-008 resolved ✅
+  - **Root Cause**: generateMana activation cost validation had fallback `return true` for unknown costs, allowing mana abilities with mana costs (like Great Hall of the Citadel's `{1}, {T}`) to activate during untap when pool is empty
+  - **Symptom**: Turn 3 with 2 lands + 1 artifact produced 3 mana instead of 2; Turn 5 with 4 lands + 2 artifacts produced 6 instead of 5
+  - **Discovery**: Debug logging revealed Great Hall was adding 1 mana each turn when it should add 0 (requires paying {1} to activate)
+  - **Fix**: Added regex check `/^\{.*\}$/` to detect and reject mana costs in activation validation for lands, artifacts, and creatures during untap
+  - **Result**: Lands/artifacts/creatures requiring mana payment no longer auto-activate during untap phase
+  - Architect-reviewed and verified via console log analysis
+
 - **2025-10-29**: Fixed untap mana calculation ignoring board state - MANA-006 resolved ✅
   - **Root Cause**: getManaProductionFromManifest was not setting `actualManaProduced` for single-color and anyColor mana sources
   - **Symptom**: Untap phase showed "0 lands" and ignored artifact mana, used flawed turn-based heuristic instead of counting actual permanents
