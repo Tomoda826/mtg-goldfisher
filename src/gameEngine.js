@@ -225,7 +225,11 @@ export const getLandManaProduction = (land, manifest) => {
     const total = Object.values(manifestProduction).reduce((a, b) => a + b, 0);
     
     if (total > 0) {
-      return manifestProduction;
+      // ✅ FIX: Add actualManaProduced property for untap phase counting
+      return {
+        ...manifestProduction,
+        actualManaProduced: manifestProduction.actualManaProduced || total
+      };
     }
   }
   

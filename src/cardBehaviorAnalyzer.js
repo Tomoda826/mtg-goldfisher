@@ -644,6 +644,7 @@ export const getManaProductionFromManifest = (card, manifest) => {
   // If it produces any color, default to colorless for goldfishing
   if (producer.anyColor) {
     manaPool.C = producer.amount;
+    manaPool.actualManaProduced = producer.amount;  // ✅ FIX: Always set actualManaProduced
     return manaPool;
   }
   
@@ -665,6 +666,10 @@ export const getManaProductionFromManifest = (card, manifest) => {
   else if (producer.colors.length > 1) {
     manaPool.isDualLand = true;  // Name is historical, but applies to artifacts too
     manaPool.actualManaProduced = 1;
+  }
+  // ✅ FIX: Single-color producers (basic lands, Sol Ring, etc.)
+  else if (producer.colors.length === 1) {
+    manaPool.actualManaProduced = producer.amount || 1;
   }
   
   return manaPool;
