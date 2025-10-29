@@ -78,6 +78,12 @@ An AI-powered Magic: The Gathering Commander deck analyzer and simulator. This a
 - **Run**: `npx vite preview --host 0.0.0.0`
 
 ## Recent Changes
+- **2025-10-29**: Fixed AI fetch land activation priority - AI-LOGIC-001 resolved ✅
+  - **Fetch Land Instructions**: Updated AI prompt to activate fetch lands IMMEDIATELY after playing them (same turn), not "next turn"
+  - **Free Action Priority**: Added new decision priority step for 0-cost activated abilities before spell casting
+  - **Decision Order**: Now enforces Land Drop → Free Actions (fetch lands) → Main Phase Evaluation
+  - AI will now properly activate Evolving Wilds and similar fetch lands right after playing them for optimal color fixing
+
 - **2025-10-29**: Completed ALL mana calculation fixes - MANA-002 fully resolved ✅
   - **Untap Mana Calculation**: Fixed untap phase in enhancedStepByStepGame.js to check actual mana production instead of counting permanents. Now properly excludes zero-mana permanents (Evolving Wilds, The One Ring) and correctly sums multi-mana sources
   - **Dual-Land Smart Color Choice**: Updated all fallback code paths in `generateMana()` and `playLand()` to use `manaPoolManager.addMana()` with choice structure instead of hardcoded color selection. Command Tower and similar dual lands now choose optimal colors based on game state via `chooseOptimalColor()` helper
