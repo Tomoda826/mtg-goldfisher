@@ -78,6 +78,13 @@ An AI-powered Magic: The Gathering Commander deck analyzer and simulator. This a
 - **Run**: `npx vite preview --host 0.0.0.0`
 
 ## Recent Changes
+- **2025-10-29**: Fixed basic land counting regression - MANA-003 resolved ✅
+  - **Root Cause**: Basic lands were missing `actualManaProduced` property in getLandManaProduction return object
+  - **Symptom**: Untap phase logged "0 lands" every turn despite lands being played and untapped correctly
+  - **Fix**: Added `actualManaProduced: 1` to all 5 basic land type returns (Plains, Island, Swamp, Mountain, Forest)
+  - **Result**: Untap phase now correctly counts and displays actual land totals (e.g., "6 lands = 6 mana available")
+  - This regression appeared after earlier MANA-002 fixes; basic lands now match dual land implementation pattern
+
 - **2025-10-29**: Fixed 0-cost ability validation - ENGINE-003 resolved ✅
   - **Cost Validation Fix**: Updated canPayAbilityCost in activatedAbilityEngine.js to properly handle 0-cost abilities
   - **Default Values**: Added default values for mana destructuring to handle abilities with no mana cost
