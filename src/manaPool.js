@@ -527,4 +527,271 @@ export class ManaPool {
     
     return `Total: ${this.actualTotal} (${colors || 'none'})`;
   }
+  
+  /**
+   * BUILD POTENTIAL MANA POOL (Available Sources Model)
+   * 
+   * Scans all untapped permanents and returns an array of available mana abilities.
+   * Each entry represents ONE ability that can be activated.
+   * 
+   * @param {Object} gameState - Current game state
+   * @returns {Array} PotentialManaPool - Array of {source, sourceName, ability, permanent} objects
+   */
+  buildPotentialManaPool(gameState) {
+    const potentialPool = [];
+    
+    console.log('\n💎 [PotentialPool] Building available sources...');
+    
+    // Scan untapped lands
+    (gameState.battlefield?.lands || []).forEach(land => {
+      if (land.tapped) return;
+      
+      const manaAbilityData = gameState.behaviorManifest?.manaAbilities?.get(land.name);
+      
+      if (manaAbilityData?.hasManaAbility) {
+        manaAbilityData.abilities.forEach((ability, idx) => {
+          // Check if ability can be activated (cost requirements)
+          const canActivate = ability.activationCost.every(cost => {
+            if (cost === '{T}') return !land.tapped;
+            if (cost.match(/^\{.*\}$/)) return false; // Requires mana payment
+            return true;
+          });
+          
+          if (canActivate) {
+            potentialPool.push({
+              source: 'land',
+              sourceName: land.name,
+              ability: ability,
+              permanent: land,
+              abilityIndex: idx
+            });
+          }
+        });
+      }
+    });
+    
+    // Scan untapped artifacts
+    (gameState.battlefield?.artifacts || []).forEach(artifact => {
+      if (artifact.tapped) return;
+      
+      const manaAbilityData = gameState.behaviorManifest?.manaAbilities?.get(artifact.name);
+      
+      if (manaAbilityData?.hasManaAbility) {
+        manaAbilityData.abilities.forEach((ability, idx) => {
+          const canActivate = ability.activationCost.every(cost => {
+            if (cost === '{T}') return !artifact.tapped;
+            if (cost.match(/^\{.*\}$/)) return false;
+            return true;
+          });
+          
+          if (canActivate) {
+            potentialPool.push({
+              source: 'artifact',
+              sourceName: artifact.name,
+              ability: ability,
+              permanent: artifact,
+              abilityIndex: idx
+            });
+          }
+        });
+      }
+    });
+    
+    // Scan untapped creatures (mana dorks)
+    (gameState.battlefield?.creatures || []).forEach(creature => {
+      if (creature.tapped || creature.summoningSick) return;
+      
+      const manaAbilityData = gameState.behaviorManifest?.manaAbilities?.get(creature.name);
+      
+      if (manaAbilityData?.hasManaAbility) {
+        manaAbilityData.abilities.forEach((ability, idx) => {
+          const canActivate = ability.activationCost.every(cost => {
+            if (cost === '{T}') return !creature.tapped && !creature.summoningSick;
+            if (cost.match(/^\{.*\}$/)) return false;
+            return true;
+          });
+          
+          if (canActivate) {
+            potentialPool.push({
+              source: 'creature',
+              sourceName: creature.name,
+              ability: ability,
+              permanent: creature,
+              abilityIndex: idx
+            });
+          }
+        });
+      }
+    });
+    
+    console.log(`💎 [PotentialPool] Found ${potentialPool.length} available mana abilities`);
+    potentialPool.forEach((entry, idx) => {
+      const produces = this.describeProduction(entry.ability.produces);
+      console.log(`   ${idx}: ${entry.sourceName} (${entry.source}) → ${produces}`);
+    });
+    
+    return potentialPool;
+  }
+  
+  /**
+   * Helper: Describe what a mana ability produces (for logging)
+   */
+  describeProduction(produces) {
+    if (!produces || produces.length === 0) return 'nothing';
+    
+    return produces.map(p => {
+      if (!p.types) return '?';
+      
+      const typeDesc = p.types.map(t => {
+        if (typeof t === 'string') return `{${t}}`;
+        if (t.choice) return `{${t.choice.join('/')}}`;
+        if (t.combination) return `{combo: ${t.combination.join(',')}}`;
+        return '?';
+      }).join('');
+      
+      return `${p.quantity || 1}x${typeDesc}`;
+    }).join(' + ');
+  }
+  
+  /**
+   * MANA SOLVER (Just-in-Time Cost Solving)
+   * 
+   * Given a mana cost and available sources, find an optimal payment solution.
+   * Returns which sources to tap and which abilities to use.
+   * 
+   * @param {string} manaCost - e.g., "{2}{U}{B}"
+   * @param {Array} potentialPool - Available mana abilities
+   * @param {Object} gameState - Current game state (for context)
+   * @returns {Object|null} - { solution: Array, totalPaid: Object } or null if impossible
+   */
+  solveCost(manaCost, potentialPool, gameState) {
+    console.log(`\n🧮 [ManaSolver] Solving cost: ${manaCost}`);
+    console.log(`🧮 [ManaSolver] Available sources: ${potentialPool.length} abilities`);
+    
+    // Parse the mana cost
+    const required = this.parseManaCostDetailed(manaCost);
+    console.log(`🧮 [ManaSolver] Required:`, required);
+    
+    // Track what we need to pay
+    const needed = {
+      W: required.colored.W || 0,
+      U: required.colored.U || 0,
+      B: required.colored.B || 0,
+      R: required.colored.R || 0,
+      G: required.colored.G || 0,
+      generic: required.generic
+    };
+    
+    const solution = [];
+    const usedIndices = new Set();
+    
+    // PHASE 1: Pay colored requirements (strict)
+    const colorOrder = ['W', 'U', 'B', 'R', 'G'];
+    
+    for (const color of colorOrder) {
+      while (needed[color] > 0) {
+        // Find a source that can produce this color
+        const sourceIdx = potentialPool.findIndex((entry, idx) => {
+          if (usedIndices.has(idx)) return false;
+          return this.canProduceColor(entry.ability, color);
+        });
+        
+        if (sourceIdx === -1) {
+          console.log(`❌ [ManaSolver] Cannot find source for {${color}}`);
+          return null; // Cannot pay
+        }
+        
+        const entry = potentialPool[sourceIdx];
+        solution.push({
+          ...entry,
+          chosenColor: color,
+          reason: `colored requirement {${color}}`
+        });
+        usedIndices.add(sourceIdx);
+        needed[color]--;
+        
+        console.log(`   ✓ Using ${entry.sourceName} for {${color}}`);
+      }
+    }
+    
+    // PHASE 2: Pay generic requirement (any source)
+    while (needed.generic > 0) {
+      const sourceIdx = potentialPool.findIndex((entry, idx) => !usedIndices.has(idx));
+      
+      if (sourceIdx === -1) {
+        console.log(`❌ [ManaSolver] Cannot find source for generic {${needed.generic}}`);
+        return null; // Cannot pay
+      }
+      
+      const entry = potentialPool[sourceIdx];
+      const producedColor = this.chooseGenericColor(entry.ability, gameState);
+      
+      solution.push({
+        ...entry,
+        chosenColor: producedColor,
+        reason: `generic payment`
+      });
+      usedIndices.add(sourceIdx);
+      needed.generic--;
+      
+      console.log(`   ✓ Using ${entry.sourceName} for generic (producing {${producedColor}})`);
+    }
+    
+    console.log(`✅ [ManaSolver] Found solution using ${solution.length} sources`);
+    
+    return {
+      solution: solution,
+      totalPaid: {
+        W: required.colored.W || 0,
+        U: required.colored.U || 0,
+        B: required.colored.B || 0,
+        R: required.colored.R || 0,
+        G: required.colored.G || 0,
+        generic: required.generic
+      }
+    };
+  }
+  
+  /**
+   * Check if an ability can produce a specific color
+   */
+  canProduceColor(ability, color) {
+    if (!ability.produces || ability.produces.length === 0) return false;
+    
+    for (const production of ability.produces) {
+      if (!production.types) continue;
+      
+      for (const type of production.types) {
+        if (typeof type === 'string' && type === color) return true;
+        if (type.choice && type.choice.includes(color)) return true;
+        if (type.combination && type.combination.includes(color)) return true;
+      }
+    }
+    
+    return false;
+  }
+  
+  /**
+   * Choose what color to produce for generic payment
+   */
+  chooseGenericColor(ability, gameState) {
+    if (!ability.produces || ability.produces.length === 0) return 'C';
+    
+    // Extract all possible colors this ability can produce
+    const canProduce = [];
+    ability.produces.forEach(production => {
+      if (!production.types) return;
+      production.types.forEach(type => {
+        if (typeof type === 'string') canProduce.push(type);
+        if (type.choice) canProduce.push(...type.choice);
+        if (type.combination) canProduce.push(...type.combination);
+      });
+    });
+    
+    // Prefer colorless for generic payment (preserve colored mana)
+    if (canProduce.includes('C')) return 'C';
+    
+    // Otherwise use first available color
+    return canProduce[0] || 'C';
+  }
 }

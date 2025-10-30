@@ -488,9 +488,98 @@ export const untapPhase = (state) => {
   return state;
 };
 
-// Generate available mana from lands AND artifacts
-// Generate available mana from lands AND artifacts
+// =============================================
+// NEW "AVAILABLE SOURCES" MANA SYSTEM
+// =============================================
+// This function builds a list of all available mana abilities
+// instead of calculating a fixed pool. Just-in-time solving
+// happens when spells are cast (see castSpell refactor).
+// =============================================
+
 export const generateMana = (state) => {
+  console.log(`🔍 [generateMana] Starting - Turn ${state.turn}`);
+  console.log(`🔍 [generateMana] Battlefield: ${state.battlefield.lands.length} lands, ${state.battlefield.artifacts.length} artifacts, ${state.battlefield.creatures.length} creatures`);
+  
+  // Initialize mana pool manager if doesn't exist
+  if (!state.manaPoolManager) {
+    state.manaPoolManager = new ManaPool();
+  }
+  
+  // ✨ NEW SYSTEM: Build PotentialManaPool (Available Sources)
+  state.potentialManaPool = state.manaPoolManager.buildPotentialManaPool(state);
+  
+  // For backwards compatibility and AI decision making, calculate a "preview" pool
+  // This shows what mana COULD be available, but the actual activation happens
+  // just-in-time during castSpell()
+  state.manaPoolManager.emptyPool();
+  
+  // Calculate preview totals (for AI to know what's available)
+  const previewTotals = {
+    W: 0, U: 0, B: 0, R: 0, G: 0, C: 0
+  };
+  let actualTotalMana = 0;
+  
+  state.potentialManaPool.forEach(entry => {
+    // Count what each source COULD produce, respecting quantity
+    entry.ability.produces.forEach(production => {
+      if (!production.types) return;
+      
+      const quantity = production.quantity || 1;
+      
+      production.types.forEach(type => {
+        if (typeof type === 'string' && ['W', 'U', 'B', 'R', 'G', 'C'].includes(type)) {
+          // Fixed color - add quantity
+          previewTotals[type] += quantity;
+          actualTotalMana += quantity;
+        } else if (type.choice) {
+          // For choice abilities, count all options with the quantity
+          type.choice.forEach(c => {
+            if (['W', 'U', 'B', 'R', 'G', 'C'].includes(c)) {
+              previewTotals[c] += quantity;
+            }
+          });
+          // But only count once for actual total
+          actualTotalMana += quantity;
+        } else if (type.combination) {
+          // Combination produces multiple types, but total is the combination length
+          actualTotalMana += type.combination.length;
+          type.combination.forEach(c => {
+            if (['W', 'U', 'B', 'R', 'G', 'C'].includes(c)) {
+              previewTotals[c]++;
+            }
+          });
+        }
+      });
+    });
+  });
+  
+  // Store preview (for AI visibility and backwards compat)
+  state.manaPool = {
+    W: previewTotals.W,
+    U: previewTotals.U,
+    B: previewTotals.B,
+    R: previewTotals.R,
+    G: previewTotals.G,
+    C: previewTotals.C
+  };
+  state.actualTotalMana = actualTotalMana;
+  
+  console.log(`🔍 [generateMana] Final total: ${state.actualTotalMana} available sources`);
+  console.log(`🔍 [generateMana] Preview flexibility:`, state.manaPool);
+  
+  // Log
+  if (state.actualTotalMana > 0) {
+    const pool = state.manaPool;
+    state.log.push(`💎 Available: ${state.actualTotalMana} sources (could produce: W:${pool.W} U:${pool.U} B:${pool.B} R:${pool.R} G:${pool.G} C:${pool.C})`);
+  }
+  
+  return state;
+};
+
+// =============================================
+// OLD SYSTEM (kept for reference, can be deleted after refactor is complete)
+// =============================================
+export const generateMana_OLD = (state) => {
   console.log(`🔍 [generateMana] Starting - Turn ${state.turn}`);
   console.log(`🔍 [generateMana] Battlefield: ${state.battlefield.lands.length} lands, ${state.battlefield.artifacts.length} artifacts, ${state.battlefield.creatures.length} creatures`);
   
@@ -839,130 +928,54 @@ export const playLand = (state, landIndex) => {
   // Mark land as tapped
   land.tapped = entersTapped;
   
-state.battlefield.lands.push(land);
+  state.battlefield.lands.push(land);
   state.hasPlayedLand = true;
   
-  // ✅ FIX: Add new land's mana using manaPoolManager for proper synchronization
-  if (!land.tapped && state.manaPoolManager) {
-    // Check for mana ability data first
-    const manaAbilityData = state.behaviorManifest?.manaAbilities?.get(land.name);
+  // ✨ NEW SYSTEM: Rebuild PotentialManaPool (land's abilities now available)
+  if (state.manaPoolManager) {
+    state.potentialManaPool = state.manaPoolManager.buildPotentialManaPool(state);
     
-    if (manaAbilityData?.hasManaAbility) {
-      // NEW SYSTEM: Use cached structured data
-      manaAbilityData.abilities.forEach(ability => {
-        // Check if we can activate (land is untapped)
-        const canActivate = ability.activationCost.every(cost => {
-          if (cost === '{T}') return !land.tapped;
-          if (cost === 'sacrifice') return true;
-          return true;
-        });
+    // Update preview pool for AI visibility (respect quantity!)
+    const previewTotals = { W: 0, U: 0, B: 0, R: 0, G: 0, C: 0 };
+    let actualTotalMana = 0;
+    
+    state.potentialManaPool.forEach(entry => {
+      entry.ability.produces.forEach(production => {
+        if (!production.types) return;
+        const quantity = production.quantity || 1;
         
-        if (canActivate) {
-          // Add mana for each production option
-          ability.produces.forEach(production => {
-            state.manaPoolManager.addMana(production, state, land);
-          });
-          
-          // Tap the land
-          if (ability.activationCost.includes('{T}')) {
-            land.tapped = true;
+        production.types.forEach(type => {
+          if (typeof type === 'string' && ['W', 'U', 'B', 'R', 'G', 'C'].includes(type)) {
+            previewTotals[type] += quantity;
+            actualTotalMana += quantity;
+          } else if (type.choice) {
+            type.choice.forEach(c => {
+              if (['W', 'U', 'B', 'R', 'G', 'C'].includes(c)) previewTotals[c] += quantity;
+            });
+            actualTotalMana += quantity;
+          } else if (type.combination) {
+            actualTotalMana += type.combination.length;
+            type.combination.forEach(c => {
+              if (['W', 'U', 'B', 'R', 'G', 'C'].includes(c)) previewTotals[c]++;
+            });
           }
-        }
+        });
       });
-    } else {
-      // FALLBACK: Old system using getLandManaProduction
-      const newMana = getLandManaProduction(land, state.behaviorManifest);
-      
-      const colors = ['W', 'U', 'B', 'R', 'G', 'C'];
-      
-      if (newMana.isDualLand || newMana.isFilterLand) {
-        // Dual lands: use manaPoolManager for smart color choice
-        const availableColors = colors.filter(c => newMana[c] > 0);
-        const amount = newMana.actualManaProduced || 1;
-        
-        if (availableColors.length > 0) {
-          state.manaPoolManager.addMana(
-            { quantity: amount, types: [{ choice: availableColors }] },
-            state,
-            land
-          );
-        }
-      } else {
-        // Basic lands: add the produced color directly
-        const actualAmount = colors.reduce((sum, c) => sum + (newMana[c] || 0), 0);
-        
-        colors.forEach(color => {
-          if (newMana[color] > 0) {
-            state.manaPoolManager.pool[color] += newMana[color];
-          }
-        });
-        state.manaPoolManager.actualTotal += actualAmount;
-      }
-      
-      land.tapped = true;
-    }
+    });
     
-    // Sync state with manager
-    state.manaPool = state.manaPoolManager.getPool();
-    state.actualTotalMana = state.manaPoolManager.getTotal();
+    state.manaPool = previewTotals;
+    state.actualTotalMana = actualTotalMana;
     
+    // Log
     const totalMana = state.actualTotalMana;
-    
-    // Log with reason
     if (entryReason) {
       state.log.push(`🏔️ Played land: ${land.name} ${entryReason}`);
     } else {
       state.log.push(`🏔️ Played land: ${land.name}`);
     }
-    
-    state.log.push(`💎 Mana pool after land: ${totalMana} total (W:${state.manaPool.W} U:${state.manaPool.U} B:${state.manaPool.B} R:${state.manaPool.R} G:${state.manaPool.G} C:${state.manaPool.C})`);
-  } else if (!land.tapped) {
-    // Fallback for systems without manaPoolManager  (should rarely be used)
-    const newMana = getLandManaProduction(land, state.behaviorManifest);
-    const colors = ['W', 'U', 'B', 'R', 'G', 'C'];
-    
-    if (newMana.isDualLand || newMana.isFilterLand) {
-      // Dual lands: Choose based on deck colors (simple heuristic)
-      const actualAmount = newMana.actualManaProduced || 1;
-      const availableColors = colors.filter(c => newMana[c] > 0);
-      
-      if (availableColors.length > 0) {
-        // Simple heuristic: choose color we have least of in pool
-        let chosenColor = availableColors[0];
-        let minAmount = state.manaPool[chosenColor] || 0;
-        for (const color of availableColors) {
-          const amount = state.manaPool[color] || 0;
-          if (amount < minAmount) {
-            minAmount = amount;
-            chosenColor = color;
-          }
-        }
-        state.manaPool[chosenColor] = (state.manaPool[chosenColor] || 0) + actualAmount;
-      }
-      
-      state.actualTotalMana = (state.actualTotalMana || 0) + actualAmount;
-    } else {
-      // Basic lands: add the produced color
-      Object.keys(newMana).forEach(color => {
-        if (colors.includes(color)) {
-          state.manaPool[color] = (state.manaPool[color] || 0) + (newMana[color] || 0);
-        }
-      });
-      let landTotal = newMana.actualManaProduced !== undefined 
-        ? newMana.actualManaProduced
-        : colors.filter(k => newMana[k]).reduce((sum, color) => sum + newMana[color], 0);
-      state.actualTotalMana = (state.actualTotalMana || 0) + landTotal;
-    }
-    
-    const totalMana = state.actualTotalMana || Object.values(state.manaPool).reduce((a, b) => a + b, 0);
-    if (entryReason) {
-      state.log.push(`🏔️ Played land: ${land.name} ${entryReason}`);
-    } else {
-      state.log.push(`🏔️ Played land: ${land.name}`);
-    }
-    state.log.push(`💎 Mana pool after land: ${totalMana} total (W:${state.manaPool.W} U:${state.manaPool.U} B:${state.manaPool.B} R:${state.manaPool.R} G:${state.manaPool.G} C:${state.manaPool.C})`);
+    state.log.push(`💎 Available: ${totalMana} sources (could produce: W:${state.manaPool.W} U:${state.manaPool.U} B:${state.manaPool.B} R:${state.manaPool.R} G:${state.manaPool.G} C:${state.manaPool.C})`);
   } else {
-    // Land entered tapped, no mana added
+    // Land entered tapped
     if (entryReason) {
       state.log.push(`🏔️ Played land: ${land.name} ${entryReason}`);
     } else {
@@ -973,54 +986,87 @@ state.battlefield.lands.push(land);
   return state;
 };
 
-// Cast a spell
+// =============================================
+// REFACTORED castSpell() - Uses Mana Solver
+// =============================================
 export const castSpell = (state, cardIndex) => {
   const card = state.hand[cardIndex];
   
-  // ✅ DEBUG: Log mana state before casting
-  const poolTotal = Object.values(state.manaPool).reduce((a, b) => a + b, 0);
-  console.log(`[castSpell] Attempting to cast ${card.name} (cost: ${card.cmc || 0})`);
-  console.log(`[castSpell] Current pool:`, state.manaPool, `Total: ${poolTotal}`);
+  console.log(`\n🎯 [castSpell] Attempting to cast ${card.name}`);
+  console.log(`🎯 [castSpell] Cost: ${card.mana_cost || '{0}'}`);
   
-  if (!canPayMana(state.manaPool, card.mana_cost, state.actualTotalMana, state.manaPoolManager)) {
-    const totalAvailable = Object.values(state.manaPool).reduce((a, b) => a + b, 0);
-    state.log.push(`⚠️ CANNOT CAST ${card.name}: Need ${card.cmc} mana, have ${totalAvailable}`);
-    console.log(`[castSpell] ⚠️ Affordability check FAILED`);
-    return state; // Don't cast if can't afford
+  // ✨ NEW SYSTEM: Use mana solver with PotentialManaPool
+  const solution = state.manaPoolManager.solveCost(
+    card.mana_cost || '{0}',
+    state.potentialManaPool || [],
+    state
+  );
+  
+  if (!solution) {
+    const totalAvailable = state.potentialManaPool?.length || 0;
+    state.log.push(`⚠️ CANNOT CAST ${card.name}: Mana solver found no valid payment`);
+    console.log(`❌ [castSpell] Cannot afford - no solution found`);
+    return state;
   }
   
-  console.log(`[castSpell] ✅ Affordability check PASSED - proceeding with cast`);
+  console.log(`✅ [castSpell] Solution found! Tapping ${solution.solution.length} sources`);
   
-  // Pay mana - use manaPoolManager if available for proper color tracking
-  if (state.manaPoolManager) {
-    state.manaPoolManager.pay(card.mana_cost);
-    state.manaPool = state.manaPoolManager.getPool();
-    state.actualTotalMana = state.manaPoolManager.getTotal();
-  } else {
-    // Fallback to old system
-    state.manaPool = payMana(state.manaPool, card.mana_cost);
-    const costPaid = parseMana(card.mana_cost).total;
-    state.actualTotalMana = Math.max(0, (state.actualTotalMana || 0) - costPaid);
-  }
-  
-  //... rest of function
-
-// ✅ NEW: Log remaining mana after cast
-const totalRemaining = state.actualTotalMana; // Use synced value
-if (state.detailedLog) {
-  state.detailedLog.push({
-    turn: state.turn,
-    phase: state.phase,
-    action: '💰 Mana After Cast',
-    spell: card.name,
-    remaining: state.manaPool,
-    total: totalRemaining
+  // Apply the solution: Tap the permanents
+  solution.solution.forEach(entry => {
+    entry.permanent.tapped = true;
+    console.log(`   🔒 Tapped ${entry.sourceName} (produced {${entry.chosenColor}})`);
   });
-}
-state.log.push(`💰 Remaining mana: ${totalRemaining} (W:${state.manaPool.W} U:${state.manaPool.U} B:${state.manaPool.B} R:${state.manaPool.R} G:${state.manaPool.G} C:${state.manaPool.C})`);
+  
+  // Rebuild PotentialManaPool (untapped sources only)
+  state.potentialManaPool = state.manaPoolManager.buildPotentialManaPool(state);
+  
+  // Update preview pool for AI visibility (respect quantity!)
+  const previewTotals = { W: 0, U: 0, B: 0, R: 0, G: 0, C: 0 };
+  let actualTotalMana = 0;
+  
+  state.potentialManaPool.forEach(entry => {
+    entry.ability.produces.forEach(production => {
+      if (!production.types) return;
+      const quantity = production.quantity || 1;
+      
+      production.types.forEach(type => {
+        if (typeof type === 'string' && ['W', 'U', 'B', 'R', 'G', 'C'].includes(type)) {
+          previewTotals[type] += quantity;
+          actualTotalMana += quantity;
+        } else if (type.choice) {
+          type.choice.forEach(c => {
+            if (['W', 'U', 'B', 'R', 'G', 'C'].includes(c)) previewTotals[c] += quantity;
+          });
+          actualTotalMana += quantity;
+        } else if (type.combination) {
+          actualTotalMana += type.combination.length;
+          type.combination.forEach(c => {
+            if (['W', 'U', 'B', 'R', 'G', 'C'].includes(c)) previewTotals[c]++;
+          });
+        }
+      });
+    });
+  });
+  
+  state.manaPool = previewTotals;
+  state.actualTotalMana = actualTotalMana;
+  
+  // Log remaining mana
+  const totalRemaining = state.actualTotalMana;
+  if (state.detailedLog) {
+    state.detailedLog.push({
+      turn: state.turn,
+      phase: state.phase,
+      action: '💰 Mana After Cast',
+      spell: card.name,
+      remaining: state.manaPool,
+      total: totalRemaining
+    });
+  }
+  state.log.push(`💰 Remaining: ${totalRemaining} sources (W:${state.manaPool.W} U:${state.manaPool.U} B:${state.manaPool.B} R:${state.manaPool.R} G:${state.manaPool.G} C:${state.manaPool.C})`);
 
-// Remove from hand
-state.hand.splice(cardIndex, 1);
+  // Remove from hand
+  state.hand.splice(cardIndex, 1);
   
   // Add to battlefield or graveyard
   if (card.category === 'creature') {
@@ -1048,74 +1094,82 @@ state.hand.splice(cardIndex, 1);
   return state;
 };
 
+// =============================================
+// REFACTORED castCommander() - Uses Mana Solver
+// =============================================
 export const castCommander = (state) => {
   if (state.commandZone.length === 0) return state;
   
   const commander = state.commandZone[0];
   
   // Commander tax is (2 * number of times PREVIOUSLY cast)
-  const additionalCost = commander.commanderCastCount * 2;  // This is CORRECT
-  // ✅ FIX: Calculate actual CMC from mana_cost
-  const actualCMC = parseMana(commander.mana_cost).total;
-  const totalCMC = actualCMC + additionalCost;
+  const additionalCost = commander.commanderCastCount * 2;
   
-  // Check if we can afford commander tax
-  const totalMana = state.manaPool.W + state.manaPool.U + state.manaPool.B + 
-                     state.manaPool.R + state.manaPool.G + state.manaPool.C;
+  // Build the full cost string (base cost + tax)
+  let fullCost = commander.mana_cost || '{0}';
+  if (additionalCost > 0) {
+    // Add tax as additional generic mana
+    fullCost = fullCost.replace(/\}$/, `}{${additionalCost}}`);
+  }
   
-  if (totalMana < totalCMC) {
-    state.log.push(`⚠️ Cannot cast commander: need ${totalCMC}, have ${totalMana}`);
+  console.log(`\n👑 [castCommander] Attempting to cast ${commander.name}`);
+  console.log(`👑 [castCommander] Base cost: ${commander.mana_cost}, Tax: ${additionalCost}, Full cost: ${fullCost}`);
+  
+  // ✨ NEW SYSTEM: Use mana solver with PotentialManaPool
+  const solution = state.manaPoolManager.solveCost(
+    fullCost,
+    state.potentialManaPool || [],
+    state
+  );
+  
+  if (!solution) {
+    const totalAvailable = state.potentialManaPool?.length || 0;
+    state.log.push(`⚠️ Cannot cast commander: Mana solver found no valid payment`);
+    console.log(`❌ [castCommander] Cannot afford - no solution found`);
     return state;
   }
   
-  if (!canPayMana(state.manaPool, commander.mana_cost, state.actualTotalMana, state.manaPoolManager)) {
-    state.log.push(`⚠️ Cannot cast commander: wrong colors`);
-    return state;
-  }
+  console.log(`✅ [castCommander] Solution found! Tapping ${solution.solution.length} sources`);
   
-  // Pay mana - use manaPoolManager if available
-  if (state.manaPoolManager) {
-    // Pay the base commander cost
-    state.manaPoolManager.pay(commander.mana_cost);
-    
-    // Pay commander tax (generic mana) using the pay() method
-    if (additionalCost > 0) {
-      const taxCost = `{${additionalCost}}`;
-      // Check if we can pay the tax
-      if (!state.manaPoolManager.canPay(taxCost)) {
-        state.log.push(`⚠️ Cannot pay commander tax: need ${additionalCost} more generic mana`);
-        return state;
-      }
-      state.manaPoolManager.pay(taxCost);
-    }
-    
-    // Sync state with manager
-    state.manaPool = state.manaPoolManager.getPool();
-    state.actualTotalMana = state.manaPoolManager.getTotal();
-  } else {
-    // Fallback to old system
-    state.manaPool = payMana(state.manaPool, commander.mana_cost);
-    
-    const baseCost = parseMana(commander.mana_cost).total;
-    const totalCost = baseCost + additionalCost;
-    state.actualTotalMana = Math.max(0, (state.actualTotalMana || 0) - totalCost);
-    
-    // Pay commander tax from remaining mana
-    let taxToPay = additionalCost;
-    const colors = ['C', 'W', 'U', 'B', 'R', 'G'];
-    for (const color of colors) {
-      if (taxToPay > 0 && state.manaPool[color] > 0) {
-        const payment = Math.min(taxToPay, state.manaPool[color]);
-        state.manaPool[color] -= payment;
-        taxToPay -= payment;
-      }
-    }
-    
-    if (taxToPay > 0) {
-      state.log.push(`⚠️ Cannot pay commander tax: need ${additionalCost} more`);
-      return state;
-    }
-  }
+  // Apply the solution: Tap the permanents
+  solution.solution.forEach(entry => {
+    entry.permanent.tapped = true;
+    console.log(`   🔒 Tapped ${entry.sourceName} (produced {${entry.chosenColor}})`);
+  });
+  
+  // Rebuild PotentialManaPool (untapped sources only)
+  state.potentialManaPool = state.manaPoolManager.buildPotentialManaPool(state);
+  
+  // Update preview pool for AI visibility (respect quantity!)
+  const previewTotals = { W: 0, U: 0, B: 0, R: 0, G: 0, C: 0 };
+  let actualTotalMana = 0;
+  
+  state.potentialManaPool.forEach(entry => {
+    entry.ability.produces.forEach(production => {
+      if (!production.types) return;
+      const quantity = production.quantity || 1;
+      
+      production.types.forEach(type => {
+        if (typeof type === 'string' && ['W', 'U', 'B', 'R', 'G', 'C'].includes(type)) {
+          previewTotals[type] += quantity;
+          actualTotalMana += quantity;
+        } else if (type.choice) {
+          type.choice.forEach(c => {
+            if (['W', 'U', 'B', 'R', 'G', 'C'].includes(c)) previewTotals[c] += quantity;
+          });
+          actualTotalMana += quantity;
+        } else if (type.combination) {
+          actualTotalMana += type.combination.length;
+          type.combination.forEach(c => {
+            if (['W', 'U', 'B', 'R', 'G', 'C'].includes(c)) previewTotals[c]++;
+          });
+        }
+      });
+    });
+  });
+  
+  state.manaPool = previewTotals;
+  state.actualTotalMana = actualTotalMana;
   
   // Cast commander
   state.commandZone.shift();
@@ -1155,10 +1209,17 @@ export const aiMainPhase = (state) => {
     // Evaluate all castable spells
     const castableSpells = state.hand
       .map((card, idx) => ({ card, idx }))
-      .filter(({ card }) => 
-        card.category !== 'land' && 
-        canPayMana(state.manaPool, card.mana_cost, state.actualTotalMana)
-      )
+      .filter(({ card }) => {
+        if (card.category === 'land') return false;
+        
+        // ✨ NEW SYSTEM: Use mana solver to check affordability
+        const solution = state.manaPoolManager?.solveCost(
+          card.mana_cost || '{0}',
+          state.potentialManaPool || [],
+          state
+        );
+        return solution !== null;
+      })
       .map(({ card, idx }) => ({
         card,
         idx,
