@@ -343,17 +343,24 @@ export class ManaPool {
   analyzeHandColorNeeds(hand, game) {
     const needs = { W: 0, U: 0, B: 0, R: 0, G: 0, C: 0 };
     
-    if (!hand) return needs;
+    if (!hand) {
+      console.log('[ManaPool] analyzeHandColorNeeds: No hand provided');
+      return needs;
+    }
+    
+    console.log(`[ManaPool] Analyzing hand of ${hand.length} cards`);
     
     // Analyze hand
     hand.forEach(card => {
       if (card.category === 'land') return; // Skip lands
       
       const cost = card.mana_cost || '';
-      const matches = cost.match(/\{([WUBRGC])\}/g) || [];
+      const matches = cost.match(/\{([WUBRGC])\}/gi) || []; // Added 'i' for case-insensitive
+      
+      console.log(`[ManaPool]   ${card.name}: cost="${cost}", matches=${matches.length}`);
       
       matches.forEach(match => {
-        const color = match.replace(/[{}]/g, '');
+        const color = match.replace(/[{}]/g, '').toUpperCase();
         if (needs[color] !== undefined) {
           needs[color]++;
         }
@@ -364,15 +371,19 @@ export class ManaPool {
     if (game.commandZone?.[0]) {
       const commander = game.commandZone[0];
       const cost = commander.mana_cost || '';
-      const matches = cost.match(/\{([WUBRGC])\}/g) || [];
+      const matches = cost.match(/\{([WUBRGC])\}/gi) || [];
+      
+      console.log(`[ManaPool] Commander ${commander.name}: cost="${cost}", matches=${matches.length}`);
       
       matches.forEach(match => {
-        const color = match.replace(/[{}]/g, '');
+        const color = match.replace(/[{}]/g, '').toUpperCase();
         if (needs[color] !== undefined) {
           needs[color] += 3; // Heavy weight
         }
       });
     }
+    
+    console.log('[ManaPool] Hand needs:', needs);
     
     return needs;
   }
