@@ -983,10 +983,10 @@ const parseModalAbility = (text) => {
   const productions = [];
   
   addMatches.forEach(addClause => {
-    // Try each parsing rule
-    let prod = parseSimpleFixedMana(addClause);
-    if (!prod) prod = parseChoiceOfOne(addClause);
+    // Try each parsing rule (choice patterns must be checked before simple patterns)
+    let prod = parseChoiceOfOne(addClause);  // ✅ Try choice first (e.g., "{U} or {B}")
     if (!prod) prod = parseFixedAmountChoice(addClause);
+    if (!prod) prod = parseSimpleFixedMana(addClause);  // Try simple last
     
     if (prod) {
       productions.push(prod);
