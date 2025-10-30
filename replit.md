@@ -78,12 +78,20 @@ An AI-powered Magic: The Gathering Commander deck analyzer and simulator. This a
 - **Run**: `npx vite preview --host 0.0.0.0`
 
 ## Recent Changes
+- **2025-10-30**: Implemented intelligent ability chooser for multi-ability permanents - MANA-011 resolved ✅
+  - **Root Cause**: After parser split Underground River into TWO abilities ({C} and {U/B}), generateMana used hardcoded "choose best" logic that always preferred colored over colorless, permanently discarding the {C} option
+  - **Symptom**: Even when hand needed {C}, engine chose {U/B} ability (score: colored=20+choice=2 > colorless=10), making colorless mana unavailable
+  - **Discovery**: Architect review revealed per-color scoring summed baselines, giving choice abilities inflated scores regardless of hand needs
+  - **Fix**: Added `ManaPoolManager.chooseBestAbility()` with need-based scoring: (1) Ability meets hand need = 100 points, (2) Choice/colored/colorless defaults = 30/20/10 points. generateMana now delegates ability choice to manaPoolManager instead of hardcoded priority
+  - **Result**: Underground River produces {C} when hand needs colorless, {U}/{B} when hand needs blue/black, or defaults to colored for flexibility
+  - Architect-reviewed and verified through three test cases
+
 - **2025-10-30**: Fixed parser not splitting multi-ability oracle text - PARSER-002 resolved ✅
   - **Root Cause**: Parser used `split('\n')` to separate abilities, but card data contains escaped newlines `\\n`. Underground River's TWO abilities (`{T}: Add {C}` AND `{T}: Add {U} or {B}`) were treated as ONE modal ability
   - **Symptom**: Manifest had one ability with `produces: [{types:["C"]}, {types:[{choice:["U","B"]}]}]` instead of two separate abilities
   - **Discovery**: Console logs showed abilityText with `\\n` separator; parser wasn't splitting on escaped newlines
   - **Fix**: Changed split pattern from `split('\n')` to `split(/\\n|\n/)` to handle both actual and escaped newlines
-  - **Result**: Underground River now correctly creates TWO ability objects; MANA-009 fix chooses the best one to activate
+  - **Result**: Underground River now correctly creates TWO ability objects; intelligent ability chooser selects the best one based on hand needs
   - Architect-reviewed and verified
 
 - **2025-10-30**: Fixed parser incorrectly parsing "{U} or {B}" choice patterns - PARSER-001 resolved ✅
