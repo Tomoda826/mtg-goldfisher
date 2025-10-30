@@ -532,33 +532,31 @@ export const generateMana = (state) => {
       });
       
       if (activatableAbilities.length > 0) {
-        // Choose the best ability: prefer color-producing over colorless
-        const bestAbility = activatableAbilities.reduce((best, current) => {
-          // Prefer abilities that produce colored mana over colorless
-          const currentHasChoice = current.produces.some(p => p.types && p.types.some(t => t.choice));
-          const bestHasChoice = best.produces.some(p => p.types && p.types.some(t => t.choice));
-          
-          if (currentHasChoice && !bestHasChoice) return current;
-          if (bestHasChoice && !currentHasChoice) return best;
-          
-          // If both have choices or both don't, prefer the first one
-          return best;
-        }, activatableAbilities[0]);
-        
-        // 🔍 DEBUG: Log ability selection for Underground River
+        // 🔍 DEBUG: Log all abilities for Underground River
         if (land.name === 'Underground River') {
-          console.log('🔍 [Underground River] Activatable abilities:', activatableAbilities.length);
-          console.log('🔍 [Underground River] Best ability:', JSON.stringify(bestAbility, null, 2));
+          console.log('🔍 [Underground River] All activatable abilities:', activatableAbilities.length);
+          activatableAbilities.forEach((ab, idx) => {
+            console.log(`🔍 [Underground River]   Ability ${idx+1}:`, JSON.stringify(ab, null, 2));
+          });
         }
         
-        // Activate the best ability
-        bestAbility.produces.forEach(production => {
-          state.manaPoolManager.addMana(production, state, land);
-        });
+        // Use manaPoolManager to intelligently choose which ability to activate
+        const chosenAbility = state.manaPoolManager.chooseBestAbility(
+          activatableAbilities,
+          state,
+          land
+        );
         
-        // Tap the land
-        if (bestAbility.activationCost.includes('{T}')) {
-          land.tapped = true;
+        if (chosenAbility) {
+          // Activate the chosen ability
+          chosenAbility.produces.forEach(production => {
+            state.manaPoolManager.addMana(production, state, land);
+          });
+          
+          // Tap the land
+          if (chosenAbility.activationCost.includes('{T}')) {
+            land.tapped = true;
+          }
         }
       }
     } else {
@@ -614,21 +612,21 @@ export const generateMana = (state) => {
       });
       
       if (activatableAbilities.length > 0) {
-        const bestAbility = activatableAbilities.reduce((best, current) => {
-          const currentHasChoice = current.produces.some(p => p.types && p.types.some(t => t.choice));
-          const bestHasChoice = best.produces.some(p => p.types && p.types.some(t => t.choice));
-          if (currentHasChoice && !bestHasChoice) return current;
-          if (bestHasChoice && !currentHasChoice) return best;
-          return best;
-        }, activatableAbilities[0]);
+        // Use manaPoolManager to intelligently choose which ability to activate
+        const chosenAbility = state.manaPoolManager.chooseBestAbility(
+          activatableAbilities,
+          state,
+          artifact
+        );
         
-        // Activate the best ability
-        bestAbility.produces.forEach(production => {
-          state.manaPoolManager.addMana(production, state, artifact);
-        });
-        
-        if (bestAbility.activationCost.includes('{T}')) {
-          artifact.tapped = true;
+        if (chosenAbility) {
+          chosenAbility.produces.forEach(production => {
+            state.manaPoolManager.addMana(production, state, artifact);
+          });
+          
+          if (chosenAbility.activationCost.includes('{T}')) {
+            artifact.tapped = true;
+          }
         }
       }
     } else {
@@ -684,21 +682,21 @@ export const generateMana = (state) => {
       });
       
       if (activatableAbilities.length > 0) {
-        const bestAbility = activatableAbilities.reduce((best, current) => {
-          const currentHasChoice = current.produces.some(p => p.types && p.types.some(t => t.choice));
-          const bestHasChoice = best.produces.some(p => p.types && p.types.some(t => t.choice));
-          if (currentHasChoice && !bestHasChoice) return current;
-          if (bestHasChoice && !currentHasChoice) return best;
-          return best;
-        }, activatableAbilities[0]);
+        // Use manaPoolManager to intelligently choose which ability to activate
+        const chosenAbility = state.manaPoolManager.chooseBestAbility(
+          activatableAbilities,
+          state,
+          creature
+        );
         
-        // Activate the best ability
-        bestAbility.produces.forEach(production => {
-          state.manaPoolManager.addMana(production, state, creature);
-        });
-        
-        if (bestAbility.activationCost.includes('{T}')) {
-          creature.tapped = true;
+        if (chosenAbility) {
+          chosenAbility.produces.forEach(production => {
+            state.manaPoolManager.addMana(production, state, creature);
+          });
+          
+          if (chosenAbility.activationCost.includes('{T}')) {
+            creature.tapped = true;
+          }
         }
       }
     } else {

@@ -148,6 +148,107 @@ export class ManaPool {
   }
   
   /**
+   * Choose best ability from multiple mana abilities
+   * Used when a permanent has multiple mana abilities (e.g., Underground River)
+   * 
+   * @param {Array} abilities - Array of parsed ability objects
+   * @param {Object} game - Game state for context
+   * @param {Object} permanent - The permanent with multiple abilities
+   * @returns {Object} - The chosen ability to activate
+   */
+  chooseBestAbility(abilities, game, permanent) {
+    if (!abilities || abilities.length === 0) return null;
+    if (abilities.length === 1) return abilities[0];
+    
+    console.log(`🔍 [${permanent.name}] Choosing from ${abilities.length} abilities`);
+    
+    // Analyze what colors the hand needs
+    const handNeeds = this.analyzeHandColorNeeds(game.hand, game);
+    
+    // Score each ability based on how well it meets hand needs
+    const scored = abilities.map(ability => {
+      let score = 0;
+      let reason = '';
+      
+      // Extract what colors this ability can produce
+      const canProduce = [];
+      
+      ability.produces.forEach(production => {
+        if (!production.types) return;
+        
+        production.types.forEach(type => {
+          if (typeof type === 'string' && ['W', 'U', 'B', 'R', 'G', 'C'].includes(type)) {
+            canProduce.push(type);
+          } else if (type.choice) {
+            canProduce.push(...type.choice);
+          }
+        });
+      });
+      
+      // Remove duplicates
+      const uniqueColors = [...new Set(canProduce)];
+      
+      // Score based on whether this ability can produce what we need
+      // Check if it produces ANY needed color
+      let meetsNeed = false;
+      let bestNeedColor = null;
+      
+      for (const color of uniqueColors) {
+        if (handNeeds[color] > 0) {
+          meetsNeed = true;
+          bestNeedColor = color;
+          break;
+        }
+      }
+      
+      if (meetsNeed) {
+        // Ability produces a needed color - HIGH score
+        score = 100;
+        reason = `hand needs {${bestNeedColor}}`;
+      } else {
+        // Ability doesn't meet immediate need - score by flexibility
+        const hasColorless = uniqueColors.includes('C');
+        const hasColored = uniqueColors.some(c => c !== 'C');
+        const isChoice = ability.produces.some(p => 
+          p.types && p.types.some(t => t.choice)
+        );
+        
+        if (isChoice) {
+          // Choice abilities are most flexible
+          score = 30;
+          reason = 'offers choice (no immediate need)';
+        } else if (hasColored) {
+          // Colored mana is generally more useful
+          score = 20;
+          reason = 'colored (default)';
+        } else if (hasColorless) {
+          // Colorless is least flexible
+          score = 10;
+          reason = 'colorless (default)';
+        } else {
+          score = 5;
+          reason = 'unknown';
+        }
+      }
+      
+      return { ability, score, reason, canProduce: uniqueColors };
+    });
+    
+    // Sort by score (descending)
+    scored.sort((a, b) => b.score - a.score);
+    
+    const chosen = scored[0];
+    console.log(`🔍 [${permanent.name}] Chose ability producing [${chosen.canProduce.join(',')}] (score: ${chosen.score}, reason: ${chosen.reason})`);
+    
+    // Log skipped abilities
+    scored.slice(1).forEach(s => {
+      console.log(`🔍 [${permanent.name}] Skipped ability producing [${s.canProduce.join(',')}] (score: ${s.score})`);
+    });
+    
+    return chosen.ability;
+  }
+  
+  /**
    * Strategic color choice - analyze hand needs and choose optimally
    */
   chooseOptimalColor(colors, game, permanent) {
