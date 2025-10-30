@@ -705,6 +705,15 @@ const parseManaAbility = (card) => {
   // Handle both actual newlines and escaped newline strings
   const lines = text.split(/\\n|\n/);
   
+  // Debug logging for Underground River
+  if (card.name === 'Underground River') {
+    console.log('🔍 [PARSER] Underground River oracle text:', text);
+    console.log('🔍 [PARSER] Split into', lines.length, 'lines');
+    lines.forEach((line, idx) => {
+      console.log(`🔍 [PARSER]   Line ${idx}:`, line);
+    });
+  }
+  
   for (const line of lines) {
     if (!line.includes(':')) continue;
     if (!line.toLowerCase().includes('add')) continue;
