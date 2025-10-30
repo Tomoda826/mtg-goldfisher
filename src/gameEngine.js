@@ -509,6 +509,11 @@ export const generateMana = (state) => {
     // Try new system first (cached abilities)
     const manaAbilityData = state.behaviorManifest?.manaAbilities?.get(land.name);
     
+    // 🔍 DEBUG: Log Underground River abilities
+    if (land.name === 'Underground River' && manaAbilityData) {
+      console.log('🔍 [Underground River] Manifest data:',  JSON.stringify(manaAbilityData, null, 2));
+    }
+    
     if (manaAbilityData?.hasManaAbility) {
       // NEW SYSTEM: Use cached structured data
       // ✅ FIX: For lands with multiple abilities (e.g., Underground River has {T}:Add{C} AND {T}:Add{U}or{B}),
@@ -538,6 +543,12 @@ export const generateMana = (state) => {
           // If both have choices or both don't, prefer the first one
           return best;
         }, activatableAbilities[0]);
+        
+        // 🔍 DEBUG: Log ability selection for Underground River
+        if (land.name === 'Underground River') {
+          console.log('🔍 [Underground River] Activatable abilities:', activatableAbilities.length);
+          console.log('🔍 [Underground River] Best ability:', JSON.stringify(bestAbility, null, 2));
+        }
         
         // Activate the best ability
         bestAbility.produces.forEach(production => {
