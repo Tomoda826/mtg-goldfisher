@@ -78,12 +78,12 @@ An AI-powered Magic: The Gathering Commander deck analyzer and simulator. This a
 - **Run**: `npx vite preview --host 0.0.0.0`
 
 ## Recent Changes
-- **2025-10-30**: Fixed modal mana abilities adding all options instead of one - MANA-010 resolved ✅
-  - **Root Cause**: generateMana used `.forEach()` to add ALL productions from a modal ability's `produces` array. For Underground River (which has `produces: [{types:["C"]}, {types:[{choice:["U","B"]}]}]`), this added BOTH {C} AND {U}/{B} to the pool, resulting in 2 mana instead of 1
-  - **Symptom**: Turn 4 with 3 lands + 1 artifact produced 5 mana instead of 4; all modal lands/artifacts produced excess mana
-  - **Discovery**: Console logs showed `Final total: 5` when only 4 mana sources existed; traced to adding all modal options
-  - **Fix**: Added check for `isModal && produces.length > 1` to select BEST production option (choice > colored > colorless) and add only that one. Applied to lands, artifacts, and creatures
-  - **Result**: Modal abilities now correctly produce 1 mana with optimal color choice; mana totals match actual board state
+- **2025-10-30**: Fixed parser not splitting multi-ability oracle text - PARSER-002 resolved ✅
+  - **Root Cause**: Parser used `split('\n')` to separate abilities, but card data contains escaped newlines `\\n`. Underground River's TWO abilities (`{T}: Add {C}` AND `{T}: Add {U} or {B}`) were treated as ONE modal ability
+  - **Symptom**: Manifest had one ability with `produces: [{types:["C"]}, {types:[{choice:["U","B"]}]}]` instead of two separate abilities
+  - **Discovery**: Console logs showed abilityText with `\\n` separator; parser wasn't splitting on escaped newlines
+  - **Fix**: Changed split pattern from `split('\n')` to `split(/\\n|\n/)` to handle both actual and escaped newlines
+  - **Result**: Underground River now correctly creates TWO ability objects; MANA-009 fix chooses the best one to activate
   - Architect-reviewed and verified
 
 - **2025-10-30**: Fixed parser incorrectly parsing "{U} or {B}" choice patterns - PARSER-001 resolved ✅

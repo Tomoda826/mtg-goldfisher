@@ -551,35 +551,10 @@ export const generateMana = (state) => {
           console.log('🔍 [Underground River] Best ability:', JSON.stringify(bestAbility, null, 2));
         }
         
-        // Activate the best ability - choose best option if modal
-        if (bestAbility.isModal && bestAbility.produces.length > 1) {
-          // Modal ability: choose the best production option
-          // Prefer colored/choice mana over colorless
-          const bestProduction = bestAbility.produces.reduce((best, current) => {
-            const currentHasChoice = current.types && current.types.some(t => t.choice);
-            const currentIsColored = current.types && current.types.some(t => 
-              typeof t === 'string' && ['W', 'U', 'B', 'R', 'G'].includes(t)
-            );
-            const bestHasChoice = best.types && best.types.some(t => t.choice);
-            const bestIsColored = best.types && best.types.some(t => 
-              typeof t === 'string' && ['W', 'U', 'B', 'R', 'G'].includes(t)
-            );
-            
-            // Priority: choice > colored > colorless
-            if (currentHasChoice && !bestHasChoice) return current;
-            if (bestHasChoice && !currentHasChoice) return best;
-            if (currentIsColored && !bestIsColored) return current;
-            
-            return best;
-          }, bestAbility.produces[0]);
-          
-          state.manaPoolManager.addMana(bestProduction, state, land);
-        } else {
-          // Non-modal or single option: add all productions
-          bestAbility.produces.forEach(production => {
-            state.manaPoolManager.addMana(production, state, land);
-          });
-        }
+        // Activate the best ability
+        bestAbility.produces.forEach(production => {
+          state.manaPoolManager.addMana(production, state, land);
+        });
         
         // Tap the land
         if (bestAbility.activationCost.includes('{T}')) {
@@ -647,28 +622,10 @@ export const generateMana = (state) => {
           return best;
         }, activatableAbilities[0]);
         
-        // Activate the best ability - choose best option if modal
-        if (bestAbility.isModal && bestAbility.produces.length > 1) {
-          const bestProduction = bestAbility.produces.reduce((best, current) => {
-            const currentHasChoice = current.types && current.types.some(t => t.choice);
-            const currentIsColored = current.types && current.types.some(t => 
-              typeof t === 'string' && ['W', 'U', 'B', 'R', 'G'].includes(t)
-            );
-            const bestHasChoice = best.types && best.types.some(t => t.choice);
-            const bestIsColored = best.types && best.types.some(t => 
-              typeof t === 'string' && ['W', 'U', 'B', 'R', 'G'].includes(t)
-            );
-            if (currentHasChoice && !bestHasChoice) return current;
-            if (bestHasChoice && !currentHasChoice) return best;
-            if (currentIsColored && !bestIsColored) return current;
-            return best;
-          }, bestAbility.produces[0]);
-          state.manaPoolManager.addMana(bestProduction, state, artifact);
-        } else {
-          bestAbility.produces.forEach(production => {
-            state.manaPoolManager.addMana(production, state, artifact);
-          });
-        }
+        // Activate the best ability
+        bestAbility.produces.forEach(production => {
+          state.manaPoolManager.addMana(production, state, artifact);
+        });
         
         if (bestAbility.activationCost.includes('{T}')) {
           artifact.tapped = true;
@@ -735,28 +692,10 @@ export const generateMana = (state) => {
           return best;
         }, activatableAbilities[0]);
         
-        // Activate the best ability - choose best option if modal
-        if (bestAbility.isModal && bestAbility.produces.length > 1) {
-          const bestProduction = bestAbility.produces.reduce((best, current) => {
-            const currentHasChoice = current.types && current.types.some(t => t.choice);
-            const currentIsColored = current.types && current.types.some(t => 
-              typeof t === 'string' && ['W', 'U', 'B', 'R', 'G'].includes(t)
-            );
-            const bestHasChoice = best.types && best.types.some(t => t.choice);
-            const bestIsColored = best.types && best.types.some(t => 
-              typeof t === 'string' && ['W', 'U', 'B', 'R', 'G'].includes(t)
-            );
-            if (currentHasChoice && !bestHasChoice) return current;
-            if (bestHasChoice && !currentHasChoice) return best;
-            if (currentIsColored && !bestIsColored) return current;
-            return best;
-          }, bestAbility.produces[0]);
-          state.manaPoolManager.addMana(bestProduction, state, creature);
-        } else {
-          bestAbility.produces.forEach(production => {
-            state.manaPoolManager.addMana(production, state, creature);
-          });
-        }
+        // Activate the best ability
+        bestAbility.produces.forEach(production => {
+          state.manaPoolManager.addMana(production, state, creature);
+        });
         
         if (bestAbility.activationCost.includes('{T}')) {
           creature.tapped = true;

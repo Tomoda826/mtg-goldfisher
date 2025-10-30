@@ -702,7 +702,8 @@ const parseManaAbility = (card) => {
   const abilities = [];
   
   // Split by lines and look for mana-producing abilities
-  const lines = text.split('\n');
+  // Handle both actual newlines and escaped newline strings
+  const lines = text.split(/\\n|\n/);
   
   for (const line of lines) {
     if (!line.includes(':')) continue;
