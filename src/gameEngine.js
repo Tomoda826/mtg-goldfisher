@@ -601,6 +601,14 @@ export const generateMana = (state) => {
     
     const manaAbilityData = state.behaviorManifest?.manaAbilities?.get(artifact.name);
     
+    // Debug logging for Sol Ring
+    if (artifact.name === 'Sol Ring') {
+      console.log('🔍 [Sol Ring] Has manifest?', !!manaAbilityData);
+      if (manaAbilityData) {
+        console.log('🔍 [Sol Ring] Manifest:', JSON.stringify(manaAbilityData, null, 2));
+      }
+    }
+    
     if (manaAbilityData?.hasManaAbility) {
       // NEW SYSTEM: Choose best activatable ability
       const activatableAbilities = manaAbilityData.abilities.filter(ability => {

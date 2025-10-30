@@ -189,15 +189,16 @@ export class ManaPool {
       const uniqueColors = [...new Set(canProduce)];
       
       // Score based on whether this ability can produce what we need
-      // Check if it produces ANY needed color
+      // Find the color with the HIGHEST need that this ability can produce
       let meetsNeed = false;
       let bestNeedColor = null;
+      let highestNeed = 0;
       
       for (const color of uniqueColors) {
-        if (handNeeds[color] > 0) {
-          meetsNeed = true;
+        if (handNeeds[color] > highestNeed) {
+          highestNeed = handNeeds[color];
           bestNeedColor = color;
-          break;
+          meetsNeed = true;
         }
       }
       
