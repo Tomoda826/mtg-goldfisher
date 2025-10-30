@@ -80,7 +80,8 @@ export const getLandManaProduction = (land, manifest) => {
   // In goldfishing, we make both colors available but it only counts as 1 mana total
   
   // UB Dual Lands (Drowned Catacomb, etc.)
-  if (text.includes('{t}: add {u} or {b}') || text.includes('{t}: add {b} or {u}')) {
+  const lowerText = text.toLowerCase();
+  if (lowerText.includes('{t}: add {u} or {b}') || lowerText.includes('{t}: add {b} or {u}')) {
     return { 
       U: 1, 
       B: 1, 
@@ -94,7 +95,7 @@ export const getLandManaProduction = (land, manifest) => {
   }
   
   // WU Dual Lands (Azorius Chancery, etc.)
-  if (text.includes('{t}: add {w} or {u}') || text.includes('{t}: add {u} or {w}')) {
+  if (lowerText.includes('{t}: add {w} or {u}') || lowerText.includes('{t}: add {u} or {w}')) {
     return { 
       W: 1, 
       U: 1, 
@@ -108,7 +109,7 @@ export const getLandManaProduction = (land, manifest) => {
   }
   
   // WB Dual Lands
-  if (text.includes('{t}: add {w} or {b}') || text.includes('{t}: add {b} or {w}')) {
+  if (lowerText.includes('{t}: add {w} or {b}') || lowerText.includes('{t}: add {b} or {w}')) {
     return { 
       W: 1, 
       B: 1, 
@@ -122,7 +123,7 @@ export const getLandManaProduction = (land, manifest) => {
   }
   
   // UR Dual Lands
-  if (text.includes('{t}: add {u} or {r}') || text.includes('{t}: add {r} or {u}')) {
+  if (lowerText.includes('{t}: add {u} or {r}') || lowerText.includes('{t}: add {r} or {u}')) {
     return { 
       U: 1, 
       R: 1, 
@@ -136,7 +137,7 @@ export const getLandManaProduction = (land, manifest) => {
   }
   
   // BR Dual Lands
-  if (text.includes('{t}: add {b} or {r}') || text.includes('{t}: add {r} or {b}')) {
+  if (lowerText.includes('{t}: add {b} or {r}') || lowerText.includes('{t}: add {r} or {b}')) {
     return { 
       B: 1, 
       R: 1, 
@@ -150,7 +151,7 @@ export const getLandManaProduction = (land, manifest) => {
   }
   
   // BG Dual Lands
-  if (text.includes('{t}: add {b} or {g}') || text.includes('{t}: add {g} or {b}')) {
+  if (lowerText.includes('{t}: add {b} or {g}') || lowerText.includes('{t}: add {g} or {b}')) {
     return { 
       B: 1, 
       G: 1, 
@@ -164,7 +165,7 @@ export const getLandManaProduction = (land, manifest) => {
   }
   
   // RG Dual Lands
-  if (text.includes('{t}: add {r} or {g}') || text.includes('{t}: add {g} or {r}')) {
+  if (lowerText.includes('{t}: add {r} or {g}') || lowerText.includes('{t}: add {g} or {r}')) {
     return { 
       R: 1, 
       G: 1, 
@@ -178,7 +179,7 @@ export const getLandManaProduction = (land, manifest) => {
   }
   
   // RW Dual Lands
-  if (text.includes('{t}: add {r} or {w}') || text.includes('{t}: add {w} or {r}')) {
+  if (lowerText.includes('{t}: add {r} or {w}') || lowerText.includes('{t}: add {w} or {r}')) {
     return { 
       R: 1, 
       W: 1, 
@@ -192,7 +193,7 @@ export const getLandManaProduction = (land, manifest) => {
   }
   
   // GW Dual Lands
-  if (text.includes('{t}: add {g} or {w}') || text.includes('{t}: add {w} or {g}')) {
+  if (lowerText.includes('{t}: add {g} or {w}') || lowerText.includes('{t}: add {w} or {g}')) {
     return { 
       G: 1, 
       W: 1, 
@@ -206,7 +207,7 @@ export const getLandManaProduction = (land, manifest) => {
   }
   
   // GU Dual Lands
-  if (text.includes('{t}: add {g} or {u}') || text.includes('{t}: add {u} or {g}')) {
+  if (lowerText.includes('{t}: add {g} or {u}') || lowerText.includes('{t}: add {u} or {g}')) {
     return { 
       G: 1, 
       U: 1, 
