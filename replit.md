@@ -40,6 +40,13 @@ The application is structured around a tab-based UI (`App.jsx`) leading to dedic
 - Handles 0-cost abilities and mana-cost abilities correctly
 - **MANA-017 Fixed**: Changed from blanket "target" rejection to per-line check, enabling complex lands to work correctly
 
+**JIT (Just-In-Time) Pool Rebuilding (Oct 31, 2025)**
+- **MANA-016 Fixed**: Lands played mid-turn now update the potential pool correctly
+  - Root cause: playLand() was rebuilding pool but using OLD buggy preview calculation
+  - Solution: Replaced with SAME corrected logic from generateMana() (permanent grouping, flexibility tie-breaking)
+  - Result: Playing Rivendell mid-turn immediately adds its ability to the pool (5 → 6 abilities)
+  - AI can now use newly-played lands in the same turn they enter (if untapped)
+
 **Solver Improvements (Oct 31, 2025)**
 - **MANA-019 Fixed**: ManaSolver now correctly handles multi-mana sources
   - Colored payments: Always use 1 mana per source activation (prevents multi-color overuse)
@@ -69,6 +76,13 @@ The application is structured around a tab-based UI (`App.jsx`) leading to dedic
   - Choice handling: Choice abilities (Underground River `{U} or {B}`) select requested color intelligently
   - Activation cost accounting: Costs added to generic requirement during solving, paid in Phase 2
   - Solver strategy: Prefer free sources first, use mana rocks when needed for colors or when net-positive
+
+- **MANA-022 Fixed**: Recursive mana activation prevented (mana rocks can't pay for their own activation)
+  - Root cause: Solver added activation cost to needed.generic, then subtracted full production, creating circular math
+  - Solution: Calculate NET production (production - activation cost) before crediting toward payment
+  - Example: Dimir Signet costs {1}, produces 2 → NET is +1 (not +2)
+  - Result: Casting {5} with 4 lands + Signet correctly FAILS (can't afford Signet's activation)
+  - Result: Casting {5} with 5 lands + Signet correctly SUCCEEDS (1 land pays for activation, Signet produces 2)
 
 **AI Integration**
 - AI casting logic now uses mana solver for affordability checks
