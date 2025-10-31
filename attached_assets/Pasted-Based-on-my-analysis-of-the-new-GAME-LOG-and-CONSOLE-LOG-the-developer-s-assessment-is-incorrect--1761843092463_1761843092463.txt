@@ -1,0 +1,71 @@
+Based on my analysis of the new GAME LOG and CONSOLE LOG, the developer's assessment is incorrect.
+
+The fixes have not solved the primary issues and appear to have introduced new, critical bugs in the mana subtraction logic within a turn.
+
+Here is a detailed breakdown.
+
+1. PARSER-001 (Parser Fix): CONFIRMED FIXED
+The developer is correct on this point. The console logs clearly show the parser is now working as intended:
+
+Evidence: The parser correctly identifies Underground River's text, splits it into 2 lines (one for {C}, one for {U} or {B}), and the manifest data now correctly reflects the { "choice": ["U", "B"] } structure.
+
+This is a success. The data being fed into the engine is now correct.
+
+2. MANA-011 (Intelligent Choice): CRITICAL FAILURE
+The developer's new "intelligent choice" logic is not working. The engine is still defaulting all choices to Blue, ignoring the AI's hand needs.
+
+Evidence (The "Smoking Gun" - Turn 5):
+
+Board State: 4 lands (including Swamp, Drowned Catacomb, Underground River) + 1 Arcane Signet.
+
+AI Hand: Contains Nazgûl (needs {B}), Mordor Muster (needs {B}), Night's Whisper (needs {B}). The hand desperately needs Black mana.
+
+Engine Calculation: The generateMana function correctly identifies 5 total mana sources. It correctly gets {B:1} from the basic Swamp.
+
+The Bug: The console logs [ManaPool] Chose U from U,B (hand needs it) twice. This is wrong. It should have chosen {B}. It proceeds to build a Final pool: {W: 0, U: 3, B: 1, ...}.
+
+Conclusion: The engine has defaulted all 3 choice-based permanents (UR, DC, Signet) to {U}, ignoring the AI's hand, and is lying about the reason (hand needs it).
+
+This same error (Chose U from U,B) happens on Turn 2, 3, 4, 6, 7, 8, 9, and 10, proving the "intelligent choice" logic is completely non-functional and is hard-coded or defaulted to Blue.
+
+3. NEW CRITICAL BUG: Intra-Phase Mana Subtraction is Broken
+The developer's changes have introduced a new, catastrophic bug in how mana is subtracted from the pool after a spell is cast. The mana pool is now desynchronizing within a single phase.
+
+Evidence (Turn 6):
+
+Start Pool: {U:3, B:2} (Total 6).
+
+playLand: Island -> Pool is now {U:4, B:2} (Total 7).
+
+castSpell: Ponder (Cost {U}) -> Pool should be {U:3, B:2} (Total 6).
+
+castSpell: Sol Ring (Cost {1}) -> Pool should be {U:2, B:2} (Total 5).
+
+AI's Next Action: PASS... Available mana is 2 (B:2).
+
+Conclusion: The AI (or the state it was given) believes all 3 Blue mana vanished after casting Ponder.
+
+Evidence (Turn 7):
+
+Start Pool: {U:3, B:3} (Total 7).
+
+playLand: Command Tower -> Pool is now {U:4, B:4} (Total 9... wait, CT is U/B). Let's say {U:4, B:3} (Total 8).
+
+castSpell: Nazgûl (Cost {2}{B}) -> Pool should be {U:4, B:2} (Total 7).
+
+castSpell: One Ring... (Cost {2}{B}{B}) -> Pool should be {U:4, B:0} (Total 5).
+
+AI's Next Action: PASS... You have only 1 mana (U:1).
+
+Conclusion: The pool should have had {U:4}, but the AI was told it only had {U:1}.
+
+Final Assessment & Bug Report
+The developer's update has fixed the parser (PARSER-001) but failed to fix the engine (MANA-011) and introduced a new critical bug (MANA-012).
+
+ID: MANA-011 (Critical) Status: NOT FIXED Title: generateMana / manaPool.js "Intelligent Choice" logic is flawed; defaults all choices to Blue.
+
+Evidence: The parser is now correctly providing { "choice": ["U", "B"] } data. However, the generateMana logic that is supposed to intelligently choose a color is failing. On Turn 5, the AI's hand needed Black mana for Nazgûl and Mordor Muster, but the console log proves the engine ignored this need, logged a false reason (hand needs it), and defaulted all three {U/B} choice permanents to Blue. This resulted in an incorrect starting pool of {U:3, B:1} instead of a correct pool like {U:0, B:4}. This bug makes casting Black spells nearly impossible.
+
+ID: MANA-012 (NEW Critical Bug) Status: NEW Title: Intra-phase mana subtraction is broken; mana (especially Blue) disappears from the pool after a spell is cast.
+
+Evidence: On Turn 6, the AI cast Ponder (cost {U}) and Sol Ring (cost {1}) from a pool of {U:4, B:2}. The remaining pool should have been {U:3, B:2}. Instead, the AI's very next action shows it believed the pool was only {B:2}. All Blue mana had vanished. This same bug (mana disappearing or being miscalculated post-cast) is visible on Turn 7 as well. The intra-phase mana tracking is now critically broken.

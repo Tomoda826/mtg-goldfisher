@@ -1,0 +1,60 @@
+Thank you for the new logs. Your debugging strategy was *partially* successful and has given us a crystal-clear path forward.
+
+This log has confirmed one fix, definitively isolated another bug, and uncovered a *new, critical* bug in the `ManaSolver`.
+
+Here is my full analysis of this log.
+
+### 1. The New, Critical Bug: `MANA-019`
+
+The `ManaSolver` is misinterpreting `Sol Ring`. It correctly identifies `Sol Ring` as a source but believes it only produces one colorless mana (`{C}`) instead of two (`{C}{C}`).
+
+This is the most severe bug in this log, as it's preventing the AI from casting its spells, even when it has enough mana.
+
+* **Evidence (Turn 3, T3, T4):**
+    1.  The AI tries to cast `Lord of the Nazgûl` for `{3}{U}{B}`.
+    2.  The `ManaSolver` logs `Available sources: 4 abilities` (Command Tower, Watery Grave, Sunken Ruins, Sol Ring).
+    3.  It correctly finds its colored mana: `✓ Using Command Tower for {U}` and `✓ Using Watery Grave for {B}`.
+    4.  It now needs `{3}` (three generic mana).
+    5.  It logs: `✓ Using Sunken Ruins for generic (producing {C})`. (1 generic paid)
+    6.  It logs: `✓ Using Sol Ring for generic (producing {C})`. (2 generic paid)
+    7.  It fails: `❌ [ManaSolver] Cannot find source for generic {1}`.
+
+This is the smoking gun. It used `Sol Ring` and only got one mana. It should have gotten two, which would have been enough to pay the `{3}` generic cost (1 from Sunken Ruins + 2 from Sol Ring). This bug is the *only reason* the AI failed to cast its commander on T3, T4, and T5.
+
+### 2. The JIT Parser Bug: `MANA-016`
+
+**CONFIRMED BROKEN.** Your hypothesis was correct. The "target" fix was applied to the start-of-turn parser, but *not* to the JIT (mid-turn) parser.
+
+* **Evidence (Turn 4):**
+    1.  **Start-of-Turn:** The `[generateMana]` function runs and correctly finds 4 abilities (including `Sol Ring`).
+    2.  **Action:** The AI plays `Barad-dûr` (a land with an ETB "target" effect).
+    3.  **JIT Rebuild:** The `💎 [PotentialPool] Building available sources...` log appears.
+    4.  **Failure:** The *result* of that rebuild (shown in the *next* `ManaSolver` log) is `Available sources: 4 abilities`. It should have been 5. The JIT parser completely failed to find the new `Barad-dûr`.
+
+### 3. The Fixed Bug: `MANA-017`
+
+**CONFIRMED FIXED.** Your "target" fix for the *start-of-turn* parser is working perfectly.
+
+* **Evidence (Turn 5):**
+    1.  After `Barad-dûr` was played on T4 (and missed by the JIT parser), the game moves to T5.
+    2.  The `[generateMana]` (start-of-turn) function runs.
+    3.  It correctly finds all 5 abilities: `Command Tower`, `Watery Grave`, `Sunken Ruins`, **`Barad-dûr`**, and `Sol Ring`.
+    4.  This proves the start-of-turn parser is now robust.
+
+### 4. The `Commander's Sphere` Bug: `MANA-018`
+
+**Inconclusive.** Your new logging for the *initial parser* worked perfectly. We can see `Commander's Sphere` is parsed correctly at the start of the game.
+
+However, `Commander's Sphere` was never drawn or played in this specific simulation. We were never able to test if the `[generateMana]` function would "drop" it on T7 when `Sol Ring` was also in play. We still need a log where both artifacts are on the battlefield at the same time to be 100% sure this bug is (or isn't) present.
+
+---
+
+### Summary & Next Steps
+
+This is a fantastic "fix-one, find-two" debugging session. We are very close.
+
+1.  **High Priority - Fix `MANA-019`:** The `ManaSolver` (or the `Sol Ring` parser output) must be corrected. The solver must be able to spend *both* colorless mana from `Sol Ring`'s single ability.
+2.  **Medium Priority - Fix `MANA-016`:** Copy the new, working "per-line target check" logic from your start-of-turn `[generateMana]` function and paste it into your JIT `rebuildPool` function. This should make it correctly identify lands like `Barad-dûr` mid-turn.
+3.  **Low Priority - Re-test `MANA-018`:** After the other fixes are in, we'll need to run a simulation where `Commander's Sphere` and `Sol Ring` are both in play.
+
+I'm ready for the next update.

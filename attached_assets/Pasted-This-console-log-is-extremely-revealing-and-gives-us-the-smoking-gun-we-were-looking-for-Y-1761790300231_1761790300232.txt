@@ -1,0 +1,76 @@
+This console log is **extremely revealing** and gives us the "smoking gun" we were looking for.
+
+Your developer's hypothesis was on the right track (a bug related to `Underground River`), but their specific guess about the *fallback function* was incorrect. This log proves **the new manifest system IS working, but the manifest data itself is being created incorrectly.**
+
+### Executive Summary: The Root Cause is Found
+
+1.  **Critical Bug Found (`PARSER-001`):** The console log *proves* that the mana ability parser (`cardBehaviorAnalyzer.js` or equivalent) is **incorrectly parsing modal mana abilities**. It is parsing `"{T}: Add {U} or {B}"` as *only* `"{T}: Add {U}"`, completely **omitting the Black mana option**. This is the root cause of the missing Black mana.
+2.  **Secondary Bug Confirmed (`MANA-010`):** The `generateMana` function (or its `manaPool.js` helper) has a secondary logic flaw. When faced with the (incorrectly parsed) choice of `{C}` or `{U}` from `Underground River`, it *always* picks `{U}`, ignoring the `{C}` option entirely.
+3.  **Good News:** The intra-phase mana tracking (adding/subtracting mana *within* a turn) is **confirmed to be working correctly**. The simulation is correctly executing multi-spell turns based on the (flawed) starting mana pool.
+
+-----
+
+### Detailed Analysis: The "Smoking Gun"
+
+The developer asked for the `🔍 [Underground River] Manifest data:` log, and it provides the definitive proof.
+
+Every turn, the console logs this manifest data for `Underground River`:
+
+```json
+gameEngine.js:515 🔍 [Underground River] Manifest data: {
+  "hasManaAbility": true,
+  "abilities": [
+    {
+      "abilityText": "{T}: Add {C}.\\n{T}: Add {U} or {B}. This land deals 1 damage to you.",
+      "isManaAbility": true,
+      "isModal": true,
+      "activationCost": [ "{T}" ],
+      "produces": [
+        { "quantity": 1, "types": [ "C" ] },
+        { "quantity": 1, "types": [ "U" ] }  // <--- THE BUG IS HERE
+      ]
+    }
+  ]
+}
+```
+
+The `produces` array should have correctly parsed the `"{T}: Add {U} or {B}"` ability according to your "Mana Ability Parsing & Implementation Guide" (Rule 2). It should look like `{ "quantity": 1, "types": [{ "choice": ["U", "B"] }] }` or something equivalent.
+
+Instead, the parser **failed** to recognize the "or {B}" and incorrectly saved the ability as only producing `{U}`.
+
+This single parsing error explains the entire simulation's behavior:
+
+  * **Why no Black mana?** The engine's `generateMana` function reads this flawed data and correctly concludes `Underground River` only makes `{C}` or `{U}`.
+  * **Why are other U/B lands also failing?** The log trace implies that `Sunken Hollow` and `Tainted Isle` (which also produce `{U}` or `{B}`) are suffering from the **exact same parsing bug** and are also being treated as U-only lands.
+  * **Proof:** On Turn 5, the board has 4 lands (`Underground River`, `Sunken Hollow`, `Tainted Isle`, `Swamp`) and 2 artifacts. The 3 U/B lands are all parsed as U-only, and the `Swamp` is parsed as B-only. The console log *perfectly* matches this flawed logic: `Final pool: {W: 0, U: 3, B: 1, R: 0, G: 0, ...}`.
+
+-----
+
+## Updated Bug Report
+
+-----
+
+**ID:** `PARSER-001` (Critical)
+**Status:** **Confirmed / Re-opened**
+**Title:** Mana parser incorrectly parses modal "or" abilities, omitting mana options.
+
+**Description:**
+The `cardBehaviorAnalyzer.js` (or equivalent parsing script) is failing to correctly parse mana abilities containing "or" (e.g., "Add {U} or {B}") as defined in the "Mana Ability Parsing & Implementation Guide".
+
+**Evidence:**
+The console log for `Underground River`'s manifest data *proves* that `"{T}: Add {U} or {B}"` is being incorrectly parsed as only producing `{U}`. The `{B}` option is completely missing from the `produces` array in the manifest. This same parsing error is affecting all similar dual lands (e.g., `Sunken Hollow`, `Tainted Isle`), leading to a simulation-wide lack of Black mana.
+
+**Recommendation:**
+This is the **root cause** of the mana bug. The developer must debug the parsing logic (Rule 2 of the Parsing Guide) to ensure that text like "Add {U} or {B}" correctly generates a manifest object representing *both* choices, such as `types: [{ "choice": ["U", "B"] }]`.
+
+-----
+
+**ID:** `MANA-010` (High)
+**Status:** **Confirmed / Re-opened**
+**Title:** `generateMana` logic for "Best ability" is flawed.
+
+**Description:**
+As a secondary issue, the `generateMana` function (or its `manaPool.js` helper) has flawed logic for selecting which mana to add during the untap step when a permanent has multiple options. When presented with the (incorrectly parsed) choice of `{C}` or `{U}` from `Underground River`, the log shows it *always* chooses `{U}`, ignoring the `{C}` option entirely.
+
+**Recommendation:**
+After `PARSER-001` is fixed, this logic must be reviewed. The `generateMana` function should not arbitrarily discard valid mana options from the manifest during its calculation.

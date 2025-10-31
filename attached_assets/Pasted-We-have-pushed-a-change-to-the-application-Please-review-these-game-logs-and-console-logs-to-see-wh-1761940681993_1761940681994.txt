@@ -1,0 +1,2025 @@
+We have pushed a change to the application. Please review these game logs and console logs to see where we stand.
+
+GAME LOG
+T0
+setup
+Game initialized
+Drew opening hand of 7 cards
+Witch-king, Bringer of Ruin
+Dimir Signet
+Lightning Greaves
+Swamp
+Talisman of Dominance
+Underground River
+Drowned Catacomb
+T0
+setup
+Token Analysis
+Deck contains 10 token-generating cards
+T0
+setup
+Scry Analysis
+Deck contains 3 scry effects (total scry 5)
+T0
+setup
+Activated Ability Analysis
+Deck contains 22 activated abilities
+T0
+setup
+🔍 DEBUG: Lórien Revealed Abilities
+Found 1 abilities on Lórien Revealed
+T0
+setup
+🧠 Deck Behavior Analysis
+Analyzed 35 card abilities
+T0
+pre-game
+Deck Analysis Complete
+Strategy: undefined | Target Win: Turn undefined
+T0
+mulligan
+Hand Evaluation
+This hand is playable and fits the deck's practical mulligan criteria. You have 3 lands (good tempo) plus two ramp artifacts (Dimir Signet and Talisman of Dominance) and Lightning Greaves as protection — that covers the deck's core early needs even though you lack a cheap cantrip. With this you have a clear 3–4 turn plan: turn 1 play a land, turn 2 cast one of the 2-mana artifacts (or Signet + pass), turn 3 accelerate into your commander or cast Greaves to protect an early Lord. Greaves counts as the interaction/protection requirement. Missing a cantrip slows digging, but the multiple fast artifacts give a reliable path to get Lord of the Nazgûl out soon and start generating Wraiths. The lands are functional (Drowned Catacomb is normally untapped here because you have a Swamp), and the pain land/ Talisman lifeloss is minor for the tempo this hand provides. Because it has a definite path to the primary win conditions (early Lord + protection + ramp) and is not cramped or mana-flooded, keep.
+T0
+pre-game
+Opening Hand Kept
+Starting with 7 cards
+Witch-king, Bringer of Ruin
+Dimir Signet
+Lightning Greaves
+Swamp
+Talisman of Dominance
+Underground River
+Drowned Catacomb
+T1
+beginning
+=== NEW TURN ===
+Starting turn 1
+T1
+untap
+Untap & Generate Mana
+All permanents untapped. 0 lands = 0 mana available.
+T1
+draw
+Draw Card
+Drew Island (land)
+T1
+main1
+Main Phase 1
+Executing strategy focused on our win condition
+T1
+main1
+MANA
+AI Strategic Decision
+Play a land is Turn 1 priority (Step 1). Playing Island (hand index 7) is the best play: it advances mana development (enables future blue plays), and it makes Drowned Catacomb enter untapped later if drawn/played next turn. With 0 available mana I can't cast any spells or artifacts this turn, so taking the land drop preserves flexibility and sets up smooth early turns toward the deck's engine (Lord of the Nazgûl / signets).
+T1
+main1
+MANA
+playLand: 7
+Played Island
+✓
+T1
+main1
+PASS
+AI Strategic Decision
+You have 1 available mana (U:1) and have already played your land for the turn. There are no spells or hand abilities that cost {1} or less to cast/activate this main phase, and all playable permanents in hand are CMC 2+ or lands (which can't be played again). Battlefield-only abilities (e.g., equip, signet tap) cannot be used from hand. Therefore the only legal/optimal action is to pass and preserve tempo for turn 2. Next turn we'll play another land (Swamp/Underground River/Drowned Catacomb) and look to cast a mana rock (Dimir Signet / Talisman) or Lightning Greaves to accelerate/protect the Lord plan.
+T1
+main1
+PASS
+AI Strategic Decision
+I have already played my land for the turn and my actual available mana is 1 (U:1). There are no cards or hand abilities that cost {1} or less to cast/activate this main phase — all permanents in hand are CMC 2+ or lands (already used land drop). Per the critical rules, I must not try to 'tap' lands or activate battlefield mana abilities from hand, and passing is the only legal/optimal choice. This preserves flexibility for turn 2 when I can play a second land (preferably Drowned Catacomb or Swamp) and cast a 2-cost mana rock (Dimir Signet/Talisman) or Lightning Greaves to advance the deck's engine/protection plan.
+T1
+main1
+End Phase
+Passed twice - ending phase
+T1
+combat
+Combat Phase
+Entering combat with 0 creatures and 0 tokens
+T1
+combat
+⚔️ Combat Phase
+No creatures available to attack
+✗
+T1
+main2
+Main Phase 2
+Post-combat - deploying remaining resources
+T1
+main2
+PASS
+AI Strategic Decision
+You have only 1 mana (U) and have already used your land drop. No card in hand has a casting cost of 1 or less, and battlefield mana abilities cannot be activated from hand. Casting nothing is the only legal/optimal play this step — passing preserves the option to play a second land and cast a 2-cost mana rock or Greaves on Turn 2.
+T1
+main2
+PASS
+AI Strategic Decision
+Available mana is 1 (U). No nonland card in hand has a casting cost of 1 or less and the commander costs 5. You've already played your land for the turn, so you cannot play another land. Mana abilities on cards in hand cannot be used from hand. Therefore there is nothing legal or productive to cast/activate this main phase — passing preserves the option to use 2 mana on turn 2 (e.g. cast Dimir Signet/Talisman/Greaves) and follows the CRITICAL rules to not manually activate mana abilities.
+T1
+main2
+End Phase
+Passed twice - ending phase
+T1
+end
+End Turn
+Turn 1 complete. Total damage: 0/40
+T2
+beginning
+=== NEW TURN ===
+Starting turn 2
+T2
+untap
+Untap & Generate Mana
+All permanents untapped. 1 lands = 1 mana available.
+T2
+draw
+Draw Card
+Drew Ringsight (sorcery)
+T2
+main1
+Main Phase 1
+Executing strategy focused on our win condition
+T2
+main1
+MANA
+AI Strategic Decision
+Play Drowned Catacomb (hand index 6). Land drop is priority: it increases future mana options and enables casting Dimir spells on turn 3. Drowned enters untapped because we control an Island, giving an available U/B source next turn without costing tempo. This advances the ramp/curve plan and preserves our single available {U} for no immediate casting (we can't cast any 1-cost spells that help more than a land drop).
+T2
+main1
+MANA
+playLand: 6
+Played Drowned Catacomb
+✓
+T2
+main1
+MANA
+AI Strategic Decision
+Turn 2 priority is ramp. Casting Dimir Signet for {2} uses available mana efficiently and accelerates future turns by providing U/B fixing — it synergizes with the deck plan to hit key plays (lord/engine/protect) earlier. Lightning Greaves and Talisman are playable alternatives, but Signet is the best long-term mana fixer for a two-color spells-matter engine and sets up stronger turns 3–4.
+T2
+main1
+💰 Mana After Cast
+T2
+main1
+💰 Mana After Cast
+T2
+main1
+MANA
+castSpell: Dimir Signet
+Cast Dimir Signet ({2})
+✓
+T2
+main1
+PASS
+AI Strategic Decision
+Available Mana = 0 and you've already played a land this turn, so there is nothing legal and productive to cast or activate. There are no battlefield activated abilities available and no 0-cost plays; passing is the correct play to preserve options for the next turn.
+T2
+main1
+PASS
+AI Strategic Decision
+You have 0 available mana and have already played a land this turn, so there are no legal or productive plays: no 0-cost spells or hand-activated abilities are available. The best play is to pass and keep resources for next turn (you already cast Dimir Signet earlier this turn to advance ramp). Passing preserves tempo and follows the early-game plan to ramp into Lord of the Nazgûl or other engine pieces on upcoming turns.
+T2
+main1
+End Phase
+Passed twice - ending phase
+T2
+combat
+Combat Phase
+Entering combat with 0 creatures and 0 tokens
+T2
+combat
+⚔️ Combat Phase
+No creatures available to attack
+✗
+T2
+main2
+Main Phase 2
+Post-combat - deploying remaining resources
+T2
+main2
+PASS
+AI Strategic Decision
+Available mana is 0 and you've already played a land this turn. There are no 0-cost spells or hand-activated abilities available and no battlefield abilities to use. You cannot legally cast any card in hand, so the optimal play is to pass and preserve resources for the next turn.
+T2
+main2
+PASS
+AI Strategic Decision
+You have 0 available mana and have already played a land this turn, so you cannot legally cast any spells or activate any battlefield abilities. There are no 0-cost or hand-activated abilities available to use. Passing is therefore the only legal and optimal action — it preserves your cards and follows the early-game plan to play ramp/engine on your next turn when you have mana available.
+T2
+main2
+End Phase
+Passed twice - ending phase
+T2
+end
+End Turn
+Turn 2 complete. Total damage: 0/40
+T3
+beginning
+=== NEW TURN ===
+Starting turn 3
+T3
+untap
+Untap & Generate Mana
+All permanents untapped. 2 lands + 1 artifacts = 4 mana available.
+T3
+draw
+Draw Card
+Drew Snap (instant)
+T3
+main1
+Main Phase 1
+Executing strategy focused on our win condition
+T3
+main1
+MANA
+AI Strategic Decision
+Play Swamp from hand as the turn's land drop. Getting an additional guaranteed black source is the most flexible and reliable early play for this Dimir deck — it helps enable future Lord of the Nazgûl casts and makes UB costs easier to pay. Playing a land advances the MANA plan without wasting cards or mana and preserves options for casting a 3CMC sorcery/instant or a 2CMC artifact later this turn (if you choose to act again).
+T3
+main1
+MANA
+playLand: 2
+Played Swamp
+✓
+T3
+main1
+MANA
+AI Strategic Decision
+Cast Talisman of Dominance for ramp. This is the most mana-efficient play that advances the deck’s early-game plan: it adds an additional permanent that will provide the extra black/blue source needed to reliably cast Lord of the Nazgûl on turn 4 and accelerates future plays. Spending 2 of the 5 available mana on a ramp artifact maximizes long-term tempo and keeps options open. Other cards (Greaves, Ringsight, Snap) are less impactful right now: Greaves is protection but not ramp, Ringsight’s search is best used when a legendary creature is on board, and Snap currently has no good target.
+T3
+main1
+💰 Mana After Cast
+T3
+main1
+💰 Mana After Cast
+T3
+main1
+MANA
+castSpell: 2
+Cast Talisman of Dominance ({2})
+✓
+T3
+main1
+THREAT
+AI Strategic Decision
+Cast Lightning Greaves ({2}). It uses mana efficiently this turn to advance the board by adding a permanent that directly enables the deck's early-game plan: it protects our commander (Lord of the Nazgûl) when we can cast it next turn and can be equipped for {0} immediately for immediate haste/shroud later. Greaves is high-impact early protection and preserves flexibility (we can still cast Lord on turn 4 and put Greaves on it). This follows the principle of doing something useful with available mana rather than passing.
+T3
+main1
+💰 Mana After Cast
+T3
+main1
+💰 Mana After Cast
+T3
+main1
+THREAT
+castSpell: 1
+Cast Lightning Greaves ({2})
+✓
+T3
+main1
+PASS
+AI Strategic Decision
+You have already played a land this turn. Available mana is insufficient to cast Ringsight (needs 3 total including U and B) or Witch-king (6). Snap (index 3) is the only spell with a total cost ≤ your available mana and with the correct colors, but it requires a target creature and there are no creatures on the battlefield, so it cannot be cast. No battlefield activated abilities are usable without casting a permanent first, and the Underground River is a land in hand (cannot be activated). By the mana/use rules, there are no legal, productive plays this main phase, so passing is optimal rather than attempting illegal or wasteful actions.
+T3
+main1
+PASS
+AI Strategic Decision
+No legal, productive plays are available this main phase. You have already played your land this turn, so Underground River cannot be played. Witch-king (6) and Ringsight (3) exceed the available mana. Snap (2, {U}) would be mana-legal but requires a target creature — none exist — so it cannot be cast. Battlefield abilities on the Underground River cannot be used from hand, and you must not manually activate mana abilities. Given the Critical Mana Rules and the Decision Priority, passing is optimal rather than attempting an illegal or wasted action.
+T3
+main1
+End Phase
+Passed twice - ending phase
+T3
+combat
+Combat Phase
+Entering combat with 0 creatures and 0 tokens
+T3
+combat
+⚔️ Combat Phase
+No creatures available to attack
+✗
+T3
+main2
+Main Phase 2
+Post-combat - deploying remaining resources
+T3
+main2
+PASS
+AI Strategic Decision
+No legal, productive plays this main phase. I have already played my land this turn so Underground River cannot be played. Witch-king (6) and Ringsight (3) exceed the available mana. Snap (cost 1U) is mana-legal only if there is a target creature — none exist — so it cannot be cast. With no castable spells or activatable non-mana abilities, the optimal play is to pass and preserve available mana for the next turn.
+T3
+main2
+PASS
+AI Strategic Decision
+No productive legal plays are available this Main Phase. I have already played my land this turn so Underground River cannot be played. Witch-king (6) and Ringsight (3) exceed the available mana. Snap (1U) is mana-legal only if there is a target creature — none exist — so it cannot be cast. There are no battlefield activated abilities I can use. Per the critical rules, I should not try to manually activate mana abilities; floating unused mana accomplishes nothing. Passing preserves the current mana pool for the next turn and follows the early-game plan to avoid wasting resources.
+T3
+main2
+End Phase
+Passed twice - ending phase
+T3
+end
+End Turn
+Turn 3 complete. Total damage: 0/40
+T4
+beginning
+=== NEW TURN ===
+Starting turn 4
+T4
+untap
+Untap & Generate Mana
+All permanents untapped. 3 lands + 2 artifacts = 6 mana available.
+T4
+draw
+Draw Card
+Drew Preordain (sorcery)
+T4
+main1
+Main Phase 1
+Executing strategy focused on our win condition
+T4
+main1
+MANA
+AI Strategic Decision
+Play Underground River as the mandatory land drop. Hitting the land drop preserves future mana flexibility and enables the land's U/B mana ability on subsequent turns (it must be played first). This follows the opening priority (land → ramp/engine) and keeps options open to cast Lord of the Nazgûl or Witch-king next turn. Playing the land now also improves color fixing for upcoming casts and avoids wasting a turn with fewer lands.
+T4
+main1
+MANA
+playLand: 1
+Played Underground River
+✓
+T4
+main1
+ENGINE
+AI Strategic Decision
+Casting Lord of the Nazgûl (cost {3}{U}{B}) is the highest-value play: it gets the engine online so subsequent instants/sorceries (Preordain, Snap) will generate Wraith tokens and accelerate our mid-game plan. We have the required colors and 7 mana available, so this is fully affordable and advances the deck's stated Turn 4 goal of establishing the engine. After this resolves, we'll have 2 mana left to cast a cheap cantrip (likely Preordain) on the same turn to start drawing and trigger Lord once summoned.
+T4
+main1
+🎯 Commander Triggers
+T4
+main1
+🔍 DEBUG: Mana After Commander Cast
+T4
+main1
+ENGINE
+castCommander: Lord of the Nazgûl
+Cast Lord of the Nazgûl (total cost: 5)
+✓
+T4
+main1
+ENGINE
+AI Strategic Decision
+Cast Preordain ({U}). It's the most mana-efficient engine play: it triggers Lord of the Nazgûl to make a Wraith token, gives Scry 2 to filter/dig for follow-up plays, and only costs 1 mana so we preserve most of our pool for additional spells this turn (e.g., Ringsight, Snap, or even Witch-king). Prioritizes the deck's engine and the 🌟 synergy while keeping options open.
+T4
+main1
+💰 Mana After Cast
+T4
+main1
+💰 Mana After Cast
+T4
+main1
+Scry (Spell Effect): Preordain
+Scry 2: Kept 2 on top, sent 0 to bottom
+✓
+T4
+main1
+📖 Draw Effect
+Drew 1 card(s): Swamp
+✓
+T4
+main1
+🎯 Cast Trigger
+Lord of the Nazgûl triggers from casting Preordain
+T4
+main1
+Create Tokens: Lord of the Nazgûl
+Created 1 token(s): 3/3 Black Wraith Token
+✓
+T4
+main1
+✨ Token Generation
+Lord of the Nazgûl's trigger created tokens
+T4
+main1
+ENGINE
+castSpell: 3
+Cast Preordain ({U})
+✓
+T4
+main1
+ENGINE
+AI Strategic Decision
+Ringsight (1UB, cost 3) is playable with the current pool (U:2 B:2) and is the highest-value ENGINE play this turn. It's a 🌟 synergy spell so casting it will trigger Lord of the Nazgûl to create another 3/3 Black Wraith while also letting you search for a card that shares a color with a legendary creature you control (card selection/refill). This advances the deck's engine and uses mana productively on Turn 4. Snap is also a valid synergy play, but with no known immediate target and being an instant you'd usually keep it as interaction — Ringsight gives immediate card advantage while generating the Lord trigger.
+T4
+main1
+ENGINE
+castSpell: 1
+Cannot afford Ringsight
+✗
+T4
+main1
+ENGINE
+AI Strategic Decision
+Cast Ringsight (hand index 1). With 4 mana available (U:2, B:2) you can pay {1}{U}{B} (3 total) so this is legal. Ringsight is the highest-value ENGINE play this turn: it (A) triggers Lord of the Nazgûl to create another 3/3 Black Wraith token, and (B) provides card selection/card advantage by searching for a card that shares a color with a legendary creature you control. That advances the deck's midgame engine more than deploying a non-synergistic permanent, and is preferred per the SYNERGY rule. Using Ringsight now keeps Snap (an instant-speed interaction) in hand for future responses.
+T4
+main1
+ENGINE
+castSpell: 1
+Cannot afford Ringsight
+✗
+T4
+combat
+Combat Phase
+Entering combat with 1 creatures and 1 tokens
+T4
+combat
+⚔️ Combat Phase
+No creatures available to attack
+✗
+T4
+main2
+Main Phase 2
+Post-combat - deploying remaining resources
+T4
+main2
+ENGINE
+AI Strategic Decision
+Ringsight ({1}{U}{B}) is the best play: it's an engine play that ALSO triggers Lord of the Nazgûl to create another 3/3 Black Wraith token (double value). It advances our midgame plan by generating tokens and searching for a card that shares a color with a legendary creature we control (likely finding more synergy or protection). Keeping Snap (instant) in hand preserves instant-speed interaction for opponent responses. Casting Ringsight uses mana efficiently this turn and builds board + card advantage.
+T4
+main2
+ENGINE
+castSpell: 1
+Cannot afford Ringsight
+✗
+T4
+main2
+ENGINE
+AI Strategic Decision
+Ringsight ({1}{U}{B}) is the best play this main2. I already have U and B and 4 total mana, so I can pay its {1}{U}{B} cost. Casting Ringsight triggers Lord of the Nazgûl to make another 3/3 Black Wraith (double value: spell effect + token) and lets me search my library for a card that shares a color with a legendary creature I control (likely finding protection/interaction or another engine piece). I should keep Snap (instant) in hand for interactive instant-speed plays. I can't play a land (land already played this turn), and no other higher-priority mana or threat plays are castable, so Ringsight is the most mana-efficient engine play this turn.
+T4
+main2
+ENGINE
+castSpell: 1
+Cannot afford Ringsight
+✗
+T4
+end
+End Turn
+Turn 4 complete. Total damage: 0/40
+T5
+beginning
+=== NEW TURN ===
+Starting turn 5
+T5
+untap
+Untap & Generate Mana
+All permanents untapped. 4 lands + 2 artifacts = 7 mana available.
+T5
+draw
+Draw Card
+Drew Saruman's Trickery (instant)
+T5
+main1
+Main Phase 1
+Executing strategy focused on our win condition
+T5
+main1
+MANA
+AI Strategic Decision
+Play a land first per decision priority. I haven't played a land this turn, so putting the Swamp onto the battlefield both follows the rules and increases my resource base for the rest of the turn (and future turns). This enables casting higher-cost plays (Witch-king) or chaining synergy instants (Ringsight / Snap / Saruman's Trickery) on the same turn. Playing the land now preserves tempo and keeps options open for the next action after this resolves.
+T5
+main1
+MANA
+playLand: 3
+Played Swamp
+✓
+T5
+main1
+ENGINE
+AI Strategic Decision
+Cast Ringsight ({1}{U}{B}). It is a 🌟 synergy spell so it both (A) triggers Lord of the Nazgûl to create at least one Wraith token and (B) tutors a card that shares a color with a legendary creature you control — letting you fetch a key piece (Witch-king or another needed card) and smooth the next turns. It's mana-efficient (3 mana) so it uses part of the 7 available mana while leaving plenty of mana for follow-up plays or instant responses. This advances the engine (token generation + card advantage) which is the priority on turn 5.
+T5
+main1
+💰 Mana After Cast
+T5
+main1
+💰 Mana After Cast
+T5
+main1
+🎯 Cast Trigger
+Lord of the Nazgûl triggers from casting Ringsight
+T5
+main1
+Create Tokens: Lord of the Nazgûl
+Created 1 token(s): 3/3 Black Wraith Token
+✓
+T5
+main1
+✨ Token Generation
+Lord of the Nazgûl's trigger created tokens
+T5
+main1
+ENGINE
+castSpell: 1
+Cast Ringsight ({1}{U}{B})
+✓
+T5
+main1
+ENGINE
+AI Strategic Decision
+Cast Saruman's Trickery (index 2). It is a 🌟 synergy play: it will trigger Lord of the Nazgûl to create at least one additional Wraith while also giving an immediate board effect (amass 1 / create a 1/1 Orc if no Army) and can counter an opponent spell if needed. It costs {1}{U}{U} which fits the available mana and is mana-efficient this turn. Casting it first preserves 6 mana afterwards, letting us follow up by casting Witch-king (index 0) on the next action to deploy a big threat. This advances the engine (more bodies) and sets up pressure while using mana effectively.
+T5
+main1
+💰 Mana After Cast
+T5
+main1
+💰 Mana After Cast
+T5
+main1
+🎯 Cast Trigger
+Lord of the Nazgûl triggers from casting Saruman's Trickery
+T5
+main1
+Create Tokens: Lord of the Nazgûl
+Created 1 token(s): 3/3 Black Wraith Token
+✓
+T5
+main1
+✨ Token Generation
+Lord of the Nazgûl's trigger created tokens
+T5
+main1
+ENGINE
+castSpell: 2
+Cast Saruman's Trickery ({1}{U}{U})
+✓
+T5
+main1
+ENGINE
+AI Strategic Decision
+Cast Snap ({1}{U}). It's a low-cost instant marked as a synergy play: casting an instant will trigger Lord of the Nazgûl to create another 3/3 Black Wraith token, increasing board presence. Snap also returns a problematic opposing creature to its owner's hand (removing a blocker or a threat) and untaps up to two lands on resolution, giving additional available mana for responses or follow-up plays on the next sequencing prompt. This uses mana efficiently (2 of your 5 available) and advances the engine by generating another token via Lord's trigger.
+T5
+main1
+ENGINE
+castSpell: 1
+Cannot afford Snap
+✗
+T5
+main1
+ENGINE
+AI Strategic Decision
+Cast Snap ({1}{U}). You have 5 mana (U:2, B:3) so you can pay {1}{U}. Snap is a high-value synergy play: it will trigger Lord of the Nazgûl to create another 3/3 Black Wraith token, remove an opposing creature (clear a blocker or immediate threat), and on resolution it can untap up to two lands enabling additional follow-up plays when prompted again. This uses mana efficiently, advances the engine, and fits the mid-game plan of generating tokens and applying pressure.
+T5
+main1
+ENGINE
+castSpell: 1
+Cannot afford Snap
+✗
+T5
+combat
+Combat Phase
+Entering combat with 1 creatures and 3 tokens
+T5
+combat
+⚔️ Combat Phase
+2 attacker(s) dealt 7 damage (keywords: flying, menace)
+✓
+T5
+combat
+⚔️ Combat Results
+2 attacker(s) dealt 7 damage (keywords: flying, menace)
+✓
+T5
+main2
+Main Phase 2
+Post-combat - deploying remaining resources
+T5
+main2
+ENGINE
+AI Strategic Decision
+Cast Snap (index 1). Snap is cheap (1U), is castable with available U:2 B:3 (total 5), and is the highest-value play this turn because it (1) triggers Lord of the Nazgûl to create another 3/3 Black Wraith token (synergy), (2) tempo-bounces an opponent's creature (or a problematic blocker) which advances our board position, and (3) untaps up to two lands so we may have additional resources after it resolves to follow up (e.g., help cast Witch-king next turn). This uses mana efficiently and follows the mid-game engine plan of casting instants/sorceries to grow the token swarm.
+T5
+main2
+ENGINE
+castSpell: 1
+Cannot afford Snap
+✗
+T5
+main2
+ENGINE
+AI Strategic Decision
+Cast Snap (1U). This is the highest-value play: it triggers Lord of the Nazgûl to create another 3/3 Black Wraith token (engine/synergy), bounces an opponent creature for tempo, and untaps up to two lands so we regain mana to follow up on later plays (sets up next turn). It uses available colored mana (U) and is mana-efficient while advancing the board state rather than passing with mana unused.
+T5
+main2
+ENGINE
+castSpell: 1
+Cannot afford Snap
+✗
+T5
+end
+End Turn
+Turn 5 complete. Total damage: 7/40
+T6
+beginning
+=== NEW TURN ===
+Starting turn 6
+T6
+untap
+Untap & Generate Mana
+All permanents untapped. 5 lands + 2 artifacts = 7 mana available.
+T6
+draw
+Draw Card
+Drew Ringwraiths (creature - has ETB effect!)
+T6
+main1
+Main Phase 1
+Executing strategy focused on our win condition
+T6
+main1
+ENGINE
+AI Strategic Decision
+Cast Snap (hand index 1). This is the highest-value play this turn because it is the 🌟 synergy card: Lord of the Nazgûl triggers when you cast an instant or sorcery, so casting Snap immediately generates another Wraith token in addition to Snap's effect (bounce a problem creature). Snap is very mana-efficient (2 mana) and advances the engine while also removing a blocker/threat. Using Snap now preserves bigger plays for after responses and follows the deck's mid-game plan of generating tokens via cheap instants/sorceries. If beneficial, Snap's untap effect may return lands/artifacts to availability later when the stack resolves; regardless, casting it now uses mana productively and leverages battlefield synergies.
+T6
+main1
+💰 Mana After Cast
+T6
+main1
+💰 Mana After Cast
+T6
+main1
+🎯 Cast Trigger
+Lord of the Nazgûl triggers from casting Snap
+T6
+main1
+Create Tokens: Lord of the Nazgûl
+Created 1 token(s): 3/3 Black Wraith Token
+✓
+T6
+main1
+✨ Token Generation
+Lord of the Nazgûl's trigger created tokens
+T6
+main1
+ENGINE
+castSpell: 1
+Cast Snap ({1}{U})
+✓
+T6
+main1
+THREAT
+AI Strategic Decision
+No land to play. With 10 mana (U4 B6) both 6-cost creatures are castable. Ringwraiths (hand index 1) has an immediate ETB effect: -3/-3 to a target creature and potential bonus life loss if it's legendary. That immediate removal/tempo swing is higher value this turn than casting Witch-king (which only gives attacking value next turn). It uses available mana efficiently, answers a potential blocker/threat now, and keeps future turns flexible. Color requirement (BB) is satisfied.
+T6
+main1
+💰 Mana After Cast
+T6
+main1
+🎯 Triggers Detected
+T6
+main1
+Trigger Resolved
+T6
+main1
+💰 Mana After Cast
+T6
+main1
+THREAT
+castSpell: 1
+Cast Ringwraiths ({4}{B}{B})
+✓
+T6
+main1
+PASS
+AI Strategic Decision
+You cannot cast the only card in hand (Witch-king, Bringer of Ruin costs {4}{B}{B}, but available mana is only 4 total with only {B}:2). There is no land in hand to play (Has Played Land This Turn = false but no land listed in hand) and there are no available battlefield activated abilities to use. With no productive plays available this main phase, the correct play is to pass and move to combat to attack with the two ready creatures (6 potential damage).
+T6
+main1
+PASS
+AI Strategic Decision
+You cannot cast Witch-king (cost {4}{B}{B}) with only 4 total mana and only {B}:2 available; there is no land in hand to play and no 0-cost/other castable actions. Per the critical mana rules, do not try to tap lands or activate mana abilities manually. With no productive main-phase play, the optimal move is to pass to combat and attack with the two ready creatures (6 damage). This preserves available mana for responses on opponents' turns and follows the deck's midgame plan to apply pressure while waiting for a proper window to cast higher-cost synergy threats.
+T6
+main1
+End Phase
+Passed twice - ending phase
+T6
+combat
+Combat Phase
+Entering combat with 2 creatures and 4 tokens
+T6
+combat
+⚔️ Combat Phase
+2 attacker(s) dealt 6 damage (keywords: menace)
+✓
+T6
+combat
+⚔️ Combat Results
+2 attacker(s) dealt 6 damage (keywords: menace)
+✓
+T6
+main2
+Main Phase 2
+Post-combat - deploying remaining resources
+T6
+main2
+PASS
+AI Strategic Decision
+I cannot cast Witch-king (cost {4}{B}{B}) because I only have 4 mana available (U:2, B:2) — total mana < spell cost, even though color requirement could be met. There are no other cards in hand or battlefield activated abilities I can pay for now, and I don't have a land in hand to play. Per the critical rules, I must not attempt to manually activate mana abilities and should not waste actions; passing is the correct play.
+T6
+main2
+PASS
+AI Strategic Decision
+You cannot legally cast Witch-king (cost {4}{B}{B}) because your ACTUAL total available mana is 4 (U:2, B:2) — less than the required 6. There are no other cards in hand, no playable lands to drop, and no battlefield abilities available to activate. Per the critical rules, you may not manually tap lands or activate mana abilities; with nothing castable or activatable, passing is the only correct play this step.
+T6
+main2
+End Phase
+Passed twice - ending phase
+T6
+end
+End Turn
+Turn 6 complete. Total damage: 13/40
+T7
+beginning
+=== NEW TURN ===
+Starting turn 7
+T7
+untap
+Untap & Generate Mana
+All permanents untapped. 5 lands + 2 artifacts = 7 mana available.
+T7
+draw
+Draw Card
+Drew Bojuka Bog (land - has ETB effect!)
+T7
+main1
+Main Phase 1
+Executing strategy focused on our win condition
+T7
+main1
+MANA
+AI Strategic Decision
+Play Bojuka Bog (hand index 1) as the mandatory land drop first. This follows the Decision Priority (land drop before spells), preserves available mana for future turns, and immediately exiles a graveyard to disrupt opponents' recursion (valuable late-game hate). Bojuka Bog entering tapped is an acceptable trade for the ETB effect and keeps our options open on the next step/turn. We must choose one action now; casting Witch-king can be done on the next decision after this land resolves if appropriate.
+T7
+main1
+MANA
+playLand: 1
+Played Bojuka Bog
+✓
+T7
+main1
+THREAT
+AI Strategic Decision
+Cast Witch-king, Bringer of Ruin for 6 (we have the required BB and total mana). This uses mana efficiently (6 of 7), advances the late-game plan by deploying a high-impact threat with flying and an attack trigger that will remove an opponent's smallest blocker on attack. It increases offensive pressure going into combat and synergizes with the deck's plan to finish the game via commanding threats. Casting now (main1) is optimal rather than passing and leaves 1 mana open for responses or flash interactions later.
+T7
+main1
+💰 Mana After Cast
+T7
+main1
+🎯 Triggers Detected
+T7
+main1
+Trigger Resolved
+T7
+main1
+💰 Mana After Cast
+T7
+main1
+THREAT
+castSpell: 0
+Cast Witch-king, Bringer of Ruin ({4}{B}{B})
+✓
+T7
+main1
+PASS
+AI Strategic Decision
+No cards in hand and I have already played a land this turn. There are no battlefield activated abilities available to use and no playable spells with an empty hand, so there is literally nothing productive to cast or activate this main phase. Passing preserves the game state and proceeds to combat where I can attack with two ready creatures (8 damage, menace) as appropriate.
+T7
+main1
+PASS
+AI Strategic Decision
+No cards in hand and no available battlefield activated abilities to use. I have already played a land this turn and there is nothing castable with the current board/hand despite having 6 mana in the pool (per the critical mana rules the pool is already set). Following the decision framework, there is literally nothing productive to cast or activate, so the optimal play is to pass main phase, proceed to combat and attack with the two ready creatures (8 damage, menace).
+T7
+main1
+End Phase
+Passed twice - ending phase
+T7
+combat
+Combat Phase
+Entering combat with 3 creatures and 4 tokens
+T7
+combat
+⚔️ Combat Phase
+2 attacker(s) dealt 8 damage (keywords: menace)
+✓
+T7
+combat
+⚔️ Combat Results
+2 attacker(s) dealt 8 damage (keywords: menace)
+✓
+T7
+main2
+Main Phase 2
+Post-combat - deploying remaining resources
+T7
+main2
+PASS
+AI Strategic Decision
+No playable spells in hand (hand = 0). Land drop already used this turn. Commander is already on the battlefield. The game state lists no available activated abilities to use. With no castable cards or activations and no land to play, there is nothing productive to spend the current mana on this step, so passing is the correct play.
+T7
+main2
+PASS
+AI Strategic Decision
+No cards in hand to cast, land drop already used, and there are no available activated abilities to pay for this step. With the current board and hand there is literally nothing legal and productive to spend the floating mana on this phase, so passing is the correct play per the critical mana rules and sequencing guidance.
+T7
+main2
+End Phase
+Passed twice - ending phase
+T7
+end
+End Turn
+Turn 7 complete. Total damage: 21/40
+T8
+beginning
+=== NEW TURN ===
+Starting turn 8
+T8
+untap
+Untap & Generate Mana
+All permanents untapped. 6 lands + 2 artifacts = 8 mana available.
+T8
+draw
+Draw Card
+Drew Go for the Throat (instant)
+T8
+main1
+Main Phase 1
+Executing strategy focused on our win condition
+T8
+main1
+ENGINE
+AI Strategic Decision
+Cast Go for the Throat ({1}{B}) now. It is affordable (total mana 8, B available) and is marked 🌟 so it triggers Lord of the Nazgûl to create a Wraith token in addition to removing an opponent's nonartifact creature. This advances the engine (token generation) while removing a threat, uses mana efficiently, and follows the deck's late-game plan to amass tokens/pressure. Pick the highest-priority nonartifact opposing creature as the spell's target (the biggest immediate threat or the creature that most prevents our plan).
+T8
+main1
+💰 Mana After Cast
+T8
+main1
+💰 Mana After Cast
+T8
+main1
+🎯 Cast Trigger
+Lord of the Nazgûl triggers from casting Go for the Throat
+T8
+main1
+Create Tokens: Lord of the Nazgûl
+Created 1 token(s): 3/3 Black Wraith Token
+✓
+T8
+main1
+✨ Token Generation
+Lord of the Nazgûl's trigger created tokens
+T8
+main1
+ENGINE
+castSpell: Go for the Throat
+Cast Go for the Throat ({1}{B})
+✓
+T8
+main1
+PASS
+AI Strategic Decision
+No playable options are available. Hand is empty, there are no battlefield activated abilities available now, the commander is already on the battlefield, and I have not played a land this turn but I have no lands in hand to play. Per the critical mana rules, I cannot (and must not) 'activate' lands or mana rocks manually — the available mana shown is the pool and there are no legal spells or abilities to spend it on. Passing preserves the game state and proceeds to combat/end step where I can attack with the single ready creature for 5 damage. Next turn I will prioritize a land drop (if I draw one) and then spend mana on ramp/engine spells to generate more Wraith tokens and press toward the win.
+T8
+main1
+PASS
+AI Strategic Decision
+No cards in hand and no playable/activatable battlefield abilities this main phase. I have no land to play, the commander is already on the battlefield, and per the critical mana rules I may not manually activate lands or mana rocks to spend this pool. There are therefore no legal productive plays to spend mana on this step. Passing is optimal; I will proceed to combat and attack with the single ready creature for 5 damage, and preserve the mana (it will refresh next turn).
+T8
+main1
+End Phase
+Passed twice - ending phase
+T8
+combat
+Combat Phase
+Entering combat with 3 creatures and 5 tokens
+T8
+combat
+⚔️ Combat Phase
+1 attacker(s) dealt 5 damage (keywords: flying)
+✓
+T8
+combat
+⚔️ Combat Results
+1 attacker(s) dealt 5 damage (keywords: flying)
+✓
+T8
+main2
+Main Phase 2
+Post-combat - deploying remaining resources
+T8
+main2
+PASS
+AI Strategic Decision
+No playable options this step. Hand is empty, no lands in hand to play, no spells to cast, and there are no battlefield activated abilities available. The commander is already on the battlefield, so castCommander is not applicable. Per the Critical Mana Rules, do not attempt to 'tap' lands or activate mana abilities manually — the pool shown is the total available. Because there is literally nothing to cast or activate, the correct and optimal play is to pass and proceed to end step. On the next turn we'll untap, draw, play a land if available, and use available mana to further the engine (prefer casting low-cost instants to trigger Lord of the Nazgûl / make tokens, or deploy threats/ramp if drawn).
+T8
+main2
+PASS
+AI Strategic Decision
+Hand is empty and there are no 0-cost activated abilities or playable permanents. Although 11 mana is shown, the pool is the total available and there is nothing in hand to spend it on; per the critical rules, I must not manually activate mana abilities. No land in hand to play (Has Played Land This Turn: false but hand size = 0), and no battlefield activated abilities are affordable. The optimal play is to pass and proceed to end step to preserve game state and draw next turn.
+T8
+main2
+End Phase
+Passed twice - ending phase
+T8
+end
+End Turn
+Turn 8 complete. Total damage: 26/40
+T9
+beginning
+=== NEW TURN ===
+Starting turn 9
+T9
+untap
+Untap & Generate Mana
+All permanents untapped. 6 lands + 2 artifacts = 8 mana available.
+T9
+draw
+Draw Card
+Drew The Grey Havens (land - has ETB effect!)
+T9
+main1
+Main Phase 1
+Executing strategy focused on our win condition
+T9
+main1
+MANA
+AI Strategic Decision
+Play The Grey Havens as the turn’s land drop. This follows the Decision Priority (Land Drop first). It gives an immediate scry 1 to sculpt the next draw and adds a flexible colorless mana source for future turns (and can produce colors later if legendary creatures are in the graveyard). Playing the land improves long-term mana and keeps options open this turn (you still have your 8 available mana to spend on spells or responses later in the turn sequence).
+T9
+main1
+MANA
+playLand: 0
+Played The Grey Havens
+✓
+T9
+main1
+PASS
+AI Strategic Decision
+No cards in hand to cast, commander already on the battlefield, the land drop was already played this turn, and there are no usable activated abilities available now. With no productive MAIN-phase plays available, the correct play is to pass to proceed to combat and attack with the ready 3/3 menace (use remaining game steps to apply pressure). This follows the Decision Priority (no MANA/ENGINE/THREAT plays available).
+T9
+main1
+PASS
+AI Strategic Decision
+No cards in hand to cast, land drop already played, and there are no usable battlefield activated abilities available. Commander is already on the battlefield. With no productive MAIN-phase plays under the CRITICAL MANA RULES, the optimal play is to pass to Combat and attack with the ready 3/3 menace to apply pressure.
+T9
+main1
+End Phase
+Passed twice - ending phase
+T9
+combat
+Combat Phase
+Entering combat with 3 creatures and 5 tokens
+T9
+combat
+⚔️ Combat Phase
+1 attacker(s) dealt 3 damage (keywords: menace)
+✓
+T9
+combat
+⚔️ Combat Results
+1 attacker(s) dealt 3 damage (keywords: menace)
+✓
+T9
+main2
+Main Phase 2
+Post-combat - deploying remaining resources
+T9
+main2
+PASS
+AI Strategic Decision
+No cards in hand and no available activated abilities to use this main phase. Land drop has already been used and the commander is already on the battlefield, so there is nothing legal or productive to cast or activate with the current game state and mana pool. Passing preserves the game state and proceeds to the next step.
+T9
+main2
+PASS
+AI Strategic Decision
+No cards in hand, no available activated abilities on the battlefield, and a land has already been played this turn. The available mana is already in the pool but there are no legal spells or abilities to pay for (and mana abilities must not be manually activated). Under the Decision Priority and Critical Mana rules, passing is the only legal and productive action this step.
+T9
+main2
+End Phase
+Passed twice - ending phase
+T9
+end
+End Turn
+Turn 9 complete. Total damage: 29/40
+T10
+beginning
+=== NEW TURN ===
+Starting turn 10
+T10
+untap
+Untap & Generate Mana
+All permanents untapped. 7 lands + 2 artifacts = 9 mana available.
+T10
+draw
+Draw Card
+Drew Toxic Deluge (sorcery)
+T10
+main1
+Main Phase 1
+Executing strategy focused on our win condition
+T10
+main1
+ENGINE
+AI Strategic Decision
+Cast Toxic Deluge (index 0). It's a high-value, synergy play: Lord of the Nazgûl triggers when you cast an instant/sorcery, so casting Deluge gives an immediate extra Wraith token while also giving the option to clear problematic creatures. Casting it for X=0 (pay 0 life) uses only {2}{B} of the available mana, preserves our current board (avoids killing our own creatures/commander), and still gains the triggered token — efficient progress toward the late-game plan. If opponents have heavy boards, we can instead choose a larger X to clear them (we have the life/mana to do so), but with incomplete info the safest, mana-efficient, synergy-maximizing line is to cast it now.
+T10
+main1
+💰 Mana After Cast
+T10
+main1
+💰 Mana After Cast
+T10
+main1
+🎯 Cast Trigger
+Lord of the Nazgûl triggers from casting Toxic Deluge
+T10
+main1
+Create Tokens: Lord of the Nazgûl
+Created 1 token(s): 3/3 Black Wraith Token
+✓
+T10
+main1
+✨ Token Generation
+Lord of the Nazgûl's trigger created tokens
+T10
+main1
+ENGINE
+castSpell0
+Cast Toxic Deluge ({2}{B})
+✓
+T10
+main1
+PASS
+AI Strategic Decision
+No cards in hand to cast, no lands in hand to play (Has Played Land This Turn = false but hand is empty), no available activated abilities on the battlefield, and the commander is already on the battlefield. With 0 playable options this main phase, passing is the only legal and optimal action — there is nothing productive to spend the available mana on this step.
+T10
+main1
+PASS
+AI Strategic Decision
+There are no cards in hand, no lands to play, and no available activated abilities or permanents to use this main phase. The commander is already on the battlefield and all creatures are summoning sick, so no profitable play is available. Per the critical mana rules, I cannot (and must not) manually activate mana abilities — the displayed mana is already the pool and there are no spells or activations that can be paid for. Therefore the only legal and optimal action this step is to pass.
+T10
+main1
+End Phase
+Passed twice - ending phase
+T10
+combat
+Combat Phase
+Entering combat with 3 creatures and 6 tokens
+T10
+combat
+⚔️ Combat Phase
+No creatures available to attack
+✗
+T10
+main2
+Main Phase 2
+Post-combat - deploying remaining resources
+T10
+main2
+PASS
+AI Strategic Decision
+No cards in hand, no playable spells, no 0-cost or other activatable battlefield abilities available, and the commander is already on the battlefield. I cannot play a land (no land in hand) and per the critical rules I must not manually activate mana abilities. With no legal productive action to spend mana on this main phase, the optimal play is to pass.
+T10
+main2
+PASS
+AI Strategic Decision
+No playable options: hand is empty, commander is already on the battlefield, there are no lands in hand to play, and there are no available activated abilities to use. Per the critical mana rules, I must not manually activate mana abilities and cannot cast any spells. With literally nothing productive to do this main phase, passing is the only legal and optimal action.
+T10
+main2
+End Phase
+Passed twice - ending phase
+T10
+end
+End Turn
+Turn 10 complete. Total damage: 29/40
+T10
+post-game
+Game Complete
+Metrics: 11 spells cast, 1 commander casts, 7 lands played
+T10
+post-game
+✅ No Errors
+Game completed without errors
+
+CONSOLE LOG
+client:745 WebSocket connection to 'wss://4bfb526c-f8d6-4438-8e29-eb9805353be8-00-rybydy69e9r8.janeway.replit.dev/?token=jidTOIC4y2XV' failed: 
+createConnection @ client:745
+connect @ client:411
+connect @ client:751
+connect @ client:289
+connect @ client:373
+(anonymous) @ client:823
+client:772 [vite] failed to connect to websocket (Error: WebSocket closed without opened.). 
+connect @ client:772
+await in connect
+connect @ client:289
+connect @ client:373
+(anonymous) @ client:823
+client:423 Uncaught (in promise) Error: WebSocket closed without opened.
+    at WebSocket.<anonymous> (client:423:30)
+(anonymous) @ client:423
+react-dom_client.js?v=453f8220:20103 Download the React DevTools for a better development experience: https://react.dev/link/react-devtools
+config.js:51 ✅ OpenAI API configured successfully
+config.js:52    Key prefix: sk-proj...
+config.js:53    Key length: 164 characters
+App.jsx:93 Loaded 32731 cards into database
+App.jsx:93 Loaded 32731 cards into database
+App.jsx:241 Deck Strategy Analysis: {success: true, timestamp: '2025-10-31T19:14:43.829Z', analysis: {…}, metadata: {…}}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+activatedAbilityEngine.js:116 [parseActivatedAbilities] Detected landcycling: Lórien Revealed → Island (cost: {1})
+activatedAbilityEngine.js:70 [parseActivatedAbilities] Detected fetch land: Evolving Wilds
+activatedAbilityEngine.js:116 [parseActivatedAbilities] Detected landcycling: Lórien Revealed → Island (cost: {1})
+enhancedStepByStepGame.js:675 🔍 Creating deck behavior manifest...
+cardBehaviorAnalyzer.js:705 🔍 [PARSER] Commander's Sphere oracle text: {T}: Add one mana of any color in your commander's color identity.\nSacrifice this artifact: Draw a card.
+cardBehaviorAnalyzer.js:706 🔍 [PARSER] Split into 2 lines
+cardBehaviorAnalyzer.js:708 🔍 [PARSER]   Line 0: {T}: Add one mana of any color in your commander's color identity.
+cardBehaviorAnalyzer.js:708 🔍 [PARSER]   Line 1: Sacrifice this artifact: Draw a card.
+cardBehaviorAnalyzer.js:731 🔍 [PARSER] Commander's Sphere - Successfully parsed ability: {
+  "abilityText": "{T}: Add one mana of any color in your commander's color identity.",
+  "isManaAbility": true,
+  "activationCost": [
+    "{T}"
+  ],
+  "produces": [
+    {
+      "quantity": 1,
+      "types": [
+        {
+          "choice": [
+            "W",
+            "U",
+            "B",
+            "R",
+            "G"
+          ],
+          "restriction": "commander_identity"
+        }
+      ]
+    }
+  ]
+}
+cardBehaviorAnalyzer.js:705 🔍 [PARSER] Sol Ring oracle text: {T}: Add {C}{C}.
+cardBehaviorAnalyzer.js:706 🔍 [PARSER] Split into 1 lines
+cardBehaviorAnalyzer.js:708 🔍 [PARSER]   Line 0: {T}: Add {C}{C}.
+cardBehaviorAnalyzer.js:705 🔍 [PARSER] Underground River oracle text: {T}: Add {C}.\n{T}: Add {U} or {B}. This land deals 1 damage to you.
+cardBehaviorAnalyzer.js:706 🔍 [PARSER] Split into 2 lines
+cardBehaviorAnalyzer.js:708 🔍 [PARSER]   Line 0: {T}: Add {C}.
+cardBehaviorAnalyzer.js:708 🔍 [PARSER]   Line 1: {T}: Add {U} or {B}. This land deals 1 damage to you.
+enhancedStepByStepGame.js:708 ✅ Behavior manifest created: {totalManaProducers: 22, totalFetchLands: 1, totalTokenGenerators: 12, totalCardDraw: 21}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+enhancedStepByStepGame.js:1880 🔍 [untap] BEFORE generateMana - Expected: 0 (lands:0 + artifacts:0 + creatures:0)
+enhancedStepByStepGame.js:1881 🔍 [untap] Land count: 0, Artifact count: 0, Creature count: 0
+gameEngine.js:510 🔍 [generateMana] Starting - Turn 1
+gameEngine.js:511 🔍 [generateMana] Battlefield: 0 lands, 0 artifacts, 0 creatures
+manaPool.js:554 
+💎 [PotentialPool] Building available sources...
+manaPool.js:640 💎 [PotentialPool] Found 0 available mana abilities
+gameEngine.js:648 🔍 [generateMana] Final total: 0 available sources
+gameEngine.js:649 🔍 [generateMana] Preview flexibility: {W: 0, U: 0, B: 0, R: 0, G: 0, …}
+enhancedStepByStepGame.js:1889 🔍 [untap] AFTER generateMana - Expected: 0, Actual: 0
+eventSystem.js:169 📤 Event Emitted: PHASE_CHANGED {source: 'unknown', queueSize: 1}
+eventSystem.js:169 📤 Event Emitted: CARD_DRAWN {source: 'Island', queueSize: 1}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+manaPool.js:554 
+💎 [PotentialPool] Building available sources...
+manaPool.js:640 💎 [PotentialPool] Found 1 available mana abilities
+manaPool.js:643    0: Island (land) → 1x{U}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+enhancedStepByStepGame.js:1880 🔍 [untap] BEFORE generateMana - Expected: 1 (lands:1 + artifacts:0 + creatures:0)
+enhancedStepByStepGame.js:1881 🔍 [untap] Land count: 1, Artifact count: 0, Creature count: 0
+gameEngine.js:510 🔍 [generateMana] Starting - Turn 2
+gameEngine.js:511 🔍 [generateMana] Battlefield: 1 lands, 0 artifacts, 0 creatures
+manaPool.js:554 
+💎 [PotentialPool] Building available sources...
+manaPool.js:640 💎 [PotentialPool] Found 1 available mana abilities
+manaPool.js:643    0: Island (land) → 1x{U}
+gameEngine.js:648 🔍 [generateMana] Final total: 1 available sources
+gameEngine.js:649 🔍 [generateMana] Preview flexibility: {W: 0, U: 1, B: 0, R: 0, G: 0, …}
+enhancedStepByStepGame.js:1889 🔍 [untap] AFTER generateMana - Expected: 1, Actual: 1
+eventSystem.js:169 📤 Event Emitted: PHASE_CHANGED {source: 'unknown', queueSize: 1}
+eventSystem.js:169 📤 Event Emitted: CARD_DRAWN {source: 'Ringsight', queueSize: 1}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+manaPool.js:554 
+💎 [PotentialPool] Building available sources...
+manaPool.js:640 💎 [PotentialPool] Found 2 available mana abilities
+manaPool.js:643    0: Island (land) → 1x{U}
+manaPool.js:643    1: Drowned Catacomb (land) → 1x{U/B}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+manaPool.js:681 
+🧮 [ManaSolver] Solving cost: {2}
+manaPool.js:682 🧮 [ManaSolver] Available sources: 2 abilities
+manaPool.js:686 🧮 [ManaSolver] Required: {colored: {…}, generic: 2}
+manaPool.js:794    ✓ Using Island for generic (NET 1 after {0} cost)
+manaPool.js:794    ✓ Using Drowned Catacomb for generic (NET 1 after {0} cost)
+manaPool.js:797 ✅ [ManaSolver] Found solution using 2 sources
+manaPool.js:404 🔍 [canPay] Checking "{2}": YES ✅
+gameEngine.js:1140 
+🎯 [castSpell] Attempting to cast Dimir Signet
+gameEngine.js:1141 🎯 [castSpell] Cost: {2}
+manaPool.js:681 
+🧮 [ManaSolver] Solving cost: {2}
+manaPool.js:682 🧮 [ManaSolver] Available sources: 2 abilities
+manaPool.js:686 🧮 [ManaSolver] Required: {colored: {…}, generic: 2}
+manaPool.js:794    ✓ Using Island for generic (NET 1 after {0} cost)
+manaPool.js:794    ✓ Using Drowned Catacomb for generic (NET 1 after {0} cost)
+manaPool.js:797 ✅ [ManaSolver] Found solution using 2 sources
+gameEngine.js:1157 ✅ [castSpell] Solution found! Tapping 2 sources
+gameEngine.js:1162    🔒 Tapped Island (produced {U})
+gameEngine.js:1162    🔒 Tapped Drowned Catacomb (produced {U})
+manaPool.js:554 
+💎 [PotentialPool] Building available sources...
+manaPool.js:640 💎 [PotentialPool] Found 0 available mana abilities
+eventSystem.js:169 📤 Event Emitted: SPELL_CAST {source: 'Dimir Signet', queueSize: 1}
+eventSystem.js:169 📤 Event Emitted: PERMANENT_ENTERS_BATTLEFIELD {source: 'Dimir Signet', queueSize: 2}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+enhancedStepByStepGame.js:1880 🔍 [untap] BEFORE generateMana - Expected: 3 (lands:2 + artifacts:1 + creatures:0)
+enhancedStepByStepGame.js:1881 🔍 [untap] Land count: 2, Artifact count: 1, Creature count: 0
+gameEngine.js:510 🔍 [generateMana] Starting - Turn 3
+gameEngine.js:511 🔍 [generateMana] Battlefield: 2 lands, 1 artifacts, 0 creatures
+manaPool.js:554 
+💎 [PotentialPool] Building available sources...
+manaPool.js:640 💎 [PotentialPool] Found 3 available mana abilities
+manaPool.js:643    0: Island (land) → 1x{U}
+manaPool.js:643    1: Drowned Catacomb (land) → 1x{U/B}
+manaPool.js:643    2: Dimir Signet (artifact) → 2x{U}{B}
+gameEngine.js:648 🔍 [generateMana] Final total: 4 available sources
+gameEngine.js:649 🔍 [generateMana] Preview flexibility: {W: 0, U: 4, B: 3, R: 0, G: 0, …}
+enhancedStepByStepGame.js:1889 🔍 [untap] AFTER generateMana - Expected: 3, Actual: 4
+eventSystem.js:169 📤 Event Emitted: PHASE_CHANGED {source: 'unknown', queueSize: 1}
+eventSystem.js:169 📤 Event Emitted: CARD_DRAWN {source: 'Snap', queueSize: 1}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+manaPool.js:554 
+💎 [PotentialPool] Building available sources...
+manaPool.js:640 💎 [PotentialPool] Found 4 available mana abilities
+manaPool.js:643    0: Island (land) → 1x{U}
+manaPool.js:643    1: Drowned Catacomb (land) → 1x{U/B}
+manaPool.js:643    2: Swamp (land) → 1x{B}
+manaPool.js:643    3: Dimir Signet (artifact) → 2x{U}{B}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+manaPool.js:681 
+🧮 [ManaSolver] Solving cost: {2}
+manaPool.js:682 🧮 [ManaSolver] Available sources: 4 abilities
+manaPool.js:686 🧮 [ManaSolver] Required: {colored: {…}, generic: 2}
+manaPool.js:794    ✓ Using Island for generic (NET 1 after {0} cost)
+manaPool.js:794    ✓ Using Drowned Catacomb for generic (NET 1 after {0} cost)
+manaPool.js:797 ✅ [ManaSolver] Found solution using 2 sources
+manaPool.js:404 🔍 [canPay] Checking "{2}": YES ✅
+gameEngine.js:1140 
+🎯 [castSpell] Attempting to cast Talisman of Dominance
+gameEngine.js:1141 🎯 [castSpell] Cost: {2}
+manaPool.js:681 
+🧮 [ManaSolver] Solving cost: {2}
+manaPool.js:682 🧮 [ManaSolver] Available sources: 4 abilities
+manaPool.js:686 🧮 [ManaSolver] Required: {colored: {…}, generic: 2}
+manaPool.js:794    ✓ Using Island for generic (NET 1 after {0} cost)
+manaPool.js:794    ✓ Using Drowned Catacomb for generic (NET 1 after {0} cost)
+manaPool.js:797 ✅ [ManaSolver] Found solution using 2 sources
+gameEngine.js:1157 ✅ [castSpell] Solution found! Tapping 2 sources
+gameEngine.js:1162    🔒 Tapped Island (produced {U})
+gameEngine.js:1162    🔒 Tapped Drowned Catacomb (produced {U})
+manaPool.js:554 
+💎 [PotentialPool] Building available sources...
+manaPool.js:640 💎 [PotentialPool] Found 2 available mana abilities
+manaPool.js:643    0: Swamp (land) → 1x{B}
+manaPool.js:643    1: Dimir Signet (artifact) → 2x{U}{B}
+eventSystem.js:169 📤 Event Emitted: SPELL_CAST {source: 'Talisman of Dominance', queueSize: 1}
+eventSystem.js:169 📤 Event Emitted: PERMANENT_ENTERS_BATTLEFIELD {source: 'Talisman of Dominance', queueSize: 2}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+manaPool.js:681 
+🧮 [ManaSolver] Solving cost: {2}
+manaPool.js:682 🧮 [ManaSolver] Available sources: 2 abilities
+manaPool.js:686 🧮 [ManaSolver] Required: {colored: {…}, generic: 2}
+manaPool.js:794    ✓ Using Swamp for generic (NET 1 after {0} cost)
+manaPool.js:782    💰 Dimir Signet costs {1}, produces 2 → NET +1
+manaPool.js:794    ✓ Using Dimir Signet for generic (NET 1 after {1} cost)
+manaPool.js:797 ✅ [ManaSolver] Found solution using 2 sources
+manaPool.js:404 🔍 [canPay] Checking "{2}": YES ✅
+gameEngine.js:1140 
+🎯 [castSpell] Attempting to cast Lightning Greaves
+gameEngine.js:1141 🎯 [castSpell] Cost: {2}
+manaPool.js:681 
+🧮 [ManaSolver] Solving cost: {2}
+manaPool.js:682 🧮 [ManaSolver] Available sources: 2 abilities
+manaPool.js:686 🧮 [ManaSolver] Required: {colored: {…}, generic: 2}
+manaPool.js:794    ✓ Using Swamp for generic (NET 1 after {0} cost)
+manaPool.js:782    💰 Dimir Signet costs {1}, produces 2 → NET +1
+manaPool.js:794    ✓ Using Dimir Signet for generic (NET 1 after {1} cost)
+manaPool.js:797 ✅ [ManaSolver] Found solution using 2 sources
+gameEngine.js:1157 ✅ [castSpell] Solution found! Tapping 2 sources
+gameEngine.js:1162    🔒 Tapped Swamp (produced {B})
+gameEngine.js:1162    🔒 Tapped Dimir Signet (produced {U})
+manaPool.js:554 
+💎 [PotentialPool] Building available sources...
+manaPool.js:640 💎 [PotentialPool] Found 2 available mana abilities
+manaPool.js:643    0: Talisman of Dominance (artifact) → 1x{C}
+manaPool.js:643    1: Talisman of Dominance (artifact) → 1x{U/B}
+eventSystem.js:169 📤 Event Emitted: SPELL_CAST {source: 'Lightning Greaves', queueSize: 1}
+eventSystem.js:169 📤 Event Emitted: PERMANENT_ENTERS_BATTLEFIELD {source: 'Lightning Greaves', queueSize: 2}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+enhancedStepByStepGame.js:1880 🔍 [untap] BEFORE generateMana - Expected: 5 (lands:3 + artifacts:2 + creatures:0)
+enhancedStepByStepGame.js:1881 🔍 [untap] Land count: 3, Artifact count: 2, Creature count: 0
+gameEngine.js:510 🔍 [generateMana] Starting - Turn 4
+gameEngine.js:511 🔍 [generateMana] Battlefield: 3 lands, 3 artifacts, 0 creatures
+manaPool.js:554 
+💎 [PotentialPool] Building available sources...
+manaPool.js:589 ⚠️ [PotentialPool] No manifest data for artifact: Lightning Greaves
+manaPool.js:640 💎 [PotentialPool] Found 6 available mana abilities
+manaPool.js:643    0: Island (land) → 1x{U}
+manaPool.js:643    1: Drowned Catacomb (land) → 1x{U/B}
+manaPool.js:643    2: Swamp (land) → 1x{B}
+manaPool.js:643    3: Dimir Signet (artifact) → 2x{U}{B}
+manaPool.js:643    4: Talisman of Dominance (artifact) → 1x{C}
+manaPool.js:643    5: Talisman of Dominance (artifact) → 1x{U/B}
+gameEngine.js:648 🔍 [generateMana] Final total: 6 available sources
+gameEngine.js:649 🔍 [generateMana] Preview flexibility: {W: 0, U: 5, B: 5, R: 0, G: 0, …}
+enhancedStepByStepGame.js:1889 🔍 [untap] AFTER generateMana - Expected: 5, Actual: 6
+eventSystem.js:169 📤 Event Emitted: PHASE_CHANGED {source: 'unknown', queueSize: 1}
+eventSystem.js:169 📤 Event Emitted: CARD_DRAWN {source: 'Preordain', queueSize: 1}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+manaPool.js:554 
+💎 [PotentialPool] Building available sources...
+manaPool.js:589 ⚠️ [PotentialPool] No manifest data for artifact: Lightning Greaves
+manaPool.js:640 💎 [PotentialPool] Found 8 available mana abilities
+manaPool.js:643    0: Island (land) → 1x{U}
+manaPool.js:643    1: Drowned Catacomb (land) → 1x{U/B}
+manaPool.js:643    2: Swamp (land) → 1x{B}
+manaPool.js:643    3: Underground River (land) → 1x{C}
+manaPool.js:643    4: Underground River (land) → 1x{U/B}
+manaPool.js:643    5: Dimir Signet (artifact) → 2x{U}{B}
+manaPool.js:643    6: Talisman of Dominance (artifact) → 1x{C}
+manaPool.js:643    7: Talisman of Dominance (artifact) → 1x{U/B}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+manaPool.js:681 
+🧮 [ManaSolver] Solving cost: {3}{U}{B}
+manaPool.js:682 🧮 [ManaSolver] Available sources: 8 abilities
+manaPool.js:686 🧮 [ManaSolver] Required: {colored: {…}, generic: 3}
+manaPool.js:738    ✓ Island produces {U}
+manaPool.js:751    ✓ Used Island for {U}
+manaPool.js:738    ✓ Drowned Catacomb produces {B}
+manaPool.js:751    ✓ Used Drowned Catacomb for {B}
+manaPool.js:794    ✓ Using Swamp for generic (NET 1 after {0} cost)
+manaPool.js:794    ✓ Using Underground River for generic (NET 1 after {0} cost)
+manaPool.js:794    ✓ Using Underground River for generic (NET 1 after {0} cost)
+manaPool.js:797 ✅ [ManaSolver] Found solution using 5 sources
+manaPool.js:404 🔍 [canPay] Checking "{3}{U}{B}": YES ✅
+gameEngine.js:1260 
+👑 [castCommander] Attempting to cast Lord of the Nazgûl
+gameEngine.js:1261 👑 [castCommander] Base cost: {3}{U}{B}, Tax: 0, Full cost: {3}{U}{B}
+manaPool.js:681 
+🧮 [ManaSolver] Solving cost: {3}{U}{B}
+manaPool.js:682 🧮 [ManaSolver] Available sources: 8 abilities
+manaPool.js:686 🧮 [ManaSolver] Required: {colored: {…}, generic: 3}
+manaPool.js:738    ✓ Island produces {U}
+manaPool.js:751    ✓ Used Island for {U}
+manaPool.js:738    ✓ Drowned Catacomb produces {B}
+manaPool.js:751    ✓ Used Drowned Catacomb for {B}
+manaPool.js:794    ✓ Using Swamp for generic (NET 1 after {0} cost)
+manaPool.js:794    ✓ Using Underground River for generic (NET 1 after {0} cost)
+manaPool.js:794    ✓ Using Underground River for generic (NET 1 after {0} cost)
+manaPool.js:797 ✅ [ManaSolver] Found solution using 5 sources
+gameEngine.js:1277 ✅ [castCommander] Solution found! Tapping 5 sources
+gameEngine.js:1282    🔒 Tapped Island (produced {U})
+gameEngine.js:1282    🔒 Tapped Drowned Catacomb (produced {B})
+gameEngine.js:1282    🔒 Tapped Swamp (produced {B})
+gameEngine.js:1282    🔒 Tapped Underground River (produced {C})
+gameEngine.js:1282    🔒 Tapped Underground River (produced {U})
+manaPool.js:554 
+💎 [PotentialPool] Building available sources...
+manaPool.js:589 ⚠️ [PotentialPool] No manifest data for artifact: Lightning Greaves
+manaPool.js:640 💎 [PotentialPool] Found 3 available mana abilities
+manaPool.js:643    0: Dimir Signet (artifact) → 2x{U}{B}
+manaPool.js:643    1: Talisman of Dominance (artifact) → 1x{C}
+manaPool.js:643    2: Talisman of Dominance (artifact) → 1x{U/B}
+eventSystem.js:169 📤 Event Emitted: PERMANENT_ENTERS_BATTLEFIELD {source: 'Lord of the Nazgûl', queueSize: 1}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+manaPool.js:681 
+🧮 [ManaSolver] Solving cost: {U}
+manaPool.js:682 🧮 [ManaSolver] Available sources: 3 abilities
+manaPool.js:686 🧮 [ManaSolver] Required: {colored: {…}, generic: 0}
+manaPool.js:738    ✓ Talisman of Dominance produces {U}
+manaPool.js:751    ✓ Used Talisman of Dominance for {U}
+manaPool.js:797 ✅ [ManaSolver] Found solution using 1 sources
+manaPool.js:404 🔍 [canPay] Checking "{U}": YES ✅
+gameEngine.js:1140 
+🎯 [castSpell] Attempting to cast Preordain
+gameEngine.js:1141 🎯 [castSpell] Cost: {U}
+manaPool.js:681 
+🧮 [ManaSolver] Solving cost: {U}
+manaPool.js:682 🧮 [ManaSolver] Available sources: 3 abilities
+manaPool.js:686 🧮 [ManaSolver] Required: {colored: {…}, generic: 0}
+manaPool.js:738    ✓ Talisman of Dominance produces {U}
+manaPool.js:751    ✓ Used Talisman of Dominance for {U}
+manaPool.js:797 ✅ [ManaSolver] Found solution using 1 sources
+gameEngine.js:1157 ✅ [castSpell] Solution found! Tapping 1 sources
+gameEngine.js:1162    🔒 Tapped Talisman of Dominance (produced {U})
+manaPool.js:554 
+💎 [PotentialPool] Building available sources...
+manaPool.js:589 ⚠️ [PotentialPool] No manifest data for artifact: Lightning Greaves
+manaPool.js:640 💎 [PotentialPool] Found 1 available mana abilities
+manaPool.js:643    0: Dimir Signet (artifact) → 2x{U}{B}
+eventSystem.js:169 📤 Event Emitted: SPELL_CAST {source: 'Preordain', queueSize: 1}
+eventSystem.js:169 📤 Event Emitted: CARD_DRAWN {source: 'Swamp', queueSize: 1}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+manaPool.js:681 
+🧮 [ManaSolver] Solving cost: {1}{U}{B}
+manaPool.js:682 🧮 [ManaSolver] Available sources: 1 abilities
+manaPool.js:686 🧮 [ManaSolver] Required: {colored: {…}, generic: 1}
+manaPool.js:725    💰 Dimir Signet requires {1} to activate
+manaPool.js:738    ✓ Dimir Signet produces {U}
+manaPool.js:738    ✓ Dimir Signet produces {B}
+manaPool.js:751    ✓ Used Dimir Signet for {U}{B}
+manaPool.js:761 ❌ [ManaSolver] Cannot find source for generic {2}
+manaPool.js:404 🔍 [canPay] Checking "{1}{U}{B}": NO ❌
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+manaPool.js:681 
+🧮 [ManaSolver] Solving cost: {1}{U}{B}
+manaPool.js:682 🧮 [ManaSolver] Available sources: 1 abilities
+manaPool.js:686 🧮 [ManaSolver] Required: {colored: {…}, generic: 1}
+manaPool.js:725    💰 Dimir Signet requires {1} to activate
+manaPool.js:738    ✓ Dimir Signet produces {U}
+manaPool.js:738    ✓ Dimir Signet produces {B}
+manaPool.js:751    ✓ Used Dimir Signet for {U}{B}
+manaPool.js:761 ❌ [ManaSolver] Cannot find source for generic {2}
+manaPool.js:404 🔍 [canPay] Checking "{1}{U}{B}": NO ❌
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+manaPool.js:681 
+🧮 [ManaSolver] Solving cost: {1}{U}{B}
+manaPool.js:682 🧮 [ManaSolver] Available sources: 1 abilities
+manaPool.js:686 🧮 [ManaSolver] Required: {colored: {…}, generic: 1}
+manaPool.js:725    💰 Dimir Signet requires {1} to activate
+manaPool.js:738    ✓ Dimir Signet produces {U}
+manaPool.js:738    ✓ Dimir Signet produces {B}
+manaPool.js:751    ✓ Used Dimir Signet for {U}{B}
+manaPool.js:761 ❌ [ManaSolver] Cannot find source for generic {2}
+manaPool.js:404 🔍 [canPay] Checking "{1}{U}{B}": NO ❌
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+manaPool.js:681 
+🧮 [ManaSolver] Solving cost: {1}{U}{B}
+manaPool.js:682 🧮 [ManaSolver] Available sources: 1 abilities
+manaPool.js:686 🧮 [ManaSolver] Required: {colored: {…}, generic: 1}
+manaPool.js:725    💰 Dimir Signet requires {1} to activate
+manaPool.js:738    ✓ Dimir Signet produces {U}
+manaPool.js:738    ✓ Dimir Signet produces {B}
+manaPool.js:751    ✓ Used Dimir Signet for {U}{B}
+manaPool.js:761 ❌ [ManaSolver] Cannot find source for generic {2}
+manaPool.js:404 🔍 [canPay] Checking "{1}{U}{B}": NO ❌
+enhancedStepByStepGame.js:1880 🔍 [untap] BEFORE generateMana - Expected: 6 (lands:4 + artifacts:2 + creatures:0)
+enhancedStepByStepGame.js:1881 🔍 [untap] Land count: 4, Artifact count: 2, Creature count: 0
+gameEngine.js:510 🔍 [generateMana] Starting - Turn 5
+gameEngine.js:511 🔍 [generateMana] Battlefield: 4 lands, 3 artifacts, 2 creatures
+manaPool.js:554 
+💎 [PotentialPool] Building available sources...
+manaPool.js:589 ⚠️ [PotentialPool] No manifest data for artifact: Lightning Greaves
+manaPool.js:640 💎 [PotentialPool] Found 8 available mana abilities
+manaPool.js:643    0: Island (land) → 1x{U}
+manaPool.js:643    1: Drowned Catacomb (land) → 1x{U/B}
+manaPool.js:643    2: Swamp (land) → 1x{B}
+manaPool.js:643    3: Underground River (land) → 1x{C}
+manaPool.js:643    4: Underground River (land) → 1x{U/B}
+manaPool.js:643    5: Dimir Signet (artifact) → 2x{U}{B}
+manaPool.js:643    6: Talisman of Dominance (artifact) → 1x{C}
+manaPool.js:643    7: Talisman of Dominance (artifact) → 1x{U/B}
+gameEngine.js:648 🔍 [generateMana] Final total: 7 available sources
+gameEngine.js:649 🔍 [generateMana] Preview flexibility: {W: 0, U: 6, B: 6, R: 0, G: 0, …}
+enhancedStepByStepGame.js:1889 🔍 [untap] AFTER generateMana - Expected: 6, Actual: 7
+eventSystem.js:169 📤 Event Emitted: PHASE_CHANGED {source: 'unknown', queueSize: 2}
+eventSystem.js:169 📤 Event Emitted: CARD_DRAWN {source: "Saruman's Trickery", queueSize: 1}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+manaPool.js:554 
+💎 [PotentialPool] Building available sources...
+manaPool.js:589 ⚠️ [PotentialPool] No manifest data for artifact: Lightning Greaves
+manaPool.js:640 💎 [PotentialPool] Found 9 available mana abilities
+manaPool.js:643    0: Island (land) → 1x{U}
+manaPool.js:643    1: Drowned Catacomb (land) → 1x{U/B}
+manaPool.js:643    2: Swamp (land) → 1x{B}
+manaPool.js:643    3: Underground River (land) → 1x{C}
+manaPool.js:643    4: Underground River (land) → 1x{U/B}
+manaPool.js:643    5: Swamp (land) → 1x{B}
+manaPool.js:643    6: Dimir Signet (artifact) → 2x{U}{B}
+manaPool.js:643    7: Talisman of Dominance (artifact) → 1x{C}
+manaPool.js:643    8: Talisman of Dominance (artifact) → 1x{U/B}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+manaPool.js:681 
+🧮 [ManaSolver] Solving cost: {1}{U}{B}
+manaPool.js:682 🧮 [ManaSolver] Available sources: 9 abilities
+manaPool.js:686 🧮 [ManaSolver] Required: {colored: {…}, generic: 1}
+manaPool.js:738    ✓ Island produces {U}
+manaPool.js:751    ✓ Used Island for {U}
+manaPool.js:738    ✓ Drowned Catacomb produces {B}
+manaPool.js:751    ✓ Used Drowned Catacomb for {B}
+manaPool.js:794    ✓ Using Swamp for generic (NET 1 after {0} cost)
+manaPool.js:797 ✅ [ManaSolver] Found solution using 3 sources
+manaPool.js:404 🔍 [canPay] Checking "{1}{U}{B}": YES ✅
+gameEngine.js:1140 
+🎯 [castSpell] Attempting to cast Ringsight
+gameEngine.js:1141 🎯 [castSpell] Cost: {1}{U}{B}
+manaPool.js:681 
+🧮 [ManaSolver] Solving cost: {1}{U}{B}
+manaPool.js:682 🧮 [ManaSolver] Available sources: 9 abilities
+manaPool.js:686 🧮 [ManaSolver] Required: {colored: {…}, generic: 1}
+manaPool.js:738    ✓ Island produces {U}
+manaPool.js:751    ✓ Used Island for {U}
+manaPool.js:738    ✓ Drowned Catacomb produces {B}
+manaPool.js:751    ✓ Used Drowned Catacomb for {B}
+manaPool.js:794    ✓ Using Swamp for generic (NET 1 after {0} cost)
+manaPool.js:797 ✅ [ManaSolver] Found solution using 3 sources
+gameEngine.js:1157 ✅ [castSpell] Solution found! Tapping 3 sources
+gameEngine.js:1162    🔒 Tapped Island (produced {U})
+gameEngine.js:1162    🔒 Tapped Drowned Catacomb (produced {B})
+gameEngine.js:1162    🔒 Tapped Swamp (produced {B})
+manaPool.js:554 
+💎 [PotentialPool] Building available sources...
+manaPool.js:589 ⚠️ [PotentialPool] No manifest data for artifact: Lightning Greaves
+manaPool.js:640 💎 [PotentialPool] Found 6 available mana abilities
+manaPool.js:643    0: Underground River (land) → 1x{C}
+manaPool.js:643    1: Underground River (land) → 1x{U/B}
+manaPool.js:643    2: Swamp (land) → 1x{B}
+manaPool.js:643    3: Dimir Signet (artifact) → 2x{U}{B}
+manaPool.js:643    4: Talisman of Dominance (artifact) → 1x{C}
+manaPool.js:643    5: Talisman of Dominance (artifact) → 1x{U/B}
+eventSystem.js:169 📤 Event Emitted: SPELL_CAST {source: 'Ringsight', queueSize: 1}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+manaPool.js:681 
+🧮 [ManaSolver] Solving cost: {1}{U}{U}
+manaPool.js:682 🧮 [ManaSolver] Available sources: 6 abilities
+manaPool.js:686 🧮 [ManaSolver] Required: {colored: {…}, generic: 1}
+manaPool.js:738    ✓ Underground River produces {U}
+manaPool.js:751    ✓ Used Underground River for {U}
+manaPool.js:738    ✓ Talisman of Dominance produces {U}
+manaPool.js:751    ✓ Used Talisman of Dominance for {U}
+manaPool.js:794    ✓ Using Underground River for generic (NET 1 after {0} cost)
+manaPool.js:797 ✅ [ManaSolver] Found solution using 3 sources
+manaPool.js:404 🔍 [canPay] Checking "{1}{U}{U}": YES ✅
+gameEngine.js:1140 
+🎯 [castSpell] Attempting to cast Saruman's Trickery
+gameEngine.js:1141 🎯 [castSpell] Cost: {1}{U}{U}
+manaPool.js:681 
+🧮 [ManaSolver] Solving cost: {1}{U}{U}
+manaPool.js:682 🧮 [ManaSolver] Available sources: 6 abilities
+manaPool.js:686 🧮 [ManaSolver] Required: {colored: {…}, generic: 1}
+manaPool.js:738    ✓ Underground River produces {U}
+manaPool.js:751    ✓ Used Underground River for {U}
+manaPool.js:738    ✓ Talisman of Dominance produces {U}
+manaPool.js:751    ✓ Used Talisman of Dominance for {U}
+manaPool.js:794    ✓ Using Underground River for generic (NET 1 after {0} cost)
+manaPool.js:797 ✅ [ManaSolver] Found solution using 3 sources
+gameEngine.js:1157 ✅ [castSpell] Solution found! Tapping 3 sources
+gameEngine.js:1162    🔒 Tapped Underground River (produced {U})
+gameEngine.js:1162    🔒 Tapped Talisman of Dominance (produced {U})
+gameEngine.js:1162    🔒 Tapped Underground River (produced {C})
+manaPool.js:554 
+💎 [PotentialPool] Building available sources...
+manaPool.js:589 ⚠️ [PotentialPool] No manifest data for artifact: Lightning Greaves
+manaPool.js:640 💎 [PotentialPool] Found 2 available mana abilities
+manaPool.js:643    0: Swamp (land) → 1x{B}
+manaPool.js:643    1: Dimir Signet (artifact) → 2x{U}{B}
+eventSystem.js:169 📤 Event Emitted: SPELL_CAST {source: "Saruman's Trickery", queueSize: 1}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+manaPool.js:681 
+🧮 [ManaSolver] Solving cost: {1}{U}
+manaPool.js:682 🧮 [ManaSolver] Available sources: 2 abilities
+manaPool.js:686 🧮 [ManaSolver] Required: {colored: {…}, generic: 1}
+manaPool.js:725    💰 Dimir Signet requires {1} to activate
+manaPool.js:738    ✓ Dimir Signet produces {U}
+manaPool.js:751    ✓ Used Dimir Signet for {U}{B}
+manaPool.js:794    ✓ Using Swamp for generic (NET 1 after {0} cost)
+manaPool.js:761 ❌ [ManaSolver] Cannot find source for generic {1}
+manaPool.js:404 🔍 [canPay] Checking "{1}{U}": NO ❌
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+manaPool.js:681 
+🧮 [ManaSolver] Solving cost: {1}{U}
+manaPool.js:682 🧮 [ManaSolver] Available sources: 2 abilities
+manaPool.js:686 🧮 [ManaSolver] Required: {colored: {…}, generic: 1}
+manaPool.js:725    💰 Dimir Signet requires {1} to activate
+manaPool.js:738    ✓ Dimir Signet produces {U}
+manaPool.js:751    ✓ Used Dimir Signet for {U}{B}
+manaPool.js:794    ✓ Using Swamp for generic (NET 1 after {0} cost)
+manaPool.js:761 ❌ [ManaSolver] Cannot find source for generic {1}
+manaPool.js:404 🔍 [canPay] Checking "{1}{U}": NO ❌
+eventSystem.js:169 📤 Event Emitted: CREATURE_ATTACKS {source: 'Lord of the Nazgûl', queueSize: 1}
+eventSystem.js:169 📤 Event Emitted: CREATURE_ATTACKS {source: '3/3 Black Wraith Token', queueSize: 2}
+eventSystem.js:169 📤 Event Emitted: COMBAT_DAMAGE_DEALT {source: 'unknown', queueSize: 3}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+manaPool.js:681 
+🧮 [ManaSolver] Solving cost: {1}{U}
+manaPool.js:682 🧮 [ManaSolver] Available sources: 2 abilities
+manaPool.js:686 🧮 [ManaSolver] Required: {colored: {…}, generic: 1}
+manaPool.js:725    💰 Dimir Signet requires {1} to activate
+manaPool.js:738    ✓ Dimir Signet produces {U}
+manaPool.js:751    ✓ Used Dimir Signet for {U}{B}
+manaPool.js:794    ✓ Using Swamp for generic (NET 1 after {0} cost)
+manaPool.js:761 ❌ [ManaSolver] Cannot find source for generic {1}
+manaPool.js:404 🔍 [canPay] Checking "{1}{U}": NO ❌
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+manaPool.js:681 
+🧮 [ManaSolver] Solving cost: {1}{U}
+manaPool.js:682 🧮 [ManaSolver] Available sources: 2 abilities
+manaPool.js:686 🧮 [ManaSolver] Required: {colored: {…}, generic: 1}
+manaPool.js:725    💰 Dimir Signet requires {1} to activate
+manaPool.js:738    ✓ Dimir Signet produces {U}
+manaPool.js:751    ✓ Used Dimir Signet for {U}{B}
+manaPool.js:794    ✓ Using Swamp for generic (NET 1 after {0} cost)
+manaPool.js:761 ❌ [ManaSolver] Cannot find source for generic {1}
+manaPool.js:404 🔍 [canPay] Checking "{1}{U}": NO ❌
+enhancedStepByStepGame.js:1880 🔍 [untap] BEFORE generateMana - Expected: 7 (lands:5 + artifacts:2 + creatures:0)
+enhancedStepByStepGame.js:1881 🔍 [untap] Land count: 5, Artifact count: 2, Creature count: 0
+gameEngine.js:510 🔍 [generateMana] Starting - Turn 6
+gameEngine.js:511 🔍 [generateMana] Battlefield: 5 lands, 3 artifacts, 4 creatures
+manaPool.js:554 
+💎 [PotentialPool] Building available sources...
+manaPool.js:589 ⚠️ [PotentialPool] No manifest data for artifact: Lightning Greaves
+manaPool.js:640 💎 [PotentialPool] Found 9 available mana abilities
+manaPool.js:643    0: Island (land) → 1x{U}
+manaPool.js:643    1: Drowned Catacomb (land) → 1x{U/B}
+manaPool.js:643    2: Swamp (land) → 1x{B}
+manaPool.js:643    3: Underground River (land) → 1x{C}
+manaPool.js:643    4: Underground River (land) → 1x{U/B}
+manaPool.js:643    5: Swamp (land) → 1x{B}
+manaPool.js:643    6: Dimir Signet (artifact) → 2x{U}{B}
+manaPool.js:643    7: Talisman of Dominance (artifact) → 1x{C}
+manaPool.js:643    8: Talisman of Dominance (artifact) → 1x{U/B}
+gameEngine.js:648 🔍 [generateMana] Final total: 7 available sources
+gameEngine.js:649 🔍 [generateMana] Preview flexibility: {W: 0, U: 6, B: 6, R: 0, G: 0, …}
+enhancedStepByStepGame.js:1889 🔍 [untap] AFTER generateMana - Expected: 7, Actual: 7
+eventSystem.js:169 📤 Event Emitted: PHASE_CHANGED {source: 'unknown', queueSize: 1}
+eventSystem.js:169 📤 Event Emitted: CARD_DRAWN {source: 'Ringwraiths', queueSize: 1}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+manaPool.js:681 
+🧮 [ManaSolver] Solving cost: {1}{U}
+manaPool.js:682 🧮 [ManaSolver] Available sources: 9 abilities
+manaPool.js:686 🧮 [ManaSolver] Required: {colored: {…}, generic: 1}
+manaPool.js:738    ✓ Island produces {U}
+manaPool.js:751    ✓ Used Island for {U}
+manaPool.js:794    ✓ Using Drowned Catacomb for generic (NET 1 after {0} cost)
+manaPool.js:797 ✅ [ManaSolver] Found solution using 2 sources
+manaPool.js:404 🔍 [canPay] Checking "{1}{U}": YES ✅
+gameEngine.js:1140 
+🎯 [castSpell] Attempting to cast Snap
+gameEngine.js:1141 🎯 [castSpell] Cost: {1}{U}
+manaPool.js:681 
+🧮 [ManaSolver] Solving cost: {1}{U}
+manaPool.js:682 🧮 [ManaSolver] Available sources: 9 abilities
+manaPool.js:686 🧮 [ManaSolver] Required: {colored: {…}, generic: 1}
+manaPool.js:738    ✓ Island produces {U}
+manaPool.js:751    ✓ Used Island for {U}
+manaPool.js:794    ✓ Using Drowned Catacomb for generic (NET 1 after {0} cost)
+manaPool.js:797 ✅ [ManaSolver] Found solution using 2 sources
+gameEngine.js:1157 ✅ [castSpell] Solution found! Tapping 2 sources
+gameEngine.js:1162    🔒 Tapped Island (produced {U})
+gameEngine.js:1162    🔒 Tapped Drowned Catacomb (produced {U})
+manaPool.js:554 
+💎 [PotentialPool] Building available sources...
+manaPool.js:589 ⚠️ [PotentialPool] No manifest data for artifact: Lightning Greaves
+manaPool.js:640 💎 [PotentialPool] Found 7 available mana abilities
+manaPool.js:643    0: Swamp (land) → 1x{B}
+manaPool.js:643    1: Underground River (land) → 1x{C}
+manaPool.js:643    2: Underground River (land) → 1x{U/B}
+manaPool.js:643    3: Swamp (land) → 1x{B}
+manaPool.js:643    4: Dimir Signet (artifact) → 2x{U}{B}
+manaPool.js:643    5: Talisman of Dominance (artifact) → 1x{C}
+manaPool.js:643    6: Talisman of Dominance (artifact) → 1x{U/B}
+eventSystem.js:169 📤 Event Emitted: SPELL_CAST {source: 'Snap', queueSize: 1}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+manaPool.js:681 
+🧮 [ManaSolver] Solving cost: {4}{B}{B}
+manaPool.js:682 🧮 [ManaSolver] Available sources: 7 abilities
+manaPool.js:686 🧮 [ManaSolver] Required: {colored: {…}, generic: 4}
+manaPool.js:738    ✓ Swamp produces {B}
+manaPool.js:751    ✓ Used Swamp for {B}
+manaPool.js:738    ✓ Underground River produces {B}
+manaPool.js:751    ✓ Used Underground River for {B}
+manaPool.js:794    ✓ Using Underground River for generic (NET 1 after {0} cost)
+manaPool.js:794    ✓ Using Swamp for generic (NET 1 after {0} cost)
+manaPool.js:794    ✓ Using Talisman of Dominance for generic (NET 1 after {0} cost)
+manaPool.js:794    ✓ Using Talisman of Dominance for generic (NET 1 after {0} cost)
+manaPool.js:797 ✅ [ManaSolver] Found solution using 6 sources
+manaPool.js:404 🔍 [canPay] Checking "{4}{B}{B}": YES ✅
+gameEngine.js:1140 
+🎯 [castSpell] Attempting to cast Ringwraiths
+gameEngine.js:1141 🎯 [castSpell] Cost: {4}{B}{B}
+manaPool.js:681 
+🧮 [ManaSolver] Solving cost: {4}{B}{B}
+manaPool.js:682 🧮 [ManaSolver] Available sources: 7 abilities
+manaPool.js:686 🧮 [ManaSolver] Required: {colored: {…}, generic: 4}
+manaPool.js:738    ✓ Swamp produces {B}
+manaPool.js:751    ✓ Used Swamp for {B}
+manaPool.js:738    ✓ Underground River produces {B}
+manaPool.js:751    ✓ Used Underground River for {B}
+manaPool.js:794    ✓ Using Underground River for generic (NET 1 after {0} cost)
+manaPool.js:794    ✓ Using Swamp for generic (NET 1 after {0} cost)
+manaPool.js:794    ✓ Using Talisman of Dominance for generic (NET 1 after {0} cost)
+manaPool.js:794    ✓ Using Talisman of Dominance for generic (NET 1 after {0} cost)
+manaPool.js:797 ✅ [ManaSolver] Found solution using 6 sources
+gameEngine.js:1157 ✅ [castSpell] Solution found! Tapping 6 sources
+gameEngine.js:1162    🔒 Tapped Swamp (produced {B})
+gameEngine.js:1162    🔒 Tapped Underground River (produced {B})
+gameEngine.js:1162    🔒 Tapped Underground River (produced {C})
+gameEngine.js:1162    🔒 Tapped Swamp (produced {B})
+gameEngine.js:1162    🔒 Tapped Talisman of Dominance (produced {C})
+gameEngine.js:1162    🔒 Tapped Talisman of Dominance (produced {U})
+manaPool.js:554 
+💎 [PotentialPool] Building available sources...
+manaPool.js:589 ⚠️ [PotentialPool] No manifest data for artifact: Lightning Greaves
+manaPool.js:640 💎 [PotentialPool] Found 1 available mana abilities
+manaPool.js:643    0: Dimir Signet (artifact) → 2x{U}{B}
+eventSystem.js:169 📤 Event Emitted: SPELL_CAST {source: 'Ringwraiths', queueSize: 1}
+eventSystem.js:169 📤 Event Emitted: PERMANENT_ENTERS_BATTLEFIELD {source: 'Ringwraiths', queueSize: 2}
+triggerHandler.js:482 🔔 1 trigger(s) matched event: PERMANENT_ENTERS_BATTLEFIELD
+triggerHandler.js:347 🎯 Resolving Trigger: Ringwraiths - target creature an opponent controls gets -3/-3 until end of turn
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+eventSystem.js:169 📤 Event Emitted: CREATURE_ATTACKS {source: '3/3 Black Wraith Token', queueSize: 1}
+eventSystem.js:169 📤 Event Emitted: CREATURE_ATTACKS {source: '3/3 Black Wraith Token', queueSize: 2}
+eventSystem.js:169 📤 Event Emitted: COMBAT_DAMAGE_DEALT {source: 'unknown', queueSize: 3}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+enhancedStepByStepGame.js:1880 🔍 [untap] BEFORE generateMana - Expected: 7 (lands:5 + artifacts:2 + creatures:0)
+enhancedStepByStepGame.js:1881 🔍 [untap] Land count: 5, Artifact count: 2, Creature count: 0
+gameEngine.js:510 🔍 [generateMana] Starting - Turn 7
+gameEngine.js:511 🔍 [generateMana] Battlefield: 5 lands, 3 artifacts, 6 creatures
+manaPool.js:554 
+💎 [PotentialPool] Building available sources...
+manaPool.js:589 ⚠️ [PotentialPool] No manifest data for artifact: Lightning Greaves
+manaPool.js:640 💎 [PotentialPool] Found 9 available mana abilities
+manaPool.js:643    0: Island (land) → 1x{U}
+manaPool.js:643    1: Drowned Catacomb (land) → 1x{U/B}
+manaPool.js:643    2: Swamp (land) → 1x{B}
+manaPool.js:643    3: Underground River (land) → 1x{C}
+manaPool.js:643    4: Underground River (land) → 1x{U/B}
+manaPool.js:643    5: Swamp (land) → 1x{B}
+manaPool.js:643    6: Dimir Signet (artifact) → 2x{U}{B}
+manaPool.js:643    7: Talisman of Dominance (artifact) → 1x{C}
+manaPool.js:643    8: Talisman of Dominance (artifact) → 1x{U/B}
+gameEngine.js:648 🔍 [generateMana] Final total: 7 available sources
+gameEngine.js:649 🔍 [generateMana] Preview flexibility: {W: 0, U: 6, B: 6, R: 0, G: 0, …}
+enhancedStepByStepGame.js:1889 🔍 [untap] AFTER generateMana - Expected: 7, Actual: 7
+eventSystem.js:169 📤 Event Emitted: PHASE_CHANGED {source: 'unknown', queueSize: 1}
+eventSystem.js:169 📤 Event Emitted: CARD_DRAWN {source: 'Bojuka Bog', queueSize: 1}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+manaPool.js:554 
+💎 [PotentialPool] Building available sources...
+manaPool.js:589 ⚠️ [PotentialPool] No manifest data for artifact: Lightning Greaves
+manaPool.js:640 💎 [PotentialPool] Found 9 available mana abilities
+manaPool.js:643    0: Island (land) → 1x{U}
+manaPool.js:643    1: Drowned Catacomb (land) → 1x{U/B}
+manaPool.js:643    2: Swamp (land) → 1x{B}
+manaPool.js:643    3: Underground River (land) → 1x{C}
+manaPool.js:643    4: Underground River (land) → 1x{U/B}
+manaPool.js:643    5: Swamp (land) → 1x{B}
+manaPool.js:643    6: Dimir Signet (artifact) → 2x{U}{B}
+manaPool.js:643    7: Talisman of Dominance (artifact) → 1x{C}
+manaPool.js:643    8: Talisman of Dominance (artifact) → 1x{U/B}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+manaPool.js:681 
+🧮 [ManaSolver] Solving cost: {4}{B}{B}
+manaPool.js:682 🧮 [ManaSolver] Available sources: 9 abilities
+manaPool.js:686 🧮 [ManaSolver] Required: {colored: {…}, generic: 4}
+manaPool.js:738    ✓ Drowned Catacomb produces {B}
+manaPool.js:751    ✓ Used Drowned Catacomb for {B}
+manaPool.js:738    ✓ Swamp produces {B}
+manaPool.js:751    ✓ Used Swamp for {B}
+manaPool.js:794    ✓ Using Island for generic (NET 1 after {0} cost)
+manaPool.js:794    ✓ Using Underground River for generic (NET 1 after {0} cost)
+manaPool.js:794    ✓ Using Underground River for generic (NET 1 after {0} cost)
+manaPool.js:794    ✓ Using Swamp for generic (NET 1 after {0} cost)
+manaPool.js:797 ✅ [ManaSolver] Found solution using 6 sources
+manaPool.js:404 🔍 [canPay] Checking "{4}{B}{B}": YES ✅
+gameEngine.js:1140 
+🎯 [castSpell] Attempting to cast Witch-king, Bringer of Ruin
+gameEngine.js:1141 🎯 [castSpell] Cost: {4}{B}{B}
+manaPool.js:681 
+🧮 [ManaSolver] Solving cost: {4}{B}{B}
+manaPool.js:682 🧮 [ManaSolver] Available sources: 9 abilities
+manaPool.js:686 🧮 [ManaSolver] Required: {colored: {…}, generic: 4}
+manaPool.js:738    ✓ Drowned Catacomb produces {B}
+manaPool.js:751    ✓ Used Drowned Catacomb for {B}
+manaPool.js:738    ✓ Swamp produces {B}
+manaPool.js:751    ✓ Used Swamp for {B}
+manaPool.js:794    ✓ Using Island for generic (NET 1 after {0} cost)
+manaPool.js:794    ✓ Using Underground River for generic (NET 1 after {0} cost)
+manaPool.js:794    ✓ Using Underground River for generic (NET 1 after {0} cost)
+manaPool.js:794    ✓ Using Swamp for generic (NET 1 after {0} cost)
+manaPool.js:797 ✅ [ManaSolver] Found solution using 6 sources
+gameEngine.js:1157 ✅ [castSpell] Solution found! Tapping 6 sources
+gameEngine.js:1162    🔒 Tapped Drowned Catacomb (produced {B})
+gameEngine.js:1162    🔒 Tapped Swamp (produced {B})
+gameEngine.js:1162    🔒 Tapped Island (produced {U})
+gameEngine.js:1162    🔒 Tapped Underground River (produced {C})
+gameEngine.js:1162    🔒 Tapped Underground River (produced {U})
+gameEngine.js:1162    🔒 Tapped Swamp (produced {B})
+manaPool.js:554 
+💎 [PotentialPool] Building available sources...
+manaPool.js:589 ⚠️ [PotentialPool] No manifest data for artifact: Lightning Greaves
+manaPool.js:640 💎 [PotentialPool] Found 3 available mana abilities
+manaPool.js:643    0: Dimir Signet (artifact) → 2x{U}{B}
+manaPool.js:643    1: Talisman of Dominance (artifact) → 1x{C}
+manaPool.js:643    2: Talisman of Dominance (artifact) → 1x{U/B}
+eventSystem.js:169 📤 Event Emitted: SPELL_CAST {source: 'Witch-king, Bringer of Ruin', queueSize: 1}
+eventSystem.js:169 📤 Event Emitted: PERMANENT_ENTERS_BATTLEFIELD {source: 'Witch-king, Bringer of Ruin', queueSize: 2}
+triggerHandler.js:482 🔔 1 trigger(s) matched event: PERMANENT_ENTERS_BATTLEFIELD
+triggerHandler.js:347 🎯 Resolving Trigger: Ringwraiths - target creature an opponent controls gets -3/-3 until end of turn
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+eventSystem.js:169 📤 Event Emitted: CREATURE_ATTACKS {source: '3/3 Black Wraith Token', queueSize: 1}
+eventSystem.js:169 📤 Event Emitted: CREATURE_ATTACKS {source: 'Ringwraiths', queueSize: 2}
+eventSystem.js:169 📤 Event Emitted: COMBAT_DAMAGE_DEALT {source: 'unknown', queueSize: 3}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+enhancedStepByStepGame.js:1880 🔍 [untap] BEFORE generateMana - Expected: 8 (lands:6 + artifacts:2 + creatures:0)
+enhancedStepByStepGame.js:1881 🔍 [untap] Land count: 6, Artifact count: 2, Creature count: 0
+gameEngine.js:510 🔍 [generateMana] Starting - Turn 8
+gameEngine.js:511 🔍 [generateMana] Battlefield: 6 lands, 3 artifacts, 7 creatures
+manaPool.js:554 
+💎 [PotentialPool] Building available sources...
+manaPool.js:589 ⚠️ [PotentialPool] No manifest data for artifact: Lightning Greaves
+manaPool.js:640 💎 [PotentialPool] Found 10 available mana abilities
+manaPool.js:643    0: Island (land) → 1x{U}
+manaPool.js:643    1: Drowned Catacomb (land) → 1x{U/B}
+manaPool.js:643    2: Swamp (land) → 1x{B}
+manaPool.js:643    3: Underground River (land) → 1x{C}
+manaPool.js:643    4: Underground River (land) → 1x{U/B}
+manaPool.js:643    5: Swamp (land) → 1x{B}
+manaPool.js:643    6: Bojuka Bog (land) → 1x{B}
+manaPool.js:643    7: Dimir Signet (artifact) → 2x{U}{B}
+manaPool.js:643    8: Talisman of Dominance (artifact) → 1x{C}
+manaPool.js:643    9: Talisman of Dominance (artifact) → 1x{U/B}
+gameEngine.js:648 🔍 [generateMana] Final total: 8 available sources
+gameEngine.js:649 🔍 [generateMana] Preview flexibility: {W: 0, U: 6, B: 7, R: 0, G: 0, …}
+enhancedStepByStepGame.js:1889 🔍 [untap] AFTER generateMana - Expected: 8, Actual: 8
+eventSystem.js:169 📤 Event Emitted: PHASE_CHANGED {source: 'unknown', queueSize: 1}
+eventSystem.js:169 📤 Event Emitted: CARD_DRAWN {source: 'Go for the Throat', queueSize: 1}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+manaPool.js:681 
+🧮 [ManaSolver] Solving cost: {1}{B}
+manaPool.js:682 🧮 [ManaSolver] Available sources: 10 abilities
+manaPool.js:686 🧮 [ManaSolver] Required: {colored: {…}, generic: 1}
+manaPool.js:738    ✓ Drowned Catacomb produces {B}
+manaPool.js:751    ✓ Used Drowned Catacomb for {B}
+manaPool.js:794    ✓ Using Island for generic (NET 1 after {0} cost)
+manaPool.js:797 ✅ [ManaSolver] Found solution using 2 sources
+manaPool.js:404 🔍 [canPay] Checking "{1}{B}": YES ✅
+gameEngine.js:1140 
+🎯 [castSpell] Attempting to cast Go for the Throat
+gameEngine.js:1141 🎯 [castSpell] Cost: {1}{B}
+manaPool.js:681 
+🧮 [ManaSolver] Solving cost: {1}{B}
+manaPool.js:682 🧮 [ManaSolver] Available sources: 10 abilities
+manaPool.js:686 🧮 [ManaSolver] Required: {colored: {…}, generic: 1}
+manaPool.js:738    ✓ Drowned Catacomb produces {B}
+manaPool.js:751    ✓ Used Drowned Catacomb for {B}
+manaPool.js:794    ✓ Using Island for generic (NET 1 after {0} cost)
+manaPool.js:797 ✅ [ManaSolver] Found solution using 2 sources
+gameEngine.js:1157 ✅ [castSpell] Solution found! Tapping 2 sources
+gameEngine.js:1162    🔒 Tapped Drowned Catacomb (produced {B})
+gameEngine.js:1162    🔒 Tapped Island (produced {U})
+manaPool.js:554 
+💎 [PotentialPool] Building available sources...
+manaPool.js:589 ⚠️ [PotentialPool] No manifest data for artifact: Lightning Greaves
+manaPool.js:640 💎 [PotentialPool] Found 8 available mana abilities
+manaPool.js:643    0: Swamp (land) → 1x{B}
+manaPool.js:643    1: Underground River (land) → 1x{C}
+manaPool.js:643    2: Underground River (land) → 1x{U/B}
+manaPool.js:643    3: Swamp (land) → 1x{B}
+manaPool.js:643    4: Bojuka Bog (land) → 1x{B}
+manaPool.js:643    5: Dimir Signet (artifact) → 2x{U}{B}
+manaPool.js:643    6: Talisman of Dominance (artifact) → 1x{C}
+manaPool.js:643    7: Talisman of Dominance (artifact) → 1x{U/B}
+eventSystem.js:169 📤 Event Emitted: SPELL_CAST {source: 'Go for the Throat', queueSize: 1}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+eventSystem.js:169 📤 Event Emitted: CREATURE_ATTACKS {source: 'Witch-king, Bringer of Ruin', queueSize: 1}
+eventSystem.js:169 📤 Event Emitted: COMBAT_DAMAGE_DEALT {source: 'unknown', queueSize: 2}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+enhancedStepByStepGame.js:1880 🔍 [untap] BEFORE generateMana - Expected: 8 (lands:6 + artifacts:2 + creatures:0)
+enhancedStepByStepGame.js:1881 🔍 [untap] Land count: 6, Artifact count: 2, Creature count: 0
+gameEngine.js:510 🔍 [generateMana] Starting - Turn 9
+gameEngine.js:511 🔍 [generateMana] Battlefield: 6 lands, 3 artifacts, 8 creatures
+manaPool.js:554 
+💎 [PotentialPool] Building available sources...
+manaPool.js:589 ⚠️ [PotentialPool] No manifest data for artifact: Lightning Greaves
+manaPool.js:640 💎 [PotentialPool] Found 10 available mana abilities
+manaPool.js:643    0: Island (land) → 1x{U}
+manaPool.js:643    1: Drowned Catacomb (land) → 1x{U/B}
+manaPool.js:643    2: Swamp (land) → 1x{B}
+manaPool.js:643    3: Underground River (land) → 1x{C}
+manaPool.js:643    4: Underground River (land) → 1x{U/B}
+manaPool.js:643    5: Swamp (land) → 1x{B}
+manaPool.js:643    6: Bojuka Bog (land) → 1x{B}
+manaPool.js:643    7: Dimir Signet (artifact) → 2x{U}{B}
+manaPool.js:643    8: Talisman of Dominance (artifact) → 1x{C}
+manaPool.js:643    9: Talisman of Dominance (artifact) → 1x{U/B}
+gameEngine.js:648 🔍 [generateMana] Final total: 8 available sources
+gameEngine.js:649 🔍 [generateMana] Preview flexibility: {W: 0, U: 6, B: 7, R: 0, G: 0, …}
+enhancedStepByStepGame.js:1889 🔍 [untap] AFTER generateMana - Expected: 8, Actual: 8
+eventSystem.js:169 📤 Event Emitted: PHASE_CHANGED {source: 'unknown', queueSize: 1}
+eventSystem.js:169 📤 Event Emitted: CARD_DRAWN {source: 'The Grey Havens', queueSize: 1}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+manaPool.js:554 
+💎 [PotentialPool] Building available sources...
+manaPool.js:589 ⚠️ [PotentialPool] No manifest data for artifact: Lightning Greaves
+manaPool.js:640 💎 [PotentialPool] Found 12 available mana abilities
+manaPool.js:643    0: Island (land) → 1x{U}
+manaPool.js:643    1: Drowned Catacomb (land) → 1x{U/B}
+manaPool.js:643    2: Swamp (land) → 1x{B}
+manaPool.js:643    3: Underground River (land) → 1x{C}
+manaPool.js:643    4: Underground River (land) → 1x{U/B}
+manaPool.js:643    5: Swamp (land) → 1x{B}
+manaPool.js:643    6: Bojuka Bog (land) → 1x{B}
+manaPool.js:643    7: The Grey Havens (land) → 1x{C}
+manaPool.js:643    8: The Grey Havens (land) → 1x{W/U/B/R/G}
+manaPool.js:643    9: Dimir Signet (artifact) → 2x{U}{B}
+manaPool.js:643    10: Talisman of Dominance (artifact) → 1x{C}
+manaPool.js:643    11: Talisman of Dominance (artifact) → 1x{U/B}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+eventSystem.js:169 📤 Event Emitted: CREATURE_ATTACKS {source: '3/3 Black Wraith Token', queueSize: 1}
+eventSystem.js:169 📤 Event Emitted: COMBAT_DAMAGE_DEALT {source: 'unknown', queueSize: 2}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+enhancedStepByStepGame.js:1880 🔍 [untap] BEFORE generateMana - Expected: 9 (lands:7 + artifacts:2 + creatures:0)
+enhancedStepByStepGame.js:1881 🔍 [untap] Land count: 7, Artifact count: 2, Creature count: 0
+gameEngine.js:510 🔍 [generateMana] Starting - Turn 10
+gameEngine.js:511 🔍 [generateMana] Battlefield: 7 lands, 3 artifacts, 8 creatures
+manaPool.js:554 
+💎 [PotentialPool] Building available sources...
+manaPool.js:589 ⚠️ [PotentialPool] No manifest data for artifact: Lightning Greaves
+manaPool.js:640 💎 [PotentialPool] Found 12 available mana abilities
+manaPool.js:643    0: Island (land) → 1x{U}
+manaPool.js:643    1: Drowned Catacomb (land) → 1x{U/B}
+manaPool.js:643    2: Swamp (land) → 1x{B}
+manaPool.js:643    3: Underground River (land) → 1x{C}
+manaPool.js:643    4: Underground River (land) → 1x{U/B}
+manaPool.js:643    5: Swamp (land) → 1x{B}
+manaPool.js:643    6: Bojuka Bog (land) → 1x{B}
+manaPool.js:643    7: The Grey Havens (land) → 1x{C}
+manaPool.js:643    8: The Grey Havens (land) → 1x{W/U/B/R/G}
+manaPool.js:643    9: Dimir Signet (artifact) → 2x{U}{B}
+manaPool.js:643    10: Talisman of Dominance (artifact) → 1x{C}
+manaPool.js:643    11: Talisman of Dominance (artifact) → 1x{U/B}
+gameEngine.js:648 🔍 [generateMana] Final total: 9 available sources
+gameEngine.js:649 🔍 [generateMana] Preview flexibility: {W: 1, U: 7, B: 8, R: 1, G: 1, …}
+enhancedStepByStepGame.js:1889 🔍 [untap] AFTER generateMana - Expected: 9, Actual: 9
+eventSystem.js:169 📤 Event Emitted: PHASE_CHANGED {source: 'unknown', queueSize: 1}
+eventSystem.js:169 📤 Event Emitted: CARD_DRAWN {source: 'Toxic Deluge', queueSize: 1}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+manaPool.js:681 
+🧮 [ManaSolver] Solving cost: {2}{B}
+manaPool.js:682 🧮 [ManaSolver] Available sources: 12 abilities
+manaPool.js:686 🧮 [ManaSolver] Required: {colored: {…}, generic: 2}
+manaPool.js:738    ✓ Drowned Catacomb produces {B}
+manaPool.js:751    ✓ Used Drowned Catacomb for {B}
+manaPool.js:794    ✓ Using Island for generic (NET 1 after {0} cost)
+manaPool.js:794    ✓ Using Swamp for generic (NET 1 after {0} cost)
+manaPool.js:797 ✅ [ManaSolver] Found solution using 3 sources
+manaPool.js:404 🔍 [canPay] Checking "{2}{B}": YES ✅
+gameEngine.js:1140 
+🎯 [castSpell] Attempting to cast Toxic Deluge
+gameEngine.js:1141 🎯 [castSpell] Cost: {2}{B}
+manaPool.js:681 
+🧮 [ManaSolver] Solving cost: {2}{B}
+manaPool.js:682 🧮 [ManaSolver] Available sources: 12 abilities
+manaPool.js:686 🧮 [ManaSolver] Required: {colored: {…}, generic: 2}
+manaPool.js:738    ✓ Drowned Catacomb produces {B}
+manaPool.js:751    ✓ Used Drowned Catacomb for {B}
+manaPool.js:794    ✓ Using Island for generic (NET 1 after {0} cost)
+manaPool.js:794    ✓ Using Swamp for generic (NET 1 after {0} cost)
+manaPool.js:797 ✅ [ManaSolver] Found solution using 3 sources
+gameEngine.js:1157 ✅ [castSpell] Solution found! Tapping 3 sources
+gameEngine.js:1162    🔒 Tapped Drowned Catacomb (produced {B})
+gameEngine.js:1162    🔒 Tapped Island (produced {U})
+gameEngine.js:1162    🔒 Tapped Swamp (produced {B})
+manaPool.js:554 
+💎 [PotentialPool] Building available sources...
+manaPool.js:589 ⚠️ [PotentialPool] No manifest data for artifact: Lightning Greaves
+manaPool.js:640 💎 [PotentialPool] Found 9 available mana abilities
+manaPool.js:643    0: Underground River (land) → 1x{C}
+manaPool.js:643    1: Underground River (land) → 1x{U/B}
+manaPool.js:643    2: Swamp (land) → 1x{B}
+manaPool.js:643    3: Bojuka Bog (land) → 1x{B}
+manaPool.js:643    4: The Grey Havens (land) → 1x{C}
+manaPool.js:643    5: The Grey Havens (land) → 1x{W/U/B/R/G}
+manaPool.js:643    6: Dimir Signet (artifact) → 2x{U}{B}
+manaPool.js:643    7: Talisman of Dominance (artifact) → 1x{C}
+manaPool.js:643    8: Talisman of Dominance (artifact) → 1x{U/B}
+eventSystem.js:169 📤 Event Emitted: SPELL_CAST {source: 'Toxic Deluge', queueSize: 1}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}

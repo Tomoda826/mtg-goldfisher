@@ -19,7 +19,7 @@ const truncateText = (text, maxLength = 150) => {
 };
 
 /**
- * Internal implementation - Analyze deck using OpenAI GPT-4o-mini
+ * Internal implementation - Analyze deck using OpenAI GPT-5-mini
  */
 const analyzeWithAIImpl = async (parsedDeck, basicStrategy) => {
   // Validate inputs
@@ -210,7 +210,7 @@ export const analyzeWithAI = wrapAIFunction(
   {
     retryCount: 1, // Reduced: deck analysis takes 40-60s, don't want users waiting 3+ minutes
     retryDelay: 2000,
-    timeout: 90000, // 90 seconds - increased for large deck analysis with full card text
+    timeout: 180000, // 180 seconds - increased for large deck analysis with full card text
     logErrors: true
   }
 );

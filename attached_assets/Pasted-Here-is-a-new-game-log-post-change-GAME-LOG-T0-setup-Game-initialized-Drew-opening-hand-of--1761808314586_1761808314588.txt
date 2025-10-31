@@ -1,0 +1,2041 @@
+Here is a new game log post change.
+
+GAME LOG:
+T0
+setup
+Game initialized
+Drew opening hand of 7 cards
+Night's Whisper
+Stern Scolding
+Swamp
+Island
+Counterspell
+Mordor Muster
+Minas Morgul, Dark Fortress
+T0
+setup
+Token Analysis
+Deck contains 10 token-generating cards
+T0
+setup
+Scry Analysis
+Deck contains 3 scry effects (total scry 5)
+T0
+setup
+Activated Ability Analysis
+Deck contains 22 activated abilities
+T0
+setup
+🔍 DEBUG: Lórien Revealed Abilities
+Found 1 abilities on Lórien Revealed
+T0
+setup
+🧠 Deck Behavior Analysis
+Analyzed 35 card abilities
+T0
+pre-game
+Deck Analysis Complete
+Strategy: undefined | Target Win: Turn undefined
+T0
+mulligan
+Hand Evaluation
+This hand is keepable. It has 3 lands (counts as the 'extra land' ramp option from the playbook), two cheap card‑draw/filter spells (Night's Whisper and Mordor Muster) and interaction (Stern Scolding + Counterspell). That matches the Must Have checklist well enough: ramp (lands), card selection, and protection. Early game sequence is a little slow because there is no Sol Ring/Signet and Minas Morgul enters tapped, and Counterspell requires UU so you can't reliably hold up full counter protection on turn 2. Despite that, you have turn‑2 draw/filter to dig for actual ramp or the commander, and you have cheap interaction to handle early small creature threats. Given the deck's lenient mulligan guidance and the pathway to assemble the spell‑slinger engine (find Lord, find ramp/protection, then cast cheap instants/sorceries), this hand has a reasonable, playable plan and should be kept.
+T0
+pre-game
+Opening Hand Kept
+Starting with 7 cards
+Night's Whisper
+Stern Scolding
+Swamp
+Island
+Counterspell
+Mordor Muster
+Minas Morgul, Dark Fortress
+T1
+beginning
+=== NEW TURN ===
+Starting turn 1
+T1
+untap
+Untap & Generate Mana
+All permanents untapped. 0 lands = 0 mana available.
+T1
+draw
+Draw Card
+Drew Brainstorm (instant)
+T1
+main1
+Main Phase 1
+Executing strategy focused on our win condition
+T1
+main1
+ENGINE
+AI Strategic Decision
+Play Island (index 3). Turn 1 priority is land drop + card-selection engine. Island lets me cast Brainstorm (U) or Stern Scolding (U) immediately on the next action and sets up blue access for the commander. Brainstorm is high value early for sculpting the hand, so prioritizing a basic Island over Minas Morgul (enters tapped) or Swamp (would only allow black one-drops but not the 1CMC draws) is the most flexible, mana-efficient play.
+T1
+main1
+ENGINE
+playLand: 3
+Played Island
+✓
+T1
+main1
+ENGINE
+AI Strategic Decision
+Cast Brainstorm (cost {U}) — it uses the available blue mana efficiently, advances the early-game plan by providing card selection and digging for ramp/protection/commander enablers, and is the highest-value engine play available this turn. Brainstorm helps sculpt the hand for future turns (protecting or enabling Lord of the Nazgûl, finding lands, or finding interaction) and avoids passing with unused mana.
+T1
+main1
+💰 Mana After Cast
+T1
+main1
+💰 Mana After Cast
+T1
+main1
+📖 Draw Effect
+Drew 3 card(s): Nazgûl, Nazgûl, Watery Grave
+✓
+T1
+main1
+ENGINE
+castSpell: 6
+Cast Brainstorm ({U})
+✓
+T1
+main1
+PASS
+AI Strategic Decision
+Available mana is 0 and I've already played my land this turn. There are no 0-cost spells or cards with activatable hand abilities (cycling/etc.) in hand, so I cannot legally or productively cast anything (commander also unaffordable). Passing preserves the game state and lets me use my mana next turn after untap. This follows the rule to not attempt to activate mana abilities or tap lands manually and to avoid wasting actions when no castable plays exist.
+T1
+main1
+PASS
+AI Strategic Decision
+You have 0 available mana and have already used your land drop this turn. No cards or hand abilities are castable with 0 mana, so there is nothing productive to do this main phase. Passing preserves the game state and keeps all cards/lands available for next turn when mana is available.
+T1
+main1
+End Phase
+Passed twice - ending phase
+T1
+combat
+Combat Phase
+Entering combat with 0 creatures and 0 tokens
+T1
+combat
+⚔️ Combat Phase
+No creatures available to attack
+✗
+T1
+main2
+Main Phase 2
+Post-combat - deploying remaining resources
+T1
+main2
+PASS
+AI Strategic Decision
+You have 0 available mana and have already used your land drop this turn, so no spells or hand-activated abilities are castable. No battlefield abilities can be used from hand. Passing preserves cards and board state for next turn when mana will be available. This follows the rule to not attempt to activate mana abilities manually and not to waste actions when nothing productive can be done.
+T1
+main2
+PASS
+AI Strategic Decision
+You have 0 available mana and have already used your land drop this turn. There are no 0-cost spells or hand-activated abilities you can pay for, and no battlefield abilities to activate. Under the critical mana rules, attempting to 'tap' lands or activate mana abilities from hand is invalid—so the only correct play this step is to pass and preserve cards for next turn.
+T1
+main2
+End Phase
+Passed twice - ending phase
+T1
+end
+End Turn
+Turn 1 complete. Total damage: 0/40
+T2
+beginning
+=== NEW TURN ===
+Starting turn 2
+T2
+untap
+Untap & Generate Mana
+All permanents untapped. 1 lands = 1 mana available.
+T2
+draw
+Draw Card
+Drew Underground River (land)
+T2
+main1
+Main Phase 1
+Executing strategy focused on our win condition
+T2
+main1
+MANA
+AI Strategic Decision
+Priority first is a land drop. Underground River enters untapped and gives flexible access to U or B (at the cost of damage only when you tap for colored mana), which helps enable our Dimir color requirements for Lord of the Nazgûl and early counters. Playing this land advances our mana base without spending the 1 available blue mana in the pool (so we can keep responses available). This is the most mana-efficient play on Turn 2 and follows the MANA → ENGINE → THREAT framework.
+T2
+main1
+MANA
+playLand: Underground River
+Played Underground River
+✓
+T2
+main1
+PASS
+AI Strategic Decision
+You have 3 mana (U:2, C:1) but no black mana available, and you've already played your land this turn. None of the black spells in hand (Night's Whisper, Mordor Muster, Nazgûl) are castable due to lacking B. The only blue spells (Stern Scolding and Counterspell) require valid targets to cast — there are no opponent spells or legal targets right now — so casting them would be illegal or wasteful. There are no battlefield abilities to activate. Therefore the only correct play this step is to pass and preserve resources for the next turn.
+T2
+main1
+PASS
+AI Strategic Decision
+No legal casts available. I have 3 mana (U:2, C:1) but no black mana, so Night's Whisper, Mordor Muster, and either Nazgûl are uncastable. The only spells I could pay for are Stern Scolding (U) and Counterspell (U U), but both require targeting an opponent's spell (there are no legal targets right now). I have already played my land this turn, so I cannot play another. Given the CRITICAL MANA RULES and the MANA→ENGINE→THREAT framework, passing preserves my answers for when an opponent actually plays a spell or until I have black mana next turn.
+T2
+main1
+End Phase
+Passed twice - ending phase
+T2
+combat
+Combat Phase
+Entering combat with 0 creatures and 0 tokens
+T2
+combat
+⚔️ Combat Phase
+No creatures available to attack
+✗
+T2
+main2
+Main Phase 2
+Post-combat - deploying remaining resources
+T2
+main2
+PASS
+AI Strategic Decision
+No legal casts or activations are available. I have 3 total mana (U:2,C:1) but no black mana, so Night's Whisper, Mordor Muster, and both Nazgûl are uncastable. The only spells I could pay for with available colors are Stern Scolding (U) and Counterspell (UU), but there are no valid targets on the stack right now, so they cannot be cast. I've already played my land this turn, and there are no 0-cost/hand-activated abilities to use. Under the MANA→ENGINE→THREAT framework and the critical mana rules, passing preserves answers for when an opponent actually plays a spell or until I have black mana next turn.
+T2
+main2
+PASS
+AI Strategic Decision
+No legal productive plays available. I have 3 mana (U:2,C:1) but no black mana, so I cannot cast Night's Whisper, Mordor Muster, or either Nazgûl. The only spells I can pay for color-wise are Stern Scolding (U) and Counterspell (UU), but there are no spells on the stack to target, so they cannot be cast now. I've already used my land drop for the turn. Under the MANA→ENGINE→THREAT framework I must not waste mana by tapping lands or attempting illegal actions; passing preserves my answers for opponents' plays and keeps mana available next turn.
+T2
+main2
+End Phase
+Passed twice - ending phase
+T2
+end
+End Turn
+Turn 2 complete. Total damage: 0/40
+T3
+beginning
+=== NEW TURN ===
+Starting turn 3
+T3
+untap
+Untap & Generate Mana
+All permanents untapped. 2 lands = 3 mana available.
+T3
+draw
+Draw Card
+Drew Arcane Signet (artifact)
+T3
+main1
+Main Phase 1
+Executing strategy focused on our win condition
+T3
+main1
+MANA
+AI Strategic Decision
+Play Watery Grave from hand (card index 8). Step 1 = land drop. Watery Grave is the best play because it gives both blue and black fixing which is important for casting our UB threats (notably Nazgûl) and for future spells. I will pay the 2 life as it enters so it comes in untapped — that maximizes our tempo (we can then immediately produce the black/blue we need on the next decision to cast a spell). Minas Morgul enters tapped and Swamp is single-color; the dual land gives the most flexibility for the early curve and enables casting Nazgûl or other black cards next. This follows the MANA-first sequencing (establish ramp/fixing before committing to other plays).
+T3
+main1
+MANA
+playLand: 8
+Played Watery Grave
+✓
+T3
+main1
+MANA
+AI Strategic Decision
+Cast Arcane Signet (index 8) for 2. With 3 total mana (U:2, C:1), Arcane Signet is the highest-priority MANA play: it efficiently ramps/fixes into our UB colors, speeds out Lord of the Nazgûl on curve in subsequent turns, and follows the early-game guideline to establish ramp. It uses mana productively this turn instead of passing or holding countermagic; Signet’s future activation will provide the colored mana flexibility we need to cast Nazgûl or black spells next turn. This also preserves our 2 blue for potential responses on opponents’ turns after resolution.
+T3
+main1
+💰 Mana After Cast
+T3
+main1
+💰 Mana After Cast
+T3
+main1
+MANA
+castSpell: 8
+Cast Arcane Signet ({2})
+✓
+T3
+main1
+PASS
+AI Strategic Decision
+No legal, productive plays with the mana/colors available. You've already played your land this turn, and your actual mana pool is 1 (U:1). Stern Scolding (index 1) requires a target creature spell and cannot be meaningfully cast now; all other spells in hand need black or more mana (Night's Whisper, Mordor Muster, Nazgûl) or UU (Counterspell) which you can't pay. Therefore the only correct action is to pass and wait for a playable window (or an opponent spell to respond to).
+T3
+main1
+PASS
+AI Strategic Decision
+You have 1 mana (U:1) and have already played your land this turn. No card in hand is legally castable with that mana: Stern Scolding requires a target creature spell to be cast legally, Counterspell and Nazgûl need more/different mana, and the black spells require B. Per the critical mana rules, you should not try to tap lands or activate mana abilities manually. With nothing productive to cast, passing is the correct play and preserves your opportunity to hold priority for responses on opponents' turns.
+T3
+main1
+End Phase
+Passed twice - ending phase
+T3
+combat
+Combat Phase
+Entering combat with 0 creatures and 0 tokens
+T3
+combat
+⚔️ Combat Phase
+No creatures available to attack
+✗
+T3
+main2
+Main Phase 2
+Post-combat - deploying remaining resources
+T3
+main2
+PASS
+AI Strategic Decision
+You have 1 mana (U:1) and have already played a land this turn. No card in hand is legally castable: Counterspell and the Nazgûl/commander need more/different mana; Night's Whisper and Mordor Muster require black; Stern Scolding requires a creature spell on the stack to be a legal target. With nothing productive to cast and no land drop available, passing preserves options and priority for responses on opponents' turns.
+T3
+main2
+PASS
+AI Strategic Decision
+No legal productive play is available this main phase. I've already played a land this turn, so I can't play the Swamp or Minas Morgul from hand. Available mana is 1 (U:1) but the only playable spell with that cost, Stern Scolding (index 1), requires a creature spell on the stack to be a legal target. All other spells/creatures require black mana or additional generic/colored mana (Counterspell, Night's Whisper, Mordor Muster, Nazgûl, commander). There are no battlefield activated abilities to use. Therefore the correct play is to pass and preserve priority to respond on opponents' turns.
+T3
+main2
+End Phase
+Passed twice - ending phase
+T3
+end
+End Turn
+Turn 3 complete. Total damage: 0/40
+T4
+beginning
+=== NEW TURN ===
+Starting turn 4
+T4
+untap
+Untap & Generate Mana
+All permanents untapped. 3 lands + 1 artifacts = 5 mana available.
+T4
+draw
+Draw Card
+Drew One Ring to Rule Them All (enchantment - has ETB effect!)
+T4
+main1
+Main Phase 1
+Executing strategy focused on our win condition
+T4
+main1
+MANA
+AI Strategic Decision
+Play the Swamp (hand index 2). Land drop is highest priority — it advances our mana base so we can cast our black spells (Nazgûl, One Ring, Night's Whisper, Mordor Muster) on upcoming turns. With the current pool (U:4, C:1, B:0) we cannot legally cast any of our black spells anyway, and there are no valid targets for our blue instants, so playing a basic Swamp (which enters untapped) is the most efficient play. It preserves flexibility for turn 5 and avoids the downside of playing Minas Morgul tapped this turn.
+T4
+main1
+MANA
+playLand: 2
+Played Swamp
+✓
+T4
+main1
+ENGINE
+AI Strategic Decision
+Casting Lord of the Nazgûl (cost {3}{U}{B} = 5) is the highest-value play this turn. I have the required colors (U:4, B:1) and total mana (6), so I can cast the commander now. Putting Lord onto the battlefield advances the deck's primary mid-game plan: it is both an engine and a threat that creates Wraith value as I start casting cheap spells in subsequent steps/turns. It uses mana efficiently (5 of 6 available), accelerates toward the deck’s synergy-driven plan, and improves future turns by turning cheap instants/sorceries into board presence. One Ring to Rule Them All cannot be cast this turn (requires two black pips).
+T4
+main1
+🎯 Commander Triggers
+T4
+main1
+🔍 DEBUG: Mana After Commander Cast
+T4
+main1
+ENGINE
+castCommander: Lord of the Nazgûl
+Cast Lord of the Nazgûl (total cost: 5)
+✓
+T4
+main1
+PASS
+AI Strategic Decision
+With only 1 blue mana available, there are no legal spells I can cast right now. Stern Scolding (index 1) is the only 1-cost card but it requires a creature spell as a target and there is no such target on the stack, so it cannot legally be cast. All other cards in hand require additional mana or black pips. No 0-cost activated abilities are available. Therefore I must pass — there is literally nothing castable this step without waiting for an opponent spell or more mana.
+T4
+main1
+PASS
+AI Strategic Decision
+With only 1 blue mana in the pool there are no legally castable spells right now. The only 1-cost card is Stern Scolding (index 1), but it requires a creature spell on the stack to target and none exists, so it cannot be cast. All other spells in hand require additional mana and/or black pips (Night's Whisper and Mordor Muster need {1}{B}; Counterspell needs {U}{U}; creatures and One Ring need more). You have already played a land this turn, so you cannot play Minas Morgul. Therefore the only correct action is to pass.
+T4
+main1
+End Phase
+Passed twice - ending phase
+T4
+combat
+Combat Phase
+Entering combat with 1 creatures and 0 tokens
+T4
+combat
+⚔️ Combat Phase
+No creatures available to attack
+✗
+T4
+main2
+Main Phase 2
+Post-combat - deploying remaining resources
+T4
+main2
+PASS
+AI Strategic Decision
+You have only {U} available. Stern Scolding ({U}) is the only 1-cost spell but it requires a legal target (a creature spell on the stack) and none exists. All other spells in hand require additional black or blue pips or more total mana, and you have already played your land this turn, so you cannot play Minas Morgul. There are no activatable battlefield or hand abilities usable now. Therefore the only legal, optimal action this step is to pass.
+T4
+main2
+PASS
+AI Strategic Decision
+With only {U} available, Stern Scolding ({U}) is the only spell in hand I could pay for, but it requires a legal target (a creature spell on the stack) and there are none. All other cards in hand cost more mana or additional colors I don't have, and I have already played my land this turn so I cannot play Minas Morgul. There are no activatable battlefield or hand abilities usable now. Therefore the only legal and mana-efficient action is to pass.
+T4
+main2
+End Phase
+Passed twice - ending phase
+T4
+end
+End Turn
+Turn 4 complete. Total damage: 0/40
+T5
+beginning
+=== NEW TURN ===
+Starting turn 5
+T5
+untap
+Untap & Generate Mana
+All permanents untapped. 4 lands = 5 mana available.
+T5
+draw
+Draw Card
+Drew Scroll of Isildur (enchantment - has ETB effect!)
+T5
+main1
+Main Phase 1
+Executing strategy focused on our win condition
+T5
+main1
+MANA
+AI Strategic Decision
+Follow the Decision Priority: take the land drop first to increase available mana sources and enable Minas Morgul's future activated ability. Even though there are high-synergy spells in hand, the framework explicitly prioritizes playing a land before casting spells. Minas Morgul also fits the MANA priority (ramp/utility), and leaving the rest of the turn to be evaluated after the land is placed is the correct sequencing choice.
+T5
+main1
+MANA
+playLand: 4
+Played Minas Morgul, Dark Fortress
+✓
+T5
+main1
+ENGINE
+AI Strategic Decision
+Cast Night's Whisper ({1}{B}). It is a high-value, low-cost engine play that (1) triggers Lord of the Nazgûl to create a Wraith token and (2) draws two cards to refill resources. It uses only 2 of the 5 available mana and uses the single black pip you have, leaving plenty of mana to follow up after this spell resolves. This follows the MANA→ENGINE→THREAT framework and prioritizes 🌟 synergy spells that give double value.
+T5
+main1
+💰 Mana After Cast
+T5
+main1
+💰 Mana After Cast
+T5
+main1
+📖 Draw Effect
+Drew 2 card(s): Nazgûl Battle-Mace, Arcane Denial
+✓
+T5
+main1
+🎯 Cast Trigger
+Lord of the Nazgûl triggers from casting Night's Whisper
+T5
+main1
+Create Tokens: Lord of the Nazgûl
+Created 1 token(s): 3/3 Black Wraith Token
+✓
+T5
+main1
+✨ Token Generation
+Lord of the Nazgûl's trigger created tokens
+T5
+main1
+ENGINE
+castSpell: 0
+Cast Night's Whisper ({1}{B})
+✓
+T5
+main1
+ENGINE
+AI Strategic Decision
+Cast Counterspell (U U). It uses available blue mana and is a high-impact instant that protects our board and denies an opponent threat. Importantly it triggers Lord of the Nazgûl's ability, creating an additional 3/3 Wraith token — double value (spell effect + token). This advances our mid-game engine (token generation and board protection) and follows the priority to favour 🌟 synergy spells. Counterspell is more flexible and reliable than Stern Scolding (narrower) and better tempo than leaving mana unused or playing a non-synergy Saga now.
+T5
+main1
+💰 Mana After Cast
+T5
+main1
+💰 Mana After Cast
+T5
+main1
+🎯 Cast Trigger
+Lord of the Nazgûl triggers from casting Counterspell
+T5
+main1
+Create Tokens: Lord of the Nazgûl
+Created 1 token(s): 3/3 Black Wraith Token
+✓
+T5
+main1
+✨ Token Generation
+Lord of the Nazgûl's trigger created tokens
+T5
+main1
+ENGINE
+castSpell: 1
+Cast Counterspell ({U}{U})
+✓
+T5
+main1
+ENGINE
+AI Strategic Decision
+Cast Stern Scolding ({U}). It's the only spell you can legally pay for with the 1 blue available, and it's marked 🌟 so it both advances your engine and triggers Lord of the Nazgûl to create another 3/3 Wraith. As an instant it preserves flexibility (can be used to counter a small creature spell if an opponent plays one), uses your mana efficiently this turn, and improves board presence toward the mid-game spell-slinger plan.
+T5
+main1
+💰 Mana After Cast
+T5
+main1
+💰 Mana After Cast
+T5
+main1
+🎯 Cast Trigger
+Lord of the Nazgûl triggers from casting Stern Scolding
+T5
+main1
+Create Tokens: Lord of the Nazgûl
+Created 1 token(s): 3/3 Black Wraith Token
+✓
+T5
+main1
+✨ Token Generation
+Lord of the Nazgûl's trigger created tokens
+T5
+main1
+ENGINE
+castSpell: 0
+Cast Stern Scolding ({U})
+✓
+T5
+main1
+Auto-Pass
+0 mana available, no free plays, land already played
+T5
+combat
+Combat Phase
+Entering combat with 1 creatures and 3 tokens
+T5
+combat
+⚔️ Combat Phase
+1 attacker(s) dealt 4 damage (keywords: flying, menace)
+✓
+T5
+combat
+⚔️ Combat Results
+1 attacker(s) dealt 4 damage (keywords: flying, menace)
+✓
+T5
+main2
+Main Phase 2
+Post-combat - deploying remaining resources
+T5
+main2
+Auto-Pass
+0 mana available, no free plays, land already played
+T5
+end
+End Turn
+Turn 5 complete. Total damage: 4/40
+T6
+beginning
+=== NEW TURN ===
+Starting turn 6
+T6
+untap
+Untap & Generate Mana
+All permanents untapped. 5 lands = 6 mana available.
+T6
+draw
+Draw Card
+Drew Bojuka Bog (land - has ETB effect!)
+T6
+main1
+Main Phase 1
+Executing strategy focused on our win condition
+T6
+main1
+MANA
+AI Strategic Decision
+Play Bojuka Bog as the mandatory land drop. Getting the land down follows the Turn 6 priority (land first → ramp/mana), potentially exiling an opponent's graveyard which can disrupt their recursion. It also preserves optimal sequencing: after the land is played we'll re-evaluate with the full board and still have 6 mana available to cast synergy spells (e.g., Mordor Muster) on resolution. Playing a land is higher priority than immediately casting non-land spells and avoids wasting the free land drop for the turn.
+T6
+main1
+MANA
+playLand: 7
+Played Bojuka Bog
+✓
+T6
+main1
+ENGINE
+AI Strategic Decision
+Cast Mordor Muster (index 0). It's the highest-value play this turn because it (a) triggers Lord of the Nazgûl to generate Wraith value, (b) draws a card (card advantage), and (c) is very mana-efficient (cost 2), leaving 4 mana to follow up. This advances our engine (tokens + draw) in the mid-game and preserves the option to cast Arcane Denial or a Nazgûl afterward. Arcane Denial is less urgent now since there's no immediate spell to counter; Mordor Muster gives immediate board and card benefit.
+T6
+main1
+💰 Mana After Cast
+T6
+main1
+💰 Mana After Cast
+T6
+main1
+📖 Draw Effect
+Drew 1 card(s): Command Tower
+✓
+T6
+main1
+🎯 Cast Trigger
+Lord of the Nazgûl triggers from casting Mordor Muster
+T6
+main1
+Create Tokens: Lord of the Nazgûl
+Created 1 token(s): 3/3 Black Wraith Token
+✓
+T6
+main1
+✨ Token Generation
+Lord of the Nazgûl's trigger created tokens
+T6
+main1
+ENGINE
+castSpell: 0
+Cast Mordor Muster ({1}{B})
+✓
+T6
+main1
+ENGINE
+AI Strategic Decision
+Cast Arcane Denial ({1}{U}) now. It's a high-value, low-cost instant marked with the deck's synergy tag — casting an instant will trigger Lord of the Nazgûl to create an additional 3/3 Black Wraith token (double value: spell effect + token). Arcane Denial also provides immediate interaction (counter) and card selection later, which is excellent mid-game. This play advances the engine while preserving options for the remaining mana (you'll be prompted again after this resolves to cast another spell). It uses available blue mana efficiently and follows the SYNERGY > ENGINE priority.
+T6
+main1
+💰 Mana After Cast
+T6
+main1
+💰 Mana After Cast
+T6
+main1
+📖 Draw Effect
+Drew 1 card(s): Countersquall
+✓
+T6
+main1
+🎯 Cast Trigger
+Lord of the Nazgûl triggers from casting Arcane Denial
+T6
+main1
+Create Tokens: Lord of the Nazgûl
+Created 1 token(s): 3/3 Black Wraith Token
+✓
+T6
+main1
+✨ Token Generation
+Lord of the Nazgûl's trigger created tokens
+T6
+main1
+ENGINE
+castSpell: 5
+Cast Arcane Denial ({1}{U})
+✓
+T6
+main1
+ENGINE
+AI Strategic Decision
+Countersquall ({U}{B}) is the only card in hand I can legally cast with the current mana (U:1, B:1). It's a 🌟 synergy spell that will trigger Lord of the Nazgûl to create an additional 3/3 Black Wraith token while also providing interaction (counter a noncreature spell and make that player lose 2 life). This uses my full available mana, advances the board by creating another threat, and follows the deck's spell-slinger/midgame plan—so it's the highest-value, most mana-efficient play this turn.
+T6
+main1
+💰 Mana After Cast
+T6
+main1
+💰 Mana After Cast
+T6
+main1
+🎯 Cast Trigger
+Lord of the Nazgûl triggers from casting Countersquall
+T6
+main1
+Create Tokens: Lord of the Nazgûl
+Created 1 token(s): 3/3 Black Wraith Token
+✓
+T6
+main1
+✨ Token Generation
+Lord of the Nazgûl's trigger created tokens
+T6
+main1
+ENGINE
+castSpell: 6
+Cast Countersquall ({U}{B})
+✓
+T6
+main1
+PASS
+AI Strategic Decision
+Available mana is 0 and there are no battlefield activated abilities available to use. You've already played a land this turn, and every card in hand requires mana to cast (lowest-cost card is {2}{B}). With no legal, productive plays, the optimal play is to pass and proceed to combat/postcombat rather than attempting any illegal/ineffective action.
+T6
+main1
+PASS
+AI Strategic Decision
+Available mana = 0 and I've already played my land this turn. Every card in hand requires mana to cast or to activate from hand, and there are no battlefield abilities I can legally use right now. The correct play is to pass main phase and proceed to combat — attack with the three ready creatures for 9 damage to apply pressure. This preserves resources and follows the critical mana rules (don't attempt to tap lands or activate mana abilities).
+T6
+main1
+End Phase
+Passed twice - ending phase
+T6
+combat
+Combat Phase
+Entering combat with 1 creatures and 6 tokens
+T6
+combat
+⚔️ Combat Phase
+3 attacker(s) dealt 9 damage (keywords: menace)
+✓
+T6
+combat
+⚔️ Combat Results
+3 attacker(s) dealt 9 damage (keywords: menace)
+✓
+T6
+main2
+Main Phase 2
+Post-combat - deploying remaining resources
+T6
+main2
+PASS
+AI Strategic Decision
+Available mana is 0 and I've already played a land this turn. There are no 0-cost (hand) activated abilities to use and no battlefield activated abilities available. All spells in hand require at least 3 mana, so I cannot legally cast anything. With no playable actions, the optimal play is to pass and conserve resources for the next turn.
+T6
+main2
+PASS
+AI Strategic Decision
+Available mana is 0 and all spells in hand require at least 3 mana. No battlefield or hand-activated abilities are available that can be paid for now, and you've already played your land this turn. Under the CRITICAL MANA RULES and decision priority, there is nothing productive to cast or activate, so the optimal play is to pass and retain resources for the next turn.
+T6
+main2
+End Phase
+Passed twice - ending phase
+T6
+end
+End Turn
+Turn 6 complete. Total damage: 13/40
+T7
+beginning
+=== NEW TURN ===
+Starting turn 7
+T7
+untap
+Untap & Generate Mana
+All permanents untapped. 6 lands = 7 mana available.
+T7
+draw
+Draw Card
+Drew Great Hall of the Citadel (land)
+T7
+main1
+Main Phase 1
+Executing strategy focused on our win condition
+T7
+main1
+MANA
+AI Strategic Decision
+Play a land first per sequencing priority. Command Tower (index 5) is the best land to drop: it gives perfect color-fixing for future casts (One Ring, Nazgûl, Nazgûl Battle‑Mace and any commander interactions) and is the highest-value land in hand for mid/late game lines. Playing a land now preserves optimal sequencing and follows the deck's MANA-first rule. (Note: the displayed mana pool is already the available mana; playing the land does not require or consume that pool but must be done before further spells per the instructions.)
+T7
+main1
+MANA
+playLand: Command Tower
+Played Command Tower
+✓
+T7
+main1
+ENGINE
+AI Strategic Decision
+Cast Nazgûl (hand index 0). It's a cheap, high-value play (3 mana) that immediately triggers the Ring temptation, which will put +1/+1 counters on each Wraith you control — a huge immediate pump to the six 3/3 Wraith tokens and increases the pressure for commander damage. This advances the engine (token/pump synergy) and the threat level while leaving 5 mana available for follow-up plays on subsequent steps. It follows the MANA→ENGINE→THREAT priorities and uses mana efficiently this turn.
+T7
+main1
+💰 Mana After Cast
+T7
+main1
+🎯 Triggers Detected
+T7
+main1
+Trigger Resolved
+T7
+main1
+Trigger Effect
+➕ Would add counter(s) (not yet implemented)
+T7
+main1
+💰 Mana After Cast
+T7
+main1
+ENGINE
+castSpell0
+Cast Nazgûl ({2}{B})
+✓
+T7
+main1
+ENGINE
+AI Strategic Decision
+Cast One Ring to Rule Them All ({2}{B}{B}) — I have 5 mana (U3 B2) so I meet the color and total cost. This is the highest-value ENGINE play: the Saga will gain its first lore counter on entering and trigger its I chapter (The Ring tempts you). There is already a Nazgûl on the battlefield, so that ‘tempt’ will put +1/+1 counters on each Wraith you control, immediately strengthening our wide board and increasing our combat/lethal potential next turn. It advances the late-game engine more than just spending all mana on the Battle-Mace, and is more impactful than casting a single Nazgûl right now because it buffs the existing token army.
+T7
+main1
+💰 Mana After Cast
+T7
+main1
+Trigger Resolved
+T7
+main1
+Trigger Effect
+➕ Would add counter(s) (not yet implemented)
+T7
+main1
+💰 Mana After Cast
+T7
+main1
+ENGINE
+castSpell: 1
+Cast One Ring to Rule Them All ({2}{B}{B})
+✓
+T7
+main1
+PASS
+AI Strategic Decision
+You have only 1 mana (U:1) and you've already played your land this turn. None of the cards in hand are castable for 1 mana: Nazgûl costs {2}{B}, Scroll of Isildur costs {2}{U}, and Nazgûl Battle-Mace costs {5}. There are no hand-activated abilities to pay 1 for, and no battlefield activated abilities affordable now. Under the mana rules, you cannot (and must not) tap lands or otherwise generate additional mana. Therefore the only legal, productive action is to pass and move to the next phase.
+T7
+main1
+PASS
+AI Strategic Decision
+You have only 1 mana available (U:1) and you've already made your land drop this turn. None of the cards in hand are castable for 1 mana (Nazgûl {2}{B}, Scroll of Isildur {2}{U}, Nazgûl Battle‑Mace {5}), and there are no 0‑cost or hand‑activatable abilities to use. Under the critical mana rules, you cannot tap lands or activate mana abilities manually. Therefore the only legal, productive action this step is to pass.
+T7
+main1
+End Phase
+Passed twice - ending phase
+T7
+combat
+Combat Phase
+Entering combat with 2 creatures and 6 tokens
+T7
+combat
+⚔️ Combat Phase
+3 attacker(s) dealt 9 damage (keywords: menace)
+✓
+T7
+combat
+⚔️ Combat Results
+3 attacker(s) dealt 9 damage (keywords: menace)
+✓
+T7
+main2
+Main Phase 2
+Post-combat - deploying remaining resources
+T7
+main2
+PASS
+AI Strategic Decision
+I have only 1 mana (U:1) and I have already played my land this turn. None of the cards in hand are castable: Nazgûl costs {2}{B}, Scroll of Isildur costs {2}{U}, Nazgûl Battle‑Mace costs {5}, and the Great Hall is a land (can't play another). There are no available battlefield abilities to activate. With no legal, productive plays this step, the optimal play is to pass and preserve mana/priority for the next turn.
+T7
+main2
+PASS
+AI Strategic Decision
+I have only 1 mana (U:1) and have already taken my land drop. None of the cards in hand are castable (Nazgûl costs {2}{B}, Scroll of Isildur costs {2}{U}, Nazgûl Battle‑Mace costs {5}) and there are no battlefield abilities I can activate. Per the critical mana rules, I cannot tap lands or activate mana abilities now and floating this mana is pointless. Passing preserves priority and lets me use full mana next turn to advance the plan.
+T7
+main2
+End Phase
+Passed twice - ending phase
+T7
+end
+End Turn
+Turn 7 complete. Total damage: 22/40
+T8
+beginning
+=== NEW TURN ===
+Starting turn 8
+T8
+untap
+Untap & Generate Mana
+All permanents untapped. 7 lands = 8 mana available.
+T8
+draw
+Draw Card
+Drew Opt (instant)
+T8
+main1
+Main Phase 1
+Executing strategy focused on our win condition
+T8
+main1
+MANA
+AI Strategic Decision
+Play Great Hall of the Citadel as my land drop. Decision priority requires a land play first; this increases my available lands for future turns and enables Great Hall's second ability to help cast legendary spells (useful for my Nazgûl/commander line). After the land resolves I can use remaining mana next to cast Opt (to trigger Lord of the Nazgûl and draw) or cast Nazgûl/Battle-Mace on subsequent steps. Playing the land now preserves tempo and adheres to the MANA → ENGINE → THREAT framework.
+T8
+main1
+MANA
+playLand: 3
+Played Great Hall of the Citadel
+✓
+T8
+main1
+ENGINE
+AI Strategic Decision
+Cast Opt (index 3). It costs {U} and is in-pool affordable (U:4). Opt is marked as a synergy card with Lord of the Nazgûl: casting it will trigger Lord to create another Wraith token while also letting me Scry 1 and draw a card. This is the highest-value, most mana-efficient play this step (ENGINE) — it advances card quality and increases board presence via the Lord trigger. It preserves flexibility for subsequent responses after it resolves.
+T8
+main1
+💰 Mana After Cast
+T8
+main1
+💰 Mana After Cast
+T8
+main1
+Scry (Spell Effect): Opt
+Scry 1: Kept 0 on top, sent 1 to bottom
+✓
+T8
+main1
+📖 Draw Effect
+Drew 1 card(s): Witch-king of Angmar
+✓
+T8
+main1
+🎯 Cast Trigger
+Lord of the Nazgûl triggers from casting Opt
+T8
+main1
+Create Tokens: Lord of the Nazgûl
+Created 1 token(s): 3/3 Black Wraith Token
+✓
+T8
+main1
+✨ Token Generation
+Lord of the Nazgûl's trigger created tokens
+T8
+main1
+ENGINE
+castSpell: 3
+Cast Opt ({U})
+✓
+T8
+main1
+ENGINE
+AI Strategic Decision
+Cast Nazgûl ({2}{B}) now. Its ETB will trigger the Ring tempting you, which (per its text) will put a +1/+1 counter on each Wraith you control. That directly advances the deck's late-game plan by beefing the entire Wraith army, increasing immediate board threat and future commander-combat potential. This is an efficient 3-mana play that leverages battlefield synergies (Lord of the Nazgûl + Wraith tokens) and makes the most of the current board state. It also preserves remaining mana for future plays next step (you used only one action this call as required).
+T8
+main1
+💰 Mana After Cast
+T8
+main1
+🎯 Triggers Detected
+T8
+main1
+Trigger Resolved
+T8
+main1
+Trigger Effect
+➕ Would add counter(s) (not yet implemented)
+T8
+main1
+Trigger Resolved
+T8
+main1
+Trigger Effect
+➕ Would add counter(s) (not yet implemented)
+T8
+main1
+💰 Mana After Cast
+T8
+main1
+ENGINE
+castSpell: 0
+Cast Nazgûl ({2}{B})
+✓
+T8
+main1
+THREAT
+AI Strategic Decision
+Casting Nazgûl Battle-Mace uses the full 5 mana pool now (no color restriction) and advances the gameplan by putting a high-impact, reusable piece of equipment on the battlefield. It is a threat that enables a strong mid/late-game line (equip to Lord/another Nazgûl next turn for menace + deathtouch + annihilator and later recur opponents' sacrificed permanents). This follows the MANA → ENGINE → THREAT framework by efficiently spending all available mana on a permanent that both increases board pressure and synergizes with sacrifice effects you may generate. It’s preferable to the 3CMC Scroll (underuses mana) and keeps the harder-to-cast 3BB Witch-king as a follow-up if needed.
+T8
+main1
+💰 Mana After Cast
+T8
+main1
+🎯 Triggers Detected
+T8
+main1
+Trigger Resolved
+T8
+main1
+Trigger Effect
+➕ Would add counter(s) (not yet implemented)
+T8
+main1
+Trigger Resolved
+T8
+main1
+Trigger Effect
+➕ Would add counter(s) (not yet implemented)
+T8
+main1
+💰 Mana After Cast
+T8
+main1
+THREAT
+castSpell: Nazgûl Battle-Mace
+Cast Nazgûl Battle-Mace ({5})
+✓
+T8
+main1
+Auto-Pass
+0 mana available, no free plays, land already played
+T8
+combat
+Combat Phase
+Entering combat with 3 creatures and 7 tokens
+T8
+combat
+⚔️ Combat Phase
+1 attacker(s) dealt 1 damage (keywords: deathtouch)
+✓
+T8
+combat
+⚔️ Combat Results
+1 attacker(s) dealt 1 damage (keywords: deathtouch)
+✓
+T8
+main2
+Main Phase 2
+Post-combat - deploying remaining resources
+T8
+main2
+Auto-Pass
+0 mana available, no free plays, land already played
+T8
+end
+End Turn
+Turn 8 complete. Total damage: 23/40
+T9
+beginning
+=== NEW TURN ===
+Starting turn 9
+T9
+untap
+Untap & Generate Mana
+All permanents untapped. 8 lands = 9 mana available.
+T9
+draw
+Draw Card
+Drew Island (land)
+T9
+main1
+Main Phase 1
+Executing strategy focused on our win condition
+T9
+main1
+MANA
+AI Strategic Decision
+Follow sequencing priority Step 1: take the land drop. Playing the Island from hand is the highest-priority, free action that improves future mana consistency and enables additional plays this turn on subsequent decisions. It preserves our current usable mana state and adheres to the rule to not pass with usable actions. After the land is played we can evaluate casting Witch-king (index 1) as a high-impact threat or Scroll of Isildur (index 0) as an engine on the next decision.
+T9
+main1
+MANA
+playLand: 2
+Played Island
+✓
+T9
+main1
+THREAT
+AI Strategic Decision
+Witch-king of Angmar is the highest-impact play this turn: it's a 5-drop threat that immediately advances our win plan (pressure and opponent disruption via its sacrifice trigger) and consumes our scarce black pips (we have only B:3). The card is castable with the current pool (total 10, needs {3}{B}{B}), so this uses mana efficiently and puts another evasive, punishing creature on board to close the game. Scroll of Isildur is a useful engine but is lower immediate impact and uses only blue/colorless, which we have abundance of — casting Witch-king first prioritizes threat density and color-efficiency. After this resolves we can re-evaluate remaining mana and plays.
+T9
+main1
+💰 Mana After Cast
+T9
+main1
+🎯 Triggers Detected
+T9
+main1
+Trigger Resolved
+T9
+main1
+Trigger Effect
+➕ Would add counter(s) (not yet implemented)
+T9
+main1
+Trigger Resolved
+T9
+main1
+Trigger Effect
+➕ Would add counter(s) (not yet implemented)
+T9
+main1
+💰 Mana After Cast
+T9
+main1
+THREAT
+castSpell: 1
+Cast Witch-king of Angmar ({3}{B}{B})
+✓
+T9
+main1
+ENGINE
+AI Strategic Decision
+Scroll of Isildur costs {2}{U} (3 mana) and I have {U}{U}{U}{U}{B} available, so I can cast it now (I meet the color requirement). This is an engine play that advances my late-game plan: it immediately enters as a Saga (adds a lore counter) and begins producing value (potentially gaining control of an artifact and later effects). Casting it uses mana productively rather than passing with idle mana, and builds my resource engine for subsequent turns. There are no other castable cards in hand and I cannot (per rules) manually activate mana abilities, so this is the best use of the available mana.
+T9
+main1
+💰 Mana After Cast
+T9
+main1
+Trigger Resolved
+T9
+main1
+Trigger Effect
+➕ Would add counter(s) (not yet implemented)
+T9
+main1
+Trigger Resolved
+T9
+main1
+Trigger Effect
+➕ Would add counter(s) (not yet implemented)
+T9
+main1
+💰 Mana After Cast
+T9
+main1
+ENGINE
+castSpell: 0
+Cast Scroll of Isildur ({2}{U})
+✓
+T9
+main1
+PASS
+AI Strategic Decision
+No cards in hand and no available activated abilities to use. Land drop is already used this turn and commander is already on the battlefield, so there is nothing legal or productive to cast or activate with the current mana pool (2 total: U1 B1). Passing advances to combat where I can attack with the two ready creatures (apply pressure for ~4 damage). This follows the priority to not leave mana unused but also not attempt illegal mana activations.
+T9
+main1
+PASS
+AI Strategic Decision
+No castable spells in hand and no playable activated abilities on the battlefield. Land drop already used. Available mana (2: U1 B1) cannot be spent on anything legal right now and mana abilities cannot/should not be manually activated. Following the Decision Priority and Critical Mana Rules, the correct play is to pass main phase and move to combat — attack with the two ready creatures for ~4 damage. This uses the turn productively rather than attempting illegal or suboptimal actions.
+T9
+main1
+End Phase
+Passed twice - ending phase
+T9
+combat
+Combat Phase
+Entering combat with 4 creatures and 7 tokens
+T9
+combat
+⚔️ Combat Phase
+2 attacker(s) dealt 4 damage (keywords: menace, deathtouch)
+✓
+T9
+combat
+⚔️ Combat Results
+2 attacker(s) dealt 4 damage (keywords: menace, deathtouch)
+✓
+T9
+main2
+Main Phase 2
+Post-combat - deploying remaining resources
+T9
+main2
+PASS
+AI Strategic Decision
+No playable spells in hand, no commander to cast (already on battlefield), and I have already played a land this turn. There are no usable battlefield activated abilities available and per the rules I may not 'activate' lands or mana rocks manually to generate more mana. With only floating mana already represented and nothing legal to cast or activate, the correct play is to pass and move to the next phase/turn.
+T9
+main2
+PASS
+AI Strategic Decision
+No cards in hand, no playable spells affordable with the available mana (2 total: U1 B1), no un-used land drop, and no battlefield activated abilities available to use this phase. Per the mana/engine/threat priority and the critical rules, there is literally nothing productive to cast or activate, so the correct play is to pass.
+T9
+main2
+End Phase
+Passed twice - ending phase
+T9
+end
+End Turn
+Turn 9 complete. Total damage: 27/40
+T10
+beginning
+=== NEW TURN ===
+Starting turn 10
+T10
+untap
+Untap & Generate Mana
+All permanents untapped. 9 lands = 10 mana available.
+T10
+draw
+Draw Card
+Drew Swamp (land)
+T10
+main1
+Main Phase 1
+Executing strategy focused on our win condition
+T10
+main1
+MANA
+AI Strategic Decision
+Play the Swamp as the priority Land Drop (Step 1). It's the only card in hand and playing a land advances the mana base for future turns without spending the current mana pool. There are no castable spells in hand and no battlefield abilities to activate now, so using the land drop is the most efficient productive play this main phase.
+T10
+main1
+MANA
+playLand: 0
+Played Swamp
+✓
+T10
+main1
+PASS
+AI Strategic Decision
+No cards in hand to cast, no available battlefield activated abilities (none affordable/untapped), and a land has already been played this turn. There are therefore no legal, productive main-phase actions to spend the available mana on right now. Passing advances to combat where the single ready attacker can be posted (deal 5 damage). This follows the rule to not manually activate mana abilities and to only act when a cast/activation is available.
+T10
+main1
+PASS
+AI Strategic Decision
+No cards in hand, no untapped/activatable battlefield abilities that can be paid for, and a land has already been played this turn. Under the critical mana rules, I cannot (and must not) manually activate mana abilities, so there is nothing productive to spend the available mana on in main phase. Best play is to pass to combat and attack with the one ready creature (pushing the 5 damage).
+T10
+main1
+End Phase
+Passed twice - ending phase
+T10
+combat
+Combat Phase
+Entering combat with 4 creatures and 7 tokens
+T10
+combat
+⚔️ Combat Phase
+1 attacker(s) dealt 5 damage (keywords: flying)
+✓
+T10
+combat
+⚔️ Combat Results
+1 attacker(s) dealt 5 damage (keywords: flying)
+✓
+T10
+main2
+Main Phase 2
+Post-combat - deploying remaining resources
+T10
+main2
+PASS
+AI Strategic Decision
+No cards in hand to cast, commander is already on the battlefield, and there are no available activated abilities to use. With 11 mana in the pool but no playable spells or abilities, the only legal productive play is to pass and move to the next phase. Passing preserves board state and allows opponents to act; we'll retain the full board of Nazgûl and Wraith tokens for defense/next-turn offense.
+T10
+main2
+PASS
+AI Strategic Decision
+No cards in hand to cast, no battlefield activated abilities available, and a land has already been played this turn. Commander is already on the battlefield. The available mana is in the pool but there are no legal productive plays to spend it on this step, so passing preserves board state and follows the Critical Mana Rules (do not manually activate mana abilities).
+T10
+main2
+End Phase
+Passed twice - ending phase
+T10
+end
+End Turn
+Turn 10 complete. Total damage: 32/40
+T10
+post-game
+Game Complete
+Metrics: 15 spells cast, 1 commander casts, 10 lands played
+T10
+post-game
+✅ No Errors
+Game completed without errors
+
+CONSOLE LOG:
+client:745 WebSocket connection to 'wss://4bfb526c-f8d6-4438-8e29-eb9805353be8-00-rybydy69e9r8.janeway.replit.dev/?token=k1piJ3phzU3c' failed: 
+createConnection @ client:745
+connect @ client:411
+connect @ client:751
+connect @ client:289
+connect @ client:373
+(anonymous) @ client:823
+client:772 [vite] failed to connect to websocket (Error: WebSocket closed without opened.). 
+connect @ client:772
+await in connect
+connect @ client:289
+connect @ client:373
+(anonymous) @ client:823
+client:423 Uncaught (in promise) Error: WebSocket closed without opened.
+    at WebSocket.<anonymous> (client:423:30)
+(anonymous) @ client:423
+react-dom_client.js?v=453f8220:20103 Download the React DevTools for a better development experience: https://react.dev/link/react-devtools
+config.js:51 ✅ OpenAI API configured successfully
+config.js:52    Key prefix: sk-proj...
+config.js:53    Key length: 164 characters
+App.jsx:93 Loaded 32731 cards into database
+App.jsx:93 Loaded 32731 cards into database
+App.jsx:241 Deck Strategy Analysis: {success: true, timestamp: '2025-10-30T06:03:12.665Z', analysis: {…}, metadata: {…}}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+activatedAbilityEngine.js:116 [parseActivatedAbilities] Detected landcycling: Lórien Revealed → Island (cost: {1})
+activatedAbilityEngine.js:70 [parseActivatedAbilities] Detected fetch land: Evolving Wilds
+activatedAbilityEngine.js:116 [parseActivatedAbilities] Detected landcycling: Lórien Revealed → Island (cost: {1})
+enhancedStepByStepGame.js:675 🔍 Creating deck behavior manifest...
+enhancedStepByStepGame.js:708 ✅ Behavior manifest created: {totalManaProducers: 22, totalFetchLands: 1, totalTokenGenerators: 12, totalCardDraw: 21}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+enhancedStepByStepGame.js:1880 🔍 [untap] BEFORE generateMana - Expected: 0 (lands:0 + artifacts:0 + creatures:0)
+enhancedStepByStepGame.js:1881 🔍 [untap] Land count: 0, Artifact count: 0, Creature count: 0
+gameEngine.js:494 🔍 [generateMana] Starting - Turn 1
+gameEngine.js:495 🔍 [generateMana] Battlefield: 0 lands, 0 artifacts, 0 creatures
+gameEngine.js:504 🔍 [generateMana] Pool emptied
+gameEngine.js:747 🔍 [generateMana] Final total: 0
+gameEngine.js:748 🔍 [generateMana] Final pool: {W: 0, U: 0, B: 0, R: 0, G: 0, …}
+enhancedStepByStepGame.js:1889 🔍 [untap] AFTER generateMana - Expected: 0, Actual: 0
+eventSystem.js:169 📤 Event Emitted: PHASE_CHANGED {source: 'unknown', queueSize: 1}
+eventSystem.js:169 📤 Event Emitted: CARD_DRAWN {source: 'Brainstorm', queueSize: 1}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+gameEngine.js:974 [castSpell] Attempting to cast Brainstorm (cost: 1)
+gameEngine.js:975 [castSpell] Current pool: {W: 0, U: 1, B: 0, R: 0, G: 0, …} Total: 1
+gameEngine.js:984 [castSpell] ✅ Affordability check PASSED - proceeding with cast
+eventSystem.js:169 📤 Event Emitted: SPELL_CAST {source: 'Brainstorm', queueSize: 1}
+eventSystem.js:169 📤 Event Emitted: CARD_DRAWN {source: 'Nazgûl', queueSize: 1}
+eventSystem.js:169 📤 Event Emitted: CARD_DRAWN {source: 'Nazgûl', queueSize: 2}
+eventSystem.js:169 📤 Event Emitted: CARD_DRAWN {source: 'Watery Grave', queueSize: 3}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+enhancedStepByStepGame.js:1880 🔍 [untap] BEFORE generateMana - Expected: 1 (lands:1 + artifacts:0 + creatures:0)
+enhancedStepByStepGame.js:1881 🔍 [untap] Land count: 1, Artifact count: 0, Creature count: 0
+gameEngine.js:494 🔍 [generateMana] Starting - Turn 2
+gameEngine.js:495 🔍 [generateMana] Battlefield: 1 lands, 0 artifacts, 0 creatures
+gameEngine.js:504 🔍 [generateMana] Pool emptied
+gameEngine.js:747 🔍 [generateMana] Final total: 1
+gameEngine.js:748 🔍 [generateMana] Final pool: {W: 0, U: 1, B: 0, R: 0, G: 0, …}
+enhancedStepByStepGame.js:1889 🔍 [untap] AFTER generateMana - Expected: 1, Actual: 1
+eventSystem.js:169 📤 Event Emitted: PHASE_CHANGED {source: 'unknown', queueSize: 4}
+eventSystem.js:169 📤 Event Emitted: CARD_DRAWN {source: 'Underground River', queueSize: 1}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+manaPool.js:165 [ManaPool] Chose U from U,B (hand needs it)
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+enhancedStepByStepGame.js:1880 🔍 [untap] BEFORE generateMana - Expected: 2 (lands:2 + artifacts:0 + creatures:0)
+enhancedStepByStepGame.js:1881 🔍 [untap] Land count: 2, Artifact count: 0, Creature count: 0
+gameEngine.js:494 🔍 [generateMana] Starting - Turn 3
+gameEngine.js:495 🔍 [generateMana] Battlefield: 2 lands, 0 artifacts, 0 creatures
+gameEngine.js:504 🔍 [generateMana] Pool emptied
+gameEngine.js:515 🔍 [Underground River] Manifest data: {
+  "hasManaAbility": true,
+  "abilities": [
+    {
+      "abilityText": "{T}: Add {C}.\\n{T}: Add {U} or {B}. This land deals 1 damage to you.",
+      "isManaAbility": true,
+      "isModal": true,
+      "activationCost": [
+        "{T}"
+      ],
+      "produces": [
+        {
+          "quantity": 1,
+          "types": [
+            "C"
+          ]
+        },
+        {
+          "quantity": 1,
+          "types": [
+            {
+              "choice": [
+                "U",
+                "B"
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
+gameEngine.js:550 🔍 [Underground River] Activatable abilities: 1
+gameEngine.js:551 🔍 [Underground River] Best ability: {
+  "abilityText": "{T}: Add {C}.\\n{T}: Add {U} or {B}. This land deals 1 damage to you.",
+  "isManaAbility": true,
+  "isModal": true,
+  "activationCost": [
+    "{T}"
+  ],
+  "produces": [
+    {
+      "quantity": 1,
+      "types": [
+        "C"
+      ]
+    },
+    {
+      "quantity": 1,
+      "types": [
+        {
+          "choice": [
+            "U",
+            "B"
+          ]
+        }
+      ]
+    }
+  ]
+}
+manaPool.js:165 [ManaPool] Chose U from U,B (hand needs it)
+gameEngine.js:747 🔍 [generateMana] Final total: 3
+gameEngine.js:748 🔍 [generateMana] Final pool: {W: 0, U: 2, B: 0, R: 0, G: 0, …}
+enhancedStepByStepGame.js:1889 🔍 [untap] AFTER generateMana - Expected: 2, Actual: 3
+eventSystem.js:169 📤 Event Emitted: PHASE_CHANGED {source: 'unknown', queueSize: 1}
+eventSystem.js:169 📤 Event Emitted: CARD_DRAWN {source: 'Arcane Signet', queueSize: 1}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+gameEngine.js:974 [castSpell] Attempting to cast Arcane Signet (cost: 2)
+gameEngine.js:975 [castSpell] Current pool: {W: 0, U: 2, B: 0, R: 0, G: 0, …} Total: 3
+gameEngine.js:984 [castSpell] ✅ Affordability check PASSED - proceeding with cast
+eventSystem.js:169 📤 Event Emitted: SPELL_CAST {source: 'Arcane Signet', queueSize: 1}
+eventSystem.js:169 📤 Event Emitted: PERMANENT_ENTERS_BATTLEFIELD {source: 'Arcane Signet', queueSize: 2}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+enhancedStepByStepGame.js:1880 🔍 [untap] BEFORE generateMana - Expected: 4 (lands:3 + artifacts:1 + creatures:0)
+enhancedStepByStepGame.js:1881 🔍 [untap] Land count: 3, Artifact count: 1, Creature count: 0
+gameEngine.js:494 🔍 [generateMana] Starting - Turn 4
+gameEngine.js:495 🔍 [generateMana] Battlefield: 3 lands, 1 artifacts, 0 creatures
+gameEngine.js:504 🔍 [generateMana] Pool emptied
+gameEngine.js:515 🔍 [Underground River] Manifest data: {
+  "hasManaAbility": true,
+  "abilities": [
+    {
+      "abilityText": "{T}: Add {C}.\\n{T}: Add {U} or {B}. This land deals 1 damage to you.",
+      "isManaAbility": true,
+      "isModal": true,
+      "activationCost": [
+        "{T}"
+      ],
+      "produces": [
+        {
+          "quantity": 1,
+          "types": [
+            "C"
+          ]
+        },
+        {
+          "quantity": 1,
+          "types": [
+            {
+              "choice": [
+                "U",
+                "B"
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
+gameEngine.js:550 🔍 [Underground River] Activatable abilities: 1
+gameEngine.js:551 🔍 [Underground River] Best ability: {
+  "abilityText": "{T}: Add {C}.\\n{T}: Add {U} or {B}. This land deals 1 damage to you.",
+  "isManaAbility": true,
+  "isModal": true,
+  "activationCost": [
+    "{T}"
+  ],
+  "produces": [
+    {
+      "quantity": 1,
+      "types": [
+        "C"
+      ]
+    },
+    {
+      "quantity": 1,
+      "types": [
+        {
+          "choice": [
+            "U",
+            "B"
+          ]
+        }
+      ]
+    }
+  ]
+}
+manaPool.js:165 [ManaPool] Chose U from U,B (hand needs it)
+manaPool.js:165 [ManaPool] Chose U from U,B (hand needs it)
+gameEngine.js:747 🔍 [generateMana] Final total: 5
+gameEngine.js:748 🔍 [generateMana] Final pool: {W: 0, U: 4, B: 0, R: 0, G: 0, …}
+enhancedStepByStepGame.js:1889 🔍 [untap] AFTER generateMana - Expected: 4, Actual: 5
+eventSystem.js:169 📤 Event Emitted: PHASE_CHANGED {source: 'unknown', queueSize: 1}
+eventSystem.js:169 📤 Event Emitted: CARD_DRAWN {source: 'One Ring to Rule Them All', queueSize: 1}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+eventSystem.js:169 📤 Event Emitted: PERMANENT_ENTERS_BATTLEFIELD {source: 'Lord of the Nazgûl', queueSize: 1}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+enhancedStepByStepGame.js:1880 🔍 [untap] BEFORE generateMana - Expected: 4 (lands:4 + artifacts:0 + creatures:0)
+enhancedStepByStepGame.js:1881 🔍 [untap] Land count: 4, Artifact count: 0, Creature count: 0
+gameEngine.js:494 🔍 [generateMana] Starting - Turn 5
+gameEngine.js:495 🔍 [generateMana] Battlefield: 4 lands, 1 artifacts, 1 creatures
+gameEngine.js:504 🔍 [generateMana] Pool emptied
+gameEngine.js:515 🔍 [Underground River] Manifest data: {
+  "hasManaAbility": true,
+  "abilities": [
+    {
+      "abilityText": "{T}: Add {C}.\\n{T}: Add {U} or {B}. This land deals 1 damage to you.",
+      "isManaAbility": true,
+      "isModal": true,
+      "activationCost": [
+        "{T}"
+      ],
+      "produces": [
+        {
+          "quantity": 1,
+          "types": [
+            "C"
+          ]
+        },
+        {
+          "quantity": 1,
+          "types": [
+            {
+              "choice": [
+                "U",
+                "B"
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
+gameEngine.js:550 🔍 [Underground River] Activatable abilities: 1
+gameEngine.js:551 🔍 [Underground River] Best ability: {
+  "abilityText": "{T}: Add {C}.\\n{T}: Add {U} or {B}. This land deals 1 damage to you.",
+  "isManaAbility": true,
+  "isModal": true,
+  "activationCost": [
+    "{T}"
+  ],
+  "produces": [
+    {
+      "quantity": 1,
+      "types": [
+        "C"
+      ]
+    },
+    {
+      "quantity": 1,
+      "types": [
+        {
+          "choice": [
+            "U",
+            "B"
+          ]
+        }
+      ]
+    }
+  ]
+}
+manaPool.js:165 [ManaPool] Chose U from U,B (hand needs it)
+manaPool.js:165 [ManaPool] Chose U from U,B (hand needs it)
+gameEngine.js:747 🔍 [generateMana] Final total: 5
+gameEngine.js:748 🔍 [generateMana] Final pool: {W: 0, U: 3, B: 1, R: 0, G: 0, …}
+enhancedStepByStepGame.js:1889 🔍 [untap] AFTER generateMana - Expected: 4, Actual: 5
+eventSystem.js:169 📤 Event Emitted: PHASE_CHANGED {source: 'unknown', queueSize: 1}
+eventSystem.js:169 📤 Event Emitted: CARD_DRAWN {source: 'Scroll of Isildur', queueSize: 1}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+gameEngine.js:974 [castSpell] Attempting to cast Night's Whisper (cost: 2)
+gameEngine.js:975 [castSpell] Current pool: {W: 0, U: 3, B: 1, R: 0, G: 0, …} Total: 5
+gameEngine.js:984 [castSpell] ✅ Affordability check PASSED - proceeding with cast
+eventSystem.js:169 📤 Event Emitted: SPELL_CAST {source: "Night's Whisper", queueSize: 1}
+eventSystem.js:169 📤 Event Emitted: CARD_DRAWN {source: 'Nazgûl Battle-Mace', queueSize: 1}
+eventSystem.js:169 📤 Event Emitted: CARD_DRAWN {source: 'Arcane Denial', queueSize: 2}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+gameEngine.js:974 [castSpell] Attempting to cast Counterspell (cost: 2)
+gameEngine.js:975 [castSpell] Current pool: {W: 0, U: 3, B: 0, R: 0, G: 0, …} Total: 3
+gameEngine.js:984 [castSpell] ✅ Affordability check PASSED - proceeding with cast
+eventSystem.js:169 📤 Event Emitted: SPELL_CAST {source: 'Counterspell', queueSize: 3}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+gameEngine.js:974 [castSpell] Attempting to cast Stern Scolding (cost: 1)
+gameEngine.js:975 [castSpell] Current pool: {W: 0, U: 1, B: 0, R: 0, G: 0, …} Total: 1
+gameEngine.js:984 [castSpell] ✅ Affordability check PASSED - proceeding with cast
+eventSystem.js:169 📤 Event Emitted: SPELL_CAST {source: 'Stern Scolding', queueSize: 1}
+eventSystem.js:169 📤 Event Emitted: CREATURE_ATTACKS {source: 'Lord of the Nazgûl', queueSize: 1}
+eventSystem.js:169 📤 Event Emitted: COMBAT_DAMAGE_DEALT {source: 'unknown', queueSize: 2}
+enhancedStepByStepGame.js:1880 🔍 [untap] BEFORE generateMana - Expected: 5 (lands:5 + artifacts:0 + creatures:0)
+enhancedStepByStepGame.js:1881 🔍 [untap] Land count: 5, Artifact count: 0, Creature count: 0
+gameEngine.js:494 🔍 [generateMana] Starting - Turn 6
+gameEngine.js:495 🔍 [generateMana] Battlefield: 5 lands, 1 artifacts, 4 creatures
+gameEngine.js:504 🔍 [generateMana] Pool emptied
+gameEngine.js:515 🔍 [Underground River] Manifest data: {
+  "hasManaAbility": true,
+  "abilities": [
+    {
+      "abilityText": "{T}: Add {C}.\\n{T}: Add {U} or {B}. This land deals 1 damage to you.",
+      "isManaAbility": true,
+      "isModal": true,
+      "activationCost": [
+        "{T}"
+      ],
+      "produces": [
+        {
+          "quantity": 1,
+          "types": [
+            "C"
+          ]
+        },
+        {
+          "quantity": 1,
+          "types": [
+            {
+              "choice": [
+                "U",
+                "B"
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
+gameEngine.js:550 🔍 [Underground River] Activatable abilities: 1
+gameEngine.js:551 🔍 [Underground River] Best ability: {
+  "abilityText": "{T}: Add {C}.\\n{T}: Add {U} or {B}. This land deals 1 damage to you.",
+  "isManaAbility": true,
+  "isModal": true,
+  "activationCost": [
+    "{T}"
+  ],
+  "produces": [
+    {
+      "quantity": 1,
+      "types": [
+        "C"
+      ]
+    },
+    {
+      "quantity": 1,
+      "types": [
+        {
+          "choice": [
+            "U",
+            "B"
+          ]
+        }
+      ]
+    }
+  ]
+}
+manaPool.js:165 [ManaPool] Chose U from U,B (hand needs it)
+manaPool.js:165 [ManaPool] Chose U from U,B (hand needs it)
+gameEngine.js:747 🔍 [generateMana] Final total: 6
+gameEngine.js:748 🔍 [generateMana] Final pool: {W: 0, U: 3, B: 2, R: 0, G: 0, …}
+enhancedStepByStepGame.js:1889 🔍 [untap] AFTER generateMana - Expected: 5, Actual: 6
+eventSystem.js:169 📤 Event Emitted: PHASE_CHANGED {source: 'unknown', queueSize: 1}
+eventSystem.js:169 📤 Event Emitted: CARD_DRAWN {source: 'Bojuka Bog', queueSize: 1}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+gameEngine.js:974 [castSpell] Attempting to cast Mordor Muster (cost: 2)
+gameEngine.js:975 [castSpell] Current pool: {W: 0, U: 3, B: 2, R: 0, G: 0, …} Total: 6
+gameEngine.js:984 [castSpell] ✅ Affordability check PASSED - proceeding with cast
+eventSystem.js:169 📤 Event Emitted: SPELL_CAST {source: 'Mordor Muster', queueSize: 1}
+eventSystem.js:169 📤 Event Emitted: CARD_DRAWN {source: 'Command Tower', queueSize: 1}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+gameEngine.js:974 [castSpell] Attempting to cast Arcane Denial (cost: 2)
+gameEngine.js:975 [castSpell] Current pool: {W: 0, U: 3, B: 1, R: 0, G: 0, …} Total: 4
+gameEngine.js:984 [castSpell] ✅ Affordability check PASSED - proceeding with cast
+eventSystem.js:169 📤 Event Emitted: SPELL_CAST {source: 'Arcane Denial', queueSize: 2}
+eventSystem.js:169 📤 Event Emitted: CARD_DRAWN {source: 'Countersquall', queueSize: 1}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+gameEngine.js:974 [castSpell] Attempting to cast Countersquall (cost: 2)
+gameEngine.js:975 [castSpell] Current pool: {W: 0, U: 1, B: 1, R: 0, G: 0, …} Total: 2
+gameEngine.js:984 [castSpell] ✅ Affordability check PASSED - proceeding with cast
+eventSystem.js:169 📤 Event Emitted: SPELL_CAST {source: 'Countersquall', queueSize: 2}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+eventSystem.js:169 📤 Event Emitted: CREATURE_ATTACKS {source: '3/3 Black Wraith Token', queueSize: 1}
+eventSystem.js:169 📤 Event Emitted: CREATURE_ATTACKS {source: '3/3 Black Wraith Token', queueSize: 2}
+eventSystem.js:169 📤 Event Emitted: CREATURE_ATTACKS {source: '3/3 Black Wraith Token', queueSize: 3}
+eventSystem.js:169 📤 Event Emitted: COMBAT_DAMAGE_DEALT {source: 'unknown', queueSize: 4}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+enhancedStepByStepGame.js:1880 🔍 [untap] BEFORE generateMana - Expected: 6 (lands:6 + artifacts:0 + creatures:0)
+enhancedStepByStepGame.js:1881 🔍 [untap] Land count: 6, Artifact count: 0, Creature count: 0
+gameEngine.js:494 🔍 [generateMana] Starting - Turn 7
+gameEngine.js:495 🔍 [generateMana] Battlefield: 6 lands, 1 artifacts, 7 creatures
+gameEngine.js:504 🔍 [generateMana] Pool emptied
+gameEngine.js:515 🔍 [Underground River] Manifest data: {
+  "hasManaAbility": true,
+  "abilities": [
+    {
+      "abilityText": "{T}: Add {C}.\\n{T}: Add {U} or {B}. This land deals 1 damage to you.",
+      "isManaAbility": true,
+      "isModal": true,
+      "activationCost": [
+        "{T}"
+      ],
+      "produces": [
+        {
+          "quantity": 1,
+          "types": [
+            "C"
+          ]
+        },
+        {
+          "quantity": 1,
+          "types": [
+            {
+              "choice": [
+                "U",
+                "B"
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
+gameEngine.js:550 🔍 [Underground River] Activatable abilities: 1
+gameEngine.js:551 🔍 [Underground River] Best ability: {
+  "abilityText": "{T}: Add {C}.\\n{T}: Add {U} or {B}. This land deals 1 damage to you.",
+  "isManaAbility": true,
+  "isModal": true,
+  "activationCost": [
+    "{T}"
+  ],
+  "produces": [
+    {
+      "quantity": 1,
+      "types": [
+        "C"
+      ]
+    },
+    {
+      "quantity": 1,
+      "types": [
+        {
+          "choice": [
+            "U",
+            "B"
+          ]
+        }
+      ]
+    }
+  ]
+}
+manaPool.js:165 [ManaPool] Chose U from U,B (hand needs it)
+manaPool.js:165 [ManaPool] Chose U from U,B (hand needs it)
+gameEngine.js:747 🔍 [generateMana] Final total: 7
+gameEngine.js:748 🔍 [generateMana] Final pool: {W: 0, U: 3, B: 3, R: 0, G: 0, …}
+enhancedStepByStepGame.js:1889 🔍 [untap] AFTER generateMana - Expected: 6, Actual: 7
+eventSystem.js:169 📤 Event Emitted: PHASE_CHANGED {source: 'unknown', queueSize: 1}
+eventSystem.js:169 📤 Event Emitted: CARD_DRAWN {source: 'Great Hall of the Citadel', queueSize: 1}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+gameEngine.js:974 [castSpell] Attempting to cast Nazgûl (cost: 3)
+gameEngine.js:975 [castSpell] Current pool: {W: 0, U: 4, B: 3, R: 0, G: 0, …} Total: 8
+gameEngine.js:984 [castSpell] ✅ Affordability check PASSED - proceeding with cast
+eventSystem.js:169 📤 Event Emitted: SPELL_CAST {source: 'Nazgûl', queueSize: 1}
+eventSystem.js:169 📤 Event Emitted: PERMANENT_ENTERS_BATTLEFIELD {source: 'Nazgûl', queueSize: 2}
+triggerHandler.js:482 🔔 1 trigger(s) matched event: PERMANENT_ENTERS_BATTLEFIELD
+triggerHandler.js:347 🎯 Resolving Trigger: Nazgûl - the Ring tempts you.\nWhenever the Ring tempts you, put a +1/+1 counter on each Wraith you control.\nA deck can have up to nine cards named Nazgûl.
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+gameEngine.js:974 [castSpell] Attempting to cast One Ring to Rule Them All (cost: 4)
+gameEngine.js:975 [castSpell] Current pool: {W: 0, U: 3, B: 2, R: 0, G: 0, …} Total: 5
+gameEngine.js:984 [castSpell] ✅ Affordability check PASSED - proceeding with cast
+eventSystem.js:169 📤 Event Emitted: SPELL_CAST {source: 'One Ring to Rule Them All', queueSize: 1}
+eventSystem.js:169 📤 Event Emitted: PERMANENT_ENTERS_BATTLEFIELD {source: 'One Ring to Rule Them All', queueSize: 2}
+triggerHandler.js:482 🔔 1 trigger(s) matched event: PERMANENT_ENTERS_BATTLEFIELD
+triggerHandler.js:347 🎯 Resolving Trigger: Nazgûl - the Ring tempts you.\nWhenever the Ring tempts you, put a +1/+1 counter on each Wraith you control.\nA deck can have up to nine cards named Nazgûl.
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+eventSystem.js:169 📤 Event Emitted: CREATURE_ATTACKS {source: '3/3 Black Wraith Token', queueSize: 1}
+eventSystem.js:169 📤 Event Emitted: CREATURE_ATTACKS {source: '3/3 Black Wraith Token', queueSize: 2}
+eventSystem.js:169 📤 Event Emitted: CREATURE_ATTACKS {source: '3/3 Black Wraith Token', queueSize: 3}
+eventSystem.js:169 📤 Event Emitted: COMBAT_DAMAGE_DEALT {source: 'unknown', queueSize: 4}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+enhancedStepByStepGame.js:1880 🔍 [untap] BEFORE generateMana - Expected: 7 (lands:7 + artifacts:0 + creatures:0)
+enhancedStepByStepGame.js:1881 🔍 [untap] Land count: 7, Artifact count: 0, Creature count: 0
+gameEngine.js:494 🔍 [generateMana] Starting - Turn 8
+gameEngine.js:495 🔍 [generateMana] Battlefield: 7 lands, 1 artifacts, 8 creatures
+gameEngine.js:504 🔍 [generateMana] Pool emptied
+gameEngine.js:515 🔍 [Underground River] Manifest data: {
+  "hasManaAbility": true,
+  "abilities": [
+    {
+      "abilityText": "{T}: Add {C}.\\n{T}: Add {U} or {B}. This land deals 1 damage to you.",
+      "isManaAbility": true,
+      "isModal": true,
+      "activationCost": [
+        "{T}"
+      ],
+      "produces": [
+        {
+          "quantity": 1,
+          "types": [
+            "C"
+          ]
+        },
+        {
+          "quantity": 1,
+          "types": [
+            {
+              "choice": [
+                "U",
+                "B"
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
+gameEngine.js:550 🔍 [Underground River] Activatable abilities: 1
+gameEngine.js:551 🔍 [Underground River] Best ability: {
+  "abilityText": "{T}: Add {C}.\\n{T}: Add {U} or {B}. This land deals 1 damage to you.",
+  "isManaAbility": true,
+  "isModal": true,
+  "activationCost": [
+    "{T}"
+  ],
+  "produces": [
+    {
+      "quantity": 1,
+      "types": [
+        "C"
+      ]
+    },
+    {
+      "quantity": 1,
+      "types": [
+        {
+          "choice": [
+            "U",
+            "B"
+          ]
+        }
+      ]
+    }
+  ]
+}
+manaPool.js:165 [ManaPool] Chose U from U,B (hand needs it)
+manaPool.js:165 [ManaPool] Chose U from U,B (hand needs it)
+gameEngine.js:747 🔍 [generateMana] Final total: 8
+gameEngine.js:748 🔍 [generateMana] Final pool: {W: 0, U: 4, B: 3, R: 0, G: 0, …}
+enhancedStepByStepGame.js:1889 🔍 [untap] AFTER generateMana - Expected: 7, Actual: 8
+eventSystem.js:169 📤 Event Emitted: PHASE_CHANGED {source: 'unknown', queueSize: 1}
+eventSystem.js:169 📤 Event Emitted: CARD_DRAWN {source: 'Opt', queueSize: 1}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+gameEngine.js:974 [castSpell] Attempting to cast Opt (cost: 1)
+gameEngine.js:975 [castSpell] Current pool: {W: 0, U: 4, B: 3, R: 0, G: 0, …} Total: 9
+gameEngine.js:984 [castSpell] ✅ Affordability check PASSED - proceeding with cast
+eventSystem.js:169 📤 Event Emitted: SPELL_CAST {source: 'Opt', queueSize: 1}
+eventSystem.js:169 📤 Event Emitted: CARD_DRAWN {source: 'Witch-king of Angmar', queueSize: 1}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+gameEngine.js:974 [castSpell] Attempting to cast Nazgûl (cost: 3)
+gameEngine.js:975 [castSpell] Current pool: {W: 0, U: 3, B: 3, R: 0, G: 0, …} Total: 8
+gameEngine.js:984 [castSpell] ✅ Affordability check PASSED - proceeding with cast
+eventSystem.js:169 📤 Event Emitted: SPELL_CAST {source: 'Nazgûl', queueSize: 2}
+eventSystem.js:169 📤 Event Emitted: PERMANENT_ENTERS_BATTLEFIELD {source: 'Nazgûl', queueSize: 3}
+triggerHandler.js:482 🔔 2 trigger(s) matched event: PERMANENT_ENTERS_BATTLEFIELD
+triggerHandler.js:347 🎯 Resolving Trigger: Nazgûl - the Ring tempts you.\nWhenever the Ring tempts you, put a +1/+1 counter on each Wraith you control.\nA deck can have up to nine cards named Nazgûl.
+triggerHandler.js:347 🎯 Resolving Trigger: Nazgûl - the Ring tempts you.\nWhenever the Ring tempts you, put a +1/+1 counter on each Wraith you control.\nA deck can have up to nine cards named Nazgûl.
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+gameEngine.js:974 [castSpell] Attempting to cast Nazgûl Battle-Mace (cost: 5)
+gameEngine.js:975 [castSpell] Current pool: {W: 0, U: 3, B: 2, R: 0, G: 0, …} Total: 5
+gameEngine.js:984 [castSpell] ✅ Affordability check PASSED - proceeding with cast
+eventSystem.js:169 📤 Event Emitted: SPELL_CAST {source: 'Nazgûl Battle-Mace', queueSize: 1}
+eventSystem.js:169 📤 Event Emitted: PERMANENT_ENTERS_BATTLEFIELD {source: 'Nazgûl Battle-Mace', queueSize: 2}
+triggerHandler.js:482 🔔 2 trigger(s) matched event: PERMANENT_ENTERS_BATTLEFIELD
+triggerHandler.js:347 🎯 Resolving Trigger: Nazgûl - the Ring tempts you.\nWhenever the Ring tempts you, put a +1/+1 counter on each Wraith you control.\nA deck can have up to nine cards named Nazgûl.
+triggerHandler.js:347 🎯 Resolving Trigger: Nazgûl - the Ring tempts you.\nWhenever the Ring tempts you, put a +1/+1 counter on each Wraith you control.\nA deck can have up to nine cards named Nazgûl.
+eventSystem.js:169 📤 Event Emitted: CREATURE_ATTACKS {source: 'Nazgûl', queueSize: 1}
+eventSystem.js:169 📤 Event Emitted: COMBAT_DAMAGE_DEALT {source: 'unknown', queueSize: 2}
+enhancedStepByStepGame.js:1880 🔍 [untap] BEFORE generateMana - Expected: 8 (lands:8 + artifacts:0 + creatures:0)
+enhancedStepByStepGame.js:1881 🔍 [untap] Land count: 8, Artifact count: 0, Creature count: 0
+gameEngine.js:494 🔍 [generateMana] Starting - Turn 9
+gameEngine.js:495 🔍 [generateMana] Battlefield: 8 lands, 2 artifacts, 10 creatures
+gameEngine.js:504 🔍 [generateMana] Pool emptied
+gameEngine.js:515 🔍 [Underground River] Manifest data: {
+  "hasManaAbility": true,
+  "abilities": [
+    {
+      "abilityText": "{T}: Add {C}.\\n{T}: Add {U} or {B}. This land deals 1 damage to you.",
+      "isManaAbility": true,
+      "isModal": true,
+      "activationCost": [
+        "{T}"
+      ],
+      "produces": [
+        {
+          "quantity": 1,
+          "types": [
+            "C"
+          ]
+        },
+        {
+          "quantity": 1,
+          "types": [
+            {
+              "choice": [
+                "U",
+                "B"
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
+gameEngine.js:550 🔍 [Underground River] Activatable abilities: 1
+gameEngine.js:551 🔍 [Underground River] Best ability: {
+  "abilityText": "{T}: Add {C}.\\n{T}: Add {U} or {B}. This land deals 1 damage to you.",
+  "isManaAbility": true,
+  "isModal": true,
+  "activationCost": [
+    "{T}"
+  ],
+  "produces": [
+    {
+      "quantity": 1,
+      "types": [
+        "C"
+      ]
+    },
+    {
+      "quantity": 1,
+      "types": [
+        {
+          "choice": [
+            "U",
+            "B"
+          ]
+        }
+      ]
+    }
+  ]
+}
+manaPool.js:165 [ManaPool] Chose U from U,B (hand needs it)
+manaPool.js:165 [ManaPool] Chose U from U,B (hand needs it)
+gameEngine.js:747 🔍 [generateMana] Final total: 9
+gameEngine.js:748 🔍 [generateMana] Final pool: {W: 0, U: 4, B: 3, R: 0, G: 0, …}
+enhancedStepByStepGame.js:1889 🔍 [untap] AFTER generateMana - Expected: 8, Actual: 9
+eventSystem.js:169 📤 Event Emitted: PHASE_CHANGED {source: 'unknown', queueSize: 1}
+eventSystem.js:169 📤 Event Emitted: CARD_DRAWN {source: 'Island', queueSize: 1}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+gameEngine.js:974 [castSpell] Attempting to cast Witch-king of Angmar (cost: 5)
+gameEngine.js:975 [castSpell] Current pool: {W: 0, U: 5, B: 3, R: 0, G: 0, …} Total: 10
+gameEngine.js:984 [castSpell] ✅ Affordability check PASSED - proceeding with cast
+eventSystem.js:169 📤 Event Emitted: SPELL_CAST {source: 'Witch-king of Angmar', queueSize: 1}
+eventSystem.js:169 📤 Event Emitted: PERMANENT_ENTERS_BATTLEFIELD {source: 'Witch-king of Angmar', queueSize: 2}
+triggerHandler.js:482 🔔 2 trigger(s) matched event: PERMANENT_ENTERS_BATTLEFIELD
+triggerHandler.js:347 🎯 Resolving Trigger: Nazgûl - the Ring tempts you.\nWhenever the Ring tempts you, put a +1/+1 counter on each Wraith you control.\nA deck can have up to nine cards named Nazgûl.
+triggerHandler.js:347 🎯 Resolving Trigger: Nazgûl - the Ring tempts you.\nWhenever the Ring tempts you, put a +1/+1 counter on each Wraith you control.\nA deck can have up to nine cards named Nazgûl.
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+gameEngine.js:974 [castSpell] Attempting to cast Scroll of Isildur (cost: 3)
+gameEngine.js:975 [castSpell] Current pool: {W: 0, U: 4, B: 1, R: 0, G: 0, …} Total: 5
+gameEngine.js:984 [castSpell] ✅ Affordability check PASSED - proceeding with cast
+eventSystem.js:169 📤 Event Emitted: SPELL_CAST {source: 'Scroll of Isildur', queueSize: 1}
+eventSystem.js:169 📤 Event Emitted: PERMANENT_ENTERS_BATTLEFIELD {source: 'Scroll of Isildur', queueSize: 2}
+triggerHandler.js:482 🔔 2 trigger(s) matched event: PERMANENT_ENTERS_BATTLEFIELD
+triggerHandler.js:347 🎯 Resolving Trigger: Nazgûl - the Ring tempts you.\nWhenever the Ring tempts you, put a +1/+1 counter on each Wraith you control.\nA deck can have up to nine cards named Nazgûl.
+triggerHandler.js:347 🎯 Resolving Trigger: Nazgûl - the Ring tempts you.\nWhenever the Ring tempts you, put a +1/+1 counter on each Wraith you control.\nA deck can have up to nine cards named Nazgûl.
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+eventSystem.js:169 📤 Event Emitted: CREATURE_ATTACKS {source: '3/3 Black Wraith Token', queueSize: 1}
+eventSystem.js:169 📤 Event Emitted: CREATURE_ATTACKS {source: 'Nazgûl', queueSize: 2}
+eventSystem.js:169 📤 Event Emitted: COMBAT_DAMAGE_DEALT {source: 'unknown', queueSize: 3}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+enhancedStepByStepGame.js:1880 🔍 [untap] BEFORE generateMana - Expected: 9 (lands:9 + artifacts:0 + creatures:0)
+enhancedStepByStepGame.js:1881 🔍 [untap] Land count: 9, Artifact count: 0, Creature count: 0
+gameEngine.js:494 🔍 [generateMana] Starting - Turn 10
+gameEngine.js:495 🔍 [generateMana] Battlefield: 9 lands, 2 artifacts, 11 creatures
+gameEngine.js:504 🔍 [generateMana] Pool emptied
+gameEngine.js:515 🔍 [Underground River] Manifest data: {
+  "hasManaAbility": true,
+  "abilities": [
+    {
+      "abilityText": "{T}: Add {C}.\\n{T}: Add {U} or {B}. This land deals 1 damage to you.",
+      "isManaAbility": true,
+      "isModal": true,
+      "activationCost": [
+        "{T}"
+      ],
+      "produces": [
+        {
+          "quantity": 1,
+          "types": [
+            "C"
+          ]
+        },
+        {
+          "quantity": 1,
+          "types": [
+            {
+              "choice": [
+                "U",
+                "B"
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
+gameEngine.js:550 🔍 [Underground River] Activatable abilities: 1
+gameEngine.js:551 🔍 [Underground River] Best ability: {
+  "abilityText": "{T}: Add {C}.\\n{T}: Add {U} or {B}. This land deals 1 damage to you.",
+  "isManaAbility": true,
+  "isModal": true,
+  "activationCost": [
+    "{T}"
+  ],
+  "produces": [
+    {
+      "quantity": 1,
+      "types": [
+        "C"
+      ]
+    },
+    {
+      "quantity": 1,
+      "types": [
+        {
+          "choice": [
+            "U",
+            "B"
+          ]
+        }
+      ]
+    }
+  ]
+}
+manaPool.js:181 [ManaPool] Chose U from U,B (default)
+manaPool.js:181 [ManaPool] Chose U from U,B (default)
+gameEngine.js:747 🔍 [generateMana] Final total: 10
+gameEngine.js:748 🔍 [generateMana] Final pool: {W: 0, U: 5, B: 3, R: 0, G: 0, …}
+enhancedStepByStepGame.js:1889 🔍 [untap] AFTER generateMana - Expected: 9, Actual: 10
+eventSystem.js:169 📤 Event Emitted: PHASE_CHANGED {source: 'unknown', queueSize: 1}
+eventSystem.js:169 📤 Event Emitted: CARD_DRAWN {source: 'Swamp', queueSize: 1}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+eventSystem.js:169 📤 Event Emitted: CREATURE_ATTACKS {source: 'Witch-king of Angmar', queueSize: 1}
+eventSystem.js:169 📤 Event Emitted: COMBAT_DAMAGE_DEALT {source: 'unknown', queueSize: 2}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}

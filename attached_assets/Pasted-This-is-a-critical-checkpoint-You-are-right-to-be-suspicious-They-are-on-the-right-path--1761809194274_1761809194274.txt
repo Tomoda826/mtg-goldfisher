@@ -1,0 +1,60 @@
+This is a **critical checkpoint**. You are right to be suspicious.
+
+They are **on the right path** with the *parser* but **still completely off** with the *engine logic*.
+
+Their new plan **confirms they are implementing the exact bug** we were afraid of.
+
+### The Good News (The Parser Fix)
+
+The developer has **correctly** identified the root cause of `PARSER-001`.
+* **Old Problem:** The parser was incorrectly merging `Underground River`'s two abilities into one modal ability.
+* **The Fix:** They are fixing the parser to handle `\n` vs. `\\n`.
+* **Correct Result:** The parser will now (correctly) create **two separate ability objects** for `Underground River`:
+    1.  Ability Object 1: `{T}: Add {C}`
+    2.  Ability Object 2: `{T}: Add {U} or {B}`
+
+This part is **perfect**. They have fixed the data generation.
+
+### The Bad News (The Engine "Fix")
+
+The developer *explicitly states* they are reverting to a flawed logic (`MANA-009`) that **will not work** with this new, correct data.
+
+Here is their new, flawed flow:
+1.  Parser creates TWO ability objects (`{C}` and `{U/B}`). (Correct)
+2.  `generateMana` finds BOTH are activatable. (Correct)
+3.  **The Bug:** `Choose best ability → Selects {U}/{B} choice ability` (This is the critical failure).
+4.  **The Result:** It adds *only* the `{U/B}` production and **discards the `{C}` ability**.
+
+This proves our `MANA-011` bug report was correct. The engine will *still* produce an inaccurate mana pool because it is designed to pick *one* "best" ability from a permanent and discard all others. It will correctly parse `Underground River` as having two abilities and then **intentionally ignore one of them**.
+
+The simulation will **still fail** to cast spells requiring colorless mana from `Underground River`, because the `generateMana` function is actively deleting that valid option from the pool.
+
+---
+
+Here is the updated bug report.
+
+## Bug Report: `MANA-009` Logic ("Choose best ability") is Incompatible with `PARSER-001` Fix
+
+**ID:** `MANA-011` (Confirmed)
+**Priority:** Critical
+**Status:** Open
+
+### Summary
+
+The developer's plan confirms the `PARSER-001` fix is correct: `Underground River` will now correctly provide **two** distinct, valid ability objects to the engine (`{T}: Add {C}` and `{T}: Add {U} or {B}`).
+
+However, the developer's plan *also* confirms they are reverting to the flawed `MANA-009` logic: `generateMana` will "Choose best ability". This logic will compare the two valid abilities, decide the `{U/B}` choice is "best" (per its `choice > colorless` priority), and **incorrectly discard the `{T}: Add {C}` ability**.
+
+### Impact
+
+The `generateMana` function will *still* calculate an incorrect starting mana pool. It will correctly parse the card, see two options, and then **intentionally delete the colorless option**. The simulation will remain inaccurate, and the AI will be unable to make plays that require colorless mana from `Underground River`, `Tainted Isle`, `Great Hall`, etc.
+
+### Recommendation
+
+The `MANA-009` logic ("Choose best ability") is fundamentally flawed and must be removed.
+
+`generateMana` should not "choose a best ability." When a permanent has multiple valid mana abilities with the same cost (e.g., two abilities that both cost `{T}`), it must:
+
+1.  Gather *all* valid production options (e.g., `Option 1: {C: 1}` and `Option 2: {U: 1, B: 1}` choice).
+2.  Pass *all* these options to the `manaPool.js` choice logic (the part that logs `[ManaPool] Chose U from U,B (hand needs it)`).
+3.  The `manaPool.js` logic must then select the single best option *from all available abilities* (e.g., it must choose between `{C}` and `{U/B}`), not just from within one ability.

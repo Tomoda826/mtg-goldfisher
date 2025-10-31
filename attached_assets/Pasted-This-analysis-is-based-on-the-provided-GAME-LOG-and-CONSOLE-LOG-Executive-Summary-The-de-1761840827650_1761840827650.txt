@@ -1,0 +1,51 @@
+This analysis is based on the provided GAME LOG and CONSOLE LOG.
+
+**Executive Summary:**
+
+The developer's fixes **did not work**. The logs confirm that **both** critical bugs are still present.
+
+1.  **`PARSER-001` (Parser Bug) is NOT Fixed:** The console log for `Underground River`'s manifest data is *identical* to the previous log. It is still incorrectly merging the card's two abilities (`{T}: Add {C}` and `{T}: Add {U} or {B}`) into a **single ability object** with two `produces` options. The developer's fix to split abilities by `\n` or `\\n` has failed.
+
+2.  **`MANA-010`/`MANA-011` (Engine Logic Bug) is NOT Fixed:** Because the parser is still providing flawed data (one modal ability instead of two separate ones), the engine's "choice" logic is still defaulting to Blue. The log confirms the engine is **still not adding Black mana** from any dual lands or artifacts.
+
+**This is the "Smoking Gun" from the console log:**
+
+* **Turn 5 (The Clearest Example):**
+    * **Board State:** `Island`, `Underground River`, `Watery Grave`, `Swamp`, `Arcane Signet` (4 lands, 1 artifact).
+    * **Expected Mana:** 5 mana. `{U:1}` (from Island), `{B:1}` (from Swamp), plus 3 sources of `{U/B}` choice (from `UR`, `WG`, `Signet`). The pool should have **4 sources of Black mana**.
+    * **Console Log:** `[ManaPool] Chose U from U,B (hand needs it)` (logged twice).
+    * **Console Result:** `Final total: 5` (Correct total!) but `Final pool: {W: 0, U: 3, B: 1, ...}`.
+    * **Analysis:** This is definitive proof. The engine is only getting `{B:1}` from the basic `Swamp`. It is incorrectly processing the other three choice-based permanents (`UR`, `WG`, `Signet`) and defaulting them *all* to `{U}`.
+
+**Conclusion:** The simulation is *still* running with a pool of almost no Black mana, which is why the AI (correctly) refuses to cast any Black spells until T3, when a basic `Swamp` is finally played.
+
+---
+
+## Updated Bug Report
+
+***
+
+**ID:** `PARSER-001` (Critical)
+**Status:** **NOT FIXED / Re-opened**
+**Title:** Parser is still incorrectly merging separate mana abilities into a single modal object.
+
+**Description:**
+The developer's fix to split abilities on `\n` or `\\n` was not effective. The console log for `Underground River`'s manifest data *proves* that its two separate abilities (`{T}: Add {C}` and `{T}: Add {U} or {B}`) are **still** being incorrectly parsed into a single ability object with two `produces` options.
+
+**Recommendation:**
+The parser logic in `cardBehaviorAnalyzer.js` **must be fixed** to correctly identify and create **two separate ability objects** for `Underground River` and similar cards (like `Great Hall of the Citadel`), as defined in the "Mana Ability Parsing & Implementation Guide". This bug must be fixed before `MANA-011` can be properly addressed.
+
+***
+
+**ID:** `MANA-011` (Critical)
+**Status:** **NOT FIXED / Re-opened**
+**Title:** `generateMana` logic defaults all mana choices to Blue, ignoring Black.
+
+**Description:**
+The `generateMana` function (and its `manaPool.js` helper) is still **critically failing** to calculate the correct color pool. It consistently defaults all `{U/B}` choices to `{U}`.
+
+**Evidence:**
+On **Turn 5**, the board had 4 lands (including 3 U/B duals + 1 basic `Swamp`) and 1 `Arcane Signet`. The engine *correctly* calculated 5 total mana but *incorrectly* assigned the colors as `Final pool: {W: 0, U: 3, B: 1, ...}`. This proves it is only getting `{B:1}` from the basic `Swamp` and defaulting the other 3 choice-based permanents to `{U}`.
+
+**Recommendation:**
+The "choice" logic in `manaPool.js` (e.g., `[ManaPool] Chose U from U,B (hand needs it)`) is not working. It must be fixed to **accurately read the AI's hand needs** and select the correct color (i.e., it should be choosing `{B}` to cast the Black spells in hand). This fix is dependent on `PARSER-001` being fixed first so that the engine is choosing between *separate abilities* (`{C}` vs. `{U/B}`) instead of *flawed modal outcomes*.

@@ -1,0 +1,1533 @@
+GAME LOG:
+T0
+setup
+Game initialized
+Drew opening hand of 7 cards
+Ringsight
+Sunken Hollow
+Swamp
+Scroll of Isildur
+Commander's Sphere
+Sunken Ruins
+Swamp
+T0
+setup
+Token Analysis
+Deck contains 10 token-generating cards
+T0
+setup
+Scry Analysis
+Deck contains 3 scry effects (total scry 5)
+T0
+setup
+Activated Ability Analysis
+Deck contains 22 activated abilities
+T0
+setup
+🔍 DEBUG: Lórien Revealed Abilities
+Found 1 abilities on Lórien Revealed
+T0
+setup
+🧠 Deck Behavior Analysis
+Analyzed 35 card abilities
+T0
+pre-game
+Deck Analysis Complete
+Strategy: undefined | Target Win: Turn undefined
+T0
+mulligan
+Hand Evaluation
+This hand is playable and fits the lenient mulligan guidance. You have 4 lands including multiple U/B sources (Sunken Hollow, Sunken Ruins, and two Swamps) so color and early mana are reliable. You also have a ramp-ish piece (Commander's Sphere) and two spells (Ringsight and Scroll of Isildur) that are meaningful game actions and count as instants/sorceries/enchantments for Lord of the Nazgûl triggers once your commander is out. It lacks a cheap cantrip or early counter/removal right now, and the Sphere is a bit slow compared to Sol Ring/Signet, but the hand has a clear path: play lands to hit turn 3–4 commander, use the Sphere/Sunken Ruins to accelerate, and start casting spells to generate Wraiths and pressure the table. Given the mulligan criteria (only mulligan truly unplayable hands), this is good enough to execute the deck’s gameplan.
+T0
+pre-game
+Opening Hand Kept
+Starting with 7 cards
+Ringsight
+Sunken Hollow
+Swamp
+Scroll of Isildur
+Commander's Sphere
+Sunken Ruins
+Swamp
+T1
+beginning
+=== NEW TURN ===
+Starting turn 1
+T1
+untap
+Untap & Generate Mana
+All permanents untapped. 0 lands = 0 mana available.
+T1
+draw
+Draw Card
+Drew Nazgûl Battle-Mace (artifact)
+T1
+main1
+Main Phase 1
+Executing strategy focused on our win condition
+T1
+main1
+MANA
+AI Strategic Decision
+Play the Swamp (hand index 2). A basic Swamp is the cleanest turn‑1 play: it enters untapped, immediately fixes black for our early plays, and sets up future casts of our commander and removal. It avoids the downside of Sunken Hollow entering tapped and is simpler than Sunken Ruins' conditional abilities. Playing a land advances mana development (MANA) with no mana cost, which is the highest priority this turn.
+T1
+main1
+MANA
+playLand: 2
+Played Swamp
+✓
+T1
+main1
+PASS
+AI Strategic Decision
+Available mana is 1 total (B:1). I have already played my land this turn so I cannot play another. No card in hand has a casting cost of 1 or less or matches the lone black pip, and there are no hand-activated abilities (cycling, etc.) usable for 1 mana. Commander and all other spells are unaffordable. Per the priority rules, when nothing productive can be cast or activated this step, the correct play is to pass and retain resources for the next turn.
+T1
+main1
+PASS
+AI Strategic Decision
+No playable spells or abilities with the current available mana (1 total: B:1). I already played my land this turn, so I cannot play another. None of the cards in hand have a casting or hand-activated cost of 1 or less, and there are no battlefield abilities to activate. Per the rules, when nothing productive can be cast or activated, the correct play is to pass and retain resources for the next turn.
+T1
+main1
+End Phase
+Passed twice - ending phase
+T1
+combat
+Combat Phase
+Entering combat with 0 creatures and 0 tokens
+T1
+combat
+⚔️ Combat Phase
+No creatures available to attack
+✗
+T1
+main2
+Main Phase 2
+Post-combat - deploying remaining resources
+T1
+main2
+PASS
+AI Strategic Decision
+You have only 1 mana (B:1) and have already taken your land drop this turn. No card in hand has a casting cost of 1 or less and there are no usable battlefield activated abilities. Under the sequencing rules, passing is optimal — any attempt to act would be illegal or wasteful. Preserve the mana (it will be available next turn after untap) and move to end step.
+T1
+main2
+PASS
+AI Strategic Decision
+You have only 1 mana (B:1) and have already played your land for the turn. No cards in hand cost 1 or less, and there are no hand-activatable abilities or battlefield abilities available to use. Casting any card in hand is illegal with available mana, and per the mana rules you must not attempt to tap lands or activate mana abilities manually. Preserving the mana and passing to end the turn is the correct, rules-compliant play.
+T1
+main2
+End Phase
+Passed twice - ending phase
+T1
+end
+End Turn
+Turn 1 complete. Total damage: 0/40
+T2
+beginning
+=== NEW TURN ===
+Starting turn 2
+T2
+untap
+Untap & Generate Mana
+All permanents untapped. 1 lands = 1 mana available.
+T2
+draw
+Draw Card
+Drew Swamp (land)
+T2
+main1
+Main Phase 1
+Executing strategy focused on our win condition
+T2
+main1
+MANA
+AI Strategic Decision
+Play the Swamp from hand. Land drop is priority #1 — it increases future available mana and progresses the mana plan for turns 3–4. Playing a basic now is better than playing Sunken Hollow or Sunken Ruins (which would enter tapped as your second land) and there are no castable spells for your single {B} this turn anyway.
+T2
+main1
+MANA
+playLand: 7
+Played Swamp
+✓
+T2
+main1
+PASS
+AI Strategic Decision
+You have 2 black mana in the pool and have already played your land this turn. There are no spells in hand that cost 2 or less or that can be paid with only black (all castable cards require blue or more mana or higher CMC), and there are no battlefield activated abilities available. Per the critical mana rules, you cannot "tap" lands or activate mana abilities manually. With no legal, productive play available, passing is optimal to preserve game state for next turn.
+T2
+main1
+PASS
+AI Strategic Decision
+No legal productive play is available. You have already taken your land drop this turn, there are no battlefield activated abilities you can use, and your available mana is 2 black (B:2) which cannot pay for any card in hand (all spells require blue and/or higher total mana). Casting the commander or any spell is impossible given the color and cost constraints, so the optimal play is to pass and preserve game state for next turn.
+T2
+main1
+End Phase
+Passed twice - ending phase
+T2
+combat
+Combat Phase
+Entering combat with 0 creatures and 0 tokens
+T2
+combat
+⚔️ Combat Phase
+No creatures available to attack
+✗
+T2
+main2
+Main Phase 2
+Post-combat - deploying remaining resources
+T2
+main2
+PASS
+AI Strategic Decision
+You have 2 black mana in the pool and have already taken your land drop this turn. None of the cards in hand can be cast for {B}{B} (they require blue or more total mana, e.g., Lord of the Nazgûl is 5 with U/B in cost, Scroll of Isildur is 2U). There are no battlefield activated abilities available and no hand abilities (cycling, etc.) that can be paid for with the available mana. Because playing a land is illegal (land drop already used) and no spells or abilities are castable/useful with the current pool, the only correct play is to pass and retain game state for next turn.
+T2
+main2
+PASS
+AI Strategic Decision
+You have 2 black mana in the pool (B:2) but no card in hand can be cast for {B}{B} or less: all non-land spells require blue or more total mana (Ringsight 1UB, Scroll of Isildur 2U, Commander's Sphere 3, Nazgûl Battle‑Mace 5). You have already taken your land drop and there are no hand-activated abilities or 0‑cost plays available. Under the critical mana rules, you cannot "tap" lands or activate battlefield mana from hand and floating unused mana would be wasted. Therefore the only correct play this step is to pass and retain the mana for the next turn.
+T2
+main2
+End Phase
+Passed twice - ending phase
+T2
+end
+End Turn
+Turn 2 complete. Total damage: 0/40
+T3
+beginning
+=== NEW TURN ===
+Starting turn 3
+T3
+untap
+Untap & Generate Mana
+All permanents untapped. 2 lands = 2 mana available.
+T3
+draw
+Draw Card
+Drew Drowned Catacomb (land)
+T3
+main1
+Main Phase 1
+Executing strategy focused on our win condition
+T3
+main1
+MANA
+AI Strategic Decision
+Play a land first per priority. Drowned Catacomb (index 7) will enter untapped because I already control a Swamp, and it provides flexible U/B mana which furthers the deck's early-game plan (enable future spells/commander). This uses the mandatory land drop without spending the available mana and improves mana base for upcoming turns.
+T3
+main1
+MANA
+playLand: 7
+Played Drowned Catacomb
+✓
+T3
+main1
+MANA
+AI Strategic Decision
+Priority = MANA. Casting Commander's Sphere (CMC 3) uses the full 3 available mana to advance the deck's early-game plan by adding a permanent ramp/fixer that produces any color in the commander's identity on future turns and can be sacrificed for card draw later. It is the most mana-efficient play this turn and improves future turns (helps cast the commander or other colored spells). Ringsight is suboptimal because its search depends on a legendary creature you control (you currently control none). Scroll of Isildur is an engine but is less immediately impactful than getting a mana rock on board now. Therefore Sphere best advances the MANA → ENGINE → THREAT framework for turn 3.
+T3
+main1
+💰 Mana After Cast
+T3
+main1
+💰 Mana After Cast
+T3
+main1
+MANA
+castSpell: 3
+Cast Commander's Sphere ({3})
+✓
+T3
+main1
+PASS
+AI Strategic Decision
+You have 0 available mana and have already played a land this turn, so you cannot cast any spells in hand (all spells cost >0) and there are no battlefield or hand-activated abilities available to use. Under the MANA→ENGINE→THREAT framework, there is nothing productive to play this main phase, so the correct play is to pass and preserve the game state for your next turn.
+T3
+main1
+PASS
+AI Strategic Decision
+You have 0 available mana and have already taken your land drop this turn. No cards in hand have a 0-cost or a hand-activated ability you can pay for, and there are no battlefield activated abilities available to use now. Under the Critical Mana Rules you cannot (and must not) tap lands or otherwise generate additional mana — the pool shown is the actual available mana. Therefore there is nothing productive to cast or activate this main phase, so the correct play is to pass and preserve the game state for your next turn. (Note: Commander's Sphere was already cast earlier this turn and is on the battlefield, which was the prior optimal mana play.)
+T3
+main1
+End Phase
+Passed twice - ending phase
+T3
+combat
+Combat Phase
+Entering combat with 0 creatures and 0 tokens
+T3
+combat
+⚔️ Combat Phase
+No creatures available to attack
+✗
+T3
+main2
+Main Phase 2
+Post-combat - deploying remaining resources
+T3
+main2
+PASS
+AI Strategic Decision
+You have 0 available mana and have already taken your land drop this turn. No card in hand has a 0-cost or hand-activated ability you can pay for, and there are no battlefield activated abilities available. Under the Critical Mana Rules you cannot tap lands or otherwise generate additional mana now, so there is nothing castable or activatable this phase. Passing preserves the game state for your next turn.
+T3
+main2
+PASS
+AI Strategic Decision
+You have 0 available mana and have already taken your land drop this turn. None of the cards in hand have 0-cost or hand-activated abilities, and there are no battlefield abilities you can use. Under the critical mana rules you cannot tap lands or otherwise generate additional mana now, so there is nothing castable or activatable this phase. Passing preserves the game state and follows the rule to not try to activate mana abilities manually.
+T3
+main2
+End Phase
+Passed twice - ending phase
+T3
+end
+End Turn
+Turn 3 complete. Total damage: 0/40
+T4
+beginning
+=== NEW TURN ===
+Starting turn 4
+T4
+untap
+Untap & Generate Mana
+All permanents untapped. 3 lands + 1 artifacts = 4 mana available.
+T4
+draw
+Draw Card
+Drew Island (land)
+T4
+main1
+Main Phase 1
+Executing strategy focused on our win condition
+T4
+main1
+MANA
+AI Strategic Decision
+Play a land first per sequencing priority. Sunken Hollow will enter untapped because I already control two or more basic lands (two Swamps), giving an untapped U/B source for future plays and improving color-fixing for casting Lord of the Nazgûl next turn. This advances the MANA plan without wasting the land drop and keeps options open for casting engine spells (like Scroll of Isildur) on the same turn after the land is played.
+T4
+main1
+MANA
+playLand: Sunken Hollow
+Played Sunken Hollow
+✓
+T4
+main1
+ENGINE
+AI Strategic Decision
+Spend mana efficiently this turn by casting Scroll of Isildur (cost {2}{U}). It advances an engine (a Saga) that can gain control of an opponent's artifact on chapter I and then provide further value on later chapters. It uses 3 of the available 4 mana, progressing the mid-game plan instead of passing with unused mana. Ringsight currently has limited value (it searches for a card that shares a color with a legendary creature you control, and you control no legendary creatures), and the Battle-Mace is unaffordable. Casting the Saga is the best productive play.
+T4
+main1
+💰 Mana After Cast
+T4
+main1
+💰 Mana After Cast
+T4
+main1
+ENGINE
+castSpell: 1
+Cast Scroll of Isildur ({2}{U})
+✓
+T4
+main1
+PASS
+AI Strategic Decision
+You have only 1 total mana available and have already played your land this turn, so you cannot cast any spells in hand (Ringsight costs 3, Nazgûl Battle‑Mace costs 5, lands can't be played due to already having a land drop). None of the cards in hand have a hand-activated ability usable for 1 mana. With no productive play available this main phase, the correct choice is to pass and preserve game flow to the next phase/turn.
+T4
+main1
+PASS
+AI Strategic Decision
+I have only 1 total mana available and I already played my land this turn. No card in hand is castable for 1 mana (Ringsight costs {1}{U}{B}, Nazgûl Battle‑Mace costs {5}, lands in hand cannot be played). There are no hand-activated abilities I can pay for with 1 mana. Given the CRITICAL MANA RULES and the decision priority (use mana or otherwise pass), the only correct productive action is to pass.
+T4
+main1
+End Phase
+Passed twice - ending phase
+T4
+combat
+Combat Phase
+Entering combat with 0 creatures and 0 tokens
+T4
+combat
+⚔️ Combat Phase
+No creatures available to attack
+✗
+T4
+main2
+Main Phase 2
+Post-combat - deploying remaining resources
+T4
+main2
+PASS
+AI Strategic Decision
+I have only 1 total mana available and I already played my land this turn. No card in hand is castable for 1 mana (Ringsight costs {1}{U}{B}, Nazgûl Battle‑Mace costs {5}) and the lands in hand cannot be played. There are no hand-activated abilities I can pay for with 1 mana. Therefore there is nothing productive I can do this step, so passing is the optimal play.
+T4
+main2
+PASS
+AI Strategic Decision
+I have only 1 total mana available and I already played my land this turn. No card in hand is castable for 1 mana (Ringsight costs {1}{U}{B}, Nazgûl Battle‑Mace costs {5}) and the lands in hand cannot be played. There are no usable activated abilities from hand or battlefield that cost 1. Per the critical mana rules and the decision priority, there is literally nothing productive to do this step, so passing preserves game state and follows the guideline to not waste actions or attempt illegal mana activations.
+T4
+main2
+End Phase
+Passed twice - ending phase
+T4
+end
+End Turn
+Turn 4 complete. Total damage: 0/40
+T5
+beginning
+=== NEW TURN ===
+Starting turn 5
+T5
+untap
+Untap & Generate Mana
+All permanents untapped. 4 lands + 1 artifacts = 5 mana available.
+T5
+draw
+Draw Card
+Drew Palantír of Orthanc (artifact)
+T5
+main1
+Main Phase 1
+Executing strategy focused on our win condition
+T5
+main1
+MANA
+AI Strategic Decision
+I haven't played a land this turn — play a land first. Sunken Ruins (hand index 1) is the best pick: it gives the most color flexibility (U/B options) for this UB commander deck and improves future mana fixing. Playing it now preserves the option to cast Lord of the Nazgûl (or other UB spells) with the available 5 mana on the next decision. Following the decision framework, Land drop (MANA) comes before casting spells.
+T5
+main1
+MANA
+playLand: 1
+Played Sunken Ruins
+✓
+T5
+main1
+THREAT
+AI Strategic Decision
+Cast Lord of the Nazgûl for {3}{U}{B} (5) now. This turn is the right time to get the commander on board: it immediately enables the deck's core engine (it will start creating Wraiths when you cast instants/sorceries on subsequent turns) and it makes Ringsight (in hand) functional next — Ringsight searches for a card that shares a color with a legendary creature you control, which requires the commander be on the battlefield. While Palantír is a solid engine, the commander is higher value here because it converts future spells into board presence and accelerates the mid-game plan. The color and total-mana requirements are satisfied by the current pool.
+T5
+main1
+🎯 Commander Triggers
+T5
+main1
+🔍 DEBUG: Mana After Commander Cast
+T5
+main1
+THREAT
+castCommander: Lord of the Nazgûl
+Cast Lord of the Nazgûl (total cost: 5)
+✓
+T5
+main1
+PASS
+AI Strategic Decision
+No playable spells or abilities this main phase with the current mana. My actual available mana is 1 total and I've already played my land this turn, so I cannot cast Ringsight (3), Palantír of Orthanc (3), or Nazgûl Battle‑Mace (5). There are no 0‑cost or activatable-from-hand abilities available. Passing preserves the game state; I'll use mana next turn after untap. Note: the optimal play this turn would have been to cast Ringsight to trigger Lord of the Nazgûl and search, but I lack the required mana.
+T5
+main1
+PASS
+AI Strategic Decision
+I have only 1 total mana available and have already used my land drop this turn. None of the cards in hand are castable for 1 mana (Ringsight and Palantír cost 3, Nazgûl Battle‑Mace costs 5; lands must be played, not cast). Commander is already on the battlefield. There are no 0‑cost or battlefield/handeable activated abilities I can use. Therefore the only legal, non-wasting play this main phase is to pass and preserve the game state for next turn.
+T5
+main1
+End Phase
+Passed twice - ending phase
+T5
+combat
+Combat Phase
+Entering combat with 1 creatures and 0 tokens
+T5
+combat
+⚔️ Combat Phase
+No creatures available to attack
+✗
+T5
+main2
+Main Phase 2
+Post-combat - deploying remaining resources
+T5
+main2
+PASS
+AI Strategic Decision
+I have only 1 total mana available and I've already taken my land drop this turn, so I cannot legally cast any cards in hand (Ringsight and Palantír cost 3, Nazgûl Battle‑Mace costs 5). There are no 0‑cost or battlefield-usable activated abilities available to use. Passing preserves the board and mana for the opponent turn and for my next main phase, where I can cast a high-value spell (preferably Ringsight to trigger Lord of the Nazgûl).
+T5
+main2
+PASS
+AI Strategic Decision
+I have only 1 total mana available and I've already taken my land drop this turn. All spells in hand cost 3+ (Ringsight 3, Palantír 3, Nazgûl Battle‑Mace 5) and there are no 0‑cost or hand‑activatable abilities to use. No battlefield activated abilities are affordable. Because nothing is legally castable or activatable this step, the correct play is to pass and wait for my next turn where I can cast a high‑value spell (preferably Ringsight to trigger Lord of the Nazgûl).
+T5
+main2
+End Phase
+Passed twice - ending phase
+T5
+end
+End Turn
+Turn 5 complete. Total damage: 0/40
+T6
+beginning
+=== NEW TURN ===
+Starting turn 6
+T6
+untap
+Untap & Generate Mana
+All permanents untapped. 5 lands + 1 artifacts = 6 mana available.
+T6
+draw
+Draw Card
+Drew Sol Ring (artifact)
+T6
+main1
+Main Phase 1
+Executing strategy focused on our win condition
+T6
+main1
+MANA
+AI Strategic Decision
+I have not played a land this turn — taking my land drop is highest priority to advance mana base and enable future plays. Playing the Island (hand index 3) preserves and shores up my blue sources for Ringsight (a key synergy play) while keeping future options open. This follows the MANA → ENGINE → THREAT framework: secure mana first so I can cast engines/synergy spells on the same turn when prompted for the next action.
+T6
+main1
+MANA
+playLand: 3
+Played Island
+✓
+T6
+main1
+ENGINE
+AI Strategic Decision
+Cast Ringsight ({1}{U}{B}). It's a high-value synergy play: it's an engine spell that will trigger Lord of the Nazgûl to create token(s) and it also searches for a card that shares a color with a legendary creature you control — giving immediate card selection and card advantage. You have the required colors (U and B) and enough total mana (3 <= available 7). This follows MANA→ENGINE→THREAT: use mana now to advance engines and generate extra bodies, while leaving remaining mana for a follow-up on the same turn after resolution.
+T6
+main1
+💰 Mana After Cast
+T6
+main1
+💰 Mana After Cast
+T6
+main1
+🎯 Cast Trigger
+Lord of the Nazgûl triggers from casting Ringsight
+T6
+main1
+Create Tokens: Lord of the Nazgûl
+Created 1 token(s): 3/3 Black Wraith Token
+✓
+T6
+main1
+✨ Token Generation
+Lord of the Nazgûl's trigger created tokens
+T6
+main1
+ENGINE
+castSpell: 0
+Cast Ringsight ({1}{U}{B})
+✓
+T6
+main1
+MANA
+AI Strategic Decision
+Prioritize ramp (MANA) on turn 6 — Sol Ring is the most impactful, mana-efficient play available. Casting Sol Ring now increases future mana available to accelerate engine/threat deployment (enables casting Nazgûl Battle‑Mace or additional engines in following turns) and follows the deck's early/mid-game guidance to play fast mana first. It costs only {1}, which is affordable from the current pool of 4 and preserves flexibility on subsequent decisions. This is better than spending 3 on Palantír this turn because ramp compounds value and fits the MANA>ENGINE>THREAT ordering.
+T6
+main1
+💰 Mana After Cast
+T6
+main1
+💰 Mana After Cast
+T6
+main1
+MANA
+castSpell: 3
+Cast Sol Ring ({1})
+✓
+T6
+main1
+ENGINE
+AI Strategic Decision
+Cast Palantír of Orthanc (3) now to use the full available mana pool and begin an ongoing card-advantage engine. I have already played a land this turn, Nazgûl Battle‑Mace (cost 5) is unaffordable, and passing with 3 unused mana is suboptimal. Palantír advances the mid‑game plan (ENGINE): it will start generating scry each turn and eventual card draw, helping find removal, ramp, or the Battle‑Mace to finish. Using the mana now preserves tempo and follows the MANA→ENGINE→THREAT priority after having already cast Sol Ring earlier.
+T6
+main1
+💰 Mana After Cast
+T6
+main1
+🎯 Triggers Detected
+T6
+main1
+💰 Mana After Cast
+T6
+main1
+ENGINE
+castSpell: 2
+Cast Palantír of Orthanc ({3})
+✓
+T6
+main1
+PASS
+AI Strategic Decision
+You have no legal productive plays this main phase. Nazgûl Battle‑Mace costs 5 and you only have 4 total mana available, and the Swamp in hand cannot be played because you've already played a land this turn. There are no activatable battlefield abilities available to spend the remaining mana. Therefore the correct play is to pass (proceed to combat/end steps) rather than try to perform an illegal or suboptimal action.
+T6
+main1
+PASS
+AI Strategic Decision
+You have 4 colorless mana in the pool and have already taken your land drop. The Swamp in hand is a land and cannot be played this turn. Nazgûl Battle‑Mace costs 5 and is unaffordable with only 4 available mana. There are no usable battlefield activated abilities to spend mana on. Under the decision framework (use mana, build engine, then threats) there is nothing legal or productive to cast or activate, so passing to proceed to combat/end is optimal.
+T6
+main1
+End Phase
+Passed twice - ending phase
+T6
+combat
+Combat Phase
+Entering combat with 1 creatures and 1 tokens
+T6
+combat
+⚔️ Combat Phase
+1 attacker(s) dealt 4 damage (keywords: flying, menace)
+✓
+T6
+combat
+⚔️ Combat Results
+1 attacker(s) dealt 4 damage (keywords: flying, menace)
+✓
+T6
+main2
+Main Phase 2
+Post-combat - deploying remaining resources
+T6
+main2
+PASS
+AI Strategic Decision
+I cannot play the Swamp because I've already played a land this turn. I cannot cast Nazgûl Battle‑Mace (cost 5) because I only have 4 mana available. There are no battlefield activated abilities available to use. With no castable spells, no activations, and no legal land drop, passing is the only correct option this step.
+T6
+main2
+PASS
+AI Strategic Decision
+No legal productive plays available: you've already used your land drop this turn (so the Swamp in hand cannot be played), Nazgûl Battle‑Mace (index 1) costs 5 and you only have 4 mana available, and there are no battlefield activated abilities to use. Under the provided rules, passing is the correct play rather than attempting illegal activations or wasting actions.
+T6
+main2
+End Phase
+Passed twice - ending phase
+T6
+end
+Triggered Abilities
+1 trigger(s) active: Palantír of Orthanc
+T6
+end
+End Turn
+Turn 6 complete. Total damage: 4/40
+T7
+beginning
+=== NEW TURN ===
+Starting turn 7
+T7
+untap
+Untap & Generate Mana
+All permanents untapped. 6 lands + 1 artifacts = 10 mana available.
+T7
+draw
+Draw Card
+Drew Island (land)
+T7
+main1
+Main Phase 1
+Executing strategy focused on our win condition
+T7
+main1
+MANA
+AI Strategic Decision
+Play a land first (priority Step 1). Adding the Swamp improves our mana base for future black spells and follows the play-a-land rule before casting spells. This advances our board without wasting the turn and preserves the current mana pool for use after this action (you will be prompted again to cast spells/activate things). Playing the Swamp also keeps options open to cast Nazgûl Battle-Mace (index 1) or other plays with the remaining mana afterward.
+T7
+main1
+MANA
+playLand: 0
+Played Swamp
+✓
+T7
+main1
+THREAT
+AI Strategic Decision
+Casting Nazgûl Battle-Mace is the best use of available mana this main phase. It's a 5-cost artifact (colorless), so it's castable with the current 11 mana. The equipment advances the late-game plan by enabling a big threat/equipment combo with our commander (menace/deathtouch/annihilator provide immediate upside once equipped) and creates a clear follow-up line for this turn. Casting it now uses mana efficiently instead of passing, and after it resolves we'll be able to equip in the next prompt (we still have plenty of mana remaining to pay an equip cost then). This play increases pressure and progresses toward finishing lines.
+T7
+main1
+💰 Mana After Cast
+T7
+main1
+🎯 Triggers Detected
+T7
+main1
+💰 Mana After Cast
+T7
+main1
+THREAT
+castSpell: 0
+Cast Nazgûl Battle-Mace ({5})
+✓
+T7
+main1
+PASS
+AI Strategic Decision
+You have already played your land this turn and the only card in hand is a land (Island), so you cannot play it. There are no castable spells in hand and no battlefield activated abilities available to use. With 6 floating mana but no legal actions, passing is the correct play.
+T7
+main1
+PASS
+AI Strategic Decision
+No legal productive plays are available. I have already played my land this turn, the only card in hand is a land (Island) which cannot be played, and there are no castable spells or available battlefield activated abilities to pay for with the 6 mana in my pool. Mana abilities (tapping lands/rocks) cannot be manually activated and the pool cannot be spent on anything meaningful now. Under the decision framework, passing is the correct play.
+T7
+main1
+End Phase
+Passed twice - ending phase
+T7
+combat
+Combat Phase
+Entering combat with 1 creatures and 1 tokens
+T7
+combat
+⚔️ Combat Phase
+1 attacker(s) dealt 3 damage (keywords: menace)
+✓
+T7
+combat
+⚔️ Combat Results
+1 attacker(s) dealt 3 damage (keywords: menace)
+✓
+T7
+main2
+Main Phase 2
+Post-combat - deploying remaining resources
+T7
+main2
+PASS
+AI Strategic Decision
+You have already played a land this turn, so the Island in hand cannot be played. There are no castable spells in hand and no available battlefield activated abilities to use right now. Your commander is already on the battlefield, so castCommander is not an option. With no legal productive play this step, passing is correct per the rules (don’t activate mana abilities manually and don’t waste actions).
+T7
+main2
+PASS
+AI Strategic Decision
+No legal productive play is available this step. I have already played a land this turn so the Island in hand cannot be played. There are no castable spells in hand and no battlefield activated abilities I can pay for. Mana abilities are automatic and cannot be manually activated. Given the CRITICAL rules and the decision priority, passing is correct to avoid illegal/inefficient actions.
+T7
+main2
+End Phase
+Passed twice - ending phase
+T7
+end
+Triggered Abilities
+1 trigger(s) active: Palantír of Orthanc
+T7
+end
+End Turn
+Turn 7 complete. Total damage: 7/40
+T8
+beginning
+=== NEW TURN ===
+Starting turn 8
+T8
+untap
+Untap & Generate Mana
+All permanents untapped. 7 lands + 1 artifacts = 11 mana available.
+T8
+draw
+Draw Card
+Drew Underground River (land)
+T8
+main1
+Main Phase 1
+Executing strategy focused on our win condition
+T8
+main1
+MANA
+AI Strategic Decision
+Play a land first per priority rules. Underground River (hand index 1) is the superior drop because it gives flexible U/B or colorless fixing for future turns (at the minor cost of 1 damage when tapped for U/B), which is more valuable for enabling future spells and maintaining tempo. We have not played a land yet this turn and must do so before other plays; this advances the MANA plan without wasting current available mana.
+T8
+main1
+MANA
+playLand: 1
+Played Underground River
+✓
+T8
+main1
+PASS
+AI Strategic Decision
+You have already played a land this turn (Has Played Land This Turn: true) and the only card in hand is a land (Island), so you cannot play it. There are no castable spells in hand and no available battlefield activated abilities to use. With nothing legal to cast or activate this main phase, the correct play is to pass and proceed to the next step.
+T8
+main1
+PASS
+AI Strategic Decision
+No playable spells or activatable battlefield abilities are available. A land was already played this turn (Island in hand cannot be played). The mana pool shown is available, but there are no spells in hand to cast and no battlefield abilities to activate. Per the critical rules and the decision priority, the correct play is to pass rather than attempt illegal actions (tapping lands or activating mana abilities manually).
+T8
+main1
+End Phase
+Passed twice - ending phase
+T8
+combat
+Combat Phase
+Entering combat with 1 creatures and 1 tokens
+T8
+combat
+⚔️ Combat Phase
+No creatures available to attack
+✗
+T8
+main2
+Main Phase 2
+Post-combat - deploying remaining resources
+T8
+main2
+PASS
+AI Strategic Decision
+You have already played a land this turn and the only card in hand is a land (Island), so you cannot play it. There are no castable spells in hand and no battlefield activated abilities available to use. Per the critical mana rules, you must not manually activate mana abilities; with nothing legal or productive to cast or activate, passing is the correct play.
+T8
+main2
+PASS
+AI Strategic Decision
+You have already played a land this turn and the only card in hand is a land (Island), so you cannot play it. There are no castable spells in hand and no battlefield activated abilities available to use. Per the critical mana rules, mana is already in the pool but you must not manually activate mana abilities; with nothing legal or productive to cast or activate, passing is the correct play to avoid illegal actions or wasted plays.
+T8
+main2
+End Phase
+Passed twice - ending phase
+T8
+end
+Triggered Abilities
+1 trigger(s) active: Palantír of Orthanc
+T8
+end
+End Turn
+Turn 8 complete. Total damage: 7/40
+T9
+beginning
+=== NEW TURN ===
+Starting turn 9
+T9
+untap
+Untap & Generate Mana
+All permanents untapped. 8 lands + 1 artifacts = 13 mana available.
+T9
+draw
+Draw Card
+Drew Bojuka Bog (land - has ETB effect!)
+T9
+main1
+Main Phase 1
+Executing strategy focused on our win condition
+T9
+main1
+MANA
+AI Strategic Decision
+Play Bojuka Bog (hand index 1). Land drop is highest priority and Bojuka Bog's ETB exile is meaningful late-game disruption (removes opponents' recursion/yard resources). It also advances board state without spending mana and fits the deck's plan of denying opponents answers. We have ample mana already, so the tapped ETB downside is irrelevant this turn.
+T9
+main1
+MANA
+playLand: 1
+Played Bojuka Bog
+✓
+T9
+main1
+PASS
+AI Strategic Decision
+You have already played a land this turn (Has Played Land This Turn: true) and the only card in hand is an Island (a land), so you cannot play it. There are no battlefield activated abilities available to use and no castable spells in hand. With no legal, productive plays available this main phase, the optimal action is to pass and retain full mana/board options for the next turn.
+T9
+main1
+PASS
+AI Strategic Decision
+You have already played a land this turn (Bojuka Bog). The only card in hand is an Island (a land) and therefore cannot be played. There are no battlefield or hand-activatable abilities available to use, and no castable spells in hand. Per the mana rules, mana is already available but you may not manually activate mana abilities; passing preserves game state and lets you keep available mana for the next turn. Passing is the only legal, productive option this Main Phase.
+T9
+main1
+End Phase
+Passed twice - ending phase
+T9
+combat
+Combat Phase
+Entering combat with 1 creatures and 1 tokens
+T9
+combat
+⚔️ Combat Phase
+No creatures available to attack
+✗
+T9
+main2
+Main Phase 2
+Post-combat - deploying remaining resources
+T9
+main2
+PASS
+AI Strategic Decision
+You have already played a land this turn, and the only card in hand is an Island (so you cannot play it). There are no castable spells in hand and no battlefield activated abilities available to use. Per the critical mana rules, the pool shown is already available but you must not manually activate mana abilities — with nothing legal or productive to cast/activate, the only correct play is to pass and proceed. This preserves game state and lets you use mana next turn.
+T9
+main2
+PASS
+AI Strategic Decision
+You have no legal or productive plays this Main2: the only card in hand is an Island but you've already played a land this turn, there are no battlefield activated abilities available to use, and the mana shown is already the pool — there is nothing to cast or activate now. Passing preserves game state and lets you use your available mana next turn. Per the critical rules, do not attempt to manually activate mana abilities or tap lands.
+T9
+main2
+End Phase
+Passed twice - ending phase
+T9
+end
+Triggered Abilities
+1 trigger(s) active: Palantír of Orthanc
+T9
+end
+End Turn
+Turn 9 complete. Total damage: 7/40
+T10
+beginning
+=== NEW TURN ===
+Starting turn 10
+T10
+untap
+Untap & Generate Mana
+All permanents untapped. 9 lands + 1 artifacts = 14 mana available.
+T10
+draw
+Draw Card
+Drew Barad-dûr (land - has ETB effect!)
+T10
+main1
+Main Phase 1
+Executing strategy focused on our win condition
+T10
+main1
+MANA
+AI Strategic Decision
+Take my land drop: play Barad-dûr from hand. With my commander already on the battlefield, Barad-dûr will enter untapped and immediately increase my available on-board mana sources and future flexibility (and provides the Amass activation later if a creature dies). I must use a land drop each turn when available; this advances the MANA plan and preserves my current 14-mana pool usage pattern for future turns. Playing Barad-dûr is strictly better than holding the Island because it gives a recurring black source and a useful late-game activated ability.
+T10
+main1
+MANA
+playLand: 1
+Played Barad-dûr
+✓
+T10
+main1
+PASS
+AI Strategic Decision
+No playable spells or abilities remain. I already took my land drop (Barad-dûr) this turn, the only card in hand is a land (Island) which cannot be played, and the battlefield currently has no available activated abilities to use. With no castable cards and no 0-cost/activatable effects, the correct play is to pass rather than attempt illegal actions or waste time.
+T10
+main1
+PASS
+AI Strategic Decision
+No playable spells or activated abilities are available. I already took my land drop this turn (Barad-dûr). The only card in hand is a land (Island), which cannot be played this turn. There are no 0-cost or battlefield abilities I can activate for value and I must not manually activate mana abilities. With 14 floating mana but nothing legal/effective to cast or activate, the correct play is to pass.
+T10
+main1
+End Phase
+Passed twice - ending phase
+T10
+combat
+Combat Phase
+Entering combat with 1 creatures and 1 tokens
+T10
+combat
+⚔️ Combat Phase
+No creatures available to attack
+✗
+T10
+main2
+Main Phase 2
+Post-combat - deploying remaining resources
+T10
+main2
+PASS
+AI Strategic Decision
+You have already taken your land drop this turn and the only card in hand is a land (Island) which cannot be played. There are no castable spells or battlefield activated abilities available and the critical rules forbid manually activating mana abilities. With no legal, productive plays, the correct play is to pass and preserve the game state for the next turn.
+T10
+main2
+PASS
+AI Strategic Decision
+You have already played a land this turn and the only card in hand is a land (Island), which cannot be played. There are no castable spells in hand, no available battlefield activated abilities to use, and the mana shown is already the pool — you cannot manually activate mana abilities. With nothing legal or productive to do this main phase, passing preserves the game state for next turn.
+T10
+main2
+End Phase
+Passed twice - ending phase
+T10
+end
+Triggered Abilities
+1 trigger(s) active: Palantír of Orthanc
+T10
+end
+End Turn
+Turn 10 complete. Total damage: 7/40
+T10
+post-game
+Game Complete
+Metrics: 6 spells cast, 1 commander casts, 10 lands played
+T10
+post-game
+✅ No Errors
+Game completed without errors
+
+CONSOLE LOG:
+client:745 WebSocket connection to 'wss://4bfb526c-f8d6-4438-8e29-eb9805353be8-00-rybydy69e9r8.janeway.replit.dev/?token=2Asz_PjvvgZa' failed: 
+createConnection @ client:745
+connect @ client:411
+connect @ client:751
+connect @ client:289
+connect @ client:373
+(anonymous) @ client:823
+client:772 [vite] failed to connect to websocket (Error: WebSocket closed without opened.). 
+connect @ client:772
+await in connect
+connect @ client:289
+connect @ client:373
+(anonymous) @ client:823
+client:423 Uncaught (in promise) Error: WebSocket closed without opened.
+    at WebSocket.<anonymous> (client:423:30)
+(anonymous) @ client:423
+react-dom_client.js?v=453f8220:20103 Download the React DevTools for a better development experience: https://react.dev/link/react-devtools
+config.js:51 ✅ OpenAI API configured successfully
+config.js:52    Key prefix: sk-proj...
+config.js:53    Key length: 164 characters
+App.jsx:93 Loaded 32731 cards into database
+App.jsx:93 Loaded 32731 cards into database
+App.jsx:241 Deck Strategy Analysis: {success: true, timestamp: '2025-10-31T05:13:26.024Z', analysis: {…}, metadata: {…}}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+activatedAbilityEngine.js:116 [parseActivatedAbilities] Detected landcycling: Lórien Revealed → Island (cost: {1})
+activatedAbilityEngine.js:70 [parseActivatedAbilities] Detected fetch land: Evolving Wilds
+activatedAbilityEngine.js:116 [parseActivatedAbilities] Detected landcycling: Lórien Revealed → Island (cost: {1})
+enhancedStepByStepGame.js:675 🔍 Creating deck behavior manifest...
+cardBehaviorAnalyzer.js:705 🔍 [PARSER] Sol Ring oracle text: {T}: Add {C}{C}.
+cardBehaviorAnalyzer.js:706 🔍 [PARSER] Split into 1 lines
+cardBehaviorAnalyzer.js:708 🔍 [PARSER]   Line 0: {T}: Add {C}{C}.
+cardBehaviorAnalyzer.js:705 🔍 [PARSER] Underground River oracle text: {T}: Add {C}.\n{T}: Add {U} or {B}. This land deals 1 damage to you.
+cardBehaviorAnalyzer.js:706 🔍 [PARSER] Split into 2 lines
+cardBehaviorAnalyzer.js:708 🔍 [PARSER]   Line 0: {T}: Add {C}.
+cardBehaviorAnalyzer.js:708 🔍 [PARSER]   Line 1: {T}: Add {U} or {B}. This land deals 1 damage to you.
+enhancedStepByStepGame.js:708 ✅ Behavior manifest created: {totalManaProducers: 22, totalFetchLands: 1, totalTokenGenerators: 12, totalCardDraw: 21}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+enhancedStepByStepGame.js:1880 🔍 [untap] BEFORE generateMana - Expected: 0 (lands:0 + artifacts:0 + creatures:0)
+enhancedStepByStepGame.js:1881 🔍 [untap] Land count: 0, Artifact count: 0, Creature count: 0
+gameEngine.js:505 🔍 [generateMana] Starting - Turn 1
+gameEngine.js:506 🔍 [generateMana] Battlefield: 0 lands, 0 artifacts, 0 creatures
+manaPool.js:554 
+💎 [PotentialPool] Building available sources...
+manaPool.js:638 💎 [PotentialPool] Found 0 available mana abilities
+gameEngine.js:572 🔍 [generateMana] Final total: 0 available sources
+gameEngine.js:573 🔍 [generateMana] Preview flexibility: {W: 0, U: 0, B: 0, R: 0, G: 0, …}
+enhancedStepByStepGame.js:1889 🔍 [untap] AFTER generateMana - Expected: 0, Actual: 0
+eventSystem.js:169 📤 Event Emitted: PHASE_CHANGED {source: 'unknown', queueSize: 1}
+eventSystem.js:169 📤 Event Emitted: CARD_DRAWN {source: 'Nazgûl Battle-Mace', queueSize: 1}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+manaPool.js:554 
+💎 [PotentialPool] Building available sources...
+manaPool.js:638 💎 [PotentialPool] Found 1 available mana abilities
+manaPool.js:641    0: Swamp (land) → 1x{B}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+enhancedStepByStepGame.js:1880 🔍 [untap] BEFORE generateMana - Expected: 1 (lands:1 + artifacts:0 + creatures:0)
+enhancedStepByStepGame.js:1881 🔍 [untap] Land count: 1, Artifact count: 0, Creature count: 0
+gameEngine.js:505 🔍 [generateMana] Starting - Turn 2
+gameEngine.js:506 🔍 [generateMana] Battlefield: 1 lands, 0 artifacts, 0 creatures
+manaPool.js:554 
+💎 [PotentialPool] Building available sources...
+manaPool.js:638 💎 [PotentialPool] Found 1 available mana abilities
+manaPool.js:641    0: Swamp (land) → 1x{B}
+gameEngine.js:572 🔍 [generateMana] Final total: 1 available sources
+gameEngine.js:573 🔍 [generateMana] Preview flexibility: {W: 0, U: 0, B: 1, R: 0, G: 0, …}
+enhancedStepByStepGame.js:1889 🔍 [untap] AFTER generateMana - Expected: 1, Actual: 1
+eventSystem.js:169 📤 Event Emitted: PHASE_CHANGED {source: 'unknown', queueSize: 1}
+eventSystem.js:169 📤 Event Emitted: CARD_DRAWN {source: 'Swamp', queueSize: 1}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+manaPool.js:554 
+💎 [PotentialPool] Building available sources...
+manaPool.js:638 💎 [PotentialPool] Found 2 available mana abilities
+manaPool.js:641    0: Swamp (land) → 1x{B}
+manaPool.js:641    1: Swamp (land) → 1x{B}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+enhancedStepByStepGame.js:1880 🔍 [untap] BEFORE generateMana - Expected: 2 (lands:2 + artifacts:0 + creatures:0)
+enhancedStepByStepGame.js:1881 🔍 [untap] Land count: 2, Artifact count: 0, Creature count: 0
+gameEngine.js:505 🔍 [generateMana] Starting - Turn 3
+gameEngine.js:506 🔍 [generateMana] Battlefield: 2 lands, 0 artifacts, 0 creatures
+manaPool.js:554 
+💎 [PotentialPool] Building available sources...
+manaPool.js:638 💎 [PotentialPool] Found 2 available mana abilities
+manaPool.js:641    0: Swamp (land) → 1x{B}
+manaPool.js:641    1: Swamp (land) → 1x{B}
+gameEngine.js:572 🔍 [generateMana] Final total: 2 available sources
+gameEngine.js:573 🔍 [generateMana] Preview flexibility: {W: 0, U: 0, B: 2, R: 0, G: 0, …}
+enhancedStepByStepGame.js:1889 🔍 [untap] AFTER generateMana - Expected: 2, Actual: 2
+eventSystem.js:169 📤 Event Emitted: PHASE_CHANGED {source: 'unknown', queueSize: 1}
+eventSystem.js:169 📤 Event Emitted: CARD_DRAWN {source: 'Drowned Catacomb', queueSize: 1}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+manaPool.js:554 
+💎 [PotentialPool] Building available sources...
+manaPool.js:638 💎 [PotentialPool] Found 3 available mana abilities
+manaPool.js:641    0: Swamp (land) → 1x{B}
+manaPool.js:641    1: Swamp (land) → 1x{B}
+manaPool.js:641    2: Drowned Catacomb (land) → 1x{U/B}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+manaPool.js:679 
+🧮 [ManaSolver] Solving cost: {3}
+manaPool.js:680 🧮 [ManaSolver] Available sources: 3 abilities
+manaPool.js:684 🧮 [ManaSolver] Required: {colored: {…}, generic: 3}
+manaPool.js:748    ✓ Using Swamp for generic (producing {B})
+manaPool.js:748    ✓ Using Swamp for generic (producing {B})
+manaPool.js:748    ✓ Using Drowned Catacomb for generic (producing {U})
+manaPool.js:751 ✅ [ManaSolver] Found solution using 3 sources
+manaPool.js:404 🔍 [canPay] Checking "{3}": YES ✅
+gameEngine.js:1000 
+🎯 [castSpell] Attempting to cast Commander's Sphere
+gameEngine.js:1001 🎯 [castSpell] Cost: {3}
+manaPool.js:679 
+🧮 [ManaSolver] Solving cost: {3}
+manaPool.js:680 🧮 [ManaSolver] Available sources: 3 abilities
+manaPool.js:684 🧮 [ManaSolver] Required: {colored: {…}, generic: 3}
+manaPool.js:748    ✓ Using Swamp for generic (producing {B})
+manaPool.js:748    ✓ Using Swamp for generic (producing {B})
+manaPool.js:748    ✓ Using Drowned Catacomb for generic (producing {U})
+manaPool.js:751 ✅ [ManaSolver] Found solution using 3 sources
+gameEngine.js:1017 ✅ [castSpell] Solution found! Tapping 3 sources
+gameEngine.js:1022    🔒 Tapped Swamp (produced {B})
+gameEngine.js:1022    🔒 Tapped Swamp (produced {B})
+gameEngine.js:1022    🔒 Tapped Drowned Catacomb (produced {U})
+manaPool.js:554 
+💎 [PotentialPool] Building available sources...
+manaPool.js:638 💎 [PotentialPool] Found 0 available mana abilities
+eventSystem.js:169 📤 Event Emitted: SPELL_CAST {source: "Commander's Sphere", queueSize: 1}
+eventSystem.js:169 📤 Event Emitted: PERMANENT_ENTERS_BATTLEFIELD {source: "Commander's Sphere", queueSize: 2}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+enhancedStepByStepGame.js:1880 🔍 [untap] BEFORE generateMana - Expected: 4 (lands:3 + artifacts:1 + creatures:0)
+enhancedStepByStepGame.js:1881 🔍 [untap] Land count: 3, Artifact count: 1, Creature count: 0
+gameEngine.js:505 🔍 [generateMana] Starting - Turn 4
+gameEngine.js:506 🔍 [generateMana] Battlefield: 3 lands, 1 artifacts, 0 creatures
+manaPool.js:554 
+💎 [PotentialPool] Building available sources...
+manaPool.js:638 💎 [PotentialPool] Found 4 available mana abilities
+manaPool.js:641    0: Swamp (land) → 1x{B}
+manaPool.js:641    1: Swamp (land) → 1x{B}
+manaPool.js:641    2: Drowned Catacomb (land) → 1x{U/B}
+manaPool.js:641    3: Commander's Sphere (artifact) → 1x{W/U/B/R/G}
+gameEngine.js:572 🔍 [generateMana] Final total: 4 available sources
+gameEngine.js:573 🔍 [generateMana] Preview flexibility: {W: 1, U: 2, B: 4, R: 1, G: 1, …}
+enhancedStepByStepGame.js:1889 🔍 [untap] AFTER generateMana - Expected: 4, Actual: 4
+eventSystem.js:169 📤 Event Emitted: PHASE_CHANGED {source: 'unknown', queueSize: 1}
+eventSystem.js:169 📤 Event Emitted: CARD_DRAWN {source: 'Island', queueSize: 1}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+manaPool.js:554 
+💎 [PotentialPool] Building available sources...
+manaPool.js:638 💎 [PotentialPool] Found 4 available mana abilities
+manaPool.js:641    0: Swamp (land) → 1x{B}
+manaPool.js:641    1: Swamp (land) → 1x{B}
+manaPool.js:641    2: Drowned Catacomb (land) → 1x{U/B}
+manaPool.js:641    3: Commander's Sphere (artifact) → 1x{W/U/B/R/G}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+manaPool.js:679 
+🧮 [ManaSolver] Solving cost: {2}{U}
+manaPool.js:680 🧮 [ManaSolver] Available sources: 4 abilities
+manaPool.js:684 🧮 [ManaSolver] Required: {colored: {…}, generic: 2}
+manaPool.js:724    ✓ Using Drowned Catacomb for {U}
+manaPool.js:748    ✓ Using Swamp for generic (producing {B})
+manaPool.js:748    ✓ Using Swamp for generic (producing {B})
+manaPool.js:751 ✅ [ManaSolver] Found solution using 3 sources
+manaPool.js:404 🔍 [canPay] Checking "{2}{U}": YES ✅
+gameEngine.js:1000 
+🎯 [castSpell] Attempting to cast Scroll of Isildur
+gameEngine.js:1001 🎯 [castSpell] Cost: {2}{U}
+manaPool.js:679 
+🧮 [ManaSolver] Solving cost: {2}{U}
+manaPool.js:680 🧮 [ManaSolver] Available sources: 4 abilities
+manaPool.js:684 🧮 [ManaSolver] Required: {colored: {…}, generic: 2}
+manaPool.js:724    ✓ Using Drowned Catacomb for {U}
+manaPool.js:748    ✓ Using Swamp for generic (producing {B})
+manaPool.js:748    ✓ Using Swamp for generic (producing {B})
+manaPool.js:751 ✅ [ManaSolver] Found solution using 3 sources
+gameEngine.js:1017 ✅ [castSpell] Solution found! Tapping 3 sources
+gameEngine.js:1022    🔒 Tapped Drowned Catacomb (produced {U})
+gameEngine.js:1022    🔒 Tapped Swamp (produced {B})
+gameEngine.js:1022    🔒 Tapped Swamp (produced {B})
+manaPool.js:554 
+💎 [PotentialPool] Building available sources...
+manaPool.js:638 💎 [PotentialPool] Found 1 available mana abilities
+manaPool.js:641    0: Commander's Sphere (artifact) → 1x{W/U/B/R/G}
+eventSystem.js:169 📤 Event Emitted: SPELL_CAST {source: 'Scroll of Isildur', queueSize: 1}
+eventSystem.js:169 📤 Event Emitted: PERMANENT_ENTERS_BATTLEFIELD {source: 'Scroll of Isildur', queueSize: 2}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+enhancedStepByStepGame.js:1880 🔍 [untap] BEFORE generateMana - Expected: 5 (lands:4 + artifacts:1 + creatures:0)
+enhancedStepByStepGame.js:1881 🔍 [untap] Land count: 4, Artifact count: 1, Creature count: 0
+gameEngine.js:505 🔍 [generateMana] Starting - Turn 5
+gameEngine.js:506 🔍 [generateMana] Battlefield: 4 lands, 1 artifacts, 0 creatures
+manaPool.js:554 
+💎 [PotentialPool] Building available sources...
+manaPool.js:638 💎 [PotentialPool] Found 5 available mana abilities
+manaPool.js:641    0: Swamp (land) → 1x{B}
+manaPool.js:641    1: Swamp (land) → 1x{B}
+manaPool.js:641    2: Drowned Catacomb (land) → 1x{U/B}
+manaPool.js:641    3: Sunken Hollow (land) → 1x{U/B}
+manaPool.js:641    4: Commander's Sphere (artifact) → 1x{W/U/B/R/G}
+gameEngine.js:572 🔍 [generateMana] Final total: 5 available sources
+gameEngine.js:573 🔍 [generateMana] Preview flexibility: {W: 1, U: 3, B: 5, R: 1, G: 1, …}
+enhancedStepByStepGame.js:1889 🔍 [untap] AFTER generateMana - Expected: 5, Actual: 5
+eventSystem.js:169 📤 Event Emitted: PHASE_CHANGED {source: 'unknown', queueSize: 1}
+eventSystem.js:169 📤 Event Emitted: CARD_DRAWN {source: 'Palantír of Orthanc', queueSize: 1}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+manaPool.js:554 
+💎 [PotentialPool] Building available sources...
+manaPool.js:638 💎 [PotentialPool] Found 6 available mana abilities
+manaPool.js:641    0: Swamp (land) → 1x{B}
+manaPool.js:641    1: Swamp (land) → 1x{B}
+manaPool.js:641    2: Drowned Catacomb (land) → 1x{U/B}
+manaPool.js:641    3: Sunken Hollow (land) → 1x{U/B}
+manaPool.js:641    4: Sunken Ruins (land) → 1x{C}
+manaPool.js:641    5: Commander's Sphere (artifact) → 1x{W/U/B/R/G}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+manaPool.js:679 
+🧮 [ManaSolver] Solving cost: {3}{U}{B}
+manaPool.js:680 🧮 [ManaSolver] Available sources: 6 abilities
+manaPool.js:684 🧮 [ManaSolver] Required: {colored: {…}, generic: 3}
+manaPool.js:724    ✓ Using Drowned Catacomb for {U}
+manaPool.js:724    ✓ Using Swamp for {B}
+manaPool.js:748    ✓ Using Swamp for generic (producing {B})
+manaPool.js:748    ✓ Using Sunken Hollow for generic (producing {U})
+manaPool.js:748    ✓ Using Sunken Ruins for generic (producing {C})
+manaPool.js:751 ✅ [ManaSolver] Found solution using 5 sources
+manaPool.js:404 🔍 [canPay] Checking "{3}{U}{B}": YES ✅
+gameEngine.js:1120 
+👑 [castCommander] Attempting to cast Lord of the Nazgûl
+gameEngine.js:1121 👑 [castCommander] Base cost: {3}{U}{B}, Tax: 0, Full cost: {3}{U}{B}
+manaPool.js:679 
+🧮 [ManaSolver] Solving cost: {3}{U}{B}
+manaPool.js:680 🧮 [ManaSolver] Available sources: 6 abilities
+manaPool.js:684 🧮 [ManaSolver] Required: {colored: {…}, generic: 3}
+manaPool.js:724    ✓ Using Drowned Catacomb for {U}
+manaPool.js:724    ✓ Using Swamp for {B}
+manaPool.js:748    ✓ Using Swamp for generic (producing {B})
+manaPool.js:748    ✓ Using Sunken Hollow for generic (producing {U})
+manaPool.js:748    ✓ Using Sunken Ruins for generic (producing {C})
+manaPool.js:751 ✅ [ManaSolver] Found solution using 5 sources
+gameEngine.js:1137 ✅ [castCommander] Solution found! Tapping 5 sources
+gameEngine.js:1142    🔒 Tapped Drowned Catacomb (produced {U})
+gameEngine.js:1142    🔒 Tapped Swamp (produced {B})
+gameEngine.js:1142    🔒 Tapped Swamp (produced {B})
+gameEngine.js:1142    🔒 Tapped Sunken Hollow (produced {U})
+gameEngine.js:1142    🔒 Tapped Sunken Ruins (produced {C})
+manaPool.js:554 
+💎 [PotentialPool] Building available sources...
+manaPool.js:638 💎 [PotentialPool] Found 1 available mana abilities
+manaPool.js:641    0: Commander's Sphere (artifact) → 1x{W/U/B/R/G}
+eventSystem.js:169 📤 Event Emitted: PERMANENT_ENTERS_BATTLEFIELD {source: 'Lord of the Nazgûl', queueSize: 1}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+enhancedStepByStepGame.js:1880 🔍 [untap] BEFORE generateMana - Expected: 6 (lands:5 + artifacts:1 + creatures:0)
+enhancedStepByStepGame.js:1881 🔍 [untap] Land count: 5, Artifact count: 1, Creature count: 0
+gameEngine.js:505 🔍 [generateMana] Starting - Turn 6
+gameEngine.js:506 🔍 [generateMana] Battlefield: 5 lands, 1 artifacts, 1 creatures
+manaPool.js:554 
+💎 [PotentialPool] Building available sources...
+manaPool.js:638 💎 [PotentialPool] Found 6 available mana abilities
+manaPool.js:641    0: Swamp (land) → 1x{B}
+manaPool.js:641    1: Swamp (land) → 1x{B}
+manaPool.js:641    2: Drowned Catacomb (land) → 1x{U/B}
+manaPool.js:641    3: Sunken Hollow (land) → 1x{U/B}
+manaPool.js:641    4: Sunken Ruins (land) → 1x{C}
+manaPool.js:641    5: Commander's Sphere (artifact) → 1x{W/U/B/R/G}
+gameEngine.js:572 🔍 [generateMana] Final total: 6 available sources
+gameEngine.js:573 🔍 [generateMana] Preview flexibility: {W: 1, U: 3, B: 5, R: 1, G: 1, …}
+enhancedStepByStepGame.js:1889 🔍 [untap] AFTER generateMana - Expected: 6, Actual: 6
+eventSystem.js:169 📤 Event Emitted: PHASE_CHANGED {source: 'unknown', queueSize: 1}
+eventSystem.js:169 📤 Event Emitted: CARD_DRAWN {source: 'Sol Ring', queueSize: 1}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+manaPool.js:554 
+💎 [PotentialPool] Building available sources...
+manaPool.js:638 💎 [PotentialPool] Found 7 available mana abilities
+manaPool.js:641    0: Swamp (land) → 1x{B}
+manaPool.js:641    1: Swamp (land) → 1x{B}
+manaPool.js:641    2: Drowned Catacomb (land) → 1x{U/B}
+manaPool.js:641    3: Sunken Hollow (land) → 1x{U/B}
+manaPool.js:641    4: Sunken Ruins (land) → 1x{C}
+manaPool.js:641    5: Island (land) → 1x{U}
+manaPool.js:641    6: Commander's Sphere (artifact) → 1x{W/U/B/R/G}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+manaPool.js:679 
+🧮 [ManaSolver] Solving cost: {1}{U}{B}
+manaPool.js:680 🧮 [ManaSolver] Available sources: 7 abilities
+manaPool.js:684 🧮 [ManaSolver] Required: {colored: {…}, generic: 1}
+manaPool.js:724    ✓ Using Drowned Catacomb for {U}
+manaPool.js:724    ✓ Using Swamp for {B}
+manaPool.js:748    ✓ Using Swamp for generic (producing {B})
+manaPool.js:751 ✅ [ManaSolver] Found solution using 3 sources
+manaPool.js:404 🔍 [canPay] Checking "{1}{U}{B}": YES ✅
+gameEngine.js:1000 
+🎯 [castSpell] Attempting to cast Ringsight
+gameEngine.js:1001 🎯 [castSpell] Cost: {1}{U}{B}
+manaPool.js:679 
+🧮 [ManaSolver] Solving cost: {1}{U}{B}
+manaPool.js:680 🧮 [ManaSolver] Available sources: 7 abilities
+manaPool.js:684 🧮 [ManaSolver] Required: {colored: {…}, generic: 1}
+manaPool.js:724    ✓ Using Drowned Catacomb for {U}
+manaPool.js:724    ✓ Using Swamp for {B}
+manaPool.js:748    ✓ Using Swamp for generic (producing {B})
+manaPool.js:751 ✅ [ManaSolver] Found solution using 3 sources
+gameEngine.js:1017 ✅ [castSpell] Solution found! Tapping 3 sources
+gameEngine.js:1022    🔒 Tapped Drowned Catacomb (produced {U})
+gameEngine.js:1022    🔒 Tapped Swamp (produced {B})
+gameEngine.js:1022    🔒 Tapped Swamp (produced {B})
+manaPool.js:554 
+💎 [PotentialPool] Building available sources...
+manaPool.js:638 💎 [PotentialPool] Found 4 available mana abilities
+manaPool.js:641    0: Sunken Hollow (land) → 1x{U/B}
+manaPool.js:641    1: Sunken Ruins (land) → 1x{C}
+manaPool.js:641    2: Island (land) → 1x{U}
+manaPool.js:641    3: Commander's Sphere (artifact) → 1x{W/U/B/R/G}
+eventSystem.js:169 📤 Event Emitted: SPELL_CAST {source: 'Ringsight', queueSize: 1}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+manaPool.js:679 
+🧮 [ManaSolver] Solving cost: {1}
+manaPool.js:680 🧮 [ManaSolver] Available sources: 4 abilities
+manaPool.js:684 🧮 [ManaSolver] Required: {colored: {…}, generic: 1}
+manaPool.js:748    ✓ Using Sunken Hollow for generic (producing {U})
+manaPool.js:751 ✅ [ManaSolver] Found solution using 1 sources
+manaPool.js:404 🔍 [canPay] Checking "{1}": YES ✅
+gameEngine.js:1000 
+🎯 [castSpell] Attempting to cast Sol Ring
+gameEngine.js:1001 🎯 [castSpell] Cost: {1}
+manaPool.js:679 
+🧮 [ManaSolver] Solving cost: {1}
+manaPool.js:680 🧮 [ManaSolver] Available sources: 4 abilities
+manaPool.js:684 🧮 [ManaSolver] Required: {colored: {…}, generic: 1}
+manaPool.js:748    ✓ Using Sunken Hollow for generic (producing {U})
+manaPool.js:751 ✅ [ManaSolver] Found solution using 1 sources
+gameEngine.js:1017 ✅ [castSpell] Solution found! Tapping 1 sources
+gameEngine.js:1022    🔒 Tapped Sunken Hollow (produced {U})
+manaPool.js:554 
+💎 [PotentialPool] Building available sources...
+manaPool.js:638 💎 [PotentialPool] Found 3 available mana abilities
+manaPool.js:641    0: Sunken Ruins (land) → 1x{C}
+manaPool.js:641    1: Island (land) → 1x{U}
+manaPool.js:641    2: Commander's Sphere (artifact) → 1x{W/U/B/R/G}
+eventSystem.js:169 📤 Event Emitted: SPELL_CAST {source: 'Sol Ring', queueSize: 1}
+eventSystem.js:169 📤 Event Emitted: PERMANENT_ENTERS_BATTLEFIELD {source: 'Sol Ring', queueSize: 2}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+manaPool.js:679 
+🧮 [ManaSolver] Solving cost: {3}
+manaPool.js:680 🧮 [ManaSolver] Available sources: 3 abilities
+manaPool.js:684 🧮 [ManaSolver] Required: {colored: {…}, generic: 3}
+manaPool.js:748    ✓ Using Sunken Ruins for generic (producing {C})
+manaPool.js:748    ✓ Using Island for generic (producing {U})
+manaPool.js:748    ✓ Using Commander's Sphere for generic (producing {W})
+manaPool.js:751 ✅ [ManaSolver] Found solution using 3 sources
+manaPool.js:404 🔍 [canPay] Checking "{3}": YES ✅
+gameEngine.js:1000 
+🎯 [castSpell] Attempting to cast Palantír of Orthanc
+gameEngine.js:1001 🎯 [castSpell] Cost: {3}
+manaPool.js:679 
+🧮 [ManaSolver] Solving cost: {3}
+manaPool.js:680 🧮 [ManaSolver] Available sources: 3 abilities
+manaPool.js:684 🧮 [ManaSolver] Required: {colored: {…}, generic: 3}
+manaPool.js:748    ✓ Using Sunken Ruins for generic (producing {C})
+manaPool.js:748    ✓ Using Island for generic (producing {U})
+manaPool.js:748    ✓ Using Commander's Sphere for generic (producing {W})
+manaPool.js:751 ✅ [ManaSolver] Found solution using 3 sources
+gameEngine.js:1017 ✅ [castSpell] Solution found! Tapping 3 sources
+gameEngine.js:1022    🔒 Tapped Sunken Ruins (produced {C})
+gameEngine.js:1022    🔒 Tapped Island (produced {U})
+gameEngine.js:1022    🔒 Tapped Commander's Sphere (produced {W})
+manaPool.js:554 
+💎 [PotentialPool] Building available sources...
+manaPool.js:638 💎 [PotentialPool] Found 1 available mana abilities
+manaPool.js:641    0: Sol Ring (artifact) → 2x{C}{C}
+eventSystem.js:169 📤 Event Emitted: SPELL_CAST {source: 'Palantír of Orthanc', queueSize: 1}
+eventSystem.js:169 📤 Event Emitted: PERMANENT_ENTERS_BATTLEFIELD {source: 'Palantír of Orthanc', queueSize: 2}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+eventSystem.js:169 📤 Event Emitted: CREATURE_ATTACKS {source: 'Lord of the Nazgûl', queueSize: 1}
+eventSystem.js:169 📤 Event Emitted: COMBAT_DAMAGE_DEALT {source: 'unknown', queueSize: 2}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+enhancedStepByStepGame.js:1880 🔍 [untap] BEFORE generateMana - Expected: 8 (lands:6 + artifacts:2 + creatures:0)
+enhancedStepByStepGame.js:1881 🔍 [untap] Land count: 6, Artifact count: 1, Creature count: 0
+gameEngine.js:505 🔍 [generateMana] Starting - Turn 7
+gameEngine.js:506 🔍 [generateMana] Battlefield: 6 lands, 3 artifacts, 2 creatures
+manaPool.js:554 
+💎 [PotentialPool] Building available sources...
+manaPool.js:638 💎 [PotentialPool] Found 7 available mana abilities
+manaPool.js:641    0: Swamp (land) → 1x{B}
+manaPool.js:641    1: Swamp (land) → 1x{B}
+manaPool.js:641    2: Drowned Catacomb (land) → 1x{U/B}
+manaPool.js:641    3: Sunken Hollow (land) → 1x{U/B}
+manaPool.js:641    4: Sunken Ruins (land) → 1x{C}
+manaPool.js:641    5: Island (land) → 1x{U}
+manaPool.js:641    6: Sol Ring (artifact) → 2x{C}{C}
+gameEngine.js:572 🔍 [generateMana] Final total: 10 available sources
+gameEngine.js:573 🔍 [generateMana] Preview flexibility: {W: 0, U: 3, B: 4, R: 0, G: 0, …}
+enhancedStepByStepGame.js:1889 🔍 [untap] AFTER generateMana - Expected: 8, Actual: 10
+eventSystem.js:169 📤 Event Emitted: PHASE_CHANGED {source: 'unknown', queueSize: 1}
+eventSystem.js:169 📤 Event Emitted: CARD_DRAWN {source: 'Island', queueSize: 1}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+manaPool.js:554 
+💎 [PotentialPool] Building available sources...
+manaPool.js:638 💎 [PotentialPool] Found 8 available mana abilities
+manaPool.js:641    0: Swamp (land) → 1x{B}
+manaPool.js:641    1: Swamp (land) → 1x{B}
+manaPool.js:641    2: Drowned Catacomb (land) → 1x{U/B}
+manaPool.js:641    3: Sunken Hollow (land) → 1x{U/B}
+manaPool.js:641    4: Sunken Ruins (land) → 1x{C}
+manaPool.js:641    5: Island (land) → 1x{U}
+manaPool.js:641    6: Swamp (land) → 1x{B}
+manaPool.js:641    7: Sol Ring (artifact) → 2x{C}{C}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+manaPool.js:679 
+🧮 [ManaSolver] Solving cost: {5}
+manaPool.js:680 🧮 [ManaSolver] Available sources: 8 abilities
+manaPool.js:684 🧮 [ManaSolver] Required: {colored: {…}, generic: 5}
+manaPool.js:748    ✓ Using Swamp for generic (producing {B})
+manaPool.js:748    ✓ Using Swamp for generic (producing {B})
+manaPool.js:748    ✓ Using Drowned Catacomb for generic (producing {U})
+manaPool.js:748    ✓ Using Sunken Hollow for generic (producing {U})
+manaPool.js:748    ✓ Using Sunken Ruins for generic (producing {C})
+manaPool.js:751 ✅ [ManaSolver] Found solution using 5 sources
+manaPool.js:404 🔍 [canPay] Checking "{5}": YES ✅
+gameEngine.js:1000 
+🎯 [castSpell] Attempting to cast Nazgûl Battle-Mace
+gameEngine.js:1001 🎯 [castSpell] Cost: {5}
+manaPool.js:679 
+🧮 [ManaSolver] Solving cost: {5}
+manaPool.js:680 🧮 [ManaSolver] Available sources: 8 abilities
+manaPool.js:684 🧮 [ManaSolver] Required: {colored: {…}, generic: 5}
+manaPool.js:748    ✓ Using Swamp for generic (producing {B})
+manaPool.js:748    ✓ Using Swamp for generic (producing {B})
+manaPool.js:748    ✓ Using Drowned Catacomb for generic (producing {U})
+manaPool.js:748    ✓ Using Sunken Hollow for generic (producing {U})
+manaPool.js:748    ✓ Using Sunken Ruins for generic (producing {C})
+manaPool.js:751 ✅ [ManaSolver] Found solution using 5 sources
+gameEngine.js:1017 ✅ [castSpell] Solution found! Tapping 5 sources
+gameEngine.js:1022    🔒 Tapped Swamp (produced {B})
+gameEngine.js:1022    🔒 Tapped Swamp (produced {B})
+gameEngine.js:1022    🔒 Tapped Drowned Catacomb (produced {U})
+gameEngine.js:1022    🔒 Tapped Sunken Hollow (produced {U})
+gameEngine.js:1022    🔒 Tapped Sunken Ruins (produced {C})
+manaPool.js:554 
+💎 [PotentialPool] Building available sources...
+manaPool.js:638 💎 [PotentialPool] Found 3 available mana abilities
+manaPool.js:641    0: Island (land) → 1x{U}
+manaPool.js:641    1: Swamp (land) → 1x{B}
+manaPool.js:641    2: Sol Ring (artifact) → 2x{C}{C}
+eventSystem.js:169 📤 Event Emitted: SPELL_CAST {source: 'Nazgûl Battle-Mace', queueSize: 1}
+eventSystem.js:169 📤 Event Emitted: PERMANENT_ENTERS_BATTLEFIELD {source: 'Nazgûl Battle-Mace', queueSize: 2}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+eventSystem.js:169 📤 Event Emitted: CREATURE_ATTACKS {source: '3/3 Black Wraith Token', queueSize: 1}
+eventSystem.js:169 📤 Event Emitted: COMBAT_DAMAGE_DEALT {source: 'unknown', queueSize: 2}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+enhancedStepByStepGame.js:1880 🔍 [untap] BEFORE generateMana - Expected: 9 (lands:7 + artifacts:2 + creatures:0)
+enhancedStepByStepGame.js:1881 🔍 [untap] Land count: 7, Artifact count: 1, Creature count: 0
+gameEngine.js:505 🔍 [generateMana] Starting - Turn 8
+gameEngine.js:506 🔍 [generateMana] Battlefield: 7 lands, 4 artifacts, 2 creatures
+manaPool.js:554 
+💎 [PotentialPool] Building available sources...
+manaPool.js:638 💎 [PotentialPool] Found 8 available mana abilities
+manaPool.js:641    0: Swamp (land) → 1x{B}
+manaPool.js:641    1: Swamp (land) → 1x{B}
+manaPool.js:641    2: Drowned Catacomb (land) → 1x{U/B}
+manaPool.js:641    3: Sunken Hollow (land) → 1x{U/B}
+manaPool.js:641    4: Sunken Ruins (land) → 1x{C}
+manaPool.js:641    5: Island (land) → 1x{U}
+manaPool.js:641    6: Swamp (land) → 1x{B}
+manaPool.js:641    7: Sol Ring (artifact) → 2x{C}{C}
+gameEngine.js:572 🔍 [generateMana] Final total: 11 available sources
+gameEngine.js:573 🔍 [generateMana] Preview flexibility: {W: 0, U: 3, B: 5, R: 0, G: 0, …}
+enhancedStepByStepGame.js:1889 🔍 [untap] AFTER generateMana - Expected: 9, Actual: 11
+eventSystem.js:169 📤 Event Emitted: PHASE_CHANGED {source: 'unknown', queueSize: 1}
+eventSystem.js:169 📤 Event Emitted: CARD_DRAWN {source: 'Underground River', queueSize: 1}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+manaPool.js:554 
+💎 [PotentialPool] Building available sources...
+manaPool.js:638 💎 [PotentialPool] Found 10 available mana abilities
+manaPool.js:641    0: Swamp (land) → 1x{B}
+manaPool.js:641    1: Swamp (land) → 1x{B}
+manaPool.js:641    2: Drowned Catacomb (land) → 1x{U/B}
+manaPool.js:641    3: Sunken Hollow (land) → 1x{U/B}
+manaPool.js:641    4: Sunken Ruins (land) → 1x{C}
+manaPool.js:641    5: Island (land) → 1x{U}
+manaPool.js:641    6: Swamp (land) → 1x{B}
+manaPool.js:641    7: Underground River (land) → 1x{C}
+manaPool.js:641    8: Underground River (land) → 1x{U/B}
+manaPool.js:641    9: Sol Ring (artifact) → 2x{C}{C}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+enhancedStepByStepGame.js:1880 🔍 [untap] BEFORE generateMana - Expected: 10 (lands:8 + artifacts:2 + creatures:0)
+enhancedStepByStepGame.js:1881 🔍 [untap] Land count: 8, Artifact count: 1, Creature count: 0
+gameEngine.js:505 🔍 [generateMana] Starting - Turn 9
+gameEngine.js:506 🔍 [generateMana] Battlefield: 8 lands, 4 artifacts, 2 creatures
+manaPool.js:554 
+💎 [PotentialPool] Building available sources...
+manaPool.js:638 💎 [PotentialPool] Found 10 available mana abilities
+manaPool.js:641    0: Swamp (land) → 1x{B}
+manaPool.js:641    1: Swamp (land) → 1x{B}
+manaPool.js:641    2: Drowned Catacomb (land) → 1x{U/B}
+manaPool.js:641    3: Sunken Hollow (land) → 1x{U/B}
+manaPool.js:641    4: Sunken Ruins (land) → 1x{C}
+manaPool.js:641    5: Island (land) → 1x{U}
+manaPool.js:641    6: Swamp (land) → 1x{B}
+manaPool.js:641    7: Underground River (land) → 1x{C}
+manaPool.js:641    8: Underground River (land) → 1x{U/B}
+manaPool.js:641    9: Sol Ring (artifact) → 2x{C}{C}
+gameEngine.js:572 🔍 [generateMana] Final total: 13 available sources
+gameEngine.js:573 🔍 [generateMana] Preview flexibility: {W: 0, U: 4, B: 6, R: 0, G: 0, …}
+enhancedStepByStepGame.js:1889 🔍 [untap] AFTER generateMana - Expected: 10, Actual: 13
+eventSystem.js:169 📤 Event Emitted: PHASE_CHANGED {source: 'unknown', queueSize: 1}
+eventSystem.js:169 📤 Event Emitted: CARD_DRAWN {source: 'Bojuka Bog', queueSize: 1}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+manaPool.js:554 
+💎 [PotentialPool] Building available sources...
+manaPool.js:638 💎 [PotentialPool] Found 10 available mana abilities
+manaPool.js:641    0: Swamp (land) → 1x{B}
+manaPool.js:641    1: Swamp (land) → 1x{B}
+manaPool.js:641    2: Drowned Catacomb (land) → 1x{U/B}
+manaPool.js:641    3: Sunken Hollow (land) → 1x{U/B}
+manaPool.js:641    4: Sunken Ruins (land) → 1x{C}
+manaPool.js:641    5: Island (land) → 1x{U}
+manaPool.js:641    6: Swamp (land) → 1x{B}
+manaPool.js:641    7: Underground River (land) → 1x{C}
+manaPool.js:641    8: Underground River (land) → 1x{U/B}
+manaPool.js:641    9: Sol Ring (artifact) → 2x{C}{C}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+enhancedStepByStepGame.js:1880 🔍 [untap] BEFORE generateMana - Expected: 11 (lands:9 + artifacts:2 + creatures:0)
+enhancedStepByStepGame.js:1881 🔍 [untap] Land count: 9, Artifact count: 1, Creature count: 0
+gameEngine.js:505 🔍 [generateMana] Starting - Turn 10
+gameEngine.js:506 🔍 [generateMana] Battlefield: 9 lands, 4 artifacts, 2 creatures
+manaPool.js:554 
+💎 [PotentialPool] Building available sources...
+manaPool.js:638 💎 [PotentialPool] Found 11 available mana abilities
+manaPool.js:641    0: Swamp (land) → 1x{B}
+manaPool.js:641    1: Swamp (land) → 1x{B}
+manaPool.js:641    2: Drowned Catacomb (land) → 1x{U/B}
+manaPool.js:641    3: Sunken Hollow (land) → 1x{U/B}
+manaPool.js:641    4: Sunken Ruins (land) → 1x{C}
+manaPool.js:641    5: Island (land) → 1x{U}
+manaPool.js:641    6: Swamp (land) → 1x{B}
+manaPool.js:641    7: Underground River (land) → 1x{C}
+manaPool.js:641    8: Underground River (land) → 1x{U/B}
+manaPool.js:641    9: Bojuka Bog (land) → 1x{B}
+manaPool.js:641    10: Sol Ring (artifact) → 2x{C}{C}
+gameEngine.js:572 🔍 [generateMana] Final total: 14 available sources
+gameEngine.js:573 🔍 [generateMana] Preview flexibility: {W: 0, U: 4, B: 7, R: 0, G: 0, …}
+enhancedStepByStepGame.js:1889 🔍 [untap] AFTER generateMana - Expected: 11, Actual: 14
+eventSystem.js:169 📤 Event Emitted: PHASE_CHANGED {source: 'unknown', queueSize: 1}
+eventSystem.js:169 📤 Event Emitted: CARD_DRAWN {source: 'Barad-dûr', queueSize: 1}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+manaPool.js:554 
+💎 [PotentialPool] Building available sources...
+manaPool.js:638 💎 [PotentialPool] Found 11 available mana abilities
+manaPool.js:641    0: Swamp (land) → 1x{B}
+manaPool.js:641    1: Swamp (land) → 1x{B}
+manaPool.js:641    2: Drowned Catacomb (land) → 1x{U/B}
+manaPool.js:641    3: Sunken Hollow (land) → 1x{U/B}
+manaPool.js:641    4: Sunken Ruins (land) → 1x{C}
+manaPool.js:641    5: Island (land) → 1x{U}
+manaPool.js:641    6: Swamp (land) → 1x{B}
+manaPool.js:641    7: Underground River (land) → 1x{C}
+manaPool.js:641    8: Underground River (land) → 1x{U/B}
+manaPool.js:641    9: Bojuka Bog (land) → 1x{B}
+manaPool.js:641    10: Sol Ring (artifact) → 2x{C}{C}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}

@@ -14,8 +14,9 @@ import {
 import DeckView from './components/DeckView.jsx';
 import SimulationView from './components/SimulationView.jsx';
 import AIAnalysisView from './components/AIAnalysisView.jsx';
-import { runEnhancedDetailedGame } from './enhancedStepByStepGame';  // NEW LINE
+import { runEnhancedDetailedGame } from './enhancedStepByStepGame';
 import DetailedGameView from './components/DetailedGameView';
+import { EXAMPLE_DECKS, getDeckOptions } from './exampleDecks';  // NEW IMPORT
 
 export default function MTGGoldfisher() {
   const [commanderList, setCommanderList] = useState('');
@@ -35,6 +36,7 @@ export default function MTGGoldfisher() {
   const [totalGames, setTotalGames] = useState(0);
   const [useAI, setUseAI] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
+  const [selectedExampleDeck, setSelectedExampleDeck] = useState('nazgul');  // NEW STATE
 
   // Load card database from CSV on mount
   React.useEffect(() => {
@@ -315,88 +317,17 @@ export default function MTGGoldfisher() {
     setStatistics(null);
   };
 
-  const exampleCommander = `1 Lord of the Nazgûl`;
-  
-  const exampleDeck = `1 Arcane Denial
-1 Arcane Signet
-1 Barad-dûr
-1 Birthday Escape
-1 Bojuka Bog
-1 Borne Upon a Wind
-1 Brainstorm
-1 Call of the Ring
-1 Claim the Precious
-1 Command Tower
-1 Commander's Sphere
-1 Consider
-1 Counterspell
-1 Countersquall
-1 Decree of Pain
-1 Dimir Signet
-1 Drowned Catacomb
-1 Evolving Wilds
-1 Extract from Darkness
-1 Feed the Swarm
-1 Frantic Search
-1 Glamdring
-1 Go for the Throat
-1 Great Hall of the Citadel
-8 Island
-1 Lightning Greaves
-1 Lórien Revealed
-1 Minas Morgul, Dark Fortress
-1 Mirkwood Bats
-1 Mithril Coat
-1 Mordor Muster
-1 Mystic Confluence
-9 Nazgûl
-1 Nazgûl Battle-Mace
-1 Night's Whisper
-1 Not Dead After All
-1 One Ring to Rule Them All
-1 Opt
-1 Orcish Bowmasters
-1 Orcish Medicine
-1 Palantír of Orthanc
-1 Path of Ancestry
-1 Ponder
-1 Preordain
-1 Press the Enemy
-1 Reanimate
-1 Ringsight
-1 Ringwraiths
-1 Rivendell
-1 Sam's Desperate Rescue
-1 Saruman's Trickery
-1 Sauron's Ransom
-1 Scroll of Isildur
-1 Shelob's Ambush
-1 Snap
-1 Sol Ring
-1 Stern Scolding
-1 Storm of Saruman
-1 Sunken Hollow
-1 Sunken Ruins
-1 Surrounded by Orcs
-10 Swamp
-1 Swan Song
-1 Tainted Isle
-1 Talisman of Dominance
-1 The Black Gate
-1 The Grey Havens
-1 The One Ring
-1 Toxic Deluge
-1 Treason of Isengard
-1 Underground River
-1 Watery Grave
-1 Whispersilk Cloak
-1 Witch-king of Angmar
-1 Witch-king, Bringer of Ruin`;
-
+  // UPDATED: Load example deck based on selection
   const loadExampleDeck = () => {
-    setCommanderList(exampleCommander);
-    setDeckList(exampleDeck);
+    const selectedDeck = EXAMPLE_DECKS[selectedExampleDeck];
+    if (selectedDeck) {
+      setCommanderList(selectedDeck.commander);
+      setDeckList(selectedDeck.deckList);
+    }
   };
+
+  // Get deck options for dropdown
+  const deckOptions = getDeckOptions();
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-purple-900 to-gray-900 text-white p-6">
@@ -508,13 +439,36 @@ export default function MTGGoldfisher() {
                 Enter your commander(s) and deck list separately. Format: <code className="bg-gray-700 px-2 py-1 rounded">1 Card Name</code> per line
               </p>
               
-              <button
-                onClick={loadExampleDeck}
-                disabled={!dbLoaded}
-                className="mb-4 px-4 py-2 bg-gray-700 hover:bg-gray-600 disabled:bg-gray-800 disabled:cursor-not-allowed rounded text-sm"
-              >
-                {dbLoaded ? 'Load Example Deck (Lord of the Nazgûl)' : 'Loading card database...'}
-              </button>
+              {/* NEW: Example Deck Selector */}
+              <div className="mb-4 p-4 bg-gray-900 border border-gray-700 rounded-lg">
+                <label className="block text-sm font-semibold mb-2 text-purple-400">
+                  📚 Load Example Deck
+                </label>
+                <div className="flex gap-3 items-start">
+                  <select
+                    value={selectedExampleDeck}
+                    onChange={(e) => setSelectedExampleDeck(e.target.value)}
+                    disabled={!dbLoaded}
+                    className="flex-1 bg-gray-800 border border-gray-600 rounded px-3 py-2 text-sm focus:outline-none focus:border-purple-500 disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    {deckOptions.map(option => (
+                      <option key={option.value} value={option.value}>
+                        {option.label}
+                      </option>
+                    ))}
+                  </select>
+                  <button
+                    onClick={loadExampleDeck}
+                    disabled={!dbLoaded}
+                    className="px-4 py-2 bg-purple-600 hover:bg-purple-700 disabled:bg-gray-700 disabled:cursor-not-allowed rounded text-sm font-semibold transition-all"
+                  >
+                    {dbLoaded ? 'Load Deck' : 'Loading...'}
+                  </button>
+                </div>
+                <p className="text-xs text-gray-400 mt-2">
+                  {EXAMPLE_DECKS[selectedExampleDeck]?.description}
+                </p>
+              </div>
 
               <div className="space-y-4">
                 <div>

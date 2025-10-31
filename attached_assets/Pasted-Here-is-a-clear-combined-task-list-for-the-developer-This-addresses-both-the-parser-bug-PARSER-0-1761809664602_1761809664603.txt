@@ -1,0 +1,84 @@
+Here is a clear, combined task list for the developer. This addresses both the parser bug (`PARSER-001`) and the critical flaw in their new engine logic (`MANA-011`), providing a definitive path to resolve the mana calculation issues.
+
+-----
+
+### Combined Task & Resolution Plan
+
+**To:** AI Developer
+**From:** User (via Gemini Analysis)
+**Subject:** Final Resolution Plan for Mana Calculation Bugs (PARSER-001 & MANA-011)
+
+Your analysis that the parser (`cardBehaviorAnalyzer.js`) is the root cause of the incorrect manifest data is **correct**.
+
+However, your proposed fix for the engine—reverting to the `MANA-009` logic ("Choose best ability")—is **critically flawed**. As we identified in bug `MANA-011`, this logic will fail. When the (newly fixed) parser provides `generateMana` with *two* valid abilities for `Underground River` (`{C}` and `{U/B}`), the "Choose best" logic will **incorrectly discard the `{C}` ability**, and the mana pool will *still* be wrong.
+
+Here is the clear, two-part path forward to **finally resolve this issue**.
+
+-----
+
+### Priority 1: Fix the Parser (Task `PARSER-001`)
+
+This task is to ensure the manifest data is 100% correct.
+
+**Action:**
+Implement the fix in `cardBehaviorAnalyzer.js` to correctly split abilities based on newline characters (`\n` or `\\n`).
+
+**Acceptance Criteria:**
+
+  * **Input:** `Underground River`'s oracle text (`{T}: Add {C}. \n {T}: Add {U} or {B}. ...`).
+  * **Output:** The manifest data for `Underground River` **must** now contain **two separate, distinct ability objects** in its `abilities` array, one for each `{T}` ability, as defined in the "Mana Ability Parsing & Implementation Guide". For example:
+    ```json
+    "abilities": [
+      {
+        "abilityText": "{T}: Add {C}.",
+        "isManaAbility": true,
+        ...
+        "produces": [{ "quantity": 1, "types": ["C"] }]
+      },
+      {
+        "abilityText": "{T}: Add {U} or {B}. ...",
+        "isManaAbility": true,
+        ...
+        "produces": [{ "quantity": 1, "types": [{ "choice": ["U", "B"] }] }]
+      }
+    ]
+    ```
+
+-----
+
+### Priority 2: Refactor `generateMana` (Task `MANA-011`)
+
+This task is to fix the engine logic so it can correctly *use* the new, correct data from Priority 1.
+
+**Action:**
+You must **remove the flawed "choose best ability" (`MANA-009`) logic**. Refactor the `generateMana` function to correctly select one mana ability from permanents that have multiple valid options (like `Underground River` or `Great Hall of the Citadel`).
+
+**New Required Logic for `generateMana`:**
+
+1.  When `generateMana` evaluates an untapped permanent (e.g., `Underground River`), it must gather a list of **all** its valid, free-to-activate mana abilities from the (now correct) manifest.
+
+      * *Example:* `valid_abilities = [ Ability_C, Ability_UB ]`.
+
+2.  The function must **NOT** "choose the best" and discard the others.
+
+3.  Instead, it must pass this *entire list* of valid ability objects (e.t., `[Ability_C, Ability_UB]`) to the "choice logic" (the part of `manaPool.js` that logs `[ManaPool] Chose U from U,B (hand needs it)`).
+
+4.  This "choice logic" must be updated to be "smarter." It must:
+    a.  Look at *all* production options from *all* abilities in the list.
+    b.  Evaluate the game state (e.g., "hand needs {B}").
+    c.  Select the **single best ability** from the list that meets the need (e.g., it will select `Ability_UB` over `Ability_C` because the hand needs Black).
+    d.  If no specific color is needed, it can default (e.g., default to `Ability_UB` and choose `{U}`).
+
+5.  Finally, `generateMana` adds the mana from that **one chosen ability** to the pool.
+
+This ensures `Underground River` still only adds 1 mana, but the AI makes an *informed choice* between `{C}` and `{U/B}` instead of the engine preemptively deleting the `{C}` option.
+
+-----
+
+### Priority 3: Implement Verbose Logging (Required for Verification)
+
+To verify these fixes, the `generateMana` console log **must** be updated to be transparent:
+
+  * For each permanent, log **all** mana abilities found.
+  * Log which abilities were **skipped** and **why** (e.g., `SKIPPED (Tapped)`, `SKIPPED (Requires Cost {1})` for `Great Hall`).
+  * Log the **final choice** (e.g., `Chose ability 'Add {U} or {B}' over 'Add {C}' based on hand needs. Adding {B: 1} to pool.`).

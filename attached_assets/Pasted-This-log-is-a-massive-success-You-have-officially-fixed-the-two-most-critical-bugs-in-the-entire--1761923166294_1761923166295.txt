@@ -1,0 +1,72 @@
+This log is a *massive* success. You have officially fixed the two most critical bugs in the entire system.
+
+* `MANA-019` (the Sol Ring quantity bug) is **FIXED**.
+* `MANA-018` (the disappearing artifact bug) is **FIXED**.
+
+The core mana *engine*—the parser, the pool builder, and the solver—is now working exactly as it should.
+
+The *only* remaining bug is `MANA-020`, and this log has perfectly isolated it. The AI is "hallucinating" mana because it's looking at the wrong data.
+
+Here is my full analysis.
+
+### 1. The Wins: What's Fixed
+
+#### ✅ FIXED! `MANA-019` (Sol Ring Quantity Bug)
+This is the biggest win. The `ManaSolver` now correctly understands that `Sol Ring` produces two mana.
+
+* **Proof (The Correct Success):**
+    * [cite_start]On T7, the AI casts `Mithril Coat` for `{3}`[cite: 272].
+    * [cite_start]The pool has `Swamp` (1 mana) and `Sol Ring` (2 mana) available[cite: 50, 52].
+    * [cite_start]The `ManaSolver` log correctly shows: `✓ Using Swamp for generic (producing 1x{B})` and `✓ Using Sol Ring for generic (producing 2x{C})`[cite: 63].
+    * [cite_start]It finds a solution: `✅ [ManaSolver] Found solution using 2 sources`[cite: 63].
+    * This is perfect. 1 + 2 = 3. The fix worked.
+
+* **Proof (The Correct Failure):**
+    * [cite_start]On T5, after casting `Mystic Confluence`, the *only* untapped source is `Sol Ring`[cite: 39].
+    * [cite_start]The AI (incorrectly, see below) tries to cast `The One Ring` for `{4}`[cite: 202, 203, 204].
+    * [cite_start]The `ManaSolver` correctly identifies it only has 2 mana available: `✓ Using Sol Ring for generic (producing 2x{C})`[cite: 40].
+    * [cite_start]It correctly fails: `❌ [ManaSolver] Cannot find source for generic {2}`[cite: 40]. This is the correct outcome.
+
+#### ✅ FIXED! `MANA-018` (Disappearing Artifact Bug)
+`Sol Ring` no longer disappears from the start-of-turn parser. It is correctly identified on every single untap step after it enters play.
+
+* **Proof (The Timeline):**
+    * [cite_start]**T6 Untap:** `6: Sol Ring (artifact) → 2x{C}{C}` [cite: 43]
+    * [cite_start]**T7 Untap:** `7: Sol Ring (artifact) → 2x{C}{C}` [cite: 55, 57]
+    * [cite_start]**T8 Untap:** `8: Sol Ring (artifact) → 2x{C}{C}` [cite: 66, 67]
+    * [cite_start]**T9 Untap:** `8: Sol Ring (artifact) → 2x{C}{C}` [cite: 79]
+    * [cite_start]**T10 Untap:** `8: Sol Ring (artifact) → 2x{C}{C}` [cite: 91]
+    * This bug is completely gone.
+
+---
+
+### 2. The Final Bug: What's Still Broken
+
+#### ❌ BROKEN! `MANA-020` (AI Decision-Maker Confusion)
+This is the last bug. The `ManaSolver` (the "engine") is correct. The AI (the "brain") is looking at bad data.
+
+The AI's internal state of "how much mana do I have?" is wrong. It is not in sync with the `PotentialPool` that the `ManaSolver` uses.
+
+* **The Smoking Gun (T5):**
+    1.  [cite_start]**AI's Brain:** After casting `Mystic Confluence`, the AI's Game Log states: "You have 4 colorless available"[cite: 213, 217].
+    2.  [cite_start]**The Reality:** The `ManaSolver`'s log shows the *actual* available pool contains *only* `Sol Ring (artifact) → 2x{C}{C}`[cite: 39]. The real mana is 2.
+    3.  [cite_start]**The Result:** The AI (thinking it has 4 mana) repeatedly tries to cast `The One Ring` for `{4}`[cite: 202, 208, 213, 217]. [cite_start]The `ManaSolver` (knowing it only has 2) repeatedly and correctly denies the action: `❌ [ManaSolver] Cannot find source for generic {2}` [cite: 40] [cite_start]and `Cannot afford The One Ring ✗`[cite: 207].
+
+This pattern repeats. [cite_start]On T6, the game log claims `10 mana available` [cite: 222][cite_start], but the AI log claims `11 available mana`[cite: 227]. Both are wrong. The `ManaSolver` is the only thing with the correct numbers.
+
+---
+
+### 3. New Low-Priority Warning
+
+* [cite_start]**`MANA-021` (Missing Manifest Data):** Your new logging has revealed that non-mana artifacts like `Mithril Coat` [cite: 66, 92] [cite_start]and `The One Ring` [cite: 79, 92] are not being parsed into the `behaviorManifest`. This is a low-priority parser gap we can fix later, as it doesn't affect mana calculation.
+
+### Summary & Next Steps
+
+This is a fantastic place to be. The core `MANA-REFACTOR-001` is functionally **complete and successful**. The engine works.
+
+The only remaining task is to fix the "data pipeline" to the AI.
+
+* **Find the Bug:** Somewhere in your code, the AI's "brain" is getting its mana count. [cite_start]This might be from the old, buggy `Actual` value in the `[untap]` log [cite: 43] or a separate, stale JIT calculator.
+* **The Fix:** You must rip out that bad data source. The AI's decision-making logic *must* get its mana count from the same `buildPotentialManaPool` function that the `ManaSolver` uses. There must be only **one source of truth** for available mana.
+
+You can go to bed. This is a huge victory.

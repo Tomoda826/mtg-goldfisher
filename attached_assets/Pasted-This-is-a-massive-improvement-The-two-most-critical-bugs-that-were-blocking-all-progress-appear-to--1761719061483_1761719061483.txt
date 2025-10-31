@@ -1,0 +1,56 @@
+This is a massive improvement. The two most critical bugs that were blocking all progress appear to be **FIXED**.
+
+The simulation engine is now correctly tracking mana *within* a single phase, allowing for multi-spell turns. This is the breakthrough we were looking for.
+
+### What's Fixed (The Great News!)
+
+1.  **FIXED: `playLand` Mana Update**
+    * **Previous Bug:** Playing a land did not update the mana pool for the current phase.
+    * **Current Status:** The engine now correctly adds the mana from a newly played land to the current pool.
+    * **Evidence (T1):** The engine starts with 0 mana. `playLand: Command Tower` is played. The AI immediately recognizes it has 1 blue mana and correctly casts `Preordain`.
+
+2.  **FIXED: `castSpell` Mana Persistence**
+    * **Previous Bug:** The mana pool reset to 0 after every spell, making multi-spell turns impossible.
+    * **Current Status:** The engine now correctly subtracts the spell's cost and retains the remaining mana in the pool for subsequent actions.
+    * **Evidence (T5):**
+        1.  The pool has 3 mana.
+        2.  `castSpell: Reanimate` (cost 1) is cast.
+        3.  The AI correctly identifies the remaining pool: "I have 2 total mana (U:1, B:1)."
+        4.  `castSpell: Arcane Denial` (cost 2) is cast.
+        5.  The AI correctly identifies the remaining pool: "Available mana = 0".
+    * **Evidence (T7):**
+        1.  The pool has 6 mana (based on its flawed count, but the logic flows).
+        2.  `castSpell: Go for the Throat` (cost 2) is cast.
+        3.  The AI correctly identifies the remaining pool: "Cast The One Ring (cost {4}) to efficiently use the full 4 mana".
+        4.  `castSpell: The One Ring` (cost 4) is cast.
+        5.  The AI correctly identifies the remaining pool: "You have 0 available mana".
+
+### The Last Remaining Mana Bug
+
+With the intra-phase logic fixed, the only remaining issue is the initial mana calculation at the start of the turn.
+
+**CRITICAL BUG: `Untap` Calculation is Incorrectly Counting Lands**
+
+The `Untap & Generate Mana` function is still not correctly implementing the mana spec. It appears to be counting the *number of lands* rather than checking what mana those lands *actually produce*.
+
+It correctly identifies that `Evolving Wilds` (which produces 0 mana) means the total is `lands - 1` on turns 5 and 6, but then it breaks and starts counting it as a mana-producing land on turns 7 and 8.
+
+* **Evidence (T5):** `Untap & Generate Mana... 4 lands = 3 mana available.`
+    * (Correct: `Command Tower`, `Swamp`, `Swamp`, `Evolving Wilds` (0 mana) = 3 mana)
+* **Evidence (T6):** `Untap & Generate Mana... 5 lands = 4 mana available.`
+    * (Correct: `CT`, `S`, `S`, `EW` (0), `The Black Gate` = 4 mana)
+* **Evidence (T7):** `Untap & Generate Mana... 6 lands = 6 mana available.`
+    * **(INCORRECT)**. The lands are (`CT`, `S`, `S`, `EW` (0), `TBG`, `TGH`). This should be **5 mana**. The engine is incorrectly counting `Evolving Wilds`.
+* **Evidence (T8):** `Untap & Generate Mana... 7 lands + 1 artifacts = 7 mana available.`
+    * **(INCORRECT)**. The lands are (`CT`, `S`, `S`, `EW` (0), `TBG`, `TGH`, `Barad-dûr`). This should be **6 mana**. The engine is *correctly* ignoring `The One Ring` artifact (which produces no mana) but is *incorrectly* counting `Evolving Wilds`.
+
+### Recommendation
+
+This is fantastic progress. The hard part (tracking a persistent mana pool) is done.
+
+The only remaining fix is to **make the `Untap & Generate Mana` function obey the mana spec**. Instead of just counting lands, it must iterate through each permanent on the battlefield and sum the mana from its *parsed mana abilities*, just as we defined in the spec.
+
+**Example Fix:**
+* When `Untap & Generate Mana` sees `Command Tower`, it adds 1 to the pool.
+* When it sees `EClick to copy`, it adds 1 to the pool.
+* When it sees `Evolving Wilds`, it reads its (non-existent) mana ability and adds **0** to the pool.

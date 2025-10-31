@@ -6,6 +6,8 @@ import {
   getManaProductionFromManifest,
 } from './cardBehaviorAnalyzer';
 
+import { ManaPool } from './manaPool.js';
+
 // Parse mana cost string like "{2}{U}{B}" into object
 export const parseMana = (manaCost) => {
   if (!manaCost) return { total: 0, W: 0, U: 0, B: 0, R: 0, G: 0, C: 0, generic: 0 };
@@ -78,7 +80,8 @@ export const getLandManaProduction = (land, manifest) => {
   // In goldfishing, we make both colors available but it only counts as 1 mana total
   
   // UB Dual Lands (Drowned Catacomb, etc.)
-  if (text.includes('{t}: add {u} or {b}') || text.includes('{t}: add {b} or {u}')) {
+  const lowerText = text.toLowerCase();
+  if (lowerText.includes('{t}: add {u} or {b}') || lowerText.includes('{t}: add {b} or {u}')) {
     return { 
       U: 1, 
       B: 1, 
@@ -92,7 +95,7 @@ export const getLandManaProduction = (land, manifest) => {
   }
   
   // WU Dual Lands (Azorius Chancery, etc.)
-  if (text.includes('{t}: add {w} or {u}') || text.includes('{t}: add {u} or {w}')) {
+  if (lowerText.includes('{t}: add {w} or {u}') || lowerText.includes('{t}: add {u} or {w}')) {
     return { 
       W: 1, 
       U: 1, 
@@ -106,7 +109,7 @@ export const getLandManaProduction = (land, manifest) => {
   }
   
   // WB Dual Lands
-  if (text.includes('{t}: add {w} or {b}') || text.includes('{t}: add {b} or {w}')) {
+  if (lowerText.includes('{t}: add {w} or {b}') || lowerText.includes('{t}: add {b} or {w}')) {
     return { 
       W: 1, 
       B: 1, 
@@ -120,7 +123,7 @@ export const getLandManaProduction = (land, manifest) => {
   }
   
   // UR Dual Lands
-  if (text.includes('{t}: add {u} or {r}') || text.includes('{t}: add {r} or {u}')) {
+  if (lowerText.includes('{t}: add {u} or {r}') || lowerText.includes('{t}: add {r} or {u}')) {
     return { 
       U: 1, 
       R: 1, 
@@ -134,7 +137,7 @@ export const getLandManaProduction = (land, manifest) => {
   }
   
   // BR Dual Lands
-  if (text.includes('{t}: add {b} or {r}') || text.includes('{t}: add {r} or {b}')) {
+  if (lowerText.includes('{t}: add {b} or {r}') || lowerText.includes('{t}: add {r} or {b}')) {
     return { 
       B: 1, 
       R: 1, 
@@ -148,7 +151,7 @@ export const getLandManaProduction = (land, manifest) => {
   }
   
   // BG Dual Lands
-  if (text.includes('{t}: add {b} or {g}') || text.includes('{t}: add {g} or {b}')) {
+  if (lowerText.includes('{t}: add {b} or {g}') || lowerText.includes('{t}: add {g} or {b}')) {
     return { 
       B: 1, 
       G: 1, 
@@ -162,7 +165,7 @@ export const getLandManaProduction = (land, manifest) => {
   }
   
   // RG Dual Lands
-  if (text.includes('{t}: add {r} or {g}') || text.includes('{t}: add {g} or {r}')) {
+  if (lowerText.includes('{t}: add {r} or {g}') || lowerText.includes('{t}: add {g} or {r}')) {
     return { 
       R: 1, 
       G: 1, 
@@ -176,7 +179,7 @@ export const getLandManaProduction = (land, manifest) => {
   }
   
   // RW Dual Lands
-  if (text.includes('{t}: add {r} or {w}') || text.includes('{t}: add {w} or {r}')) {
+  if (lowerText.includes('{t}: add {r} or {w}') || lowerText.includes('{t}: add {w} or {r}')) {
     return { 
       R: 1, 
       W: 1, 
@@ -190,7 +193,7 @@ export const getLandManaProduction = (land, manifest) => {
   }
   
   // GW Dual Lands
-  if (text.includes('{t}: add {g} or {w}') || text.includes('{t}: add {w} or {g}')) {
+  if (lowerText.includes('{t}: add {g} or {w}') || lowerText.includes('{t}: add {w} or {g}')) {
     return { 
       G: 1, 
       W: 1, 
@@ -204,7 +207,7 @@ export const getLandManaProduction = (land, manifest) => {
   }
   
   // GU Dual Lands
-  if (text.includes('{t}: add {g} or {u}') || text.includes('{t}: add {u} or {g}')) {
+  if (lowerText.includes('{t}: add {g} or {u}') || lowerText.includes('{t}: add {u} or {g}')) {
     return { 
       G: 1, 
       U: 1, 
@@ -223,23 +226,38 @@ export const getLandManaProduction = (land, manifest) => {
     const total = Object.values(manifestProduction).reduce((a, b) => a + b, 0);
     
     if (total > 0) {
-      return manifestProduction;
+      // ✅ FIX: Add actualManaProduced property for untap phase counting
+      return {
+        ...manifestProduction,
+        actualManaProduced: manifestProduction.actualManaProduced || total
+      };
     }
   }
   
   // Fall back to basic land type detection
-  if (name.includes('plains') || text.includes('(plains)')) return { W: 1, U: 0, B: 0, R: 0, G: 0, C: 0 };
-  if (name.includes('island') || text.includes('(island)')) return { U: 1, W: 0, B: 0, R: 0, G: 0, C: 0 };
-  if (name.includes('swamp') || text.includes('(swamp)')) return { B: 1, W: 0, U: 0, R: 0, G: 0, C: 0 };
-  if (name.includes('mountain') || text.includes('(mountain)')) return { R: 1, W: 0, U: 0, B: 0, G: 0, C: 0 };
-  if (name.includes('forest') || text.includes('(forest)')) return { G: 1, W: 0, U: 0, B: 0, R: 0, C: 0 };
+  if (name.includes('plains') || text.includes('(plains)')) return { W: 1, U: 0, B: 0, R: 0, G: 0, C: 0, actualManaProduced: 1 };
+  if (name.includes('island') || text.includes('(island)')) return { U: 1, W: 0, B: 0, R: 0, G: 0, C: 0, actualManaProduced: 1 };
+  if (name.includes('swamp') || text.includes('(swamp)')) return { B: 1, W: 0, U: 0, R: 0, G: 0, C: 0, actualManaProduced: 1 };
+  if (name.includes('mountain') || text.includes('(mountain)')) return { R: 1, W: 0, U: 0, B: 0, G: 0, C: 0, actualManaProduced: 1 };
+  if (name.includes('forest') || text.includes('(forest)')) return { G: 1, W: 0, U: 0, B: 0, R: 0, C: 0, actualManaProduced: 1 };
   
   console.warn('⚠️ Could not determine mana production for:', land.name);
   return { W: 0, U: 0, B: 0, R: 0, G: 0, C: 0 };
 };
 
 // Check if we can pay a mana cost
-export const canPayMana = (manaPool, manaCost, actualTotalMana = null) => {
+export const canPayMana = (manaPool, manaCost, actualTotalMana = null, manaPoolManager = null, state = null) => {
+  // ✨ NEW SYSTEM: Use ManaPool manager with solver
+  if (manaPoolManager && state) {
+    return manaPoolManager.canPay(manaCost, state);
+  }
+  
+  // OLD SYSTEM: Backwards compatibility (when state not available)
+  if (manaPoolManager) {
+    return manaPoolManager.canPay(manaCost);
+  }
+  
+  // LEGACY: Direct pool checking
   const cost = parseMana(manaCost);
   
   // Check colored requirements
@@ -249,8 +267,6 @@ export const canPayMana = (manaPool, manaCost, actualTotalMana = null) => {
   if (cost.R > manaPool.R) return false;
   if (cost.G > manaPool.G) return false;
   
-  // ✅ CRITICAL FIX: Use actualTotalMana if provided (handles dual/filter lands correctly)
-  // Otherwise fall back to summing the pool (for backward compatibility)
   const availableTotal = actualTotalMana !== null 
     ? actualTotalMana 
     : (manaPool.W + manaPool.U + manaPool.B + manaPool.R + manaPool.G + manaPool.C);
@@ -261,7 +277,15 @@ export const canPayMana = (manaPool, manaCost, actualTotalMana = null) => {
 };
 
 // Pay mana from pool
-export const payMana = (manaPool, manaCost) => {
+// Pay mana from pool
+export const payMana = (manaPool, manaCost, manaPoolManager = null) => {
+  // NEW SYSTEM: Use ManaPool manager if available
+  if (manaPoolManager) {
+    manaPoolManager.pay(manaCost);
+    return manaPoolManager.getPool();
+  }
+  
+  // OLD SYSTEM: Backwards compatibility
   const cost = parseMana(manaCost);
   const newPool = { ...manaPool };
   
@@ -461,6 +485,11 @@ export const untapPhase = (state) => {
     land.tapped = false;
   });
   
+  // ✅ FIX MANA-018: Untap all artifacts
+  state.battlefield.artifacts.forEach(artifact => {
+    artifact.tapped = false;
+  });
+  
   // Remove summoning sickness from creatures
   state.battlefield.creatures.forEach(creature => {
     creature.summoningSick = false;
@@ -469,189 +498,437 @@ export const untapPhase = (state) => {
   return state;
 };
 
-// Generate available mana from lands AND artifacts
+// =============================================
+// NEW "AVAILABLE SOURCES" MANA SYSTEM
+// =============================================
+// This function builds a list of all available mana abilities
+// instead of calculating a fixed pool. Just-in-time solving
+// happens when spells are cast (see castSpell refactor).
+// =============================================
+
 export const generateMana = (state) => {
-  const availableMana = { W: 0, U: 0, B: 0, R: 0, G: 0, C: 0 };
+  console.log(`🔍 [generateMana] Starting - Turn ${state.turn}`);
+  console.log(`🔍 [generateMana] Battlefield: ${state.battlefield.lands.length} lands, ${state.battlefield.artifacts.length} artifacts, ${state.battlefield.creatures.length} creatures`);
   
-  // ✅ DEBUG: Track each land's production
-  const landDetails = [];
+  // Initialize mana pool manager if doesn't exist
+  if (!state.manaPoolManager) {
+    state.manaPoolManager = new ManaPool();
+  }
   
-  // ✅ CRITICAL: Track actual total mana separately (fixes dual land double-counting)
+  // ✨ NEW SYSTEM: Build PotentialManaPool (Available Sources)
+  state.potentialManaPool = state.manaPoolManager.buildPotentialManaPool(state);
+  
+  // For backwards compatibility and AI decision making, calculate a "preview" pool
+  // This shows what mana COULD be available, but the actual activation happens
+  // just-in-time during castSpell()
+  state.manaPoolManager.emptyPool();
+  
+  // ✅ FIX MANA-020: Calculate preview by counting UNIQUE PERMANENTS
+  // Each permanent can only be tapped ONCE, so we must count each permanent once
+  // and use its MAXIMUM potential output (choosing the best ability)
+  const previewTotals = {
+    W: 0, U: 0, B: 0, R: 0, G: 0, C: 0
+  };
   let actualTotalMana = 0;
   
-  // Count UNTAPPED lands only
-  state.battlefield.lands.forEach(land => {
-    // Skip tapped lands
-    if (land.tapped) {
-      landDetails.push({ name: land.name, status: 'TAPPED', mana: 'none' });
-      return;
-    }
+  // Group abilities by permanent
+  const permanentMap = new Map();
+  
+  state.potentialManaPool.forEach(entry => {
+    const permanentKey = `${entry.source}-${entry.sourceName}`;
     
-    const production = getLandManaProduction(land, state.behaviorManifest);
-
-    // ✅ NEW: Track dual/filter lands separately for correct total calculation
-    if (!state.dualLandManaTracking) {
-      state.dualLandManaTracking = [];
+    if (!permanentMap.has(permanentKey)) {
+      permanentMap.set(permanentKey, []);
     }
+    permanentMap.get(permanentKey).push(entry.ability);
+  });
+  
+  // For each permanent, find the ability that produces the MOST total mana
+  permanentMap.forEach((abilities, permanentKey) => {
+    let maxMana = 0;
+    let bestAbility = null;
     
-    if (production.isDualLand || production.isFilterLand) {
-      state.dualLandManaTracking.push({
-        landName: land.name,
-        actualMana: production.actualManaProduced || 1,
-        colors: Object.keys(production).filter(k => 
-          ['W','U','B','R','G','C'].includes(k) && production[k] > 0
-        )
-      });
-    }
-
-    // ✅ CRITICAL FIX #1: Filter lands produce 1 mana (choose mode), not sum of all abilities
-    if (production.isFilterLand) {
-      // For filter lands, add mana to multiple colors but DON'T double count
-      Object.keys(production).forEach(color => {
-        if (color !== 'isFilterLand' && color !== 'actualManaProduced') {
-          availableMana[color] += production[color];
+    // Calculate total mana and flexibility for each ability
+    abilities.forEach(ability => {
+      let abilityTotal = 0;
+      let colorFlexibility = 0; // Higher = more color options (for tie-breaking)
+      
+      ability.produces.forEach(production => {
+        // Calculate total mana: use quantity, or combination.length as fallback
+        let productionTotal = production.quantity || 0;
+        
+        // If no quantity set, count combination length (for bounce lands, etc)
+        if (!productionTotal && production.types) {
+          production.types.forEach(type => {
+            if (type.combination) {
+              productionTotal = Math.max(productionTotal, type.combination.length);
+            }
+          });
+        }
+        
+        abilityTotal += productionTotal || 1;
+        
+        // Calculate flexibility: count how many different color options exist
+        if (production.types) {
+          production.types.forEach(type => {
+            if (type.choice) {
+              colorFlexibility += type.choice.length; // {U/B} = 2 options
+            } else if (type.combination) {
+              colorFlexibility += type.combination.length; // Multi-color = higher
+            } else if (typeof type === 'string') {
+              colorFlexibility += 1; // Fixed color = 1 option
+            }
+          });
         }
       });
       
-      // ✅ Add ACTUAL mana produced (1) to total
-      actualTotalMana += (production.actualManaProduced || 1);
-      
-      // Log correctly
-      const colors = Object.entries(production)
-        .filter(([key, val]) => val > 0 && key !== 'isFilterLand' && key !== 'actualManaProduced')
-        .map(([color]) => color)
-        .join(' or ');
-      
-      landDetails.push({ 
-        name: land.name, 
-        status: 'UNTAPPED', 
-        mana: `1 (choose ${colors})`,
-        isFilter: true,
-        actualMana: 1
-      });
-    }
-    // ✅ CRITICAL FIX #2: Dual lands produce 1 mana (choose color), not sum of both colors
-    else if (production.isDualLand) {
-      // For dual lands, add mana to both colors but DON'T double count
-      Object.keys(production).forEach(color => {
-        if (color !== 'isDualLand' && color !== 'actualManaProduced') {
-          availableMana[color] += production[color];
-        }
-      });
-      
-      // ✅ Add ACTUAL mana produced (1) to total
-      actualTotalMana += (production.actualManaProduced || 1);
-      
-      // Log correctly
-      const colors = Object.entries(production)
-        .filter(([key, val]) => val > 0 && key !== 'isDualLand' && key !== 'actualManaProduced')
-        .map(([color]) => color)
-        .join(' or ');
-      
-      landDetails.push({ 
-        name: land.name, 
-        status: 'UNTAPPED', 
-        mana: `1 (choose ${colors})`,
-        isDual: true,
-        actualMana: 1
-      });
-    } else {
-      // Regular lands: add all colors normally
-      Object.keys(production).forEach(color => {
-        if (color !== 'isDualLand' && color !== 'actualManaProduced' && color !== 'isFilterLand') {
-          availableMana[color] += production[color];
-        }
+      // Update best ability: prefer higher mana, then higher flexibility (tie-breaker)
+      if (abilityTotal > maxMana || (abilityTotal === maxMana && colorFlexibility > (bestAbility?.flexibility || 0))) {
+        maxMana = abilityTotal;
+        bestAbility = ability;
+        bestAbility.flexibility = colorFlexibility; // Store for comparison
+      }
+    });
+    
+    // Count the best ability's output in previewTotals
+    if (bestAbility) {
+      bestAbility.produces.forEach(production => {
+        if (!production.types) return;
+        
+        const quantity = production.quantity || 1;
+        
+        // Get unique colors this production can make
+        // Sol Ring: types=['C','C'] → unique=['C'], add quantity(2) once
+        // Island: types=['U'] → unique=['U'], add quantity(1) once
+        // Underground River: types=[{choice:['U','B']}] → add to both U and B
+        const uniqueColors = new Set();
+        
+        production.types.forEach(type => {
+          if (typeof type === 'string' && ['W', 'U', 'B', 'R', 'G', 'C'].includes(type)) {
+            uniqueColors.add(type);
+          } else if (type.choice) {
+            // Choice: can make ANY of these colors
+            type.choice.forEach(c => {
+              if (['W', 'U', 'B', 'R', 'G', 'C'].includes(c)) {
+                uniqueColors.add(c);
+              }
+            });
+          } else if (type.combination) {
+            // Combination: makes ALL of these colors at once
+            type.combination.forEach(c => {
+              if (['W', 'U', 'B', 'R', 'G', 'C'].includes(c)) {
+                uniqueColors.add(c);
+              }
+            });
+          }
+        });
+        
+        // Add quantity to each unique color
+        uniqueColors.forEach(color => {
+          previewTotals[color] += quantity;
+        });
       });
       
-      // ✅ Add sum of production to total (for regular lands, this is typically 1)
-      const landTotal = Object.keys(production)
-        .filter(k => ['W','U','B','R','G','C'].includes(k))
-        .reduce((sum, color) => sum + production[color], 0);
-      
-      actualTotalMana += landTotal;
-      
-      // Log normally
-      const manaString = Object.entries(production)
-        .filter(([key, val]) => val > 0 && key !== 'isDualLand' && key !== 'actualManaProduced' && key !== 'isFilterLand')
-        .map(([color, amount]) => `${color}:${amount}`)
-        .join(', ');
-      
-      landDetails.push({ 
-        name: land.name, 
-        status: 'UNTAPPED', 
-        mana: manaString || 'none',
-        actualMana: landTotal
-      });
+      // Add to actual total (count once per permanent)
+      actualTotalMana += maxMana;
     }
   });
   
-  // ✅ DEBUG: Log on early turns
-  if (state.detailedLog && state.turn <= 5) {
-    state.detailedLog.push({
-      turn: state.turn,
-      phase: state.phase,
-      action: '🔍 DEBUG: Mana Generation',
-      details: `${state.battlefield.lands.length} lands, ${landDetails.filter(l => l.status === 'UNTAPPED').length} untapped`,
-      lands: landDetails,
-      landTotal: actualTotalMana,
-      totalAvailable: availableMana
-    });
-  }
-  
-// ✅ Count mana-producing artifacts (assume they untap normally)
-state.battlefield.artifacts.forEach(artifact => {
-  const production = getArtifactManaProduction(artifact, state.behaviorManifest);
-  
-  // ✅ CRITICAL FIX: Detect if artifact produces multiple color choices
-  // Examples:
-  // - Arcane Signet: {T}: Add one mana of any color in your commander's color identity
-  // - Talisman of Dominance: {T}: Add {C} OR {T}, Pay 1 life: Add {U} or {B}
-  // - Sol Ring: {T}: Add {C}{C} (produces 2 colorless)
-  //
-  // If production has 2+ different colors with value > 0, it's a choice artifact
-  // Count how many colors this artifact can produce
-  const colorCount = Object.keys(production)
-    .filter(key => ['W','U','B','R','G','C'].includes(key) && production[key] > 0)
-    .length;
-  
-  const isChoiceArtifact = production.isDualLand || 
-                          production.isChoiceManaArtifact || 
-                          colorCount >= 2;
-  
-  if (isChoiceArtifact) {
-    // Multi-ability artifacts: add all colors to pool, but only count as 1 total
-    Object.keys(production).forEach(color => {
-      if (['W','U','B','R','G','C'].includes(color) && production[color] > 0) {
-        availableMana[color] += production[color];
-      }
-    });
-    
-    // ✅ Only add 1 to actual total (artifact can only be tapped once)
-    actualTotalMana += (production.actualManaProduced || 1);
-    
-  } else {
-    // Regular mana artifacts (e.g., Sol Ring producing {C}{C}): 
-    // Count the TOTAL mana produced, not per-color
-    let artifactTotal = 0;
-    Object.keys(production).forEach(color => {
-      if (['W','U','B','R','G','C'].includes(color) && production[color] > 0) {
-        availableMana[color] += production[color];
-        artifactTotal += production[color];  // Sum up the total
-      }
-    });
-    // Add the total once, not per-color
-    actualTotalMana += artifactTotal;
-  }
-});
-  
-  // ✅ Set the mana pool to the availableMana object
-  state.manaPool = { ...availableMana };
-  
+  // Store preview (for AI visibility and backwards compat)
+  state.manaPool = {
+    W: previewTotals.W,
+    U: previewTotals.U,
+    B: previewTotals.B,
+    R: previewTotals.R,
+    G: previewTotals.G,
+    C: previewTotals.C
+  };
   state.actualTotalMana = actualTotalMana;
+  
+  console.log(`🔍 [generateMana] Final total: ${state.actualTotalMana} available sources`);
+  console.log(`🔍 [generateMana] Preview flexibility:`, state.manaPool);
+  
+  // Log
+  if (state.actualTotalMana > 0) {
+    const pool = state.manaPool;
+    state.log.push(`💎 Available: ${state.actualTotalMana} sources (could produce: W:${pool.W} U:${pool.U} B:${pool.B} R:${pool.R} G:${pool.G} C:${pool.C})`);
+  }
+  
+  return state;
+};
 
-  // ✅ CRITICAL: Log using ACTUAL total, not sum of colors
-  if (actualTotalMana > 0) {
-    state.log.push(`💎 Generated ${actualTotalMana} mana (W:${availableMana.W} U:${availableMana.U} B:${availableMana.B} R:${availableMana.R} G:${availableMana.G} C:${availableMana.C})`);
+// =============================================
+// OLD SYSTEM (kept for reference, can be deleted after refactor is complete)
+// =============================================
+export const generateMana_OLD = (state) => {
+  console.log(`🔍 [generateMana] Starting - Turn ${state.turn}`);
+  console.log(`🔍 [generateMana] Battlefield: ${state.battlefield.lands.length} lands, ${state.battlefield.artifacts.length} artifacts, ${state.battlefield.creatures.length} creatures`);
+  
+  // Initialize mana pool manager if doesn't exist
+  if (!state.manaPoolManager) {
+    state.manaPoolManager = new ManaPool();
+  }
+  
+  // Empty pool at start of each mana generation
+  state.manaPoolManager.emptyPool();
+  console.log(`🔍 [generateMana] Pool emptied`);
+  
+  // Process lands
+  state.battlefield.lands.forEach(land => {
+    if (land.tapped) return;
+    
+    // Try new system first (cached abilities)
+    const manaAbilityData = state.behaviorManifest?.manaAbilities?.get(land.name);
+    
+    // 🔍 DEBUG: Log Underground River abilities
+    if (land.name === 'Underground River' && manaAbilityData) {
+      console.log('🔍 [Underground River] Manifest data:',  JSON.stringify(manaAbilityData, null, 2));
+    }
+    
+    if (manaAbilityData?.hasManaAbility) {
+      // NEW SYSTEM: Use cached structured data
+      // ✅ FIX: For lands with multiple abilities (e.g., Underground River has {T}:Add{C} AND {T}:Add{U}or{B}),
+      // we should activate the BEST one, not try all of them (which would fail after first tap)
+      
+      // Filter to only activatable abilities
+      const activatableAbilities = manaAbilityData.abilities.filter(ability => {
+        return ability.activationCost.every(cost => {
+          if (cost === '{T}') return !land.tapped;
+          if (cost === 'sacrifice') return true; // Handle separately
+          // Reject abilities that require paying mana during untap
+          if (cost.match(/^\{.*\}$/)) return false;
+          return true;
+        });
+      });
+      
+      if (activatableAbilities.length > 0) {
+        // 🔍 DEBUG: Log all abilities for Underground River
+        if (land.name === 'Underground River') {
+          console.log('🔍 [Underground River] All activatable abilities:', activatableAbilities.length);
+          activatableAbilities.forEach((ab, idx) => {
+            console.log(`🔍 [Underground River]   Ability ${idx+1}:`, JSON.stringify(ab, null, 2));
+          });
+        }
+        
+        // Use manaPoolManager to intelligently choose which ability to activate
+        const chosenAbility = state.manaPoolManager.chooseBestAbility(
+          activatableAbilities,
+          state,
+          land
+        );
+        
+        if (chosenAbility) {
+          // Activate the chosen ability
+          chosenAbility.produces.forEach(production => {
+            state.manaPoolManager.addMana(production, state, land);
+          });
+          
+          // Tap the land
+          if (chosenAbility.activationCost.includes('{T}')) {
+            land.tapped = true;
+          }
+        }
+      }
+    } else {
+      // FALLBACK: Old system for backwards compatibility
+      const production = getLandManaProduction(land, state.behaviorManifest);
+      
+      // Convert to manaPoolManager format for smart color choice
+      const colors = ['W', 'U', 'B', 'R', 'G', 'C'];
+      
+      if (production.isDualLand || production.isFilterLand) {
+        // Dual lands: use manaPoolManager.addMana for smart color choice
+        const availableColors = colors.filter(c => production[c] > 0);
+        const amount = production.actualManaProduced || 1;
+        
+        if (availableColors.length > 0) {
+          // Use manaPoolManager with choice structure for optimal color selection
+          state.manaPoolManager.addMana(
+            { quantity: amount, types: [{ choice: availableColors }] },
+            state,
+            land
+          );
+        }
+      } else {
+        // Basic lands: add the produced color directly
+        const actualAmount = colors.reduce((sum, c) => sum + (production[c] || 0), 0);
+        
+        colors.forEach(color => {
+          if (production[color] > 0) {
+            state.manaPoolManager.pool[color] += production[color];
+          }
+        });
+        state.manaPoolManager.actualTotal += actualAmount;
+      }
+      
+      land.tapped = true;
+    }
+  });
+  
+  // Process artifacts (similar logic)
+  state.battlefield.artifacts.forEach(artifact => {
+    if (artifact.tapped) return;
+    
+    const manaAbilityData = state.behaviorManifest?.manaAbilities?.get(artifact.name);
+    
+    // Debug logging for Sol Ring
+    if (artifact.name === 'Sol Ring') {
+      console.log('🔍 [Sol Ring] Has manifest?', !!manaAbilityData);
+      if (manaAbilityData) {
+        console.log('🔍 [Sol Ring] Manifest:', JSON.stringify(manaAbilityData, null, 2));
+      }
+    }
+    
+    if (manaAbilityData?.hasManaAbility) {
+      // NEW SYSTEM: Choose best activatable ability
+      const activatableAbilities = manaAbilityData.abilities.filter(ability => {
+        return ability.activationCost.every(cost => {
+          if (cost === '{T}') return !artifact.tapped;
+          if (cost.match(/^\{.*\}$/)) return false;
+          return true;
+        });
+      });
+      
+      if (activatableAbilities.length > 0) {
+        // Use manaPoolManager to intelligently choose which ability to activate
+        const chosenAbility = state.manaPoolManager.chooseBestAbility(
+          activatableAbilities,
+          state,
+          artifact
+        );
+        
+        if (chosenAbility) {
+          chosenAbility.produces.forEach(production => {
+            state.manaPoolManager.addMana(production, state, artifact);
+          });
+          
+          if (chosenAbility.activationCost.includes('{T}')) {
+            artifact.tapped = true;
+          }
+        }
+      }
+    } else {
+      // FALLBACK: Old system
+      const production = getArtifactManaProduction(artifact, state.behaviorManifest);
+      
+      // Convert to manaPoolManager format for smart color choice
+      const colors = ['W', 'U', 'B', 'R', 'G', 'C'];
+      const colorCount = colors.filter(c => production[c] > 0).length;
+      
+      if (colorCount >= 2 || production.isDualLand) {
+        // Multi-color artifacts: use manaPoolManager for smart color choice
+        const availableColors = colors.filter(c => production[c] > 0);
+        const amount = production.actualManaProduced || 1;
+        
+        if (availableColors.length > 0) {
+          state.manaPoolManager.addMana(
+            { quantity: amount, types: [{ choice: availableColors }] },
+            state,
+            artifact
+          );
+        }
+      } else {
+        // Single-color artifacts: add the produced color directly
+        const actualAmount = colors.reduce((sum, c) => sum + (production[c] || 0), 0);
+        
+        colors.forEach(color => {
+          if (production[color] > 0) {
+            state.manaPoolManager.pool[color] += production[color];
+          }
+        });
+        state.manaPoolManager.actualTotal += actualAmount;
+      }
+      
+      artifact.tapped = true;
+    }
+  });
+  
+  // Process creatures with mana abilities (e.g., Birds of Paradise, mana dorks)
+  state.battlefield.creatures.forEach(creature => {
+    if (creature.tapped || creature.summoningSick) return;
+    
+    const manaAbilityData = state.behaviorManifest?.manaAbilities?.get(creature.name);
+    
+    if (manaAbilityData?.hasManaAbility) {
+      // NEW SYSTEM: Choose best activatable ability
+      const activatableAbilities = manaAbilityData.abilities.filter(ability => {
+        return ability.activationCost.every(cost => {
+          if (cost === '{T}') return !creature.tapped && !creature.summoningSick;
+          if (cost.match(/^\{.*\}$/)) return false;
+          return true;
+        });
+      });
+      
+      if (activatableAbilities.length > 0) {
+        // Use manaPoolManager to intelligently choose which ability to activate
+        const chosenAbility = state.manaPoolManager.chooseBestAbility(
+          activatableAbilities,
+          state,
+          creature
+        );
+        
+        if (chosenAbility) {
+          chosenAbility.produces.forEach(production => {
+            state.manaPoolManager.addMana(production, state, creature);
+          });
+          
+          if (chosenAbility.activationCost.includes('{T}')) {
+            creature.tapped = true;
+          }
+        }
+      }
+    } else {
+      // FALLBACK: Old system - check oracle text for mana abilities
+      const text = (creature.oracle_text || '').toLowerCase();
+      if (text.includes('{t}:') && text.includes('add')) {
+        const production = getManaProductionFromManifest(creature, state.behaviorManifest);
+        
+        // Convert to manaPoolManager format for smart color choice
+        const colors = ['W', 'U', 'B', 'R', 'G', 'C'];
+        const colorCount = colors.filter(c => production[c] > 0).length;
+        
+        if (colorCount >= 2) {
+          // Multi-color creatures: use manaPoolManager for smart color choice
+          const availableColors = colors.filter(c => production[c] > 0);
+          const amount = production.actualManaProduced || 1;
+          
+          if (availableColors.length > 0) {
+            state.manaPoolManager.addMana(
+              { quantity: amount, types: [{ choice: availableColors }] },
+              state,
+              creature
+            );
+            creature.tapped = true;
+          }
+        } else {
+          // Single-color creatures: add the produced color directly
+          const actualAmount = colors.reduce((sum, c) => sum + (production[c] || 0), 0);
+          
+          if (actualAmount > 0) {
+            colors.forEach(color => {
+              if (production[color] > 0) {
+                state.manaPoolManager.pool[color] += production[color];
+              }
+            });
+            state.manaPoolManager.actualTotal += actualAmount;
+            creature.tapped = true;
+          }
+        }
+      }
+    }
+  });
+  
+  // Update legacy fields for backwards compatibility
+  state.manaPool = state.manaPoolManager.getPool();
+  state.actualTotalMana = state.manaPoolManager.getTotal();
+  
+  console.log(`🔍 [generateMana] Final total: ${state.actualTotalMana}`);
+  console.log(`🔍 [generateMana] Final pool:`, state.manaPool);
+  
+  // Log
+  if (state.actualTotalMana > 0) {
+    const pool = state.manaPool;
+    state.log.push(`💎 Generated ${state.actualTotalMana} mana (W:${pool.W} U:${pool.U} B:${pool.B} R:${pool.R} G:${pool.G} C:${pool.C})`);
   }
   
   return state;
@@ -680,91 +957,6 @@ export const playLand = (state, landIndex) => {
   // Check if land enters tapped
   const text = (land.oracle_text || '').toLowerCase();
   // Note: name variable removed - no longer needed with new check land logic
-
-//   // ✅ FILTER LANDS: Check for filter land pattern
-// // Pattern: "{T}: Add {C}." followed by "{X/Y}, {T}: Add {XX}, {XY}, or {YY}."
-// // These lands produce 1 mana (either {C} or filtered colors), NOT the sum of both abilities
-
-// // Common filter lands and their patterns
-// const filterLandPatterns = [
-//   // Sunken Ruins (U/B filter)
-//   /\{t\}:\s*add\s*\{c\}.*\{[ub]\/[ub]\},\s*\{t\}:\s*add\s*\{[ub]\}\{[ub]\}/i,
-  
-//   // Generic filter pattern: {T}: Add {C}. {X/Y}, {T}: Add {XX}, {XY}, or {YY}
-//   /\{t\}:\s*add\s*\{c\}.*\{[wubrgc]\/[wubrgc]\},\s*\{t\}:\s*add/i
-// ];
-
-// const isFilterLand = filterLandPatterns.some(pattern => pattern.test(text));
-
-// if (isFilterLand) {
-//   // For filter lands, determine which colors they can produce
-//   // In goldfishing, we assume optimal play (can use filter mode when beneficial)
-//   // But it still only produces 1 mana total
-  
-//   let colors = { W: 0, U: 0, B: 0, R: 0, G: 0, C: 0 };
-  
-//   // Parse which color combinations this filter land offers
-//   if (text.includes('{u}{u}') || text.includes('{u}{b}') || text.includes('{b}{b}')) {
-//     // Sunken Ruins: can produce U or B
-//     colors.U = 1;
-//     colors.B = 1;
-//     colors.C = 1; // Can also tap for {C}
-//   } else if (text.includes('{w}{w}') || text.includes('{w}{u}') || text.includes('{u}{u}')) {
-//     // Mystic Gate: can produce W or U
-//     colors.W = 1;
-//     colors.U = 1;
-//     colors.C = 1;
-//   } else if (text.includes('{w}{w}') || text.includes('{w}{b}') || text.includes('{b}{b}')) {
-//     // Fetid Heath: can produce W or B
-//     colors.W = 1;
-//     colors.B = 1;
-//     colors.C = 1;
-//   } else if (text.includes('{u}{u}') || text.includes('{u}{r}') || text.includes('{r}{r}')) {
-//     // Cascade Bluffs: can produce U or R
-//     colors.U = 1;
-//     colors.R = 1;
-//     colors.C = 1;
-//   } else if (text.includes('{b}{b}') || text.includes('{b}{r}') || text.includes('{r}{r}')) {
-//     // Graven Cairns: can produce B or R
-//     colors.B = 1;
-//     colors.R = 1;
-//     colors.C = 1;
-//   } else if (text.includes('{b}{b}') || text.includes('{b}{g}') || text.includes('{g}{g}')) {
-//     // Twilight Mire: can produce B or G
-//     colors.B = 1;
-//     colors.G = 1;
-//     colors.C = 1;
-//   } else if (text.includes('{r}{r}') || text.includes('{r}{g}') || text.includes('{g}{g}')) {
-//     // Fire-Lit Thicket: can produce R or G
-//     colors.R = 1;
-//     colors.G = 1;
-//     colors.C = 1;
-//   } else if (text.includes('{r}{r}') || text.includes('{r}{w}') || text.includes('{w}{w}')) {
-//     // Rugged Prairie: can produce R or W
-//     colors.R = 1;
-//     colors.W = 1;
-//     colors.C = 1;
-//   } else if (text.includes('{g}{g}') || text.includes('{g}{w}') || text.includes('{w}{w}')) {
-//     // Wooded Bastion: can produce G or W
-//     colors.G = 1;
-//     colors.W = 1;
-//     colors.C = 1;
-//   } else if (text.includes('{g}{g}') || text.includes('{g}{u}') || text.includes('{u}{u}')) {
-//     // Flooded Grove: can produce G or U
-//     colors.G = 1;
-//     colors.U = 1;
-//     colors.C = 1;
-//   } else {
-//     // Generic filter land - default to colorless
-//     colors.C = 1;
-//   }
-  
-//   return {
-//     ...colors,
-//     isFilterLand: true,
-//     actualManaProduced: 1  // ✅ CRITICAL: Filter lands produce 1 mana total
-//   };
-// }
   
   // ✅ CHECK LANDS: "enters tapped unless you control [land type]"
   const isCheckLand = text.includes('enters') && text.includes('tapped') && text.includes('unless you control');
@@ -817,51 +1009,118 @@ export const playLand = (state, landIndex) => {
   // Mark land as tapped
   land.tapped = entersTapped;
   
-state.battlefield.lands.push(land);
+  state.battlefield.lands.push(land);
   state.hasPlayedLand = true;
   
-  // ✅ FIX: Add new land's mana to existing pool (don't regenerate entire pool)
-  if (!land.tapped) {
-    const newMana = getLandManaProduction(land, state.behaviorManifest);
+  // ✨ NEW SYSTEM: Rebuild PotentialManaPool (land's abilities now available)
+  // ✅ FIX MANA-016: Use same corrected logic as generateMana
+  if (state.manaPoolManager) {
+    state.potentialManaPool = state.manaPoolManager.buildPotentialManaPool(state);
     
-    // Add the new land's mana production to the current pool
-if (newMana.isDualLand || newMana.isFilterLand) {
-      Object.keys(newMana).forEach(color => {
-        if (['W', 'U', 'B', 'R', 'G', 'C'].includes(color) && newMana[color] > 0) {
-          state.manaPool[color] = (state.manaPool[color] || 0) + newMana[color];
+    // Use SAME preview calculation as generateMana (fixed for MANA-020)
+    const previewTotals = { W: 0, U: 0, B: 0, R: 0, G: 0, C: 0 };
+    let actualTotalMana = 0;
+    
+    // Group abilities by permanent to count each source once
+    const permanentMap = new Map();
+    state.potentialManaPool.forEach(entry => {
+      const key = `${entry.source}-${entry.sourceName}`;
+      if (!permanentMap.has(key)) {
+        permanentMap.set(key, []);
+      }
+      permanentMap.get(key).push(entry.ability);
+    });
+    
+    // For each permanent, find the ability that produces the MOST total mana
+    permanentMap.forEach((abilities, permanentKey) => {
+      let maxMana = 0;
+      let bestAbility = null;
+      
+      // Calculate total mana and flexibility for each ability
+      abilities.forEach(ability => {
+        let abilityTotal = 0;
+        let colorFlexibility = 0;
+        
+        ability.produces.forEach(production => {
+          let productionTotal = production.quantity || 0;
+          
+          if (!productionTotal && production.types) {
+            production.types.forEach(type => {
+              if (type.combination) {
+                productionTotal = Math.max(productionTotal, type.combination.length);
+              }
+            });
+          }
+          
+          abilityTotal += productionTotal || 1;
+          
+          if (production.types) {
+            production.types.forEach(type => {
+              if (type.choice) {
+                colorFlexibility += type.choice.length;
+              } else if (type.combination) {
+                colorFlexibility += type.combination.length;
+              } else if (typeof type === 'string') {
+                colorFlexibility += 1;
+              }
+            });
+          }
+        });
+        
+        if (abilityTotal > maxMana || (abilityTotal === maxMana && colorFlexibility > (bestAbility?.flexibility || 0))) {
+          maxMana = abilityTotal;
+          bestAbility = ability;
+          bestAbility.flexibility = colorFlexibility;
         }
       });
       
-      // ✅ BUG #1 FIX: Update actualTotalMana for dual/filter lands
-      state.actualTotalMana = (state.actualTotalMana || 0) + (newMana.actualManaProduced || 1);
-      
-    } else {
-      Object.keys(newMana).forEach(color => {
-        if (['W', 'U', 'B', 'R', 'G', 'C'].includes(color)) {
-          state.manaPool[color] = (state.manaPool[color] || 0) + (newMana[color] || 0);
-        }
-      });
-      
-      // ✅ BUG #1 FIX: Update actualTotalMana for regular lands
-      const landTotal = Object.keys(newMana)
-        .filter(k => ['W','U','B','R','G','C'].includes(k))
-        .reduce((sum, color) => sum + newMana[color], 0);
-      state.actualTotalMana = (state.actualTotalMana || 0) + landTotal;
-    }
+      if (bestAbility) {
+        bestAbility.produces.forEach(production => {
+          if (!production.types) return;
+          
+          const quantity = production.quantity || 1;
+          const uniqueColors = new Set();
+          
+          production.types.forEach(type => {
+            if (typeof type === 'string' && ['W', 'U', 'B', 'R', 'G', 'C'].includes(type)) {
+              uniqueColors.add(type);
+            } else if (type.choice) {
+              type.choice.forEach(c => {
+                if (['W', 'U', 'B', 'R', 'G', 'C'].includes(c)) {
+                  uniqueColors.add(c);
+                }
+              });
+            } else if (type.combination) {
+              type.combination.forEach(c => {
+                if (['W', 'U', 'B', 'R', 'G', 'C'].includes(c)) {
+                  uniqueColors.add(c);
+                }
+              });
+            }
+          });
+          
+          uniqueColors.forEach(color => {
+            previewTotals[color] += quantity;
+          });
+        });
+        
+        actualTotalMana += maxMana;
+      }
+    });
     
-    // ✅ BUG #1 FIX: Use actualTotalMana instead of sum
-    const totalMana = state.actualTotalMana || Object.values(state.manaPool).reduce((a, b) => a + b, 0);
+    state.manaPool = previewTotals;
+    state.actualTotalMana = actualTotalMana;
     
-    // Log with reason
+    // Log
+    const totalMana = state.actualTotalMana;
     if (entryReason) {
       state.log.push(`🏔️ Played land: ${land.name} ${entryReason}`);
     } else {
       state.log.push(`🏔️ Played land: ${land.name}`);
     }
-    
-    state.log.push(`💎 Mana pool after land: ${totalMana} total (W:${state.manaPool.W} U:${state.manaPool.U} B:${state.manaPool.B} R:${state.manaPool.R} G:${state.manaPool.G} C:${state.manaPool.C})`);
+    state.log.push(`💎 Available: ${totalMana} sources (could produce: W:${state.manaPool.W} U:${state.manaPool.U} B:${state.manaPool.B} R:${state.manaPool.R} G:${state.manaPool.G} C:${state.manaPool.C})`);
   } else {
-    // Land entered tapped, no mana added
+    // Land entered tapped
     if (entryReason) {
       state.log.push(`🏔️ Played land: ${land.name} ${entryReason}`);
     } else {
@@ -872,50 +1131,87 @@ if (newMana.isDualLand || newMana.isFilterLand) {
   return state;
 };
 
-// Cast a spell
+// =============================================
+// REFACTORED castSpell() - Uses Mana Solver
+// =============================================
 export const castSpell = (state, cardIndex) => {
   const card = state.hand[cardIndex];
   
-  // ✅ DEBUG: Log mana state before casting
-  const poolTotal = Object.values(state.manaPool).reduce((a, b) => a + b, 0);
-  console.log(`[castSpell] Attempting to cast ${card.name} (cost: ${card.cmc || 0})`);
-  console.log(`[castSpell] Current pool:`, state.manaPool, `Total: ${poolTotal}`);
+  console.log(`\n🎯 [castSpell] Attempting to cast ${card.name}`);
+  console.log(`🎯 [castSpell] Cost: ${card.mana_cost || '{0}'}`);
   
-  if (!canPayMana(state.manaPool, card.mana_cost, state.actualTotalMana)) {
-    const totalAvailable = Object.values(state.manaPool).reduce((a, b) => a + b, 0);
-    state.log.push(`⚠️ CANNOT CAST ${card.name}: Need ${card.cmc} mana, have ${totalAvailable}`);
-    console.log(`[castSpell] ⚠️ Affordability check FAILED`);
-    return state; // Don't cast if can't afford
+  // ✨ NEW SYSTEM: Use mana solver with PotentialManaPool
+  const solution = state.manaPoolManager.solveCost(
+    card.mana_cost || '{0}',
+    state.potentialManaPool || [],
+    state
+  );
+  
+  if (!solution) {
+    const totalAvailable = state.potentialManaPool?.length || 0;
+    state.log.push(`⚠️ CANNOT CAST ${card.name}: Mana solver found no valid payment`);
+    console.log(`❌ [castSpell] Cannot afford - no solution found`);
+    return state;
   }
   
-  console.log(`[castSpell] ✅ Affordability check PASSED - proceeding with cast`);
+  console.log(`✅ [castSpell] Solution found! Tapping ${solution.solution.length} sources`);
   
-  // Pay mana
-  state.manaPool = payMana(state.manaPool, card.mana_cost);
-  
-  // ✅ CRITICAL: Sync actualTotalMana after spending mana (fixes phantom mana bug)
-  // ✅ CRITICAL: Manually decrement actualTotalMana (don't recalc from pool - breaks dual lands!)
-  const costPaid = parseMana(card.mana_cost).total;
-  state.actualTotalMana = Math.max(0, (state.actualTotalMana || 0) - costPaid);
-  
-  //... rest of function
-
-// ✅ NEW: Log remaining mana after cast
-const totalRemaining = state.actualTotalMana; // Use synced value
-if (state.detailedLog) {
-  state.detailedLog.push({
-    turn: state.turn,
-    phase: state.phase,
-    action: '💰 Mana After Cast',
-    spell: card.name,
-    remaining: state.manaPool,
-    total: totalRemaining
+  // Apply the solution: Tap the permanents
+  solution.solution.forEach(entry => {
+    entry.permanent.tapped = true;
+    console.log(`   🔒 Tapped ${entry.sourceName} (produced {${entry.chosenColor}})`);
   });
-}
-state.log.push(`💰 Remaining mana: ${totalRemaining} (W:${state.manaPool.W} U:${state.manaPool.U} B:${state.manaPool.B} R:${state.manaPool.R} G:${state.manaPool.G} C:${state.manaPool.C})`);
+  
+  // Rebuild PotentialManaPool (untapped sources only)
+  state.potentialManaPool = state.manaPoolManager.buildPotentialManaPool(state);
+  
+  // Update preview pool for AI visibility (respect quantity!)
+  const previewTotals = { W: 0, U: 0, B: 0, R: 0, G: 0, C: 0 };
+  let actualTotalMana = 0;
+  
+  state.potentialManaPool.forEach(entry => {
+    entry.ability.produces.forEach(production => {
+      if (!production.types) return;
+      const quantity = production.quantity || 1;
+      
+      production.types.forEach(type => {
+        if (typeof type === 'string' && ['W', 'U', 'B', 'R', 'G', 'C'].includes(type)) {
+          previewTotals[type] += quantity;
+          actualTotalMana += quantity;
+        } else if (type.choice) {
+          type.choice.forEach(c => {
+            if (['W', 'U', 'B', 'R', 'G', 'C'].includes(c)) previewTotals[c] += quantity;
+          });
+          actualTotalMana += quantity;
+        } else if (type.combination) {
+          actualTotalMana += type.combination.length;
+          type.combination.forEach(c => {
+            if (['W', 'U', 'B', 'R', 'G', 'C'].includes(c)) previewTotals[c]++;
+          });
+        }
+      });
+    });
+  });
+  
+  state.manaPool = previewTotals;
+  state.actualTotalMana = actualTotalMana;
+  
+  // Log remaining mana
+  const totalRemaining = state.actualTotalMana;
+  if (state.detailedLog) {
+    state.detailedLog.push({
+      turn: state.turn,
+      phase: state.phase,
+      action: '💰 Mana After Cast',
+      spell: card.name,
+      remaining: state.manaPool,
+      total: totalRemaining
+    });
+  }
+  state.log.push(`💰 Remaining: ${totalRemaining} sources (W:${state.manaPool.W} U:${state.manaPool.U} B:${state.manaPool.B} R:${state.manaPool.R} G:${state.manaPool.G} C:${state.manaPool.C})`);
 
-// Remove from hand
-state.hand.splice(cardIndex, 1);
+  // Remove from hand
+  state.hand.splice(cardIndex, 1);
   
   // Add to battlefield or graveyard
   if (card.category === 'creature') {
@@ -943,52 +1239,82 @@ state.hand.splice(cardIndex, 1);
   return state;
 };
 
+// =============================================
+// REFACTORED castCommander() - Uses Mana Solver
+// =============================================
 export const castCommander = (state) => {
   if (state.commandZone.length === 0) return state;
   
   const commander = state.commandZone[0];
   
   // Commander tax is (2 * number of times PREVIOUSLY cast)
-  const additionalCost = commander.commanderCastCount * 2;  // This is CORRECT
-  const totalCMC = commander.cmc + additionalCost;
+  const additionalCost = commander.commanderCastCount * 2;
   
-  // Check if we can afford commander tax
-  const totalMana = state.manaPool.W + state.manaPool.U + state.manaPool.B + 
-                     state.manaPool.R + state.manaPool.G + state.manaPool.C;
+  // Build the full cost string (base cost + tax)
+  let fullCost = commander.mana_cost || '{0}';
+  if (additionalCost > 0) {
+    // Add tax as additional generic mana
+    fullCost = fullCost.replace(/\}$/, `}{${additionalCost}}`);
+  }
   
-  if (totalMana < totalCMC) {
-    state.log.push(`⚠️ Cannot cast commander: need ${totalCMC}, have ${totalMana}`);
+  console.log(`\n👑 [castCommander] Attempting to cast ${commander.name}`);
+  console.log(`👑 [castCommander] Base cost: ${commander.mana_cost}, Tax: ${additionalCost}, Full cost: ${fullCost}`);
+  
+  // ✨ NEW SYSTEM: Use mana solver with PotentialManaPool
+  const solution = state.manaPoolManager.solveCost(
+    fullCost,
+    state.potentialManaPool || [],
+    state
+  );
+  
+  if (!solution) {
+    const totalAvailable = state.potentialManaPool?.length || 0;
+    state.log.push(`⚠️ Cannot cast commander: Mana solver found no valid payment`);
+    console.log(`❌ [castCommander] Cannot afford - no solution found`);
     return state;
   }
   
-  if (!canPayMana(state.manaPool, commander.mana_cost, state.actualTotalMana)) {
-    state.log.push(`⚠️ Cannot cast commander: wrong colors`);
-    return state;
-  }
+  console.log(`✅ [castCommander] Solution found! Tapping ${solution.solution.length} sources`);
   
-  // Pay mana
-  state.manaPool = payMana(state.manaPool, commander.mana_cost);
+  // Apply the solution: Tap the permanents
+  solution.solution.forEach(entry => {
+    entry.permanent.tapped = true;
+    console.log(`   🔒 Tapped ${entry.sourceName} (produced {${entry.chosenColor}})`);
+  });
   
+  // Rebuild PotentialManaPool (untapped sources only)
+  state.potentialManaPool = state.manaPoolManager.buildPotentialManaPool(state);
   
-  // ✅ CRITICAL: Manually decrement actualTotalMana by base cost + tax
-  const baseCost = parseMana(commander.mana_cost).total;
-  const totalCost = baseCost + additionalCost;
-  state.actualTotalMana = Math.max(0, (state.actualTotalMana || 0) - totalCost);
-  // Pay commander tax from remaining mana
-  let taxToPay = additionalCost;
-  const colors = ['C', 'W', 'U', 'B', 'R', 'G'];
-  for (const color of colors) {
-    if (taxToPay > 0 && state.manaPool[color] > 0) {
-      const payment = Math.min(taxToPay, state.manaPool[color]);
-      state.manaPool[color] -= payment;
-      taxToPay -= payment;
-    }
-  }
+  // Update preview pool for AI visibility (respect quantity!)
+  const previewTotals = { W: 0, U: 0, B: 0, R: 0, G: 0, C: 0 };
+  let actualTotalMana = 0;
   
-  if (taxToPay > 0) {
-    state.log.push(`⚠️ Cannot pay commander tax: need ${additionalCost} more`);
-    return state;
-  }
+  state.potentialManaPool.forEach(entry => {
+    entry.ability.produces.forEach(production => {
+      if (!production.types) return;
+      const quantity = production.quantity || 1;
+      
+      production.types.forEach(type => {
+        if (typeof type === 'string' && ['W', 'U', 'B', 'R', 'G', 'C'].includes(type)) {
+          previewTotals[type] += quantity;
+          actualTotalMana += quantity;
+        } else if (type.choice) {
+          type.choice.forEach(c => {
+            if (['W', 'U', 'B', 'R', 'G', 'C'].includes(c)) previewTotals[c] += quantity;
+          });
+          actualTotalMana += quantity;
+        } else if (type.combination) {
+          actualTotalMana += type.combination.length;
+          type.combination.forEach(c => {
+            if (['W', 'U', 'B', 'R', 'G', 'C'].includes(c)) previewTotals[c]++;
+          });
+        }
+      });
+    });
+  });
+  
+  state.manaPool = previewTotals;
+  state.actualTotalMana = actualTotalMana;
   
   // Cast commander
   state.commandZone.shift();
@@ -1028,10 +1354,17 @@ export const aiMainPhase = (state) => {
     // Evaluate all castable spells
     const castableSpells = state.hand
       .map((card, idx) => ({ card, idx }))
-      .filter(({ card }) => 
-        card.category !== 'land' && 
-        canPayMana(state.manaPool, card.mana_cost, state.actualTotalMana)
-      )
+      .filter(({ card }) => {
+        if (card.category === 'land') return false;
+        
+        // ✨ NEW SYSTEM: Use mana solver to check affordability
+        const solution = state.manaPoolManager?.solveCost(
+          card.mana_cost || '{0}',
+          state.potentialManaPool || [],
+          state
+        );
+        return solution !== null;
+      })
       .map(({ card, idx }) => ({
         card,
         idx,

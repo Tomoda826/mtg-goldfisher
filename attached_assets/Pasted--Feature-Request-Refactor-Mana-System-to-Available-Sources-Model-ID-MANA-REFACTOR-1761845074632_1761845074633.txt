@@ -1,0 +1,93 @@
+### **Feature Request: Refactor Mana System to "Available Sources" Model**
+
+**ID:** `MANA-REFACTOR-001`
+**Priority:** Critical
+**Date:** October 30, 2025
+
+**1. Background & Problem Statement**
+
+Our current mana tracking system is architecturally flawed and is the root cause of our most persistent, critical bugs.
+
+The current model attempts to calculate a *fixed* mana pool (e.g., `{U:3, B:1}`) at the start of the turn by having the `generateMana` function "intelligently guess" what colors the AI will need.
+
+This model has been proven to be a critical failure:
+
+  * **`MANA-011` (Flawed Choice):** The "intelligent choice" logic is broken. Console logs definitively show the engine *knows* the AI's hand needs Black mana (`[ManaPool] Hand needs: {W: 0, U: 4, B: 10, ...}`) but *still* incorrectly chooses Blue when evaluating dual lands (`[ManaPool] Chose U from U,B (hand needs it)`). The AI is then "stuck" with this incorrect pool for the entire phase.
+  * **`MANA-012` (State Corruption):** The current model, which relies on mutating a single state object, is unstable. We have observed "vanishing mana," where casting one spell (e.g., `Ponder` for `{U}`) incorrectly causes all other Blue mana to disappear from the pool for the next action.
+
+Fixing these bugs is not possible by patching the current "fixed pool" model. We must move to a more robust, just-in-time calculation.
+
+**2. Proposed Solution: "Available Sources" Model**
+
+We will refactor the system to an "Available Sources" (or "Potential Pool") model.
+
+  * **Current (Flawed) Model:**
+    `Untap` -\> `Guess Colors (U, B)` -\> `Create Pool: {U:3, B:1}` -\> `AI fails to cast {B} spell`.
+  * **New (Proposed) Model:**
+    `Untap` -\> `Create List: [Swamp {B}, UR {C}, UR {U/B}, Signet {U/B}]` -\> `AI wants to cast Nazgûl {2}{B}` -\> `Engine "solves" cost` -\> `Taps Swamp, UR, Signet`.
+
+Instead of calculating a *fixed* pool, the engine will maintain a **list of all available, untapped mana-producing abilities** on the battlefield. The decision of which color to produce (e.g., `{U}` or `{B}` from `Underground River`) is delayed until the **moment a spell is cast**. This allows a "mana solver" to make a perfect, just-in-time choice based on the spell's specific cost.
+
+**3. Key Components to Refactor**
+
+1.  **`generateMana` (in `gameEngine.js`):**
+
+      * **Old Role:** Guessed a fixed pool.
+      * **New Role:** Must be refactored to scan the `gameState.battlefield` and **return a `PotentialManaPool` (an array/list)** of all available, untapped mana *abilities* (not a fixed mana sum).
+
+2.  **`castSpell` / `activateAbility` (in `gameEngine.js`):**
+
+      * **Old Role:** Subtracted cost from the fixed pool.
+      * **New Role:** Must be rebuilt to:
+        a.  Call a new "Mana Solver" function.
+        b.  Pass the spell's `cost` and the current `PotentialManaPool` to the solver.
+        c.  If the solver returns a valid payment solution (i.e., a list of permanents/abilities to use), the engine will "tap" those sources.
+
+3.  **`playLand` (in `gameEngine.js`):**
+
+      * **New Role:** When a land enters untapped, this function must *add* its parsed mana abilities to the `PotentialManaPool` list for the current phase.
+
+**4. Detailed Process Flow (New Logic)**
+
+1.  **Step 1: Build `PotentialManaPool`**
+
+      * At the start of a phase (or after any state change), the refactored `generateMana` runs.
+      * It scans all untapped permanents, reads their (now correctly fixed `PARSER-001`) manifest data, and builds a list.
+      * *Example `PotentialManaPool` Array:*
+        ```json
+        [
+          { "source": "Swamp", "ability": { "produces": [{... "types": ["B"] }] } },
+          { "source": "Underground River", "ability": { "produces": [{... "types": ["C"] }] } },
+          { "source": "Underground River", "ability": { "produces": [{... "types": [{"choice": ["U", "B"]}] }] } },
+          { "source": "Arcane Signet", "ability": { "produces": [{... "types": [{"choice": ["U", "B"]}] }] } }
+        ]
+        ```
+      * This list correctly shows `Underground River` has *two* distinct abilities the AI can choose from.
+
+2.  **Step 2: AI Makes a Choice**
+
+      * The AI, seeing its hand and the potential mana, decides to cast `Nazgûl` (Cost: `{2}{B}`).
+
+3.  **Step 3: The "Mana Solver"**
+
+      * The `castSpell` function calls `ManaPoolManager.solveCost(cost: {2}{B}, pool: PotentialManaPool)`.
+      * The solver intelligently iterates the list to find a valid payment.
+      * *Example Solution:* "Payment found: Use `Swamp` for `{B}`, `Arcane Signet`'s ability for `{B}`, and `Underground River`'s `{U/B}` ability for `{1}` (paying the generic)."
+      * This "just-in-time" decision **permanently fixes `MANA-011`**.
+
+4.  **Step 4: Update State & Rebuild Pool**
+
+      * The engine marks `Swamp`, `Arcane Signet`, and `Underground River` as "tapped" in the `gameState`.
+      * The `generateMana` function is re-run (or the list is filtered) to create the *new* `PotentialManaPool` for the *next* action in the phase (which will now be empty, as all sources are tapped).
+      * This "rebuild from reality" model **permanently fixes the "vanishing mana" bug (`MANA-012`)**.
+
+**5. Acceptance Criteria (How We Know This Is Fixed)**
+
+  * **`MANA-011` is Fixed:** The AI **must** be able to cast a Black spell (like `Nazgûl` or `Mordor Muster`) when it controls only choice-based sources (e.g., `Underground River`, `Watery Grave`, `Arcane Signet`) and a basic `Island`.
+  * **`MANA-011` (Variant) is Fixed:** The AI **must** be able to cast a Colorless spell (e.g., `Sol Ring`) when it controls `Underground River` (proving the `{C}` ability is now a selectable option and not discarded).
+  * **`MANA-012` is Fixed:** The AI **must** be able to execute multi-spell turns, and the mana available for the *second* spell (e.g., `Mordor Muster` after `Ponder`) must be correctly calculated based on the *remaining* untapped sources.
+  * **`MANA-008` is Fixed:** The solver **must** correctly utilize mana from artifacts (`Sol Ring`, `Arcane Signet`) and complex lands (`Great Hall`) in its payment solutions.
+
+**6. Dependencies**
+
+  * This refactor **must** build upon the **`PARSER-001` fix**. It relies on the manifest data being 100% accurate and providing separate ability objects for cards like `Underground River`.

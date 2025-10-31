@@ -8,8 +8,9 @@ import {
   castCommander,
   drawCard,
   untapPhase,
-  combatPhase,
-  generateMana
+  generateMana,
+  getLandManaProduction,
+  getArtifactManaProduction
 } from './gameEngine';
 
 import {
@@ -31,6 +32,20 @@ import {
   analyzeScryEffects
 } from './scryEngine';
 
+// ===== PHASE 2A: Spell Effects & Combat System =====
+import {
+  resolveSpellEffects,
+  cleanupEndOfTurnEffects,
+  getSpellEffectsSummary
+} from './spellEffects.js';
+
+import {
+  executeCombat,
+  getCombatSummary,
+  untapPermanents,
+  clearSummoningSickness
+} from './combatSystem.js';
+
 import {
   parseActivatedAbilities,
   activateAbilityFromHand,
@@ -47,6 +62,7 @@ import {
 
 import {
   createDeckBehaviorManifest,
+  getManaProductionFromManifest
 } from './cardBehaviorAnalyzer';
 
 import { callOpenAI, SYSTEM_PROMPTS } from './apiClient.js';
@@ -55,6 +71,20 @@ import {
   GameEngineError,
   logError
 } from './errorHandler.js';
+
+// ===== PHASE 1: Event System, Trigger Handler, Enhanced Permanent State =====
+import EventEmitter, { EVENT_TYPES, createEvent } from './eventSystem.js';
+import { 
+  detectTriggers, 
+  processTriggers 
+} from './triggerHandler.js';
+import { 
+  createEnhancedPermanent,
+  upgradeExistingPermanents,
+  updatePermanentState,
+  calculateEffectiveStats,
+  getPermanentStateSummary
+} from './permanentState.js';
 
 /**
  * Enrich deck cards with full database information
@@ -356,6 +386,151 @@ const executeCastTriggers = (game, castSpell) => {
 /**
  * Initialize enhanced detailed game with enriched card data
  */
+
+/**
+ * ============================================================================
+ * PHASE 1: HELPER FUNCTIONS FOR EVENT & TRIGGER SYSTEM
+ * ============================================================================
+ */
+
+/**
+ * Enhance all permanents on battlefield with enhanced state tracking
+ */
+const enhancePermanentsOnBattlefield = (game) => {
+  game.battlefield.creatures = game.battlefield.creatures.map(creature => {
+    if (!creature.counters || !creature.modifications) {
+      const enhanced = createEnhancedPermanent(creature, game);
+      enhanced.triggers = detectTriggers(enhanced);
+      return enhanced;
+    }
+    return creature;
+  });
+  
+  game.battlefield.artifacts = game.battlefield.artifacts.map(artifact => {
+    if (!artifact.counters || !artifact.modifications) {
+      const enhanced = createEnhancedPermanent(artifact, game);
+      enhanced.triggers = detectTriggers(enhanced);
+      return enhanced;
+    }
+    return artifact;
+  });
+  
+  game.battlefield.enchantments = game.battlefield.enchantments.map(enchantment => {
+    if (!enchantment.counters || !enchantment.modifications) {
+      const enhanced = createEnhancedPermanent(enchantment, game);
+      enhanced.triggers = detectTriggers(enhanced);
+      return enhanced;
+    }
+    return enchantment;
+  });
+  
+  game.battlefield.planeswalkers = game.battlefield.planeswalkers.map(planeswalker => {
+    if (!planeswalker.counters || !planeswalker.modifications) {
+      const enhanced = createEnhancedPermanent(planeswalker, game);
+      enhanced.triggers = detectTriggers(enhanced);
+      return enhanced;
+    }
+    return planeswalker;
+  });
+};
+
+/**
+ * Emit events and process triggers for a spell cast
+ */
+const handleSpellCastEvents = async (game, card) => {
+  // Emit SPELL_CAST event
+  game.eventEmitter.emit(createEvent(
+    EVENT_TYPES.SPELL_CAST,
+    card,
+    { player: 'player', phase: game.phase, zone: 'stack' }
+  ));
+  
+  // If permanent, handle ETB
+  if (['creature', 'artifact', 'enchantment', 'planeswalker'].includes(card.category)) {
+    const allPermanents = [
+      ...game.battlefield.creatures,
+      ...game.battlefield.artifacts,
+      ...game.battlefield.enchantments,
+      ...game.battlefield.planeswalkers
+    ];
+    
+    const enteredPermanent = allPermanents
+      .filter(p => p.name === card.name && !p._etbEmittedThisTurn)
+      .pop();
+    
+    if (enteredPermanent) {
+      enteredPermanent._etbEmittedThisTurn = true;
+      
+      const enhanced = createEnhancedPermanent(enteredPermanent, game);
+      enhanced.triggers = detectTriggers(enhanced);
+      enhanced._etbEmittedThisTurn = true;
+      
+      // Replace in array
+      if (card.category === 'creature') {
+        const idx = game.battlefield.creatures.findIndex(c => c === enteredPermanent);
+        if (idx !== -1) game.battlefield.creatures[idx] = enhanced;
+      } else if (card.category === 'artifact') {
+        const idx = game.battlefield.artifacts.findIndex(a => a === enteredPermanent);
+        if (idx !== -1) game.battlefield.artifacts[idx] = enhanced;
+      } else if (card.category === 'enchantment') {
+        const idx = game.battlefield.enchantments.findIndex(e => e === enteredPermanent);
+        if (idx !== -1) game.battlefield.enchantments[idx] = enhanced;
+      } else if (card.category === 'planeswalker') {
+        const idx = game.battlefield.planeswalkers.findIndex(p => p === enteredPermanent);
+        if (idx !== -1) game.battlefield.planeswalkers[idx] = enhanced;
+      }
+      
+      // Emit ETB
+      game.eventEmitter.emit(createEvent(
+        EVENT_TYPES.PERMANENT_ENTERS_BATTLEFIELD,
+        enhanced,
+        { player: 'player', phase: game.phase, zone: 'battlefield' }
+      ));
+      
+      if (enhanced.triggers.length > 0) {
+        game.detailedLog.push({
+          turn: game.turn,
+          phase: game.phase,
+          action: '🎯 Triggers Detected',
+          source: enhanced.name,
+          count: enhanced.triggers.length,
+          triggers: enhanced.triggers.map(t => t.fullText)
+        });
+      }
+    }
+  }
+  
+  // Process queue and triggers
+  game.eventEmitter.processEventQueue();
+  const spellEvent = { type: EVENT_TYPES.SPELL_CAST, source: card, context: { phase: game.phase } };
+  await processTriggers(game, spellEvent);
+  
+  if (['creature', 'artifact', 'enchantment', 'planeswalker'].includes(card.category)) {
+    const etbEvent = { type: EVENT_TYPES.PERMANENT_ENTERS_BATTLEFIELD, source: card, context: { phase: game.phase } };
+    await processTriggers(game, etbEvent);
+  }
+};
+
+/**
+ * Update all permanents at start of turn
+ */
+const updateAllPermanents = (game) => {
+  const allPermanents = [
+    ...game.battlefield.creatures,
+    ...game.battlefield.artifacts,
+    ...game.battlefield.enchantments,
+    ...game.battlefield.planeswalkers
+  ];
+  
+  allPermanents.forEach(permanent => {
+    if (permanent._etbEmittedThisTurn) {
+      delete permanent._etbEmittedThisTurn;
+    }
+    updatePermanentState(permanent, game);
+  });
+};
+
+
 export const initializeEnhancedDetailedGame = (parsedDeck, deckStrategy, aiAnalysis, cardDatabase) => {
   // Enrich all cards with database info
   const enrichedDeck = enrichCardsWithData(parsedDeck, cardDatabase);
@@ -389,6 +564,7 @@ export const initializeEnhancedDetailedGame = (parsedDeck, deckStrategy, aiAnaly
     graveyard: [],
     exile: [],
     commandZone: [...enrichedDeck.commanders.map(cmd => ({ ...cmd, commanderCastCount: 0 }))],
+    deckList: enrichedDeck,  // Store the full deck for later reference
     manaPool: { W: 0, U: 0, B: 0, R: 0, G: 0, C: 0 },
     availableMana: { W: 0, U: 0, B: 0, R: 0, G: 0, C: 0 },
     hasPlayedLand: false,
@@ -411,7 +587,9 @@ export const initializeEnhancedDetailedGame = (parsedDeck, deckStrategy, aiAnaly
     errors: [],
     fallbacksUsed: 0,
     successfulAICalls: 0,
-    failedAICalls: 0
+    failedAICalls: 0,
+    // ===== PHASE 1: Initialize Event System ===== 
+  eventEmitter: new EventEmitter()
   };
   
   // Draw opening hand
@@ -688,7 +866,10 @@ const performMulligan = async (game, mulliganCount = 0) => {
  * Get strategic AI decision for current phase with protocol-based thinking
  */
 const getStrategicAIDecision = async (game) => {
-  const availableMana = game.actualTotalMana || Object.values(game.manaPool).reduce((a, b) => a + b, 0);
+  // ✅ FIX: Use actualTotalMana if it exists (even if 0!), otherwise calculate from pool
+  const availableMana = game.actualTotalMana !== null && game.actualTotalMana !== undefined
+    ? game.actualTotalMana 
+    : Object.values(game.manaPool).reduce((a, b) => a + b, 0);
   
   // ⭐ NEW: Analyze battlefield synergies BEFORE building prompt
   const synergies = analyzeBattlefieldSynergies(game);
@@ -697,14 +878,19 @@ const getStrategicAIDecision = async (game) => {
   // Identify cards with synergy bonuses (for marking in hand display)
   const synergyCardIndices = new Set(synergies.synergyBonuses.map(b => b.cardIndex));
   
+  const combatSummary = getCombatSummary(game);
+
   const prompt = `You are an expert Magic: The Gathering Commander player executing optimal gameplay following professional sequencing principles.
 
 CURRENT GAME STATE:
 Turn ${game.turn}, Phase: ${game.phase}
 Available Mana: ${availableMana} total (W:${game.manaPool.W} U:${game.manaPool.U} B:${game.manaPool.B} R:${game.manaPool.R} G:${game.manaPool.G} C:${game.manaPool.C})
 
-⚠️ CRITICAL: This mana is ALREADY IN YOUR POOL. Do NOT try to "activate" Sol Ring or tap lands for mana - the mana is already available above!
-If you have {C:2} available, you can cast a 2-cost spell RIGHT NOW without activating anything.
+⚠️ CRITICAL MANA RULES:
+- The  mana shown above is your ACTUAL TOTAL AVAILABLE MANA
+- This is ALREADY IN YOUR POOL - Do NOT try to "activate" Sol Ring or tap lands!
+- To cast a spell, check: (1) Do I have the required colors? (2) Is my ACTUAL TOTAL >= spell cost?
+- Example: If you see "6 total (U:2, C:4)" you can cast ANY spell costing 6 or less that needs at most 2 blue
 Has Played Land This Turn: ${game.hasPlayedLand}
 Damage Dealt So Far: ${game.damageDealtThisGame}/40
 
@@ -712,6 +898,16 @@ BATTLEFIELD:
 Lands (${game.battlefield.lands.length}): ${game.battlefield.lands.map(l => l.name).join(', ') || 'None'}
 Creatures (${game.battlefield.creatures.length}): ${game.battlefield.creatures.map(c => `${c.name}${c.summoningSick ? ' (summoning sick)' : ''}`).join(', ') || 'None'}
 Other Permanents: ${game.battlefield.artifacts.length} artifacts, ${game.battlefield.enchantments.length} enchantments
+
+⚔️ COMBAT CAPABILITIES ⚔️
+${combatSummary.availableAttackers > 0 ? `
+Ready to Attack: ${combatSummary.availableAttackers} creature(s)
+Potential Damage: ${combatSummary.potentialDamage}
+Combat Keywords: ${combatSummary.keywords.length > 0 ? combatSummary.keywords.join(', ') : 'None'}
+${combatSummary.hasLifelink ? '❤️ Lifelink available - you will gain life' : ''}
+${combatSummary.hasVigilance ? '🛡️ Vigilance available - attackers stay untapped' : ''}
+${combatSummary.hasEvasion ? '🦅 Evasion available - flying/menace' : ''}
+` : 'No creatures ready to attack this turn'}
 
 ⭐⭐⭐ BATTLEFIELD SYNERGY ANALYSIS ⭐⭐⭐
 ${synergyInfo}
@@ -758,8 +954,9 @@ ${game.hand.map((c, i) => {
     if (isFetchLand && c.category === 'land') {
       cardInfo += `\n      📍 THIS IS A FETCH LAND - Special Instructions:`;
       cardInfo += `\n         1️⃣  Play it as your land drop (if available this turn)`;
-      cardInfo += `\n         2️⃣  NEXT turn, activate it from battlefield to search for a basic land`;
-      cardInfo += `\n         3️⃣  Do NOT try to "activate" it from your hand - that's illegal!`;
+      cardInfo += `\n         2️⃣  IMMEDIATELY activate it from battlefield (same turn!) to search for a basic land`;
+      cardInfo += `\n         3️⃣  Fetch land activation is FREE (0 cost) and should be done right away for color fixing`;
+      cardInfo += `\n         4️⃣  Do NOT try to "activate" it from your hand - that's illegal!`;
       
       // Show what the ability does
       const fetchAbility = battlefieldAbilities[0];
@@ -874,7 +1071,12 @@ Decision Priority (MANA → ENGINE → THREAT Framework):
 
 1. **Land Drop**: Can I play a land this turn? → Play the optimal land first.
 
-2. **Main Phase Evaluation** (follow sequencePriority ranking):
+2. **FREE ACTIONS**: After playing a land, check for 0-cost activated abilities:
+   - ⚡ Fetch lands (Evolving Wilds, etc.): IMMEDIATELY activate to search for basic land
+   - ⚡ 0-cost abilities on battlefield: Activate these before casting spells
+   - These are free mana-fixing/card advantage - always prioritize them!
+
+3. **Main Phase Evaluation** (follow sequencePriority ranking):
    
    Step A - Identify highest-priority action type available:
    - MANA: Ramp spells, mana rocks, land tutors (accelerate to win condition)
@@ -892,13 +1094,13 @@ Decision Priority (MANA → ENGINE → THREAT Framework):
    - ✅ Activate NON-MANA ability (cycling, tokens, card draw)
    - ❌ NEVER manually activate mana abilities (these are automatic!)
 
-3. **Re-evaluate After Each Action**:
+4. **Re-evaluate After Each Action**:
    - Did I use all my mana?
-   - Return to Step 2 to find next best action with remaining mana
+   - Return to Step 3 to find next best action with remaining mana
    - Continue until no more productive plays available
 
-4. **End Phase Properly**:
-   - If Steps 1 & 2 yield no more viable actions → Proceed to Combat/Pass
+5. **End Phase Properly**:
+   - If Steps 1-3 yield no more viable actions → Proceed to Combat/Pass
    - Do NOT tap lands for mana you can't use (mana pools empty between steps)
    - Floating unused mana is NOT a productive play
 
@@ -1004,7 +1206,7 @@ Respond with JSON:
 /**
  * Execute action with enhanced logging
  */
-const executeStrategicAction = (game, decision) => {
+const executeStrategicAction = async (game, decision) => {
   const logEntry = {
     turn: game.turn,
     phase: game.phase,
@@ -1055,29 +1257,40 @@ case 'castSpell': {
   
   if (spellIndex !== -1 && spellIndex < game.hand.length) {
     const spell = game.hand[spellIndex];
-    if (canPayMana(game.manaPool, spell.mana_cost, game.actualTotalMana)) {
+  if (canPayMana(game.manaPool, spell.mana_cost, game.actualTotalMana, game.manaPoolManager, game)) {
       const manaSpent = spell.cmc || 0;
       
       // ✅ CRITICAL: Log mana BEFORE casting
-      const manaB4 = {...game.manaPool};
+      const manaBeforeCast = {...game.manaPool};
+      const totalBeforeCast = game.actualTotalMana || 0;
       
       // Cast the spell (this modifies game.manaPool in place)
+      // ===== PHASE 1: Save card before casting (it gets removed from hand) =====
+      const cardBeforeCast = {...game.hand[spellIndex]};
+      
       castSpell(game, spellIndex);
       
-      // ✅ SAFETY: Ensure actualTotalMana is synced (should already be done in castSpell)
+      // ✅ CRITICAL: Sync actualTotalMana after casting
+      game.actualTotalMana = game.manaPoolManager?.getTotal() || game.actualTotalMana;
       
-      // ✅ DEBUG: Log mana AFTER casting
-      if (game.turn <= 5) {
-        game.detailedLog.push({
-          turn: game.turn,
-          phase: game.phase,
-          action: '🔍 DEBUG: Mana After Cast',
-          spell: spell.name,
-          cost: spell.mana_cost,
-          before: manaB4,
-          after: {...game.manaPool}
-        });
-      }
+      // ===== PHASE 1: Handle spell cast events and triggers =====
+      await handleSpellCastEvents(game, cardBeforeCast);
+      
+      
+      // ✅ FIX #3: Log mana changes using actualTotalMana
+      const manaAfterCast = {...game.manaPool};
+      const totalAfterCast = game.actualTotalMana || 0;
+      
+      game.detailedLog.push({
+        turn: game.turn,
+        phase: game.phase,
+        action: '💰 Mana After Cast',
+        spell: spell.name,
+        cost: spell.mana_cost,
+        before: { pool: manaBeforeCast, total: totalBeforeCast },
+        after: { pool: manaAfterCast, total: totalAfterCast },
+        spent: totalBeforeCast - totalAfterCast
+      });
       
       game.metrics.spellsCast++;
       game.metrics.totalManaSpent += manaSpent;
@@ -1099,6 +1312,11 @@ case 'castSpell': {
         executeScry(game, scryAmount, spell, 'spell');
       }
 
+      // ===== PHASE 2A: RESOLVE SPELL EFFECTS =====
+      if (spell.category === 'instant' || spell.category === 'sorcery') {
+        await resolveSpellEffects(game, spell);
+      }
+
          // CHECK FOR "WHENEVER YOU CAST" TRIGGERS FROM BATTLEFIELD
    executeCastTriggers(game, spell);
 
@@ -1117,17 +1335,73 @@ case 'castSpell': {
 }
 
 case 'castCommander': {
+    // ✅ ADD THIS DEFENSIVE CHECK AT THE TOP:
+  if (!game.deckList || !game.deckList.commanders || game.deckList.commanders.length === 0) {
+    console.error('❌ Cannot cast commander - deckList.commanders not initialized');
+    
+    game.detailedLog?.push({
+      turn: game.turn,
+      phase: game.phase,
+      action: '❌ FATAL ERROR',
+      details: 'Commander data not available in game state',
+      success: false
+    });
+    
+    return { 
+      success: false, 
+      message: 'Commander casting failed - missing deck data',
+      error: 'DECKLIST_COMMANDERS_UNDEFINED'
+    };
+  }
+  
   if (game.commandZone.length > 0) {
     const commander = game.commandZone[0];
     const taxAmount = commander.commanderCastCount * 2;
     const totalCost = commander.cmc + taxAmount;
     const totalMana = Object.values(game.manaPool).reduce((a, b) => a + b, 0);
     
-    if (totalMana >= totalCost && canPayMana(game.manaPool, commander.mana_cost, game.actualTotalMana)) {
+if (totalMana >= totalCost && canPayMana(game.manaPool, commander.mana_cost, game.actualTotalMana, game.manaPoolManager, game)) {
       // ✅ DEBUG: Log mana before
       const manaB4 = {...game.manaPool};
       
       castCommander(game);
+      
+      // ===== PHASE 1: Handle commander ETB =====
+      const commanderOnField = game.battlefield.creatures.find(c => 
+        c.name === game.deckList.commanders[0]?.name && !c._etbEmittedThisTurn
+      );
+      
+      if (commanderOnField) {
+        commanderOnField._etbEmittedThisTurn = true;
+        
+        const enhanced = createEnhancedPermanent(commanderOnField, game);
+        enhanced.triggers = detectTriggers(enhanced);
+        enhanced._etbEmittedThisTurn = true;
+        
+        const idx = game.battlefield.creatures.findIndex(c => c === commanderOnField);
+        if (idx !== -1) game.battlefield.creatures[idx] = enhanced;
+        
+        game.eventEmitter.emit(createEvent(
+          EVENT_TYPES.PERMANENT_ENTERS_BATTLEFIELD,
+          enhanced,
+          { player: 'player', phase: game.phase, zone: 'battlefield' }
+        ));
+        
+        game.eventEmitter.processEventQueue();
+        const etbEvent = { type: EVENT_TYPES.PERMANENT_ENTERS_BATTLEFIELD, source: enhanced, context: { phase: game.phase } };
+        await processTriggers(game, etbEvent);
+        
+        if (enhanced.triggers.length > 0) {
+          game.detailedLog.push({
+            turn: game.turn,
+            phase: game.phase,
+            action: '🎯 Commander Triggers',
+            source: enhanced.name,
+            count: enhanced.triggers.length
+          });
+        }
+      }
+      
       
       // ✅ DEBUG: Log mana after
       if (game.turn <= 5) {
@@ -1313,7 +1587,10 @@ const runEnhancedMainPhase = async (game, maxActions = 15) => {
   
   while (actionsThisPhase < maxActions && consecutivePasses < 2) {
 
-  const totalMana = game.actualTotalMana || Object.values(game.manaPool).reduce((a,b)=>a+b,0);
+  // ✅ FIX: Use actualTotalMana if it exists (even if 0!), otherwise calculate from pool
+  const totalMana = game.actualTotalMana !== null && game.actualTotalMana !== undefined
+    ? game.actualTotalMana
+    : Object.values(game.manaPool).reduce((a,b)=>a+b,0);
   
   if (totalMana === 0 && game.hasPlayedLand) {
     // Check for free plays
@@ -1452,7 +1729,7 @@ const runEnhancedMainPhase = async (game, maxActions = 15) => {
         break;
       }
     } else {
-const success = executeStrategicAction(game, decision);
+const success = await executeStrategicAction(game, decision);
 if (success) {
   consecutivePasses = 0;  // Only reset on success
 } else {
@@ -1553,19 +1830,93 @@ export const runEnhancedTurn = async (game) => {
   });
   
   // UNTAP PHASE
-  game.phase = 'untap';
-  untapPhase(game);
+untapPhase(game);
+  
+  // ===== PHASE 2A: CLEAR SUMMONING SICKNESS =====
+  clearSummoningSickness(game);
+  
+  // ✅ FIX: Calculate ACTUAL mana production BEFORE generateMana taps them
+  let landCountBeforeTap = 0;
+  let landManaProduced = 0;
+  game.battlefield.lands.filter(l => !l.tapped).forEach(land => {
+    const production = getLandManaProduction(land, game.behaviorManifest);
+    const manaAmount = production.actualManaProduced || 0;
+    if (manaAmount > 0) {
+      landCountBeforeTap++;
+      landManaProduced += manaAmount;
+    }
+  });
+  
+  let artifactCountBeforeTap = 0;
+  let artifactManaProduced = 0;
+  game.battlefield.artifacts.filter(a => !a.tapped).forEach(artifact => {
+    const production = getArtifactManaProduction(artifact, game.behaviorManifest);
+    const manaAmount = production.actualManaProduced || 0;
+    if (manaAmount > 0) {
+      artifactCountBeforeTap++;
+      artifactManaProduced += manaAmount;
+    }
+  });
+  
+  let creatureManaDorksBeforeTap = 0;
+  let creatureManaProduced = 0;
+  game.battlefield.creatures.filter(c => !c.tapped && !c.summoningSick).forEach(creature => {
+    // Check both manifest and oracle text for mana abilities
+    const manaAbilityData = game.behaviorManifest?.manaAbilities?.get(creature.name);
+    const text = (creature.oracle_text || '').toLowerCase();
+    const hasManaAbility = manaAbilityData?.hasManaAbility || 
+                           (text.includes('{t}:') && text.includes('add'));
+    
+    if (hasManaAbility) {
+      const production = getManaProductionFromManifest(creature, game.behaviorManifest);
+      const manaAmount = production.actualManaProduced || 0;
+      if (manaAmount > 0) {
+        creatureManaDorksBeforeTap++;
+        creatureManaProduced += manaAmount;
+      }
+    }
+  });
+  
+  console.log(`🔍 [untap] BEFORE generateMana - Expected: ${landManaProduced + artifactManaProduced + creatureManaProduced} (lands:${landManaProduced} + artifacts:${artifactManaProduced} + creatures:${creatureManaProduced})`);
+  console.log(`🔍 [untap] Land count: ${landCountBeforeTap}, Artifact count: ${artifactCountBeforeTap}, Creature count: ${creatureManaDorksBeforeTap}`);
+  
   generateMana(game);
   await checkPhaseTriggersAI(game, 'untap');
+  
+  const expectedMana = landManaProduced + artifactManaProduced + creatureManaProduced;
+  const totalMana = game.actualTotalMana || 0;
+  
+  console.log(`🔍 [untap] AFTER generateMana - Expected: ${expectedMana}, Actual: ${totalMana}`);
+  
+  let manaSourcesDesc = `${landCountBeforeTap} lands`;
+  if (artifactCountBeforeTap > 0) {
+    manaSourcesDesc += ` + ${artifactCountBeforeTap} artifacts`;
+  }
+  if (creatureManaDorksBeforeTap > 0) {
+    manaSourcesDesc += ` + ${creatureManaDorksBeforeTap} creatures`;
+  }
+  
   game.detailedLog.push({
     turn: game.turn,
     phase: 'untap',
     action: 'Untap & Generate Mana',
-    details: `All permanents untapped. ${game.battlefield.lands.length} lands = ${Object.values(game.manaPool).reduce((a,b)=>a+b,0)} mana available.`
+    details: `All permanents untapped. ${manaSourcesDesc} = ${totalMana} mana available.`
   });
   
   // UPKEEP PHASE
   game.phase = 'upkeep';
+  
+  // ===== PHASE 1: Phase change event =====
+  game.eventEmitter.emit(createEvent(
+    EVENT_TYPES.PHASE_CHANGED,
+    null,
+    { player: 'player', phase: 'upkeep', turn: game.turn }
+  ));
+  
+  game.eventEmitter.processEventQueue();
+  const upkeepEvent = { type: EVENT_TYPES.PHASE_CHANGED, source: null, context: { phase: 'upkeep' } };
+  await processTriggers(game, upkeepEvent);
+  
   await checkPhaseTriggersAI(game, 'upkeep');
   
   // DRAW STEP
@@ -1574,6 +1925,18 @@ export const runEnhancedTurn = async (game) => {
     const drawnCard = game.library[game.library.length - 1];
     const etb = hasETBEffect(drawnCard);
     drawCard(game);
+    
+    // ===== PHASE 1: Card draw event =====
+    game.eventEmitter.emit(createEvent(
+      EVENT_TYPES.CARD_DRAWN,
+      drawnCard,
+      { player: 'player', phase: 'draw' }
+    ));
+    
+    game.eventEmitter.processEventQueue();
+    const drawEvent = { type: EVENT_TYPES.CARD_DRAWN, source: drawnCard, context: { phase: 'draw' } };
+    await processTriggers(game, drawEvent);
+    
     game.detailedLog.push({
       turn: game.turn,
       phase: 'draw',
@@ -1606,8 +1969,26 @@ export const runEnhancedTurn = async (game) => {
     details: `Entering combat with ${regularCreatures} creatures and ${tokenCount} tokens`
   });
   
-  await checkPhaseTriggersAI(game, 'combat');
-  combatPhase(game);
+await checkPhaseTriggersAI(game, 'combat');
+  
+  // ===== PHASE 2A: ENHANCED COMBAT SYSTEM =====
+  const combatResults = executeCombat(game);
+  
+  // Log combat details
+  if (combatResults.attackers.length > 0) {
+    const uniqueKeywords = [...new Set(combatResults.keywords)];
+    game.detailedLog.push({
+      turn: game.turn,
+      phase: 'combat',
+      action: '⚔️ Combat Results',
+      attackers: combatResults.attackers.length,
+      damage: combatResults.damage,
+      lifeGained: combatResults.lifeGained,
+      keywords: uniqueKeywords,
+      details: `${combatResults.attackers.length} attacker(s) dealt ${combatResults.damage} damage${combatResults.lifeGained > 0 ? `, gained ${combatResults.lifeGained} life` : ''}${uniqueKeywords.length > 0 ? ` (keywords: ${uniqueKeywords.join(', ')})` : ''}`,
+      success: true
+    });
+  }
   
   // POST-COMBAT MAIN PHASE
   game.phase = 'main2';
@@ -1620,9 +2001,13 @@ export const runEnhancedTurn = async (game) => {
   
   await runEnhancedMainPhase(game);
   
-  // END STEP
+// END STEP
   game.phase = 'end';
   await checkPhaseTriggersAI(game, 'end');
+  
+  // ===== PHASE 2A: CLEANUP TEMPORARY EFFECTS =====
+  cleanupEndOfTurnEffects(game);
+  
   game.detailedLog.push({
     turn: game.turn,
     phase: 'end',
