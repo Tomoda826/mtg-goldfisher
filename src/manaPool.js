@@ -768,23 +768,30 @@ export class ManaPool {
       // ✅ FIX MANA-019: Get the quantity this ability produces (with X resolution)
       const producedQuantity = this.getProductionQuantity(entry.ability, gameState, entry.permanent);
       
-      // Handle activation cost (e.g., Dimir Signet needs {1})
+      // ✅ FIX MANA-022: Handle activation cost (calculate NET contribution)
+      // Dimir Signet: costs {1}, produces 2 → NET is +1 (not +2!)
       const activationCost = this.getActivationManaCost(entry.activationCost || []);
-      if (activationCost) {
-        needed.generic += activationCost; // Add to what we still need to pay
-        console.log(`   💰 ${entry.sourceName} requires {${activationCost}} to activate`);
+      const netProduction = producedQuantity - activationCost;
+      
+      if (netProduction <= 0) {
+        console.log(`❌ [ManaSolver] ${entry.sourceName} is net-zero or negative (produces ${producedQuantity}, costs ${activationCost})`);
+        continue; // Skip this source, it doesn't help
+      }
+      
+      if (activationCost > 0) {
+        console.log(`   💰 ${entry.sourceName} costs {${activationCost}}, produces ${producedQuantity} → NET +${netProduction}`);
       }
       
       solution.push({
         ...entry,
         chosenColor: producedColor,
-        reason: `generic payment`,
+        reason: `generic payment (net +${netProduction})`,
         activationCost: activationCost || 0
       });
       usedIndices.add(sourceIdx);
-      needed.generic -= producedQuantity;
+      needed.generic -= netProduction; // Use NET production, not gross
       
-      console.log(`   ✓ Using ${entry.sourceName} for generic (producing ${producedQuantity}x{${producedColor}})`);
+      console.log(`   ✓ Using ${entry.sourceName} for generic (NET ${netProduction} after {${activationCost}} cost)`);
     }
     
     console.log(`✅ [ManaSolver] Found solution using ${solution.length} sources`);

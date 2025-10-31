@@ -1013,35 +1013,99 @@ export const playLand = (state, landIndex) => {
   state.hasPlayedLand = true;
   
   // ✨ NEW SYSTEM: Rebuild PotentialManaPool (land's abilities now available)
+  // ✅ FIX MANA-016: Use same corrected logic as generateMana
   if (state.manaPoolManager) {
     state.potentialManaPool = state.manaPoolManager.buildPotentialManaPool(state);
     
-    // Update preview pool for AI visibility (respect quantity!)
+    // Use SAME preview calculation as generateMana (fixed for MANA-020)
     const previewTotals = { W: 0, U: 0, B: 0, R: 0, G: 0, C: 0 };
     let actualTotalMana = 0;
     
+    // Group abilities by permanent to count each source once
+    const permanentMap = new Map();
     state.potentialManaPool.forEach(entry => {
-      entry.ability.produces.forEach(production => {
-        if (!production.types) return;
-        const quantity = production.quantity || 1;
+      const key = `${entry.source}-${entry.sourceName}`;
+      if (!permanentMap.has(key)) {
+        permanentMap.set(key, []);
+      }
+      permanentMap.get(key).push(entry.ability);
+    });
+    
+    // For each permanent, find the ability that produces the MOST total mana
+    permanentMap.forEach((abilities, permanentKey) => {
+      let maxMana = 0;
+      let bestAbility = null;
+      
+      // Calculate total mana and flexibility for each ability
+      abilities.forEach(ability => {
+        let abilityTotal = 0;
+        let colorFlexibility = 0;
         
-        production.types.forEach(type => {
-          if (typeof type === 'string' && ['W', 'U', 'B', 'R', 'G', 'C'].includes(type)) {
-            previewTotals[type] += quantity;
-            actualTotalMana += quantity;
-          } else if (type.choice) {
-            type.choice.forEach(c => {
-              if (['W', 'U', 'B', 'R', 'G', 'C'].includes(c)) previewTotals[c] += quantity;
+        ability.produces.forEach(production => {
+          let productionTotal = production.quantity || 0;
+          
+          if (!productionTotal && production.types) {
+            production.types.forEach(type => {
+              if (type.combination) {
+                productionTotal = Math.max(productionTotal, type.combination.length);
+              }
             });
-            actualTotalMana += quantity;
-          } else if (type.combination) {
-            actualTotalMana += type.combination.length;
-            type.combination.forEach(c => {
-              if (['W', 'U', 'B', 'R', 'G', 'C'].includes(c)) previewTotals[c]++;
+          }
+          
+          abilityTotal += productionTotal || 1;
+          
+          if (production.types) {
+            production.types.forEach(type => {
+              if (type.choice) {
+                colorFlexibility += type.choice.length;
+              } else if (type.combination) {
+                colorFlexibility += type.combination.length;
+              } else if (typeof type === 'string') {
+                colorFlexibility += 1;
+              }
             });
           }
         });
+        
+        if (abilityTotal > maxMana || (abilityTotal === maxMana && colorFlexibility > (bestAbility?.flexibility || 0))) {
+          maxMana = abilityTotal;
+          bestAbility = ability;
+          bestAbility.flexibility = colorFlexibility;
+        }
       });
+      
+      if (bestAbility) {
+        bestAbility.produces.forEach(production => {
+          if (!production.types) return;
+          
+          const quantity = production.quantity || 1;
+          const uniqueColors = new Set();
+          
+          production.types.forEach(type => {
+            if (typeof type === 'string' && ['W', 'U', 'B', 'R', 'G', 'C'].includes(type)) {
+              uniqueColors.add(type);
+            } else if (type.choice) {
+              type.choice.forEach(c => {
+                if (['W', 'U', 'B', 'R', 'G', 'C'].includes(c)) {
+                  uniqueColors.add(c);
+                }
+              });
+            } else if (type.combination) {
+              type.combination.forEach(c => {
+                if (['W', 'U', 'B', 'R', 'G', 'C'].includes(c)) {
+                  uniqueColors.add(c);
+                }
+              });
+            }
+          });
+          
+          uniqueColors.forEach(color => {
+            previewTotals[color] += quantity;
+          });
+        });
+        
+        actualTotalMana += maxMana;
+      }
     });
     
     state.manaPool = previewTotals;
