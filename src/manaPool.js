@@ -719,13 +719,14 @@ export class ManaPool {
         }
         
         const entry = potentialPool[sourceIdx];
+        
         solution.push({
           ...entry,
           chosenColor: color,
           reason: `colored requirement {${color}}`
         });
         usedIndices.add(sourceIdx);
-        needed[color]--;
+        needed[color]--; // Colored: always pay 1 pip per source
         
         console.log(`   ✓ Using ${entry.sourceName} for {${color}}`);
       }
@@ -743,15 +744,18 @@ export class ManaPool {
       const entry = potentialPool[sourceIdx];
       const producedColor = this.chooseGenericColor(entry.ability, gameState);
       
+      // ✅ FIX MANA-019: Get the quantity this ability produces (with X resolution)
+      const producedQuantity = this.getProductionQuantity(entry.ability, gameState, entry.permanent);
+      
       solution.push({
         ...entry,
         chosenColor: producedColor,
         reason: `generic payment`
       });
       usedIndices.add(sourceIdx);
-      needed.generic--;
+      needed.generic -= producedQuantity;
       
-      console.log(`   ✓ Using ${entry.sourceName} for generic (producing {${producedColor}})`);
+      console.log(`   ✓ Using ${entry.sourceName} for generic (producing ${producedQuantity}x{${producedColor}})`);
     }
     
     console.log(`✅ [ManaSolver] Found solution using ${solution.length} sources`);
@@ -767,6 +771,38 @@ export class ManaPool {
         generic: required.generic
       }
     };
+  }
+  
+  /**
+   * Get the total quantity of mana an ability produces for GENERIC payment
+   * Handles: 2x{C}{C} (Sol Ring produces 2), 1x{U/B} (choice produces 1), etc.
+   * IMPORTANT: For colored pips, we always pay 1 per source activation.
+   * For generic, we count the total quantity available, resolving X if needed.
+   * 
+   * @param {Object} ability - The mana ability
+   * @param {Object} gameState - Current game state (for X resolution)
+   * @param {Object} permanent - The permanent with this ability (for X resolution)
+   */
+  getProductionQuantity(ability, gameState, permanent) {
+    if (!ability.produces || ability.produces.length === 0) return 1;
+    
+    // Sum all production quantities
+    let total = 0;
+    ability.produces.forEach(production => {
+      const qty = production.quantity;
+      
+      // Handle variable quantities (X) - resolve using game state
+      if (typeof qty === 'string') {
+        const resolved = this.resolveQuantity(qty, gameState, permanent);
+        console.log(`🔍 [Solver] Resolved variable quantity "${qty}" = ${resolved}`);
+        total += resolved;
+        return;
+      }
+      
+      total += qty || 1;
+    });
+    
+    return total;
   }
   
   /**
