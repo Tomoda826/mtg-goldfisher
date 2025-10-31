@@ -485,6 +485,11 @@ export const untapPhase = (state) => {
     land.tapped = false;
   });
   
+  // ✅ FIX MANA-018: Untap all artifacts
+  state.battlefield.artifacts.forEach(artifact => {
+    artifact.tapped = false;
+  });
+  
   // Remove summoning sickness from creatures
   state.battlefield.creatures.forEach(creature => {
     creature.summoningSick = false;

@@ -1,0 +1,77 @@
+This is a fantastic log. It shows you've fixed the two most difficult bugs (`MANA-019` and `MANA-016`) but also isolates the two remaining bugs with perfect clarity.
+
+You can go to bed. The core `ManaSolver` logic is **fixed**. The remaining issues are in the code that *feeds* data *to* the AI and the start-of-turn parser.
+
+Here is my full analysis.
+
+### The Good News: The Hard Part is Done
+
+#### 1. FIXED! `MANA-019` (Sol Ring Quantity Bug)
+This is the big one. The `ManaSolver` is now correctly handling `Sol Ring`'s quantity. The bug from the previous log is gone.
+
+* **Evidence (T2 - The *Correct* Failure):**
+    * The AI has `Island` {U}, `Swamp` {B}, and `Sol Ring` {C}{C}. Total available mana = 4.
+    * Commander cost = 5.
+    * The `ManaSolver` log correctly reports: `✓ Using Sol Ring for generic (producing 2x{C})`... `❌ [ManaSolver] Cannot find source for generic {1}`.
+    * This is **perfect**. It used the 2 mana from Sol Ring, still needed 1 more, and failed.
+
+* **Evidence (T3 - The *Correct* Success):**
+    * The AI plays `Tainted Isle`. The pool now has `Island`, `Swamp`, `Tainted Isle` (x2 abilities), and `Sol Ring`. Total available mana = 5.
+    * The `ManaSolver` runs again for the 5-cost commander.
+    * It finds {U} (Island) and {B} (Swamp). It needs {3} generic.
+    * It logs: `✓ Using Tainted Isle for generic...`, `✓ Using Tainted Isle for generic...`, `✓ Using Sol Ring for generic (producing 2x{C})`.
+    * It finds a solution: `✅ [ManaSolver] Found solution using 5 sources`.
+    * The commander is cast. **This is a complete success.**
+
+
+
+#### 2. FIXED! `MANA-016` / `MANA-017` (JIT / "Target" Bug)
+Your unified parser fix worked. The JIT (mid-turn) parser is now correctly handling conditional/ETB lands.
+
+* **Evidence (T3):**
+    1.  The AI plays `Tainted Isle` (a conditional land that needs a Swamp/Island).
+    2.  The JIT `[PotentialPool]` rebuilds *immediately*.
+    3.  The *very next* `ManaSolver` log shows: `Available sources: 5 abilities`, and the list correctly includes both abilities from `Tainted Isle`.
+    * This proves the JIT parser is fixed and in sync with the start-of-turn parser.
+
+---
+
+### The Remaining Bugs (What's Broken)
+
+You are left with two bugs, and they are likely related.
+
+#### 1. CONFIRMED BROKEN: `MANA-018` (The Disappearing Artifact Bug)
+This is now the #1 priority. `Sol Ring` is disappearing from the start-of-turn mana pool after T3.
+
+* **Evidence (The Timeline):**
+    * **T3 `[generateMana]`:** `Found 3 available mana abilities`... `2: Sol Ring (artifact) → 2x{C}{C}`. (Correct)
+    * **T4 `[generateMana]`:** `Found 4 available mana abilities`... (List shows `Island`, `Swamp`, `Tainted Isle`, `Tainted Isle`). **`Sol Ring` is gone.**
+    * **T5 `[generateMana]`:** `Found 5 available mana abilities`... (List shows 5 lands). **`Sol Ring` is still gone.**
+
+This is the *exact* same bug we hypothesized about with `Commander's Sphere`. The start-of-turn parser is incorrectly iterating its artifact list and "losing" artifacts after one turn.
+
+#### 2. NEW BUG: `MANA-020` (AI Decision-Maker Confusion)
+The `ManaSolver` (which is fixed) and the AI's "decision" logic (which is broken) are getting different data.
+
+* **Evidence (T2):**
+    * The `GAME LOG` (AI) says: `Cannot afford commander (need 5, have 6) ✗`. The AI *thinks* it has 6 mana.
+    * The `CONSOLE LOG` (Solver) correctly fails, because it only has 4 mana.
+
+* **Evidence (T3):**
+    * The `GAME LOG` (AI) says: `We have 8 available mana...` The AI *thinks* it has 8 mana.
+    * The `CONSOLE LOG` (Solver) correctly finds a solution using the 5 available mana.
+
+The `[generateMana]` function's `Actual:` and `Final total:` log values are completely wrong (e.g., T3 `Actual: 6` when mana is 4). This bad data is being fed to the AI, causing it to *attempt* impossible actions (like on T2). The `ManaSolver`, thankfully, is using the *correct* ability list and acting as a backstop.
+
+---
+
+### Summary & Next Steps
+
+Get some rest. This is huge progress.
+
+1.  **What's Fixed:** The `ManaSolver` (`MANA-019`) and the JIT Parser (`MANA-016`). The "engine" of the mana system is now working.
+2.  **What's Broken:** The *data pipeline*. The start-of-turn `[generateMana]` function is:
+    * A) Failing to find artifacts after T3 (`MANA-018`).
+    * B) Reporting a wildly incorrect "total mana" number in its logs, which is confusing the AI (`MANA-020`).
+
+**Your next step is clear:** Fix the start-of-turn `[generateMana]` function's artifact loop. Fixing `MANA-018` (the disappearing `Sol Ring`) will almost certainly fix `MANA-020` (the incorrect "Actual" mana count) at the same time.
