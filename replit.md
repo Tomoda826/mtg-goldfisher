@@ -61,11 +61,21 @@ The application is structured around a tab-based UI (`App.jsx`) leading to dedic
   - Combination handling: Properly credits multi-symbol abilities using combination.length as fallback
   - AI now sees accurate mana counts matching what the ManaSolver can actually use
 
+**Mana Rock Support (Oct 31, 2025)**
+- **MANA-021 Fixed**: Mana rocks with activation costs (Dimir Signet, Arcane Signet, Talismans, etc.) now fully supported
+  - Root cause: buildPotentialManaPool filtered out ANY ability with mana cost in activation
+  - Solution: Include all abilities with activation costs tracked, let ManaSolver decide when to use them
+  - Multi-color handling: Combination abilities (Dimir Signet `{U}{B}`) credit ALL pips in one activation
+  - Choice handling: Choice abilities (Underground River `{U} or {B}`) select requested color intelligently
+  - Activation cost accounting: Costs added to generic requirement during solving, paid in Phase 2
+  - Solver strategy: Prefer free sources first, use mana rocks when needed for colors or when net-positive
+
 **AI Integration**
 - AI casting logic now uses mana solver for affordability checks
 - Intelligent ability selection based on hand needs (colored vs. colorless)
 - Fetch land activation prioritized for color fixing
 - AI decision-making now uses same data source as ManaSolver (single source of truth)
+- Mana rocks (Signets, Talismans) now counted and used correctly in AI gameplay
 
 ### Deployment and Configuration
 - **Development Environment**: React + Vite, configured for Replit (port 5000, HMR via WSS on port 443).
