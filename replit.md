@@ -47,6 +47,12 @@ The application is structured around a tab-based UI (`App.jsx`) leading to dedic
   - Variable X quantities: Integrated with `resolveQuantity()` for accurate game-state-based resolution
   - Handles Cabal Coffers, Nykthos, and other X producers correctly (can resolve to 0)
 
+**Game Rules Fixes (Oct 31, 2025)**
+- **MANA-018 Fixed**: Artifacts now untap correctly during untap phase
+  - Root cause: `untapPhase()` was only untapping lands, not artifacts
+  - Sol Ring and other mana artifacts now persist turn-to-turn instead of disappearing
+  - This was a critical missing piece of basic MTG rules implementation
+
 **AI Integration**
 - AI casting logic now uses mana solver for affordability checks
 - Intelligent ability selection based on hand needs (colored vs. colorless)
