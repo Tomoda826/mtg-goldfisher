@@ -681,6 +681,13 @@ export class ManaPool {
     console.log(`\n🧮 [ManaSolver] Solving cost: ${manaCost}`);
     console.log(`🧮 [ManaSolver] Available sources: ${potentialPool.length} abilities`);
     
+    // ✅ FIX MANA-022: Add unique poolIndex to each entry for tracking through recursion
+    // This ensures we can correctly identify which source was used even with duplicate names
+    const indexedPool = potentialPool.map((entry, idx) => ({
+      ...entry,
+      poolIndex: entry.poolIndex !== undefined ? entry.poolIndex : idx
+    }));
+    
     // Parse the mana cost
     const required = this.parseManaCostDetailed(manaCost);
     console.log(`🧮 [ManaSolver] Required:`, required);
@@ -704,14 +711,14 @@ export class ManaPool {
     for (const color of colorOrder) {
       while (needed[color] > 0) {
         // Find a source that can produce this color (prefer free sources)
-        const sourceIdx = this.findBestSourceForColor(potentialPool, color, usedIndices, needed);
+        const sourceIdx = this.findBestSourceForColor(indexedPool, color, usedIndices, needed);
         
         if (sourceIdx === -1) {
           console.log(`❌ [ManaSolver] Cannot find source for {${color}}`);
           return null; // Cannot pay
         }
         
-        const entry = potentialPool[sourceIdx];
+        const entry = indexedPool[sourceIdx];
         
         // Check what colors this ability produces (might be multiple!)
         // e.g., Dimir Signet {U}{B} → produces both U and B in one activation
@@ -725,8 +732,8 @@ export class ManaPool {
           console.log(`   💰 ${entry.sourceName} requires {${activationCost}} to activate`);
         }
         
-        // Mark source as used ONCE
-        usedIndices.add(sourceIdx);
+        // ✅ FIX MANA-022: Mark source as used by poolIndex (not array index)
+        usedIndices.add(entry.poolIndex);
         
         // Credit ALL colors this ability produces
         // For Dimir Signet {U}{B}: credits both U and B
@@ -755,14 +762,14 @@ export class ManaPool {
     // PHASE 2: Pay generic requirement (any source)
     while (needed.generic > 0) {
       // Find best source (prefer free sources, avoid mana rocks unless needed)
-      const sourceIdx = this.findBestGenericSource(potentialPool, usedIndices, needed.generic);
+      const sourceIdx = this.findBestGenericSource(indexedPool, usedIndices, needed.generic);
       
       if (sourceIdx === -1) {
         console.log(`❌ [ManaSolver] Cannot find source for generic {${needed.generic}}`);
         return null; // Cannot pay
       }
       
-      const entry = potentialPool[sourceIdx];
+      const entry = indexedPool[sourceIdx];
       const producedColor = this.chooseGenericColor(entry.ability, gameState);
       
       // ✅ FIX MANA-019: Get the quantity this ability produces (with X resolution)
@@ -775,20 +782,63 @@ export class ManaPool {
       
       if (netProduction <= 0) {
         console.log(`❌ [ManaSolver] ${entry.sourceName} is net-zero or negative (produces ${producedQuantity}, costs ${activationCost})`);
+        usedIndices.add(entry.poolIndex); // Mark as tried by poolIndex
         continue; // Skip this source, it doesn't help
       }
       
+      // ✅ FIX MANA-022 (COMPLETE): Recursively verify activation cost can be paid
       if (activationCost > 0) {
         console.log(`   💰 ${entry.sourceName} costs {${activationCost}}, produces ${producedQuantity} → NET +${netProduction}`);
+        console.log(`   🔄 Checking if we can afford {${activationCost}} activation cost...`);
+        
+        // Mark this source as "reserved" temporarily so recursion can't use it
+        usedIndices.add(entry.poolIndex);
+        
+        // Create filtered pool excluding already-used sources
+        // ✅ FIX MANA-022: Filter by poolIndex (not array index)
+        const availablePool = indexedPool.filter(e => !usedIndices.has(e.poolIndex));
+        
+        console.log(`   🔄 Available sources for activation: ${availablePool.length}`);
+        
+        // Recursively check: can we pay the activation cost with OTHER sources?
+        // Convert activation cost to mana string format: {1}, {2}, etc.
+        const activationCostString = `{${activationCost}}`;
+        const activationSolution = this.solveCost(
+          activationCostString,
+          availablePool,
+          gameState
+        );
+        
+        if (!activationSolution) {
+          // Cannot afford activation cost - skip this source and try next
+          console.log(`   ❌ Cannot afford {${activationCost}} activation cost for ${entry.sourceName} - trying next source`);
+          continue; // usedIndices already marked, will skip this source next time
+        }
+        
+        // Success! Merge activation solution into main solution
+        console.log(`   ✅ Can afford activation using ${activationSolution.solution.length} source(s)`);
+        solution.push(...activationSolution.solution);
+        
+        // ✅ FIX MANA-022: Use poolIndex to mark sources as used (unique identifier)
+        activationSolution.solution.forEach(activationEntry => {
+          if (activationEntry.poolIndex !== undefined) {
+            usedIndices.add(activationEntry.poolIndex);
+            console.log(`   🔒 Marked ${activationEntry.sourceName} (poolIndex ${activationEntry.poolIndex}) as used for activation`);
+          }
+        });
+      } else {
+        // No activation cost - just mark as used by poolIndex
+        usedIndices.add(entry.poolIndex);
       }
       
+      // Add the main source to solution
       solution.push({
         ...entry,
         chosenColor: producedColor,
         reason: `generic payment (net +${netProduction})`,
         activationCost: activationCost || 0
       });
-      usedIndices.add(sourceIdx);
+      
       needed.generic -= netProduction; // Use NET production, not gross
       
       console.log(`   ✓ Using ${entry.sourceName} for generic (NET ${netProduction} after {${activationCost}} cost)`);
@@ -959,9 +1009,10 @@ export class ManaPool {
    * Prefers free sources (no mana cost) over mana rocks
    */
   findBestSourceForColor(potentialPool, color, usedIndices, needed) {
+    // ✅ FIX MANA-022: Check poolIndex instead of array index
     // First try: find a FREE source (no mana activation cost)
     let sourceIdx = potentialPool.findIndex((entry, idx) => {
-      if (usedIndices.has(idx)) return false;
+      if (usedIndices.has(entry.poolIndex)) return false;
       if (!this.canProduceColor(entry.ability, color)) return false;
       
       const manaCost = this.getActivationManaCost(entry.activationCost || []);
@@ -972,7 +1023,7 @@ export class ManaPool {
     
     // Second try: allow mana rocks (have activation cost)
     sourceIdx = potentialPool.findIndex((entry, idx) => {
-      if (usedIndices.has(idx)) return false;
+      if (usedIndices.has(entry.poolIndex)) return false;
       return this.canProduceColor(entry.ability, color);
     });
     
@@ -984,9 +1035,10 @@ export class ManaPool {
    * Prefers free sources, only uses mana rocks if beneficial
    */
   findBestGenericSource(potentialPool, usedIndices, neededGeneric) {
+    // ✅ FIX MANA-022: Check poolIndex instead of array index
     // First try: find a FREE source that produces enough
     let sourceIdx = potentialPool.findIndex((entry, idx) => {
-      if (usedIndices.has(idx)) return false;
+      if (usedIndices.has(entry.poolIndex)) return false;
       
       const manaCost = this.getActivationManaCost(entry.activationCost || []);
       return manaCost === 0; // Free source
@@ -997,7 +1049,7 @@ export class ManaPool {
     // Second try: mana rocks that are net-positive
     // e.g., Dimir Signet: costs {1}, produces {U}{B} (2 mana) → net +1
     sourceIdx = potentialPool.findIndex((entry, idx) => {
-      if (usedIndices.has(idx)) return false;
+      if (usedIndices.has(entry.poolIndex)) return false;
       
       const manaCost = this.getActivationManaCost(entry.activationCost || []);
       if (manaCost === 0) return false; // Already checked above
