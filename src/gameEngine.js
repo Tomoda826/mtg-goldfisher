@@ -523,44 +523,115 @@ export const generateMana = (state) => {
   // just-in-time during castSpell()
   state.manaPoolManager.emptyPool();
   
-  // Calculate preview totals (for AI to know what's available)
+  // ✅ FIX MANA-020: Calculate preview by counting UNIQUE PERMANENTS
+  // Each permanent can only be tapped ONCE, so we must count each permanent once
+  // and use its MAXIMUM potential output (choosing the best ability)
   const previewTotals = {
     W: 0, U: 0, B: 0, R: 0, G: 0, C: 0
   };
   let actualTotalMana = 0;
   
+  // Group abilities by permanent
+  const permanentMap = new Map();
+  
   state.potentialManaPool.forEach(entry => {
-    // Count what each source COULD produce, respecting quantity
-    entry.ability.produces.forEach(production => {
-      if (!production.types) return;
+    const permanentKey = `${entry.source}-${entry.sourceName}`;
+    
+    if (!permanentMap.has(permanentKey)) {
+      permanentMap.set(permanentKey, []);
+    }
+    permanentMap.get(permanentKey).push(entry.ability);
+  });
+  
+  // For each permanent, find the ability that produces the MOST total mana
+  permanentMap.forEach((abilities, permanentKey) => {
+    let maxMana = 0;
+    let bestAbility = null;
+    
+    // Calculate total mana and flexibility for each ability
+    abilities.forEach(ability => {
+      let abilityTotal = 0;
+      let colorFlexibility = 0; // Higher = more color options (for tie-breaking)
       
-      const quantity = production.quantity || 1;
-      
-      production.types.forEach(type => {
-        if (typeof type === 'string' && ['W', 'U', 'B', 'R', 'G', 'C'].includes(type)) {
-          // Fixed color - add quantity
-          previewTotals[type] += quantity;
-          actualTotalMana += quantity;
-        } else if (type.choice) {
-          // For choice abilities, count all options with the quantity
-          type.choice.forEach(c => {
-            if (['W', 'U', 'B', 'R', 'G', 'C'].includes(c)) {
-              previewTotals[c] += quantity;
+      ability.produces.forEach(production => {
+        // Calculate total mana: use quantity, or combination.length as fallback
+        let productionTotal = production.quantity || 0;
+        
+        // If no quantity set, count combination length (for bounce lands, etc)
+        if (!productionTotal && production.types) {
+          production.types.forEach(type => {
+            if (type.combination) {
+              productionTotal = Math.max(productionTotal, type.combination.length);
             }
           });
-          // But only count once for actual total
-          actualTotalMana += quantity;
-        } else if (type.combination) {
-          // Combination produces multiple types, but total is the combination length
-          actualTotalMana += type.combination.length;
-          type.combination.forEach(c => {
-            if (['W', 'U', 'B', 'R', 'G', 'C'].includes(c)) {
-              previewTotals[c]++;
+        }
+        
+        abilityTotal += productionTotal || 1;
+        
+        // Calculate flexibility: count how many different color options exist
+        if (production.types) {
+          production.types.forEach(type => {
+            if (type.choice) {
+              colorFlexibility += type.choice.length; // {U/B} = 2 options
+            } else if (type.combination) {
+              colorFlexibility += type.combination.length; // Multi-color = higher
+            } else if (typeof type === 'string') {
+              colorFlexibility += 1; // Fixed color = 1 option
             }
           });
         }
       });
+      
+      // Update best ability: prefer higher mana, then higher flexibility (tie-breaker)
+      if (abilityTotal > maxMana || (abilityTotal === maxMana && colorFlexibility > (bestAbility?.flexibility || 0))) {
+        maxMana = abilityTotal;
+        bestAbility = ability;
+        bestAbility.flexibility = colorFlexibility; // Store for comparison
+      }
     });
+    
+    // Count the best ability's output in previewTotals
+    if (bestAbility) {
+      bestAbility.produces.forEach(production => {
+        if (!production.types) return;
+        
+        const quantity = production.quantity || 1;
+        
+        // Get unique colors this production can make
+        // Sol Ring: types=['C','C'] → unique=['C'], add quantity(2) once
+        // Island: types=['U'] → unique=['U'], add quantity(1) once
+        // Underground River: types=[{choice:['U','B']}] → add to both U and B
+        const uniqueColors = new Set();
+        
+        production.types.forEach(type => {
+          if (typeof type === 'string' && ['W', 'U', 'B', 'R', 'G', 'C'].includes(type)) {
+            uniqueColors.add(type);
+          } else if (type.choice) {
+            // Choice: can make ANY of these colors
+            type.choice.forEach(c => {
+              if (['W', 'U', 'B', 'R', 'G', 'C'].includes(c)) {
+                uniqueColors.add(c);
+              }
+            });
+          } else if (type.combination) {
+            // Combination: makes ALL of these colors at once
+            type.combination.forEach(c => {
+              if (['W', 'U', 'B', 'R', 'G', 'C'].includes(c)) {
+                uniqueColors.add(c);
+              }
+            });
+          }
+        });
+        
+        // Add quantity to each unique color
+        uniqueColors.forEach(color => {
+          previewTotals[color] += quantity;
+        });
+      });
+      
+      // Add to actual total (count once per permanent)
+      actualTotalMana += maxMana;
+    }
   });
   
   // Store preview (for AI visibility and backwards compat)
