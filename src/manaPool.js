@@ -587,6 +587,12 @@ export class ManaPool {
       
       const manaAbilityData = gameState.behaviorManifest?.manaAbilities?.get(artifact.name);
       
+      if (!manaAbilityData) {
+        console.log(`⚠️ [PotentialPool] No manifest data for artifact: ${artifact.name}`);
+      } else if (!manaAbilityData.hasManaAbility) {
+        console.log(`⚠️ [PotentialPool] Artifact ${artifact.name} has no mana ability in manifest`);
+      }
+      
       if (manaAbilityData?.hasManaAbility) {
         manaAbilityData.abilities.forEach((ability, idx) => {
           const canActivate = ability.activationCost.every(cost => {

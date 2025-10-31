@@ -700,8 +700,8 @@ const parseManaAbility = (card) => {
   // Handle both actual newlines and escaped newline strings
   const lines = text.split(/\\n|\n/);
   
-  // Debug logging for Underground River and Sol Ring
-  if (card.name === 'Underground River' || card.name === 'Sol Ring') {
+  // Debug logging for specific cards
+  if (card.name === 'Underground River' || card.name === 'Sol Ring' || card.name === "Commander's Sphere") {
     console.log(`🔍 [PARSER] ${card.name} oracle text:`, text);
     console.log(`🔍 [PARSER] Split into ${lines.length} lines`);
     lines.forEach((line, idx) => {
@@ -727,6 +727,11 @@ const parseManaAbility = (card) => {
     
     if (parsed) {
       abilities.push(parsed);
+      if (card.name === "Commander's Sphere") {
+        console.log(`🔍 [PARSER] Commander's Sphere - Successfully parsed ability:`, JSON.stringify(parsed, null, 2));
+      }
+    } else if (card.name === "Commander's Sphere") {
+      console.log(`🔍 [PARSER] Commander's Sphere - Failed to parse line:`, line);
     }
   }
   
