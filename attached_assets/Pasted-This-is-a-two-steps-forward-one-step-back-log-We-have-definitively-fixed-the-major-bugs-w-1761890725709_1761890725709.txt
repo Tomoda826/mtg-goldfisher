@@ -1,0 +1,65 @@
+This is a "two steps forward, one step back" log.
+
+We have definitively **fixed** the major bugs we were hunting (`MANA-017` and `MANA-008`), which is a huge victory. The start-of-turn parser is now correctly handling complex lands and artifacts.
+
+However, this update has revealed two new, distinct bugs: one that was hiding (`MANA-016` is still present) and one new regression (`MANA-018`).
+
+Here is my full analysis.
+
+### 1. What's Fixed (The Good News)
+
+The start-of-turn (`[generateMana]`) function is now robust and correct, which was our primary goal.
+
+* **FIXED! (`MANA-017`): Start-of-Turn Land Parsing**
+    * The `[generateMana]` function is no longer failing to parse your non-basic lands.
+    * **Evidence (T10):** `9: Bojuka Bog (land) → 1x{B}`. This is the exact card that failed in the previous log, and it is now working perfectly.
+    * **Evidence (T5):** `3: Sunken Hollow (land) → 1x{U/B}`. This was also parsed correctly at the start of the turn.
+
+* **CONFIRMED FIXED! (`MANA-008`): Artifact Mana**
+    * We finally have a log where `Sol Ring` is in play, and it works exactly as expected.
+    * **Evidence (T6 JIT):** After casting `Ringsight` and `Sol Ring`, the *next* JIT rebuild (for casting `Palantír`) correctly identifies `Sol Ring` as an available source: `0: Sol Ring (artifact) → 2x{C}{C}`.
+    * **Evidence (T7 Untap):** The start-of-turn parser also finds it: `6: Sol Ring (artifact) → 2x{C}{C}`.
+
+### 2. What's Still Broken / New Bugs
+
+#### BUG `MANA-016`: JIT Pool Update Failure (Still Broken)
+
+This bug is still present. The JIT (Just-In-Time) mana pool rebuild that runs *after* a `playLand` action is failing for *some* of your non-basic lands.
+
+This proves that your **start-of-turn parser** (which is now fixed) and your **JIT parser** (which is still broken) are two different pieces of code that need to be unified.
+
+* **Evidence (Turn 4):**
+    1.  **Start of Turn:** The pool correctly has 4 mana abilities.
+    2.  **Action:** The AI plays `Sunken Hollow` (a conditional ETB land).
+    3.  **JIT Rebuild:** The console logs `💎 [PotentialPool] Building available sources...`
+    4.  **Failure:** The log *after* that build (the `ManaSolver` for `Scroll of Isildur`) reports `Available sources: 4 abilities`.
+    5.  This is the bug. After `Sunken Hollow` resolved, the JIT pool should have found **5** abilities, but it failed to find the new land.
+
+* **Contrasting Evidence (Turn 5):**
+    1.  The AI plays `Sunken Ruins` (a vanilla non-basic).
+    2.  The JIT rebuild runs.
+    3.  The `ManaSolver` for `castCommander` correctly reports `Available sources: 6 abilities` (the 5 from untap + 1 from Sunken Ruins).
+    4.  This shows the JIT parser works for simple lands but fails for conditional-ETB lands like `Sunken Hollow`.
+
+#### BUG `MANA-018`: Regression - `Commander's Sphere` Disappears
+
+This is a new and critical regression. The `start-of-turn` parser—while fixed for lands—is now **dropping `Commander's Sphere` from the mana pool** starting on Turn 7.
+
+
+
+* **Evidence (T4, T5, T6):**
+    * On the untap steps for these turns, the `[PotentialPool]` list correctly includes `Commander's Sphere`.
+    * `T6 Pool: ... 5: Commander's Sphere (artifact) → 1x{W/U/B/R/G}`. (This is correct)
+
+* **Evidence (T7, T8, T9, T10):**
+    * On Turn 7, `Sol Ring` has been added to the battlefield.
+    * **The Bug:** The `[generateMana]` function on T7 *fails to find `Commander's Sphere`*. The `PotentialPool` list only contains the 6 lands and `Sol Ring`.
+    * This failure repeats on T8, T9, and T10. `Commander's Sphere` is never seen by the start-of-turn parser again.
+
+* **Hypothesis:** The logic you added to the start-of-turn parser to correctly find `Sol Ring` (in `cardBehaviorAnalyzer.js` perhaps?) has accidentally broken the parser for `Commander's Sphere`. It's likely an issue in your artifact-parsing loop.
+
+### Summary & Next Steps
+
+1.  **Celebrate:** The land and `Sol Ring` parsing at the start of the turn is **fixed**. The core refactor is holding.
+2.  **`MANA-016`:** Copy the (now working) land-parsing logic from your **start-of-turn** `[generateMana]` function and paste it into your **JIT** `rebuildPool` function. This should fix the JIT failures on conditional lands.
+3.  **`MANA-018`:** Investigate the start-of-turn artifact parser. Why does it correctly find `Sol Ring` but *stop* finding `Commander's Sphere` on the *exact same turn* `Sol Ring` is first present (T7)?

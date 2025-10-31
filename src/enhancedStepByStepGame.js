@@ -8,7 +8,9 @@ import {
   castCommander,
   drawCard,
   untapPhase,
-  generateMana
+  generateMana,
+  getLandManaProduction,
+  getArtifactManaProduction
 } from './gameEngine';
 
 import {
@@ -60,6 +62,7 @@ import {
 
 import {
   createDeckBehaviorManifest,
+  getManaProductionFromManifest
 } from './cardBehaviorAnalyzer';
 
 import { callOpenAI, SYSTEM_PROMPTS } from './apiClient.js';
@@ -561,6 +564,7 @@ export const initializeEnhancedDetailedGame = (parsedDeck, deckStrategy, aiAnaly
     graveyard: [],
     exile: [],
     commandZone: [...enrichedDeck.commanders.map(cmd => ({ ...cmd, commanderCastCount: 0 }))],
+    deckList: enrichedDeck,  // Store the full deck for later reference
     manaPool: { W: 0, U: 0, B: 0, R: 0, G: 0, C: 0 },
     availableMana: { W: 0, U: 0, B: 0, R: 0, G: 0, C: 0 },
     hasPlayedLand: false,
@@ -862,7 +866,10 @@ const performMulligan = async (game, mulliganCount = 0) => {
  * Get strategic AI decision for current phase with protocol-based thinking
  */
 const getStrategicAIDecision = async (game) => {
-  const availableMana = game.actualTotalMana || Object.values(game.manaPool).reduce((a, b) => a + b, 0);
+  // ✅ FIX: Use actualTotalMana if it exists (even if 0!), otherwise calculate from pool
+  const availableMana = game.actualTotalMana !== null && game.actualTotalMana !== undefined
+    ? game.actualTotalMana 
+    : Object.values(game.manaPool).reduce((a, b) => a + b, 0);
   
   // ⭐ NEW: Analyze battlefield synergies BEFORE building prompt
   const synergies = analyzeBattlefieldSynergies(game);
@@ -879,8 +886,11 @@ CURRENT GAME STATE:
 Turn ${game.turn}, Phase: ${game.phase}
 Available Mana: ${availableMana} total (W:${game.manaPool.W} U:${game.manaPool.U} B:${game.manaPool.B} R:${game.manaPool.R} G:${game.manaPool.G} C:${game.manaPool.C})
 
-⚠️ CRITICAL: This mana is ALREADY IN YOUR POOL. Do NOT try to "activate" Sol Ring or tap lands for mana - the mana is already available above!
-If you have {C:2} available, you can cast a 2-cost spell RIGHT NOW without activating anything.
+⚠️ CRITICAL MANA RULES:
+- The  mana shown above is your ACTUAL TOTAL AVAILABLE MANA
+- This is ALREADY IN YOUR POOL - Do NOT try to "activate" Sol Ring or tap lands!
+- To cast a spell, check: (1) Do I have the required colors? (2) Is my ACTUAL TOTAL >= spell cost?
+- Example: If you see "6 total (U:2, C:4)" you can cast ANY spell costing 6 or less that needs at most 2 blue
 Has Played Land This Turn: ${game.hasPlayedLand}
 Damage Dealt So Far: ${game.damageDealtThisGame}/40
 
@@ -944,8 +954,9 @@ ${game.hand.map((c, i) => {
     if (isFetchLand && c.category === 'land') {
       cardInfo += `\n      📍 THIS IS A FETCH LAND - Special Instructions:`;
       cardInfo += `\n         1️⃣  Play it as your land drop (if available this turn)`;
-      cardInfo += `\n         2️⃣  NEXT turn, activate it from battlefield to search for a basic land`;
-      cardInfo += `\n         3️⃣  Do NOT try to "activate" it from your hand - that's illegal!`;
+      cardInfo += `\n         2️⃣  IMMEDIATELY activate it from battlefield (same turn!) to search for a basic land`;
+      cardInfo += `\n         3️⃣  Fetch land activation is FREE (0 cost) and should be done right away for color fixing`;
+      cardInfo += `\n         4️⃣  Do NOT try to "activate" it from your hand - that's illegal!`;
       
       // Show what the ability does
       const fetchAbility = battlefieldAbilities[0];
@@ -1060,7 +1071,12 @@ Decision Priority (MANA → ENGINE → THREAT Framework):
 
 1. **Land Drop**: Can I play a land this turn? → Play the optimal land first.
 
-2. **Main Phase Evaluation** (follow sequencePriority ranking):
+2. **FREE ACTIONS**: After playing a land, check for 0-cost activated abilities:
+   - ⚡ Fetch lands (Evolving Wilds, etc.): IMMEDIATELY activate to search for basic land
+   - ⚡ 0-cost abilities on battlefield: Activate these before casting spells
+   - These are free mana-fixing/card advantage - always prioritize them!
+
+3. **Main Phase Evaluation** (follow sequencePriority ranking):
    
    Step A - Identify highest-priority action type available:
    - MANA: Ramp spells, mana rocks, land tutors (accelerate to win condition)
@@ -1078,13 +1094,13 @@ Decision Priority (MANA → ENGINE → THREAT Framework):
    - ✅ Activate NON-MANA ability (cycling, tokens, card draw)
    - ❌ NEVER manually activate mana abilities (these are automatic!)
 
-3. **Re-evaluate After Each Action**:
+4. **Re-evaluate After Each Action**:
    - Did I use all my mana?
-   - Return to Step 2 to find next best action with remaining mana
+   - Return to Step 3 to find next best action with remaining mana
    - Continue until no more productive plays available
 
-4. **End Phase Properly**:
-   - If Steps 1 & 2 yield no more viable actions → Proceed to Combat/Pass
+5. **End Phase Properly**:
+   - If Steps 1-3 yield no more viable actions → Proceed to Combat/Pass
    - Do NOT tap lands for mana you can't use (mana pools empty between steps)
    - Floating unused mana is NOT a productive play
 
@@ -1241,11 +1257,12 @@ case 'castSpell': {
   
   if (spellIndex !== -1 && spellIndex < game.hand.length) {
     const spell = game.hand[spellIndex];
-    if (canPayMana(game.manaPool, spell.mana_cost, game.actualTotalMana)) {
+  if (canPayMana(game.manaPool, spell.mana_cost, game.actualTotalMana, game.manaPoolManager, game)) {
       const manaSpent = spell.cmc || 0;
       
       // ✅ CRITICAL: Log mana BEFORE casting
-      const manaB4 = {...game.manaPool};
+      const manaBeforeCast = {...game.manaPool};
+      const totalBeforeCast = game.actualTotalMana || 0;
       
       // Cast the spell (this modifies game.manaPool in place)
       // ===== PHASE 1: Save card before casting (it gets removed from hand) =====
@@ -1253,24 +1270,27 @@ case 'castSpell': {
       
       castSpell(game, spellIndex);
       
+      // ✅ CRITICAL: Sync actualTotalMana after casting
+      game.actualTotalMana = game.manaPoolManager?.getTotal() || game.actualTotalMana;
+      
       // ===== PHASE 1: Handle spell cast events and triggers =====
       await handleSpellCastEvents(game, cardBeforeCast);
       
       
-      // ✅ SAFETY: Ensure actualTotalMana is synced (should already be done in castSpell)
+      // ✅ FIX #3: Log mana changes using actualTotalMana
+      const manaAfterCast = {...game.manaPool};
+      const totalAfterCast = game.actualTotalMana || 0;
       
-      // ✅ DEBUG: Log mana AFTER casting
-      if (game.turn <= 5) {
-        game.detailedLog.push({
-          turn: game.turn,
-          phase: game.phase,
-          action: '🔍 DEBUG: Mana After Cast',
-          spell: spell.name,
-          cost: spell.mana_cost,
-          before: manaB4,
-          after: {...game.manaPool}
-        });
-      }
+      game.detailedLog.push({
+        turn: game.turn,
+        phase: game.phase,
+        action: '💰 Mana After Cast',
+        spell: spell.name,
+        cost: spell.mana_cost,
+        before: { pool: manaBeforeCast, total: totalBeforeCast },
+        after: { pool: manaAfterCast, total: totalAfterCast },
+        spent: totalBeforeCast - totalAfterCast
+      });
       
       game.metrics.spellsCast++;
       game.metrics.totalManaSpent += manaSpent;
@@ -1315,13 +1335,32 @@ case 'castSpell': {
 }
 
 case 'castCommander': {
+    // ✅ ADD THIS DEFENSIVE CHECK AT THE TOP:
+  if (!game.deckList || !game.deckList.commanders || game.deckList.commanders.length === 0) {
+    console.error('❌ Cannot cast commander - deckList.commanders not initialized');
+    
+    game.detailedLog?.push({
+      turn: game.turn,
+      phase: game.phase,
+      action: '❌ FATAL ERROR',
+      details: 'Commander data not available in game state',
+      success: false
+    });
+    
+    return { 
+      success: false, 
+      message: 'Commander casting failed - missing deck data',
+      error: 'DECKLIST_COMMANDERS_UNDEFINED'
+    };
+  }
+  
   if (game.commandZone.length > 0) {
     const commander = game.commandZone[0];
     const taxAmount = commander.commanderCastCount * 2;
     const totalCost = commander.cmc + taxAmount;
     const totalMana = Object.values(game.manaPool).reduce((a, b) => a + b, 0);
     
-    if (totalMana >= totalCost && canPayMana(game.manaPool, commander.mana_cost, game.actualTotalMana)) {
+if (totalMana >= totalCost && canPayMana(game.manaPool, commander.mana_cost, game.actualTotalMana, game.manaPoolManager, game)) {
       // ✅ DEBUG: Log mana before
       const manaB4 = {...game.manaPool};
       
@@ -1548,7 +1587,10 @@ const runEnhancedMainPhase = async (game, maxActions = 15) => {
   
   while (actionsThisPhase < maxActions && consecutivePasses < 2) {
 
-  const totalMana = game.actualTotalMana || Object.values(game.manaPool).reduce((a,b)=>a+b,0);
+  // ✅ FIX: Use actualTotalMana if it exists (even if 0!), otherwise calculate from pool
+  const totalMana = game.actualTotalMana !== null && game.actualTotalMana !== undefined
+    ? game.actualTotalMana
+    : Object.values(game.manaPool).reduce((a,b)=>a+b,0);
   
   if (totalMana === 0 && game.hasPlayedLand) {
     // Check for free plays
@@ -1788,18 +1830,77 @@ export const runEnhancedTurn = async (game) => {
   });
   
   // UNTAP PHASE
-  game.phase = 'untap';
-  untapPhase(game);
+untapPhase(game);
   
   // ===== PHASE 2A: CLEAR SUMMONING SICKNESS =====
   clearSummoningSickness(game);
+  
+  // ✅ FIX: Calculate ACTUAL mana production BEFORE generateMana taps them
+  let landCountBeforeTap = 0;
+  let landManaProduced = 0;
+  game.battlefield.lands.filter(l => !l.tapped).forEach(land => {
+    const production = getLandManaProduction(land, game.behaviorManifest);
+    const manaAmount = production.actualManaProduced || 0;
+    if (manaAmount > 0) {
+      landCountBeforeTap++;
+      landManaProduced += manaAmount;
+    }
+  });
+  
+  let artifactCountBeforeTap = 0;
+  let artifactManaProduced = 0;
+  game.battlefield.artifacts.filter(a => !a.tapped).forEach(artifact => {
+    const production = getArtifactManaProduction(artifact, game.behaviorManifest);
+    const manaAmount = production.actualManaProduced || 0;
+    if (manaAmount > 0) {
+      artifactCountBeforeTap++;
+      artifactManaProduced += manaAmount;
+    }
+  });
+  
+  let creatureManaDorksBeforeTap = 0;
+  let creatureManaProduced = 0;
+  game.battlefield.creatures.filter(c => !c.tapped && !c.summoningSick).forEach(creature => {
+    // Check both manifest and oracle text for mana abilities
+    const manaAbilityData = game.behaviorManifest?.manaAbilities?.get(creature.name);
+    const text = (creature.oracle_text || '').toLowerCase();
+    const hasManaAbility = manaAbilityData?.hasManaAbility || 
+                           (text.includes('{t}:') && text.includes('add'));
+    
+    if (hasManaAbility) {
+      const production = getManaProductionFromManifest(creature, game.behaviorManifest);
+      const manaAmount = production.actualManaProduced || 0;
+      if (manaAmount > 0) {
+        creatureManaDorksBeforeTap++;
+        creatureManaProduced += manaAmount;
+      }
+    }
+  });
+  
+  console.log(`🔍 [untap] BEFORE generateMana - Expected: ${landManaProduced + artifactManaProduced + creatureManaProduced} (lands:${landManaProduced} + artifacts:${artifactManaProduced} + creatures:${creatureManaProduced})`);
+  console.log(`🔍 [untap] Land count: ${landCountBeforeTap}, Artifact count: ${artifactCountBeforeTap}, Creature count: ${creatureManaDorksBeforeTap}`);
+  
   generateMana(game);
   await checkPhaseTriggersAI(game, 'untap');
+  
+  const expectedMana = landManaProduced + artifactManaProduced + creatureManaProduced;
+  const totalMana = game.actualTotalMana || 0;
+  
+  console.log(`🔍 [untap] AFTER generateMana - Expected: ${expectedMana}, Actual: ${totalMana}`);
+  
+  let manaSourcesDesc = `${landCountBeforeTap} lands`;
+  if (artifactCountBeforeTap > 0) {
+    manaSourcesDesc += ` + ${artifactCountBeforeTap} artifacts`;
+  }
+  if (creatureManaDorksBeforeTap > 0) {
+    manaSourcesDesc += ` + ${creatureManaDorksBeforeTap} creatures`;
+  }
+  
   game.detailedLog.push({
     turn: game.turn,
     phase: 'untap',
     action: 'Untap & Generate Mana',
-    details: `All permanents untapped. ${game.battlefield.lands.length} lands = ${Object.values(game.manaPool).reduce((a,b)=>a+b,0)} mana available.`
+    details: `All permanents untapped. ${manaSourcesDesc} = ${totalMana} mana available.`
   });
   
   // UPKEEP PHASE

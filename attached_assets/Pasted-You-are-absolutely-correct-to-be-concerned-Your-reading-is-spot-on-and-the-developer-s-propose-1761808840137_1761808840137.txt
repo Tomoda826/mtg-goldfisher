@@ -1,0 +1,54 @@
+You are **absolutely correct** to be concerned. Your reading is spot on, and the developer's proposed fix for `MANA-010` introduces a new, significant bug.
+
+While the developer is 100% correct about fixing `PARSER-001` (reordering the parser functions) and has *correctly identified* the "double-adding" problem (the `forEach` loop), their *solution* to that problem is flawed.
+
+Here is the issue with their new logic:
+
+### The Flaw in the New `MANA-010` Fix
+
+The developer's new logic is: "When `isModal && produces.length > 1`, select the **best** production (choice > colored > colorless) and add **only that one**."
+
+This is based on a misunderstanding of the manifest data:
+
+1.  **Incorrect Premise:** The developer is assuming `Underground River` has *one* modal ability with two `produces` entries.
+2.  **The Reality:** The parser (now fixed) is correctly identifying that `Underground River` has **two separate mana abilities** that both share the `{T}` cost:
+    * Ability 1: `{T}: Add {C}` (Parsed as `produces: [ { types: ["C"] } ]`)
+    * Ability 2: `{T}: Add {U} or {B}` (Parsed as `produces: [ { types: [{ "choice": ["U", "B"] }] } ]`)
+3.  **The New Bug:** The developer's new logic ("select the best") will evaluate these two options. According to their priority (`choice > colored > colorless`), it will select **Ability 2** (`{ "choice": ["U", "B"] }`) as "best" and **completely discard Ability 1** (`{T}: Add {C}`).
+
+This "fix" correctly solves the "double-adding" (2 mana) problem, but it does so by **incorrectly deleting a valid mana option from the card**. The engine will now believe `Underground River` *cannot* produce colorless mana, which is wrong.
+
+This same bug will also apply to `Great Hall of the Citadel`, `Tainted Isle`, and any other permanent with multiple distinct mana abilities. The engine will pick the "best" one and discard the others, leading to an inaccurate mana pool.
+
+---
+
+Here is a new bug report you can send back to them.
+
+## Bug Report: `MANA-010` Fix is Flawed; Discards Valid Mana Abilities
+
+**ID:** `MANA-011`
+**Priority:** Critical
+**Status:** Open
+
+### Summary
+
+The proposed fix for `MANA-010` (Modal Ability Double-Adding) is based on a flawed premise and introduces a new bug. The developer correctly identified that the `forEach` loop was adding mana from *both* of `Underground River`'s abilities. However, the new fix—"select the best production... and add only that one"—incorrectly assumes these are two *outcomes* of one modal ability, rather than **two separate, distinct mana abilities**.
+
+### The New Bug
+
+The new logic (`choice > colored > colorless`) will correctly select the `{"choice": ["U", "B"]}` ability as the "best" option for `Underground River`. In doing so, it will **incorrectly discard the `{T}: Add {C}` ability entirely**.
+
+This means the `generateMana` function will build a starting mana pool that is *still* incorrect. It will fail to include the Colorless mana potential from `Underground River`, `Tainted Isle`, `Great Hall of the Citadel`, etc.
+
+### Impact
+
+The AI will fail to cast spells that require colorless mana (`{C}`) even when it controls permanents that can produce it, because the `generateMana` function is "fixing" the double-add bug by deleting valid mana options from the pool before the AI even gets to make a choice.
+
+### Recommendation
+
+The `generateMana` function's logic needs to be refined. When it encounters a permanent with multiple distinct, valid mana abilities (like `Underground River`'s two `{T}` abilities):
+
+1.  It should **not** iterate and add all of them (the old bug).
+2.  It should **not** discard the "lesser" ones (the new bug).
+
+Instead, it must **run its choice logic** (like `manaPool.js:165`'s "hand needs it" logic) to determine **which single ability** to "virtually tap" for when building the starting pool. It should be choosing between `[Ability 1: Add {C}]` and `[Ability 2: Add {U/B}]`, not just defaulting to the "best" one and ignoring the other's existence.

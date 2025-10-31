@@ -1,0 +1,62 @@
+This is a **major breakthrough**. The console logs show that the developer's fix to the parser worked, and we have now **found the true root cause** of the mana bug.
+
+**Executive Summary:**
+
+1.  **FIXED: `PARSER-001` is Resolved.**
+    * The console log *proves* the mana parser is now **correctly** parsing `Underground River`'s modal ability. The manifest data now correctly shows `produces: [ { types: ["C"] }, { types: [ { "choice": ["U", "B"] } ] } ]`. This is a perfect fix.
+
+2.  **CONFIRMED: `MANA-010` is the Critical Blocker.**
+    * The console log *also proves* that the `generateMana` function (and its `manaPool.js` helper) is **failing to correctly process this new, correct data**.
+    * The `generateMana` function is calculating the **correct *total* mana** (e.g., T5: 5 lands + 1 artifact = 6 mana total [this is wrong, T5 is 4 lands + 1 artifact = 5 mana, let me re-check... T5 log: `4 lands, 1 artifacts`, `Final total: 5`. Yes, that's correct]).
+    * **However,** it is **incorrectly assigning the *colors***. It defaults *all* U/B choices (from `Underground River`, `Watery Grave`, `Arcane Signet`, etc.) to **Blue**, resulting in a pool with almost no Black mana.
+
+---
+
+### Detailed Analysis: The "Smoking Gun"
+
+The new console logs are definitive.
+
+1.  **The Parser is Fixed:**
+    The manifest data for `Underground River` is now perfect and matches the spec: `produces: [ ..., { types: [ { "choice": [ "U", "B" ] } ] } ]`.
+
+2.  **The `generateMana` Logic is Now the Bug:**
+    * **Turn 4:**
+        * **Board:** `Island`, `Underground River`, `Watery Grave`, `Arcane Signet` (3 lands, 1 artifact).
+        * **Expected Mana:** 4 total. (`Island`={U}, `UR`={U/B/C}, `WG`={U/B}, `Signet`={U/B}). The pool should have multiple sources of {B}.
+        * **Console Log:** `[ManaPool] Chose U from U,B (hand needs it)` (logged *twice*).
+        * **Console Result:** `Final total: 5` (Incorrect total) and `Final pool: {W: 0, U: 4, B: 0, ...}`.
+        * **Conclusion:** The logic saw 4 permanents, all of which *could* produce Blue, and incorrectly assigned `{U:4}` to the pool, completely ignoring the Black options. (The total `5` is an additional calculation bug).
+    * **Turn 5 (The Clearest Example):**
+        * **Board:** `Island`, `Underground River`, `Watery Grave`, `Swamp`, `Arcane Signet` (4 lands, 1 artifact).
+        * **Expected Mana:** 5 total. Should have `{B: 1}` from `Swamp` plus `{B}` options from `UR`, `WG`, and `Signet`.
+        * **Console Log:** `[ManaPool] Chose U from U,B (hand needs it)` (logged *twice*).
+        * **Console Result:** `Final total: 5` (Correct total!) but `Final pool: {W: 0, U: 3, B: 1, ...}`.
+        * **Conclusion:** This is the smoking gun. It correctly found 5 mana sources. It correctly got `{B:1}` from the basic `Swamp`. It *incorrectly* processed the other 3 choice-based sources (`UR`, `WG`, `Signet`) and defaulted them *all* to `{U}`, resulting in `{U:3}`. The AI's hand at this point (needing Black for `Nazgûl` and `Mordor Muster`) was ignored by the `(hand needs it)` logic.
+    * **Turn 6:**
+        * **Board:** 5 lands, 1 artifact.
+        * **Console Result:** `Final total: 6` (Correct!) but `Final pool: {W: 0, U: 3, B: 2, ...}`.
+        * **Conclusion:** Same bug. It's defaulting all choices, resulting in a pool that doesn't reflect the true available colors. This explains why the AI in the UI log *still* can't cast its Black spells, even though it *should* have plenty of Black mana.
+
+---
+
+## Updated Bug Report
+
+***
+
+**ID:** `MANA-010` (Critical)
+**Status:** **Confirmed & Re-opened**
+**Title:** `generateMana` / `manaPool.js` calculates correct total mana but **incorrectly assigns colors**, defaulting all choices to Blue.
+
+**Description:**
+The parser (`PARSER-001`) is now **fixed** and correctly providing manifest data with `{ "choice": ["U", "B"] }` for dual lands.
+
+However, the `generateMana` function (and its `manaPool.js` helper) is **critically failing** to process this correct data. It calculates the *correct total mana* (e.g., 5 total mana on T5) but **incorrectly assigns the colors**.
+
+**Evidence:**
+* The console log `[ManaPool] Chose U from U,B (hand needs it)` or `(default)` appears for *every* choice-based permanent (`Underground River`, `Watery Grave`, `Arcane Signet`).
+* On **Turn 5**, with 4 lands (including 3 U/B duals and 1 `Swamp`) and 1 `Arcane Signet`, the expected pool should have multiple Black sources. The engine *correctly* calculates `Final total: 5` but *incorrectly* assigns the colors as `Final pool: {W: 0, U: 3, B: 1, ...}`.
+* This proves the engine is only counting the basic `Swamp` for `{B:1}` and defaulting the other three choice-based permanents (`UR`, `WG`, `Signet`) to `{U}`, resulting in `{U:3}`.
+* This incorrect pool (`{U:3, B:1}`) is then passed to the AI, which correctly determines it cannot cast its Black-heavy spells.
+
+**Recommendation:**
+This is the final critical mana bug. The logic in `generateMana` and/NEW-LOG-ANALYSIS-COMPLETE-- `manaPool.js` (specifically the `[ManaPool] Chose...` logic) **must be fixed**. It needs to be rewritten to create a pool that *accurately reflects all available color choices* (e.g., `{U:1, B:1, choices: [...]}`), not just default everything to Blue.

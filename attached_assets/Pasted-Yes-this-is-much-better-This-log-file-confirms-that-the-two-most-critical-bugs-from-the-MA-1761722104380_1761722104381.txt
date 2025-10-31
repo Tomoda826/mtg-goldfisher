@@ -1,0 +1,80 @@
+Yes, this is **much** better.
+
+This log file confirms that the two most critical bugs from the `MANA-002` report are **FIXED**. The engine is now correctly tracking a persistent mana pool *within* a single phase, which is a major breakthrough.
+
+### What's Fixed (The Great News!)
+
+1.  **FIXED: `playLand` Mana Update**
+    * **Previous Bug:** Playing a land did not update the mana pool for the current phase.
+    * **Current Status:** The engine now correctly adds the mana from a newly played land to the current pool.
+    * **Evidence (Turn 4):**
+        1.  The turn starts with 3 mana.
+        2.  The AI plays a `Swamp` (pool is now 4).
+        3.  The AI correctly casts `Palantír of Orthanc` for 3 mana.
+        4.  The AI correctly identifies it has 1 mana (B:1) remaining.
+
+2.  **FIXED: `castSpell` Mana Persistence (Multi-Spell Turns)**
+    * **Previous Bug:** The mana pool reset to 0 after every spell.
+    * **Current Status:** The engine now correctly subtracts the spell's cost and retains the remaining mana in the pool, allowing for perfect multi-spell turns.
+    * **Evidence (Turn 5):**
+        1.  The turn starts with 4 mana.
+        2.  `playLand: Island` (Pool is now 5).
+        3.  `castSpell: Ponder` (Cost 1). (Pool is now 4).
+        4.  `castSpell: Mirkwood Bats` (Cost 4). (Pool is now 0).
+        5.  The AI correctly identifies "Available Mana is 0".
+    * **Evidence (Turn 7):**
+        1.  The turn starts with 6 mana.
+        2.  `playLand: Island` (Pool is now 7).
+        3.  `castSpell: Surrounded by Orcs` (Cost 4). (Pool is now 3).
+        4.  `castSpell: Arcane Signet` (Cost 2). (Pool is now 1).
+        5.  The AI correctly identifies it has "1 total mana (B:1)" remaining.
+
+This is exactly the correct behavior.
+
+---
+
+### The Last Remaining Mana Bug
+
+With the intra-phase logic fixed, the *only* remaining problem is the `Untap & Generate Mana` function at the start of the turn. It has regressed and is no longer counting lands at all.
+
+***
+
+## Bug Report: `Untap` Function Not Scanning Lands
+
+**ID:** MANA-003
+**Priority:** High
+**Status:** Open
+
+### Summary
+
+The `Untap & Generate Mana` function is no longer scanning the battlefield for lands. It is back to reporting "0 lands" at the start of every turn, even though the rest of the mana logic (which *depends* on that starting value) is now working.
+
+This is a **regression** from `Game File 7`, which was correctly counting lands (even if the formula was slightly off).
+
+### Observed Behavior
+
+The log shows "0 lands" at the start of every single turn, while the mana total just ticks up by one.
+
+* **Turn 2:** "0 lands = 1 mana available." (Board has 1 land).
+* **Turn 3:** "0 lands = 2 mana available." (Board has 2 lands).
+* **Turn 4:** "0 lands = 3 mana available." (Board has 3 lands).
+* **Turn 5:** "0 lands = 4 mana available." (Board has 4 lands).
+* **Turn 6:** "0 lands = 5 mana available." (Board has 5 lands).
+* **Turn 7:** "0 lands = 6 mana available." (Board has 6 lands).
+
+### Analysis
+
+The engine's `Untap` step is clearly not reading the battlefield. It seems to be using a simple `mana = turn_number - 1` heuristic.
+
+The *good news* is that the rest of the engine (the `playLand` and `castSpell` functions) is now working perfectly with this "starting" mana.
+
+If the `Untap` step is fixed to *actually* scan the battlefield (e.g., "6 lands = 6 mana available" on Turn 7), the entire system should be 100% functional.
+
+### Recommendation
+
+Focus all effort on fixing the `Untap & Generate Mana` function. It must:
+1.  Iterate through all permanents on the battlefield.
+2.  Read their parsed mana abilities.
+3.  Sum the *actual* mana they produce (e.g., 6 lands = 6 mana, 7 lands + 1 Arcane Signet = 8 mana) to create the starting pool for the turn.
+
+The rest of the logic looks solid.

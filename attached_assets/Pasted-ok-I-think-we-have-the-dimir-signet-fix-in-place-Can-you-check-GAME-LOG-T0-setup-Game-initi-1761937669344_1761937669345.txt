@@ -1,0 +1,1441 @@
+ok, I think we have the dimir signet fix in place. Can you check?
+
+GAME LOG
+T0
+setup
+Game initialized
+Drew opening hand of 7 cards
+Underground River
+The Grey Havens
+Barad-dûr
+Rivendell
+Dimir Signet
+Swamp
+Nazgûl Battle-Mace
+T0
+setup
+Token Analysis
+Deck contains 10 token-generating cards
+T0
+setup
+Scry Analysis
+Deck contains 3 scry effects (total scry 5)
+T0
+setup
+Activated Ability Analysis
+Deck contains 22 activated abilities
+T0
+setup
+🔍 DEBUG: Lórien Revealed Abilities
+Found 1 abilities on Lórien Revealed
+T0
+setup
+🧠 Deck Behavior Analysis
+Analyzed 35 card abilities
+T0
+pre-game
+Deck Analysis Complete
+Strategy: undefined | Target Win: Turn undefined
+T0
+mulligan
+Hand Evaluation
+This hand is land-heavy (5 lands) and misses the cheap cantrips that fuel the Wraith/storm plan, but it is still playable and not strictly unkeepable under the deck's mulligan guidance. It has Dimir Signet (a valid ramp piece) and multiple lands so you can reliably cast your commander in the early turns and start building toward either the Voltron or token plan. The Grey Havens gives a small scry to find gas, and Nazgûl Battle-Mace is a useful piece to have early for later equipping. Downsides: no immediate cheap instants/sorceries to generate Wraiths on turn you get the commander, and Barad-dûr/Rivendell may enter tapped without a legendary creature, so your early turns may be a bit clunky. Given the instruction to be lenient and only mulligan truly dead hands (0–1 lands, 6+ lands, or no path forward), this hand has a clear path forward—ramp into commander and then dig for cantrips—so keep it.
+T0
+pre-game
+Opening Hand Kept
+Starting with 7 cards
+Underground River
+The Grey Havens
+Barad-dûr
+Rivendell
+Dimir Signet
+Swamp
+Nazgûl Battle-Mace
+T1
+beginning
+=== NEW TURN ===
+Starting turn 1
+T1
+untap
+Untap & Generate Mana
+All permanents untapped. 0 lands = 0 mana available.
+T1
+draw
+Draw Card
+Drew Swamp (land)
+T1
+main1
+Main Phase 1
+Executing strategy focused on our win condition
+T1
+main1
+MANA
+AI Strategic Decision
+Play The Grey Havens (hand index 1). It enters untapped and scries 1, which improves card quality on turn 1 while putting a land onto the battlefield to enable future plays. This follows the priority to make a land drop first (ramp/mana), gives filtering for early game, and avoids the life loss that Underground River would cause if used for colored mana.
+T1
+main1
+MANA
+playLand: 1
+Played The Grey Havens
+✓
+T1
+main1
+MANA
+AI Strategic Decision
+Cast Dimir Signet for {2}. This is the most mana-efficient play available: it advances our ramp (priority MANA), enabling faster access to colored mana and smoothing into Lord of the Nazgûl or other early plays. With only 2 total mana available and a land already played, the signet is the best use of resources on turn 1 to accelerate future turns.
+T1
+main1
+💰 Mana After Cast
+T1
+main1
+💰 Mana After Cast
+T1
+main1
+MANA
+castSpell: 3
+Cast Dimir Signet ({2})
+✓
+T1
+main1
+PASS
+AI Strategic Decision
+No available mana (0). I've already played my land this turn, and there are no 0-cost spells or activated abilities in hand that can be used now. Battlefield has no usable activated abilities I can pay for with 0 mana. Under the critical mana rules, I cannot 'tap' lands or activate battlefield mana abilities from hand, so there's literally nothing castable or activatable this main phase. Passing preserves the game state for my next turn.
+T1
+main1
+PASS
+AI Strategic Decision
+I have already played my land this turn and just spent my available mana casting Dimir Signet, leaving my pool at 0. There are no 0-cost spells or hand/battlefield activated abilities I can pay for now, and I must not manually activate mana abilities. With nothing productive to do this main phase, passing is optimal to preserve the board and proceed to the next turn where the signet will accelerate future plays.
+T1
+main1
+End Phase
+Passed twice - ending phase
+T1
+combat
+Combat Phase
+Entering combat with 0 creatures and 0 tokens
+T1
+combat
+⚔️ Combat Phase
+No creatures available to attack
+✗
+T1
+main2
+Main Phase 2
+Post-combat - deploying remaining resources
+T1
+main2
+PASS
+AI Strategic Decision
+Available mana = 0 and I have already played my land this turn. There are no cards in hand with activate-from-hand abilities and I cannot legally cast the commander (cost 5) or any other spell with 0 mana. I also must not manually activate mana abilities. Given nothing productive is castable and passing preserves board state for the next turn (when mana sources untap and the previously-cast Dimir Signet will provide acceleration), passing is the optimal play.
+T1
+main2
+PASS
+AI Strategic Decision
+You have 0 available mana and have already played your land this turn. No spells in hand cost 0 and there are no battlefield abilities you can activate from the hand. Per the critical mana rules, you cannot (and should not) manually tap lands or activate mana abilities from the battlefield now. With nothing productive castable, the optimal play is to pass and preserve the current board state so you can use untapped mana next turn.
+T1
+main2
+End Phase
+Passed twice - ending phase
+T1
+end
+End Turn
+Turn 1 complete. Total damage: 0/40
+T2
+beginning
+=== NEW TURN ===
+Starting turn 2
+T2
+untap
+Untap & Generate Mana
+All permanents untapped. 1 lands + 1 artifacts = 3 mana available.
+T2
+draw
+Draw Card
+Drew Island (land)
+T2
+main1
+Main Phase 1
+Executing strategy focused on our win condition
+T2
+main1
+MANA
+AI Strategic Decision
+Play Underground River (hand index 0). Priority is land drop and mana/ramp — Underground River comes in untapped and gives immediate future access to U or B (important for getting Lord of the Nazgûl online) and color-fixes better than playing a tapped Barad-dûr or Rivendell. The life ping only happens when you later tap it for U/B and is an acceptable trade for early ramp/fixing. This advances the MANA plan for turns 2–3 without wasting the turn.
+T2
+main1
+MANA
+playLand: 0
+Played Underground River
+✓
+T2
+main1
+ENGINE
+AI Strategic Decision
+Casting Lord of the Nazgûl for 5 now is the highest-value play: it advances our engine (getting the commander online early to start generating Wraith value from subsequent spells), and it immediately makes us control a legendary creature — which will cause future copies of Barad-dûr and Rivendell to enter untapped so our next turns are smoother. We have the required U and B and sufficient total mana (5 ≤ 8). There are no cheaper meaningful plays in hand and the only other nonland option (Nazgûl Battle‑Mace) is best cast later when we have a creature to equip or when opponents present sacrifice interactions. Saving mana for responses is less important than progressing the plan on turn 2.
+T2
+main1
+🎯 Commander Triggers
+T2
+main1
+🔍 DEBUG: Mana After Commander Cast
+T2
+main1
+ENGINE
+castCommander: Lord of the Nazgûl
+Cast Lord of the Nazgûl (total cost: 5)
+✓
+T2
+main1
+PASS
+AI Strategic Decision
+Available mana is 0 and I've already played a land this turn, so I cannot cast any spells or play another land. There are no usable battlefield activated abilities and the commander is already on the battlefield. With nothing castable, the correct play is to pass and proceed to combat/end steps, reserving actions for my next turn when I will untap and have mana again.
+T2
+main1
+PASS
+AI Strategic Decision
+Available Mana = 0 and I've already taken my land drop this turn. There are no battlefield activated abilities available and no 0-cost/hand-activatable options to use. I cannot legally cast any spells or activate anything productive, so the only correct play is to pass and proceed. This preserves the game state so I can untap next turn and use my mana to advance the plan (play a land that benefits from having a legendary creature in play, cast ramp/engine, or equip/prepare Lord of the Nazgûl).
+T2
+main1
+End Phase
+Passed twice - ending phase
+T2
+combat
+Combat Phase
+Entering combat with 1 creatures and 0 tokens
+T2
+combat
+⚔️ Combat Phase
+No creatures available to attack
+✗
+T2
+main2
+Main Phase 2
+Post-combat - deploying remaining resources
+T2
+main2
+PASS
+AI Strategic Decision
+You have 0 available mana and have already taken your land drop this turn. None of the cards in hand have zero-cost hand-activatable abilities, and no battlefield abilities are available to pay for. By the rules given, the only legal and optimal action is to pass so you untap next turn and can play a land and/or cast ramp. Attempting to tap lands or activate mana abilities is prohibited here.
+T2
+main2
+PASS
+AI Strategic Decision
+You have 0 available mana and have already taken your land drop this turn. No spells or hand-activated abilities can be paid for, and per the critical rules you must not manually tap lands or activate mana abilities. Therefore the only legal and optimal action this step is to pass and untap next turn so you can play a land and/or cast ramp. Passing preserves future options and follows the deck's early-game plan to ramp/setup on the next turn.
+T2
+main2
+End Phase
+Passed twice - ending phase
+T2
+end
+End Turn
+Turn 2 complete. Total damage: 0/40
+T3
+beginning
+=== NEW TURN ===
+Starting turn 3
+T3
+untap
+Untap & Generate Mana
+All permanents untapped. 2 lands + 1 artifacts = 4 mana available.
+T3
+draw
+Draw Card
+Drew Swamp (land)
+T3
+main1
+Main Phase 1
+Executing strategy focused on our win condition
+T3
+main1
+ENGINE
+AI Strategic Decision
+Take the land drop first. Rivendell will enter untapped because I control a legendary creature (commander/Lord of the Nazgûl) and gives an on-board engine (access to {1}{U}, {T}: Scry 2) on a subsequent step. Scrying improves card quality and is higher-value early-game sequencing than the other land options. This advances the deck's engine without wasting the current mana pool.
+T3
+main1
+ENGINE
+playLand: Rivendell
+Played Rivendell
+✓
+T3
+main1
+THREAT
+AI Strategic Decision
+With one land drop already used, the only meaningful nonland play in hand is Nazgûl Battle-Mace (index 2). Casting it for {5} uses available mana efficiently (8 total → 3 remaining after resolution), advances the deck's gameplan by providing a powerful equipment to turn Lord of the Nazgûl into a much larger, evasive, and resilient threat, and sets up future equip/attack lines. There are no 0-cost or higher-priority engine plays available, so investing in the equipment this turn is the best way to improve board presence and pressure opponents next turn.
+T3
+main1
+💰 Mana After Cast
+T3
+main1
+🎯 Triggers Detected
+T3
+main1
+💰 Mana After Cast
+T3
+main1
+THREAT
+castSpell: 2
+Cast Nazgûl Battle-Mace ({5})
+✓
+T3
+main1
+PASS
+AI Strategic Decision
+You have 0 available mana and have already played a land this turn. All cards in hand are lands (no 0-cost activated abilities or cycling available from hand) and there are no battlefield activated abilities available to use. Therefore there is nothing productive you can legally cast or activate this main phase — the correct play is to pass and proceed to combat/endstep.
+T3
+main1
+PASS
+AI Strategic Decision
+You have 0 available mana and have already played a land this turn. All cards in hand are lands (no 0-cost or activatable-from-hand abilities), and there are no usable battlefield activated abilities. Under the critical mana rules, you cannot tap lands or otherwise generate additional mana now, so there is nothing legal or productive to cast or activate. Passing is the correct play.
+T3
+main1
+End Phase
+Passed twice - ending phase
+T3
+combat
+Combat Phase
+Entering combat with 1 creatures and 0 tokens
+T3
+combat
+⚔️ Combat Phase
+1 attacker(s) dealt 4 damage (keywords: flying, menace)
+✓
+T3
+combat
+⚔️ Combat Results
+1 attacker(s) dealt 4 damage (keywords: flying, menace)
+✓
+T3
+main2
+Main Phase 2
+Post-combat - deploying remaining resources
+T3
+main2
+PASS
+AI Strategic Decision
+You have 0 available mana and have already played a land this turn, and none of the cards in hand have playable/cycling abilities from hand. Battlefield abilities requiring tapping cannot be used from hand and no battlefield activated abilities are currently available to pay for. Therefore there is no legal or productive play to make this Main Phase — best option is to pass and preserve resources for the next turn.
+T3
+main2
+PASS
+AI Strategic Decision
+You have 0 available mana and have already played a land this turn. None of the cards in hand have any 0-cost or hand-activatable abilities (no cycling/etc.), and no battlefield activated abilities are currently usable. Casting or activating anything is illegal with 0 mana, so the only legal and optimal action is to pass and preserve resources for the next turn.
+T3
+main2
+End Phase
+Passed twice - ending phase
+T3
+end
+End Turn
+Turn 3 complete. Total damage: 4/40
+T4
+beginning
+=== NEW TURN ===
+Starting turn 4
+T4
+untap
+Untap & Generate Mana
+All permanents untapped. 3 lands + 1 artifacts = 5 mana available.
+T4
+draw
+Draw Card
+Drew Commander's Sphere (artifact)
+T4
+main1
+Main Phase 1
+Executing strategy focused on our win condition
+T4
+main1
+MANA
+AI Strategic Decision
+Play Barad-dûr (hand index 0). Land drop is highest priority. Barad-dûr will enter untapped because our commander (a legendary creature) is already on the battlefield, giving immediate access to another black source on future turns and providing an amass activation later. This advances our mana base (MANA), preserves the current 5 mana for casting spells later in the turn if needed, and prioritizes ramp/synergy over casting the Commander's Sphere now.
+T4
+main1
+MANA
+playLand: 0
+Played Barad-dûr
+✓
+T4
+main1
+MANA
+AI Strategic Decision
+Cast Commander's Sphere (hand index 4). With no playable nonland cards besides lands in hand and having already taken the land drop, the highest-value play this turn is to deploy a mana rock. Commander's Sphere is efficient ramp that fixes colors for our commander and future plays, can be sacrificed to draw a card later, and uses available mana productively instead of passing. This advances the MANA tier of our plan and leaves us better set to deploy engines/threats on subsequent turns.
+T4
+main1
+💰 Mana After Cast
+T4
+main1
+💰 Mana After Cast
+T4
+main1
+MANA
+castSpell: 4
+Cast Commander's Sphere ({3})
+✓
+T4
+main1
+PASS
+AI Strategic Decision
+No playable spells or abilities this main phase. All four cards in hand are lands, and I've already taken my land drop this turn. There are no available battlefield activated abilities I can use and the commander is already on the battlefield. With nothing legal or productive to cast or activate, passing is the correct play.
+T4
+main1
+PASS
+AI Strategic Decision
+All four cards in hand are lands and I've already taken my land drop this turn, so I cannot play a land. There are no nonland spells to cast and no battlefield activated abilities available to use. The commander is already on the battlefield. I cannot (and must not) manually activate mana abilities to spend the available mana. Given these constraints, there is no legal, productive play this main phase, so passing is optimal.
+T4
+main1
+End Phase
+Passed twice - ending phase
+T4
+combat
+Combat Phase
+Entering combat with 1 creatures and 0 tokens
+T4
+combat
+⚔️ Combat Phase
+No creatures available to attack
+✗
+T4
+main2
+Main Phase 2
+Post-combat - deploying remaining resources
+T4
+main2
+PASS
+AI Strategic Decision
+No legal or productive plays are available this main phase. I have already taken my land drop, so I cannot play any of the four lands in hand. There are no nonland spells to cast and no battlefield activated abilities available. Per the critical mana rules, I must not attempt to manually activate mana abilities from the hand or battlefield. With nothing castable or activatable, passing is the correct play to avoid illegal actions or wasted attempts to spend mana.
+T4
+main2
+PASS
+AI Strategic Decision
+I have already taken my land drop this turn, and every card in hand is a land (indices 0-3). Lands cannot be cast now. The available mana shown is the current pool but there are no nonland spells or battlefield activated abilities I can legally pay for or activate (and per the rules I must not manually activate mana abilities). Therefore there is no legal, productive play to make this main phase — passing is the correct action.
+T4
+main2
+End Phase
+Passed twice - ending phase
+T4
+end
+End Turn
+Turn 4 complete. Total damage: 4/40
+T5
+beginning
+=== NEW TURN ===
+Starting turn 5
+T5
+untap
+Untap & Generate Mana
+All permanents untapped. 4 lands + 2 artifacts = 7 mana available.
+T5
+draw
+Draw Card
+Drew Island (land)
+T5
+main1
+Main Phase 1
+Executing strategy focused on our win condition
+T5
+main1
+MANA
+AI Strategic Decision
+Land drop is the highest priority (Step 1). I have not played a land this turn and playing a Swamp increases future black sources for my midgame (Lord of the Nazgûl / reanimation / removal lines). I have no non-land spells in hand to cast now, so making the land drop uses this turn productively and follows the MANA → ENGINE → THREAT priority.
+T5
+main1
+MANA
+playLand: Swamp (hand index 0)
+Played Swamp
+✓
+T5
+main1
+PASS
+AI Strategic Decision
+I have already played a land this turn (Has Played Land This Turn: true) and every card in hand is a land, so there is nothing legal to cast. The commander (Lord of the Nazgûl) is already on the battlefield, there are no battlefield activated abilities available, and there are no nonland spells or cycling/activated-from-hand options to use my mana. Given the game rules provided, passing is the only legal and optimal action this step.
+T5
+main1
+PASS
+AI Strategic Decision
+All cards in hand are lands and I have already played a land this turn. The commander is already on the battlefield and there are no battlefield activated abilities I can use from hand. Per the critical mana rules, I cannot (and must not) 'tap' lands or manually activate mana abilities now — the available mana shown is what is currently available, but there are no legal nonland casts or activations to spend it on. Therefore the only legal and optimal action this step is to pass.
+T5
+main1
+End Phase
+Passed twice - ending phase
+T5
+combat
+Combat Phase
+Entering combat with 1 creatures and 0 tokens
+T5
+combat
+⚔️ Combat Phase
+No creatures available to attack
+✗
+T5
+main2
+Main Phase 2
+Post-combat - deploying remaining resources
+T5
+main2
+PASS
+AI Strategic Decision
+I have already played a land this turn and every card in hand is a land, which cannot be cast. There are no battlefield activated abilities available to use, and the commander is already on the battlefield. Per the critical mana rules I must not manually activate mana abilities and there are no legal nonland casts or activations to spend the available mana on. Therefore the only legal and optimal play this step is to pass.
+T5
+main2
+PASS
+AI Strategic Decision
+I have already played a land this turn and every card in hand is a land (uncastable). There are no battlefield activated abilities available and I must not manually activate mana abilities. With no legal, productive casts or activations, passing is the only correct play this step.
+T5
+main2
+End Phase
+Passed twice - ending phase
+T5
+end
+End Turn
+Turn 5 complete. Total damage: 4/40
+T6
+beginning
+=== NEW TURN ===
+Starting turn 6
+T6
+untap
+Untap & Generate Mana
+All permanents untapped. 5 lands + 2 artifacts = 8 mana available.
+T6
+draw
+Draw Card
+Drew Bojuka Bog (land - has ETB effect!)
+T6
+main1
+Main Phase 1
+Executing strategy focused on our win condition
+T6
+main1
+MANA
+AI Strategic Decision
+Play a basic Swamp from hand. Priority 1 is to take my land drop to improve future mana consistency and avoid the tempo loss of Bojuka Bog entering tapped. I have plenty of black in my pool and my deck/commander are black‑centric, so a Swamp is the most flexible untapped play this turn. Bojuka Bog is the only land with an immediate ETB effect (graveyard exile) but it enters tapped and would cost tempo; if an opponent’s graveyard poses an active threat I would instead play index 4. No other playable nonland cards exist, so the land drop is the correct MANA-driven play.
+T6
+main1
+MANA
+playLand: 0
+Played Swamp
+✓
+T6
+main1
+PASS
+AI Strategic Decision
+I have no castable nonland spells in hand (all four cards are lands). I've already taken my land drop this turn, so I cannot play another land. The battlefield has no available activated abilities to use. With no legal or productive plays available this main phase, passing is the correct choice per the CRITICAL MANA RULES and the Decision Priority (do something every turn — but here there is nothing to do).
+T6
+main1
+PASS
+AI Strategic Decision
+I've already taken my land drop this turn (played a Swamp). All cards in hand are lands (Island, Swamp, Island, Bojuka Bog) and therefore not castable as spells, and there are no battlefield activated abilities available to use. Per the critical mana rules I must not manually tap lands or activate mana abilities; with no legal or productive plays available in Main Phase 1 the correct play is to pass and retain the current board state for postcombat/main2. If Bojuka Bog were the only necessary play to stop an immediate graveyard threat and I had not yet played a land, I would instead play it despite entering tapped; that option is not available now.
+T6
+main1
+End Phase
+Passed twice - ending phase
+T6
+combat
+Combat Phase
+Entering combat with 1 creatures and 0 tokens
+T6
+combat
+⚔️ Combat Phase
+No creatures available to attack
+✗
+T6
+main2
+Main Phase 2
+Post-combat - deploying remaining resources
+T6
+main2
+PASS
+AI Strategic Decision
+You have already taken your land drop this turn. Every card in hand is a land (Island, Swamp, Island, Bojuka Bog) and none are castable from hand as spells or have activated abilities usable from hand. There are no battlefield activated abilities available to use, and per the critical mana rules you must not manually activate mana abilities. With no legal or productive plays available in main2, passing is the correct play to preserve game state and proceed to end of turn. If Bojuka Bog had been the only necessary play and you had not yet played a land, you would instead play it to exile a graveyard, but that land drop is already spent.
+T6
+main2
+PASS
+AI Strategic Decision
+All cards in hand are lands and I've already used my land drop this turn, so I cannot play any of them. There are no non-land spells or battlefield activated abilities I can use right now, and per the critical mana rules I must not manually activate mana abilities. With no legal or productive plays available in Main2, passing preserves game state and follows the guidance to not waste actions or mana.
+T6
+main2
+End Phase
+Passed twice - ending phase
+T6
+end
+End Turn
+Turn 6 complete. Total damage: 4/40
+T7
+beginning
+=== NEW TURN ===
+Starting turn 7
+T7
+untap
+Untap & Generate Mana
+All permanents untapped. 6 lands + 2 artifacts = 8 mana available.
+T7
+draw
+Draw Card
+Drew Sunken Hollow (land - has ETB effect!)
+T7
+main1
+Main Phase 1
+Executing strategy focused on our win condition
+T7
+main1
+MANA
+AI Strategic Decision
+Play a land first per priority. Sunken Hollow (hand index 4) is the optimal land — it can enter untapped because we already control two or more basic lands (the two Swamps), giving us a dual U/B source for future turns and improving color fixing. This advances the MANA priority and preserves Bojuka Bog's valuable ETB for a turn when exile is more relevant.
+T7
+main1
+MANA
+playLand: 4
+Played Sunken Hollow
+✓
+T7
+main1
+PASS
+AI Strategic Decision
+You have already played a land this turn (Sunken Hollow). All cards in hand are lands (Island, Swamp, Island, Bojuka Bog) which must be played as land drops, not cast, and you cannot play another land this turn. There are no castable spells, no battlefield activated abilities available, and the commander is already on the battlefield. With nothing legal or productive to cast/activate, the only correct action is to pass.
+T7
+main1
+PASS
+AI Strategic Decision
+I already played my land this turn (Sunken Hollow). All cards in hand are lands (Island, Swamp, Island, Bojuka Bog) which must be played as land drops and cannot be cast from hand, and there are no battlefield activated abilities or other castable spells available. Per the critical mana rules I also must not manually activate mana abilities — nothing productive can be done this main phase, so the correct play is to pass.
+T7
+main1
+End Phase
+Passed twice - ending phase
+T7
+combat
+Combat Phase
+Entering combat with 1 creatures and 0 tokens
+T7
+combat
+⚔️ Combat Phase
+No creatures available to attack
+✗
+T7
+main2
+Main Phase 2
+Post-combat - deploying remaining resources
+T7
+main2
+PASS
+AI Strategic Decision
+You have already used your land drop this turn. Every card in hand is a land (indices 0–3) which must be played as a land, not cast, so there are no legal spells or activated battlefield abilities to pay for or activate this main phase. There are also no 0-cost hand abilities to use. With nothing castable and per the critical mana rules (do not manually activate mana abilities), the correct play is to pass.
+T7
+main2
+PASS
+AI Strategic Decision
+You have already used your land drop this turn and every card in hand is a land (no spells or hand-activated abilities). There are no battlefield activated abilities available to pay for or activate. Per the critical mana rules, the shown mana is the pool and you must not manually activate mana abilities — but there is nothing legal to cast or activate now, so passing is the only correct play.
+T7
+main2
+End Phase
+Passed twice - ending phase
+T7
+end
+End Turn
+Turn 7 complete. Total damage: 4/40
+T8
+beginning
+=== NEW TURN ===
+Starting turn 8
+T8
+untap
+Untap & Generate Mana
+All permanents untapped. 7 lands + 2 artifacts = 9 mana available.
+T8
+draw
+Draw Card
+Drew Swamp (land)
+T8
+main1
+Main Phase 1
+Executing strategy focused on our win condition
+T8
+main1
+MANA
+AI Strategic Decision
+Take my land drop now to increase future mana options and follow the play-priority (always play a land if able). I choose the Island (hand index 0) because it gives an untapped blue source (better for draw/counter/engine spells going forward) and avoids playing Bojuka Bog tapped this turn. This preserves flexibility for casting blue instants/engines on upcoming turns.
+T8
+main1
+MANA
+playLand: 0
+Played Island
+✓
+T8
+main1
+PASS
+AI Strategic Decision
+No legal productive plays available: all cards in hand are lands and a land drop has already been used this turn, there are no battlefield activated abilities to use, and the commander is already on the battlefield. With only lands in hand I cannot cast any spells or activate anything meaningful, so the optimal play is to pass and keep the current mana for the next turn.
+T8
+main1
+PASS
+AI Strategic Decision
+I must pass because I have only lands in hand and I've already used my one land drop this turn. There are no castable spells, no battlefield activated abilities to use, and the commander is already on the battlefield. Per the critical mana rules, I cannot 'activate' lands or mana rocks manually to spend the available mana, and there are no non-mana abilities in hand to pay for. The deck plan calls for spending mana on engines or threats, but none are available, so passing is the only legal, productive action this step.
+T8
+main1
+End Phase
+Passed twice - ending phase
+T8
+combat
+Combat Phase
+Entering combat with 1 creatures and 0 tokens
+T8
+combat
+⚔️ Combat Phase
+No creatures available to attack
+✗
+T8
+main2
+Main Phase 2
+Post-combat - deploying remaining resources
+T8
+main2
+PASS
+AI Strategic Decision
+All cards in hand are lands and I've already used my one land drop this turn. There are no castable spells, no battlefield activated abilities to use, and per the critical mana rules I cannot 'activate' lands or mana rocks from hand. With no playable actions that advance the board or engine this step, passing is the only legal and productive choice.
+T8
+main2
+PASS
+AI Strategic Decision
+I have already used my one land drop this turn and every card in hand is a land (Swamp, Island, Bojuka Bog, Swamp), so none are castable. There are no castable spells or battlefield activated abilities available and the critical mana rules forbid 'activating' lands or mana rocks from hand. With no legal or productive plays to advance the board or engine, passing is the correct play to avoid wasting mana or illegal actions.
+T8
+main2
+End Phase
+Passed twice - ending phase
+T8
+end
+End Turn
+Turn 8 complete. Total damage: 4/40
+T9
+beginning
+=== NEW TURN ===
+Starting turn 9
+T9
+untap
+Untap & Generate Mana
+All permanents untapped. 8 lands + 2 artifacts = 10 mana available.
+T9
+draw
+Draw Card
+Drew Command Tower (land)
+T9
+main1
+Main Phase 1
+Executing strategy focused on our win condition
+T9
+main1
+MANA
+AI Strategic Decision
+Use my land drop now. Bojuka Bog (hand index 2) provides immediate non-mana value by exiling a player's graveyard on entry, which is high-impact in late game to disrupt reanimation/yard strategies. Entering tapped is acceptable — I already have ample mana this turn and no nonland spells in hand to cast — so this maximizes long-term value and advances the board. Playing a land also satisfies the first priority (land drop) before passing with no spells to cast.
+T9
+main1
+MANA
+playLand: 2
+Played Bojuka Bog
+✓
+T9
+main1
+PASS
+AI Strategic Decision
+No castable nonland spells or battlefield activated abilities are available. I already used my land drop (Has Played Land This Turn: true), and the entire hand consists of lands/Command Tower which must be played via the land drop action (not cast) — that option is no longer available this turn. Per the critical mana/activation rules I cannot manually activate mana abilities to spend the pool. With nothing productive to cast or activate, passing is the correct play to avoid illegal actions and preserve resources for the next turn.
+T9
+main1
+PASS
+AI Strategic Decision
+No legal productive plays exist. I have already used my land drop this turn, and every card in hand is a land that can only be played via a land drop (cannot be cast or activated from hand). There are no battlefield activated abilities available and the commander is already on the battlefield. Per the critical mana rules I must not attempt to manually activate mana abilities; the available mana pool cannot be spent on anything in hand. Passing preserves game state and available mana for the next turn and avoids illegal actions.
+T9
+main1
+End Phase
+Passed twice - ending phase
+T9
+combat
+Combat Phase
+Entering combat with 1 creatures and 0 tokens
+T9
+combat
+⚔️ Combat Phase
+No creatures available to attack
+✗
+T9
+main2
+Main Phase 2
+Post-combat - deploying remaining resources
+T9
+main2
+PASS
+AI Strategic Decision
+I have already used my land drop this turn and every card in hand is a land (indices 0–3). Lands in hand cannot be cast as spells or have battlefield abilities activated from hand. There are no non-mana activated abilities available and the commander is already on the battlefield. Per the critical mana rules I may not manually activate mana abilities and there are no castable spells or activatable hand abilities, so passing is the only legal, productive action to preserve game state and the available mana for next turn.
+T9
+main2
+PASS
+AI Strategic Decision
+All four cards in hand are lands and I have already taken my land drop this turn, so I cannot legally cast or play any of them. There are no non-mana activated abilities available on the battlefield and no spells to cast. Per the critical mana rules, I must not manually activate mana abilities and floating unused mana is the only option; therefore passing is the only productive/legal action this step.
+T9
+main2
+End Phase
+Passed twice - ending phase
+T9
+end
+End Turn
+Turn 9 complete. Total damage: 4/40
+T10
+beginning
+=== NEW TURN ===
+Starting turn 10
+T10
+untap
+Untap & Generate Mana
+All permanents untapped. 9 lands + 2 artifacts = 11 mana available.
+T10
+draw
+Draw Card
+Drew The Black Gate (land - has ETB effect!)
+T10
+main1
+Main Phase 1
+Executing strategy focused on our win condition
+T10
+main1
+MANA
+AI Strategic Decision
+Play a land first per priority. Command Tower enters untapped and gives perfect color fixing for the commander without paying life (unlike The Black Gate). It maximizes future flexibility and costs nothing this turn, so it's the highest-value land drop from hand.
+T10
+main1
+MANA
+playLand: Command Tower
+Played Command Tower
+✓
+T10
+main1
+PASS
+AI Strategic Decision
+You have already taken your land drop this turn (Command Tower was played). All cards in hand are lands (two Swamps, an Island, The Black Gate) so there are no castable spells or available battlefield activated abilities to use. Per the critical mana rules, we must not manually tap lands or activate mana abilities, and floating unused mana is pointless. With no productive play available this main phase, the correct action is to pass and preserve the full mana pool for the next turn.
+T10
+main1
+PASS
+AI Strategic Decision
+You have already taken your one land drop this turn. All cards in hand are lands (two Swamps, an Island, The Black Gate) which cannot be cast from hand. There are no battlefield activated abilities available to use and critical mana rules forbid manually activating mana abilities. With no productive plays available this main phase, the optimal play is to pass and preserve the game state for the next turn.
+T10
+main1
+End Phase
+Passed twice - ending phase
+T10
+combat
+Combat Phase
+Entering combat with 1 creatures and 0 tokens
+T10
+combat
+⚔️ Combat Phase
+No creatures available to attack
+✗
+T10
+main2
+Main Phase 2
+Post-combat - deploying remaining resources
+T10
+main2
+PASS
+AI Strategic Decision
+You have already taken your land drop and every card in hand is a land (Swamp, Island, Swamp, The Black Gate) which cannot be cast from hand. There are no battlefield activated abilities available to use and no nonland spells to cast. With no legal, productive plays available this main phase, the optimal play is to pass and preserve the current game state for the next turn.
+T10
+main2
+PASS
+AI Strategic Decision
+No legal, productive plays are available this Main Phase. Every card in hand is a land (indexes 0–3). You have already taken your land drop this turn, so you cannot play another land. There are no nonland spells to cast and no battlefield activated abilities available to use. Under the critical mana rules, mana abilities (lands/artifacts) are automatic and cannot be activated from hand, and cycling/other hand activations are not present. Therefore the only optimal play is to pass and preserve the board and full mana pool for the next turn.
+T10
+main2
+End Phase
+Passed twice - ending phase
+T10
+end
+End Turn
+Turn 10 complete. Total damage: 4/40
+T10
+post-game
+Game Complete
+Metrics: 3 spells cast, 1 commander casts, 10 lands played
+T10
+post-game
+✅ No Errors
+Game completed without errors
+
+CONSOLE LOG
+client:745 WebSocket connection to 'wss://4bfb526c-f8d6-4438-8e29-eb9805353be8-00-rybydy69e9r8.janeway.replit.dev/?token=L5jeKtOdmo75' failed: 
+createConnection @ client:745
+connect @ client:411
+connect @ client:751
+connect @ client:289
+connect @ client:373
+(anonymous) @ client:823
+client:772 [vite] failed to connect to websocket (Error: WebSocket closed without opened.). 
+connect @ client:772
+await in connect
+connect @ client:289
+connect @ client:373
+(anonymous) @ client:823
+client:423 Uncaught (in promise) Error: WebSocket closed without opened.
+    at WebSocket.<anonymous> (client:423:30)
+(anonymous) @ client:423
+react-dom_client.js?v=453f8220:20103 Download the React DevTools for a better development experience: https://react.dev/link/react-devtools
+config.js:51 ✅ OpenAI API configured successfully
+config.js:52    Key prefix: sk-proj...
+config.js:53    Key length: 164 characters
+App.jsx:93 Loaded 32731 cards into database
+App.jsx:93 Loaded 32731 cards into database
+App.jsx:241 Deck Strategy Analysis: {success: true, timestamp: '2025-10-31T18:06:04.619Z', analysis: {…}, metadata: {…}}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+activatedAbilityEngine.js:116 [parseActivatedAbilities] Detected landcycling: Lórien Revealed → Island (cost: {1})
+activatedAbilityEngine.js:70 [parseActivatedAbilities] Detected fetch land: Evolving Wilds
+activatedAbilityEngine.js:116 [parseActivatedAbilities] Detected landcycling: Lórien Revealed → Island (cost: {1})
+enhancedStepByStepGame.js:675 🔍 Creating deck behavior manifest...
+cardBehaviorAnalyzer.js:705 🔍 [PARSER] Commander's Sphere oracle text: {T}: Add one mana of any color in your commander's color identity.\nSacrifice this artifact: Draw a card.
+cardBehaviorAnalyzer.js:706 🔍 [PARSER] Split into 2 lines
+cardBehaviorAnalyzer.js:708 🔍 [PARSER]   Line 0: {T}: Add one mana of any color in your commander's color identity.
+cardBehaviorAnalyzer.js:708 🔍 [PARSER]   Line 1: Sacrifice this artifact: Draw a card.
+cardBehaviorAnalyzer.js:731 🔍 [PARSER] Commander's Sphere - Successfully parsed ability: {
+  "abilityText": "{T}: Add one mana of any color in your commander's color identity.",
+  "isManaAbility": true,
+  "activationCost": [
+    "{T}"
+  ],
+  "produces": [
+    {
+      "quantity": 1,
+      "types": [
+        {
+          "choice": [
+            "W",
+            "U",
+            "B",
+            "R",
+            "G"
+          ],
+          "restriction": "commander_identity"
+        }
+      ]
+    }
+  ]
+}
+cardBehaviorAnalyzer.js:705 🔍 [PARSER] Sol Ring oracle text: {T}: Add {C}{C}.
+cardBehaviorAnalyzer.js:706 🔍 [PARSER] Split into 1 lines
+cardBehaviorAnalyzer.js:708 🔍 [PARSER]   Line 0: {T}: Add {C}{C}.
+cardBehaviorAnalyzer.js:705 🔍 [PARSER] Underground River oracle text: {T}: Add {C}.\n{T}: Add {U} or {B}. This land deals 1 damage to you.
+cardBehaviorAnalyzer.js:706 🔍 [PARSER] Split into 2 lines
+cardBehaviorAnalyzer.js:708 🔍 [PARSER]   Line 0: {T}: Add {C}.
+cardBehaviorAnalyzer.js:708 🔍 [PARSER]   Line 1: {T}: Add {U} or {B}. This land deals 1 damage to you.
+enhancedStepByStepGame.js:708 ✅ Behavior manifest created: {totalManaProducers: 22, totalFetchLands: 1, totalTokenGenerators: 12, totalCardDraw: 21}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+enhancedStepByStepGame.js:1880 🔍 [untap] BEFORE generateMana - Expected: 0 (lands:0 + artifacts:0 + creatures:0)
+enhancedStepByStepGame.js:1881 🔍 [untap] Land count: 0, Artifact count: 0, Creature count: 0
+gameEngine.js:510 🔍 [generateMana] Starting - Turn 1
+gameEngine.js:511 🔍 [generateMana] Battlefield: 0 lands, 0 artifacts, 0 creatures
+manaPool.js:554 
+💎 [PotentialPool] Building available sources...
+manaPool.js:640 💎 [PotentialPool] Found 0 available mana abilities
+gameEngine.js:648 🔍 [generateMana] Final total: 0 available sources
+gameEngine.js:649 🔍 [generateMana] Preview flexibility: {W: 0, U: 0, B: 0, R: 0, G: 0, …}
+enhancedStepByStepGame.js:1889 🔍 [untap] AFTER generateMana - Expected: 0, Actual: 0
+eventSystem.js:169 📤 Event Emitted: PHASE_CHANGED {source: 'unknown', queueSize: 1}
+eventSystem.js:169 📤 Event Emitted: CARD_DRAWN {source: 'Swamp', queueSize: 1}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+manaPool.js:554 
+💎 [PotentialPool] Building available sources...
+manaPool.js:640 💎 [PotentialPool] Found 2 available mana abilities
+manaPool.js:643    0: The Grey Havens (land) → 1x{C}
+manaPool.js:643    1: The Grey Havens (land) → 1x{W/U/B/R/G}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+manaPool.js:681 
+🧮 [ManaSolver] Solving cost: {2}
+manaPool.js:682 🧮 [ManaSolver] Available sources: 2 abilities
+manaPool.js:686 🧮 [ManaSolver] Required: {colored: {…}, generic: 2}
+manaPool.js:787    ✓ Using The Grey Havens for generic (producing 1x{C})
+manaPool.js:787    ✓ Using The Grey Havens for generic (producing 1x{W})
+manaPool.js:790 ✅ [ManaSolver] Found solution using 2 sources
+manaPool.js:404 🔍 [canPay] Checking "{2}": YES ✅
+gameEngine.js:1076 
+🎯 [castSpell] Attempting to cast Dimir Signet
+gameEngine.js:1077 🎯 [castSpell] Cost: {2}
+manaPool.js:681 
+🧮 [ManaSolver] Solving cost: {2}
+manaPool.js:682 🧮 [ManaSolver] Available sources: 2 abilities
+manaPool.js:686 🧮 [ManaSolver] Required: {colored: {…}, generic: 2}
+manaPool.js:787    ✓ Using The Grey Havens for generic (producing 1x{C})
+manaPool.js:787    ✓ Using The Grey Havens for generic (producing 1x{W})
+manaPool.js:790 ✅ [ManaSolver] Found solution using 2 sources
+gameEngine.js:1093 ✅ [castSpell] Solution found! Tapping 2 sources
+gameEngine.js:1098    🔒 Tapped The Grey Havens (produced {C})
+gameEngine.js:1098    🔒 Tapped The Grey Havens (produced {W})
+manaPool.js:554 
+💎 [PotentialPool] Building available sources...
+manaPool.js:640 💎 [PotentialPool] Found 0 available mana abilities
+eventSystem.js:169 📤 Event Emitted: SPELL_CAST {source: 'Dimir Signet', queueSize: 1}
+eventSystem.js:169 📤 Event Emitted: PERMANENT_ENTERS_BATTLEFIELD {source: 'Dimir Signet', queueSize: 2}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+enhancedStepByStepGame.js:1880 🔍 [untap] BEFORE generateMana - Expected: 2 (lands:1 + artifacts:1 + creatures:0)
+enhancedStepByStepGame.js:1881 🔍 [untap] Land count: 1, Artifact count: 1, Creature count: 0
+gameEngine.js:510 🔍 [generateMana] Starting - Turn 2
+gameEngine.js:511 🔍 [generateMana] Battlefield: 1 lands, 1 artifacts, 0 creatures
+manaPool.js:554 
+💎 [PotentialPool] Building available sources...
+manaPool.js:640 💎 [PotentialPool] Found 3 available mana abilities
+manaPool.js:643    0: The Grey Havens (land) → 1x{C}
+manaPool.js:643    1: The Grey Havens (land) → 1x{W/U/B/R/G}
+manaPool.js:643    2: Dimir Signet (artifact) → 2x{U}{B}
+gameEngine.js:648 🔍 [generateMana] Final total: 3 available sources
+gameEngine.js:649 🔍 [generateMana] Preview flexibility: {W: 1, U: 3, B: 3, R: 1, G: 1, …}
+enhancedStepByStepGame.js:1889 🔍 [untap] AFTER generateMana - Expected: 2, Actual: 3
+eventSystem.js:169 📤 Event Emitted: PHASE_CHANGED {source: 'unknown', queueSize: 1}
+eventSystem.js:169 📤 Event Emitted: CARD_DRAWN {source: 'Island', queueSize: 1}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+manaPool.js:554 
+💎 [PotentialPool] Building available sources...
+manaPool.js:640 💎 [PotentialPool] Found 5 available mana abilities
+manaPool.js:643    0: The Grey Havens (land) → 1x{C}
+manaPool.js:643    1: The Grey Havens (land) → 1x{W/U/B/R/G}
+manaPool.js:643    2: Underground River (land) → 1x{C}
+manaPool.js:643    3: Underground River (land) → 1x{U/B}
+manaPool.js:643    4: Dimir Signet (artifact) → 2x{U}{B}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+manaPool.js:681 
+🧮 [ManaSolver] Solving cost: {3}{U}{B}
+manaPool.js:682 🧮 [ManaSolver] Available sources: 5 abilities
+manaPool.js:686 🧮 [ManaSolver] Required: {colored: {…}, generic: 3}
+manaPool.js:738    ✓ The Grey Havens produces {U}
+manaPool.js:751    ✓ Used The Grey Havens for {U}
+manaPool.js:738    ✓ Underground River produces {B}
+manaPool.js:751    ✓ Used Underground River for {B}
+manaPool.js:787    ✓ Using The Grey Havens for generic (producing 1x{C})
+manaPool.js:787    ✓ Using Underground River for generic (producing 1x{C})
+manaPool.js:775    💰 Dimir Signet requires {1} to activate
+manaPool.js:787    ✓ Using Dimir Signet for generic (producing 2x{U})
+manaPool.js:790 ✅ [ManaSolver] Found solution using 5 sources
+manaPool.js:404 🔍 [canPay] Checking "{3}{U}{B}": YES ✅
+gameEngine.js:1196 
+👑 [castCommander] Attempting to cast Lord of the Nazgûl
+gameEngine.js:1197 👑 [castCommander] Base cost: {3}{U}{B}, Tax: 0, Full cost: {3}{U}{B}
+manaPool.js:681 
+🧮 [ManaSolver] Solving cost: {3}{U}{B}
+manaPool.js:682 🧮 [ManaSolver] Available sources: 5 abilities
+manaPool.js:686 🧮 [ManaSolver] Required: {colored: {…}, generic: 3}
+manaPool.js:738    ✓ The Grey Havens produces {U}
+manaPool.js:751    ✓ Used The Grey Havens for {U}
+manaPool.js:738    ✓ Underground River produces {B}
+manaPool.js:751    ✓ Used Underground River for {B}
+manaPool.js:787    ✓ Using The Grey Havens for generic (producing 1x{C})
+manaPool.js:787    ✓ Using Underground River for generic (producing 1x{C})
+manaPool.js:775    💰 Dimir Signet requires {1} to activate
+manaPool.js:787    ✓ Using Dimir Signet for generic (producing 2x{U})
+manaPool.js:790 ✅ [ManaSolver] Found solution using 5 sources
+gameEngine.js:1213 ✅ [castCommander] Solution found! Tapping 5 sources
+gameEngine.js:1218    🔒 Tapped The Grey Havens (produced {U})
+gameEngine.js:1218    🔒 Tapped Underground River (produced {B})
+gameEngine.js:1218    🔒 Tapped The Grey Havens (produced {C})
+gameEngine.js:1218    🔒 Tapped Underground River (produced {C})
+gameEngine.js:1218    🔒 Tapped Dimir Signet (produced {U})
+manaPool.js:554 
+💎 [PotentialPool] Building available sources...
+manaPool.js:640 💎 [PotentialPool] Found 0 available mana abilities
+eventSystem.js:169 📤 Event Emitted: PERMANENT_ENTERS_BATTLEFIELD {source: 'Lord of the Nazgûl', queueSize: 1}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+enhancedStepByStepGame.js:1880 🔍 [untap] BEFORE generateMana - Expected: 3 (lands:2 + artifacts:1 + creatures:0)
+enhancedStepByStepGame.js:1881 🔍 [untap] Land count: 2, Artifact count: 1, Creature count: 0
+gameEngine.js:510 🔍 [generateMana] Starting - Turn 3
+gameEngine.js:511 🔍 [generateMana] Battlefield: 2 lands, 1 artifacts, 1 creatures
+manaPool.js:554 
+💎 [PotentialPool] Building available sources...
+manaPool.js:640 💎 [PotentialPool] Found 5 available mana abilities
+manaPool.js:643    0: The Grey Havens (land) → 1x{C}
+manaPool.js:643    1: The Grey Havens (land) → 1x{W/U/B/R/G}
+manaPool.js:643    2: Underground River (land) → 1x{C}
+manaPool.js:643    3: Underground River (land) → 1x{U/B}
+manaPool.js:643    4: Dimir Signet (artifact) → 2x{U}{B}
+gameEngine.js:648 🔍 [generateMana] Final total: 4 available sources
+gameEngine.js:649 🔍 [generateMana] Preview flexibility: {W: 1, U: 4, B: 4, R: 1, G: 1, …}
+enhancedStepByStepGame.js:1889 🔍 [untap] AFTER generateMana - Expected: 3, Actual: 4
+eventSystem.js:169 📤 Event Emitted: PHASE_CHANGED {source: 'unknown', queueSize: 1}
+eventSystem.js:169 📤 Event Emitted: CARD_DRAWN {source: 'Swamp', queueSize: 1}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+manaPool.js:554 
+💎 [PotentialPool] Building available sources...
+manaPool.js:640 💎 [PotentialPool] Found 5 available mana abilities
+manaPool.js:643    0: The Grey Havens (land) → 1x{C}
+manaPool.js:643    1: The Grey Havens (land) → 1x{W/U/B/R/G}
+manaPool.js:643    2: Underground River (land) → 1x{C}
+manaPool.js:643    3: Underground River (land) → 1x{U/B}
+manaPool.js:643    4: Dimir Signet (artifact) → 2x{U}{B}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+manaPool.js:681 
+🧮 [ManaSolver] Solving cost: {5}
+manaPool.js:682 🧮 [ManaSolver] Available sources: 5 abilities
+manaPool.js:686 🧮 [ManaSolver] Required: {colored: {…}, generic: 5}
+manaPool.js:787    ✓ Using The Grey Havens for generic (producing 1x{C})
+manaPool.js:787    ✓ Using The Grey Havens for generic (producing 1x{W})
+manaPool.js:787    ✓ Using Underground River for generic (producing 1x{C})
+manaPool.js:787    ✓ Using Underground River for generic (producing 1x{U})
+manaPool.js:775    💰 Dimir Signet requires {1} to activate
+manaPool.js:787    ✓ Using Dimir Signet for generic (producing 2x{U})
+manaPool.js:790 ✅ [ManaSolver] Found solution using 5 sources
+manaPool.js:404 🔍 [canPay] Checking "{5}": YES ✅
+gameEngine.js:1076 
+🎯 [castSpell] Attempting to cast Nazgûl Battle-Mace
+gameEngine.js:1077 🎯 [castSpell] Cost: {5}
+manaPool.js:681 
+🧮 [ManaSolver] Solving cost: {5}
+manaPool.js:682 🧮 [ManaSolver] Available sources: 5 abilities
+manaPool.js:686 🧮 [ManaSolver] Required: {colored: {…}, generic: 5}
+manaPool.js:787    ✓ Using The Grey Havens for generic (producing 1x{C})
+manaPool.js:787    ✓ Using The Grey Havens for generic (producing 1x{W})
+manaPool.js:787    ✓ Using Underground River for generic (producing 1x{C})
+manaPool.js:787    ✓ Using Underground River for generic (producing 1x{U})
+manaPool.js:775    💰 Dimir Signet requires {1} to activate
+manaPool.js:787    ✓ Using Dimir Signet for generic (producing 2x{U})
+manaPool.js:790 ✅ [ManaSolver] Found solution using 5 sources
+gameEngine.js:1093 ✅ [castSpell] Solution found! Tapping 5 sources
+gameEngine.js:1098    🔒 Tapped The Grey Havens (produced {C})
+gameEngine.js:1098    🔒 Tapped The Grey Havens (produced {W})
+gameEngine.js:1098    🔒 Tapped Underground River (produced {C})
+gameEngine.js:1098    🔒 Tapped Underground River (produced {U})
+gameEngine.js:1098    🔒 Tapped Dimir Signet (produced {U})
+manaPool.js:554 
+💎 [PotentialPool] Building available sources...
+manaPool.js:640 💎 [PotentialPool] Found 0 available mana abilities
+eventSystem.js:169 📤 Event Emitted: SPELL_CAST {source: 'Nazgûl Battle-Mace', queueSize: 1}
+eventSystem.js:169 📤 Event Emitted: PERMANENT_ENTERS_BATTLEFIELD {source: 'Nazgûl Battle-Mace', queueSize: 2}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+eventSystem.js:169 📤 Event Emitted: CREATURE_ATTACKS {source: 'Lord of the Nazgûl', queueSize: 1}
+eventSystem.js:169 📤 Event Emitted: COMBAT_DAMAGE_DEALT {source: 'unknown', queueSize: 2}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+enhancedStepByStepGame.js:1880 🔍 [untap] BEFORE generateMana - Expected: 4 (lands:3 + artifacts:1 + creatures:0)
+enhancedStepByStepGame.js:1881 🔍 [untap] Land count: 3, Artifact count: 1, Creature count: 0
+gameEngine.js:510 🔍 [generateMana] Starting - Turn 4
+gameEngine.js:511 🔍 [generateMana] Battlefield: 3 lands, 2 artifacts, 1 creatures
+manaPool.js:554 
+💎 [PotentialPool] Building available sources...
+manaPool.js:589 ⚠️ [PotentialPool] No manifest data for artifact: Nazgûl Battle-Mace
+manaPool.js:640 💎 [PotentialPool] Found 6 available mana abilities
+manaPool.js:643    0: The Grey Havens (land) → 1x{C}
+manaPool.js:643    1: The Grey Havens (land) → 1x{W/U/B/R/G}
+manaPool.js:643    2: Underground River (land) → 1x{C}
+manaPool.js:643    3: Underground River (land) → 1x{U/B}
+manaPool.js:643    4: Rivendell (land) → 1x{U}
+manaPool.js:643    5: Dimir Signet (artifact) → 2x{U}{B}
+gameEngine.js:648 🔍 [generateMana] Final total: 5 available sources
+gameEngine.js:649 🔍 [generateMana] Preview flexibility: {W: 1, U: 5, B: 4, R: 1, G: 1, …}
+enhancedStepByStepGame.js:1889 🔍 [untap] AFTER generateMana - Expected: 4, Actual: 5
+eventSystem.js:169 📤 Event Emitted: PHASE_CHANGED {source: 'unknown', queueSize: 1}
+eventSystem.js:169 📤 Event Emitted: CARD_DRAWN {source: "Commander's Sphere", queueSize: 1}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+manaPool.js:554 
+💎 [PotentialPool] Building available sources...
+manaPool.js:589 ⚠️ [PotentialPool] No manifest data for artifact: Nazgûl Battle-Mace
+manaPool.js:640 💎 [PotentialPool] Found 6 available mana abilities
+manaPool.js:643    0: The Grey Havens (land) → 1x{C}
+manaPool.js:643    1: The Grey Havens (land) → 1x{W/U/B/R/G}
+manaPool.js:643    2: Underground River (land) → 1x{C}
+manaPool.js:643    3: Underground River (land) → 1x{U/B}
+manaPool.js:643    4: Rivendell (land) → 1x{U}
+manaPool.js:643    5: Dimir Signet (artifact) → 2x{U}{B}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+manaPool.js:681 
+🧮 [ManaSolver] Solving cost: {3}
+manaPool.js:682 🧮 [ManaSolver] Available sources: 6 abilities
+manaPool.js:686 🧮 [ManaSolver] Required: {colored: {…}, generic: 3}
+manaPool.js:787    ✓ Using The Grey Havens for generic (producing 1x{C})
+manaPool.js:787    ✓ Using The Grey Havens for generic (producing 1x{W})
+manaPool.js:787    ✓ Using Underground River for generic (producing 1x{C})
+manaPool.js:790 ✅ [ManaSolver] Found solution using 3 sources
+manaPool.js:404 🔍 [canPay] Checking "{3}": YES ✅
+gameEngine.js:1076 
+🎯 [castSpell] Attempting to cast Commander's Sphere
+gameEngine.js:1077 🎯 [castSpell] Cost: {3}
+manaPool.js:681 
+🧮 [ManaSolver] Solving cost: {3}
+manaPool.js:682 🧮 [ManaSolver] Available sources: 6 abilities
+manaPool.js:686 🧮 [ManaSolver] Required: {colored: {…}, generic: 3}
+manaPool.js:787    ✓ Using The Grey Havens for generic (producing 1x{C})
+manaPool.js:787    ✓ Using The Grey Havens for generic (producing 1x{W})
+manaPool.js:787    ✓ Using Underground River for generic (producing 1x{C})
+manaPool.js:790 ✅ [ManaSolver] Found solution using 3 sources
+gameEngine.js:1093 ✅ [castSpell] Solution found! Tapping 3 sources
+gameEngine.js:1098    🔒 Tapped The Grey Havens (produced {C})
+gameEngine.js:1098    🔒 Tapped The Grey Havens (produced {W})
+gameEngine.js:1098    🔒 Tapped Underground River (produced {C})
+manaPool.js:554 
+💎 [PotentialPool] Building available sources...
+manaPool.js:589 ⚠️ [PotentialPool] No manifest data for artifact: Nazgûl Battle-Mace
+manaPool.js:640 💎 [PotentialPool] Found 2 available mana abilities
+manaPool.js:643    0: Rivendell (land) → 1x{U}
+manaPool.js:643    1: Dimir Signet (artifact) → 2x{U}{B}
+eventSystem.js:169 📤 Event Emitted: SPELL_CAST {source: "Commander's Sphere", queueSize: 1}
+eventSystem.js:169 📤 Event Emitted: PERMANENT_ENTERS_BATTLEFIELD {source: "Commander's Sphere", queueSize: 2}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+enhancedStepByStepGame.js:1880 🔍 [untap] BEFORE generateMana - Expected: 6 (lands:4 + artifacts:2 + creatures:0)
+enhancedStepByStepGame.js:1881 🔍 [untap] Land count: 4, Artifact count: 2, Creature count: 0
+gameEngine.js:510 🔍 [generateMana] Starting - Turn 5
+gameEngine.js:511 🔍 [generateMana] Battlefield: 4 lands, 3 artifacts, 1 creatures
+manaPool.js:554 
+💎 [PotentialPool] Building available sources...
+manaPool.js:589 ⚠️ [PotentialPool] No manifest data for artifact: Nazgûl Battle-Mace
+manaPool.js:640 💎 [PotentialPool] Found 8 available mana abilities
+manaPool.js:643    0: The Grey Havens (land) → 1x{C}
+manaPool.js:643    1: The Grey Havens (land) → 1x{W/U/B/R/G}
+manaPool.js:643    2: Underground River (land) → 1x{C}
+manaPool.js:643    3: Underground River (land) → 1x{U/B}
+manaPool.js:643    4: Rivendell (land) → 1x{U}
+manaPool.js:643    5: Barad-dûr (land) → 1x{B}
+manaPool.js:643    6: Dimir Signet (artifact) → 2x{U}{B}
+manaPool.js:643    7: Commander's Sphere (artifact) → 1x{W/U/B/R/G}
+gameEngine.js:648 🔍 [generateMana] Final total: 7 available sources
+gameEngine.js:649 🔍 [generateMana] Preview flexibility: {W: 2, U: 6, B: 6, R: 2, G: 2, …}
+enhancedStepByStepGame.js:1889 🔍 [untap] AFTER generateMana - Expected: 6, Actual: 7
+eventSystem.js:169 📤 Event Emitted: PHASE_CHANGED {source: 'unknown', queueSize: 1}
+eventSystem.js:169 📤 Event Emitted: CARD_DRAWN {source: 'Island', queueSize: 1}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+manaPool.js:554 
+💎 [PotentialPool] Building available sources...
+manaPool.js:589 ⚠️ [PotentialPool] No manifest data for artifact: Nazgûl Battle-Mace
+manaPool.js:640 💎 [PotentialPool] Found 9 available mana abilities
+manaPool.js:643    0: The Grey Havens (land) → 1x{C}
+manaPool.js:643    1: The Grey Havens (land) → 1x{W/U/B/R/G}
+manaPool.js:643    2: Underground River (land) → 1x{C}
+manaPool.js:643    3: Underground River (land) → 1x{U/B}
+manaPool.js:643    4: Rivendell (land) → 1x{U}
+manaPool.js:643    5: Barad-dûr (land) → 1x{B}
+manaPool.js:643    6: Swamp (land) → 1x{B}
+manaPool.js:643    7: Dimir Signet (artifact) → 2x{U}{B}
+manaPool.js:643    8: Commander's Sphere (artifact) → 1x{W/U/B/R/G}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+enhancedStepByStepGame.js:1880 🔍 [untap] BEFORE generateMana - Expected: 7 (lands:5 + artifacts:2 + creatures:0)
+enhancedStepByStepGame.js:1881 🔍 [untap] Land count: 5, Artifact count: 2, Creature count: 0
+gameEngine.js:510 🔍 [generateMana] Starting - Turn 6
+gameEngine.js:511 🔍 [generateMana] Battlefield: 5 lands, 3 artifacts, 1 creatures
+manaPool.js:554 
+💎 [PotentialPool] Building available sources...
+manaPool.js:589 ⚠️ [PotentialPool] No manifest data for artifact: Nazgûl Battle-Mace
+manaPool.js:640 💎 [PotentialPool] Found 9 available mana abilities
+manaPool.js:643    0: The Grey Havens (land) → 1x{C}
+manaPool.js:643    1: The Grey Havens (land) → 1x{W/U/B/R/G}
+manaPool.js:643    2: Underground River (land) → 1x{C}
+manaPool.js:643    3: Underground River (land) → 1x{U/B}
+manaPool.js:643    4: Rivendell (land) → 1x{U}
+manaPool.js:643    5: Barad-dûr (land) → 1x{B}
+manaPool.js:643    6: Swamp (land) → 1x{B}
+manaPool.js:643    7: Dimir Signet (artifact) → 2x{U}{B}
+manaPool.js:643    8: Commander's Sphere (artifact) → 1x{W/U/B/R/G}
+gameEngine.js:648 🔍 [generateMana] Final total: 8 available sources
+gameEngine.js:649 🔍 [generateMana] Preview flexibility: {W: 2, U: 6, B: 7, R: 2, G: 2, …}
+enhancedStepByStepGame.js:1889 🔍 [untap] AFTER generateMana - Expected: 7, Actual: 8
+eventSystem.js:169 📤 Event Emitted: PHASE_CHANGED {source: 'unknown', queueSize: 1}
+eventSystem.js:169 📤 Event Emitted: CARD_DRAWN {source: 'Bojuka Bog', queueSize: 1}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+manaPool.js:554 
+💎 [PotentialPool] Building available sources...
+manaPool.js:589 ⚠️ [PotentialPool] No manifest data for artifact: Nazgûl Battle-Mace
+manaPool.js:640 💎 [PotentialPool] Found 10 available mana abilities
+manaPool.js:643    0: The Grey Havens (land) → 1x{C}
+manaPool.js:643    1: The Grey Havens (land) → 1x{W/U/B/R/G}
+manaPool.js:643    2: Underground River (land) → 1x{C}
+manaPool.js:643    3: Underground River (land) → 1x{U/B}
+manaPool.js:643    4: Rivendell (land) → 1x{U}
+manaPool.js:643    5: Barad-dûr (land) → 1x{B}
+manaPool.js:643    6: Swamp (land) → 1x{B}
+manaPool.js:643    7: Swamp (land) → 1x{B}
+manaPool.js:643    8: Dimir Signet (artifact) → 2x{U}{B}
+manaPool.js:643    9: Commander's Sphere (artifact) → 1x{W/U/B/R/G}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+enhancedStepByStepGame.js:1880 🔍 [untap] BEFORE generateMana - Expected: 8 (lands:6 + artifacts:2 + creatures:0)
+enhancedStepByStepGame.js:1881 🔍 [untap] Land count: 6, Artifact count: 2, Creature count: 0
+gameEngine.js:510 🔍 [generateMana] Starting - Turn 7
+gameEngine.js:511 🔍 [generateMana] Battlefield: 6 lands, 3 artifacts, 1 creatures
+manaPool.js:554 
+💎 [PotentialPool] Building available sources...
+manaPool.js:589 ⚠️ [PotentialPool] No manifest data for artifact: Nazgûl Battle-Mace
+manaPool.js:640 💎 [PotentialPool] Found 10 available mana abilities
+manaPool.js:643    0: The Grey Havens (land) → 1x{C}
+manaPool.js:643    1: The Grey Havens (land) → 1x{W/U/B/R/G}
+manaPool.js:643    2: Underground River (land) → 1x{C}
+manaPool.js:643    3: Underground River (land) → 1x{U/B}
+manaPool.js:643    4: Rivendell (land) → 1x{U}
+manaPool.js:643    5: Barad-dûr (land) → 1x{B}
+manaPool.js:643    6: Swamp (land) → 1x{B}
+manaPool.js:643    7: Swamp (land) → 1x{B}
+manaPool.js:643    8: Dimir Signet (artifact) → 2x{U}{B}
+manaPool.js:643    9: Commander's Sphere (artifact) → 1x{W/U/B/R/G}
+gameEngine.js:648 🔍 [generateMana] Final total: 8 available sources
+gameEngine.js:649 🔍 [generateMana] Preview flexibility: {W: 2, U: 6, B: 7, R: 2, G: 2, …}
+enhancedStepByStepGame.js:1889 🔍 [untap] AFTER generateMana - Expected: 8, Actual: 8
+eventSystem.js:169 📤 Event Emitted: PHASE_CHANGED {source: 'unknown', queueSize: 1}
+eventSystem.js:169 📤 Event Emitted: CARD_DRAWN {source: 'Sunken Hollow', queueSize: 1}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+manaPool.js:554 
+💎 [PotentialPool] Building available sources...
+manaPool.js:589 ⚠️ [PotentialPool] No manifest data for artifact: Nazgûl Battle-Mace
+manaPool.js:640 💎 [PotentialPool] Found 10 available mana abilities
+manaPool.js:643    0: The Grey Havens (land) → 1x{C}
+manaPool.js:643    1: The Grey Havens (land) → 1x{W/U/B/R/G}
+manaPool.js:643    2: Underground River (land) → 1x{C}
+manaPool.js:643    3: Underground River (land) → 1x{U/B}
+manaPool.js:643    4: Rivendell (land) → 1x{U}
+manaPool.js:643    5: Barad-dûr (land) → 1x{B}
+manaPool.js:643    6: Swamp (land) → 1x{B}
+manaPool.js:643    7: Swamp (land) → 1x{B}
+manaPool.js:643    8: Dimir Signet (artifact) → 2x{U}{B}
+manaPool.js:643    9: Commander's Sphere (artifact) → 1x{W/U/B/R/G}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+enhancedStepByStepGame.js:1880 🔍 [untap] BEFORE generateMana - Expected: 9 (lands:7 + artifacts:2 + creatures:0)
+enhancedStepByStepGame.js:1881 🔍 [untap] Land count: 7, Artifact count: 2, Creature count: 0
+gameEngine.js:510 🔍 [generateMana] Starting - Turn 8
+gameEngine.js:511 🔍 [generateMana] Battlefield: 7 lands, 3 artifacts, 1 creatures
+manaPool.js:554 
+💎 [PotentialPool] Building available sources...
+manaPool.js:589 ⚠️ [PotentialPool] No manifest data for artifact: Nazgûl Battle-Mace
+manaPool.js:640 💎 [PotentialPool] Found 11 available mana abilities
+manaPool.js:643    0: The Grey Havens (land) → 1x{C}
+manaPool.js:643    1: The Grey Havens (land) → 1x{W/U/B/R/G}
+manaPool.js:643    2: Underground River (land) → 1x{C}
+manaPool.js:643    3: Underground River (land) → 1x{U/B}
+manaPool.js:643    4: Rivendell (land) → 1x{U}
+manaPool.js:643    5: Barad-dûr (land) → 1x{B}
+manaPool.js:643    6: Swamp (land) → 1x{B}
+manaPool.js:643    7: Swamp (land) → 1x{B}
+manaPool.js:643    8: Sunken Hollow (land) → 1x{U/B}
+manaPool.js:643    9: Dimir Signet (artifact) → 2x{U}{B}
+manaPool.js:643    10: Commander's Sphere (artifact) → 1x{W/U/B/R/G}
+gameEngine.js:648 🔍 [generateMana] Final total: 9 available sources
+gameEngine.js:649 🔍 [generateMana] Preview flexibility: {W: 2, U: 7, B: 8, R: 2, G: 2, …}
+enhancedStepByStepGame.js:1889 🔍 [untap] AFTER generateMana - Expected: 9, Actual: 9
+eventSystem.js:169 📤 Event Emitted: PHASE_CHANGED {source: 'unknown', queueSize: 1}
+eventSystem.js:169 📤 Event Emitted: CARD_DRAWN {source: 'Swamp', queueSize: 1}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+manaPool.js:554 
+💎 [PotentialPool] Building available sources...
+manaPool.js:589 ⚠️ [PotentialPool] No manifest data for artifact: Nazgûl Battle-Mace
+manaPool.js:640 💎 [PotentialPool] Found 12 available mana abilities
+manaPool.js:643    0: The Grey Havens (land) → 1x{C}
+manaPool.js:643    1: The Grey Havens (land) → 1x{W/U/B/R/G}
+manaPool.js:643    2: Underground River (land) → 1x{C}
+manaPool.js:643    3: Underground River (land) → 1x{U/B}
+manaPool.js:643    4: Rivendell (land) → 1x{U}
+manaPool.js:643    5: Barad-dûr (land) → 1x{B}
+manaPool.js:643    6: Swamp (land) → 1x{B}
+manaPool.js:643    7: Swamp (land) → 1x{B}
+manaPool.js:643    8: Sunken Hollow (land) → 1x{U/B}
+manaPool.js:643    9: Island (land) → 1x{U}
+manaPool.js:643    10: Dimir Signet (artifact) → 2x{U}{B}
+manaPool.js:643    11: Commander's Sphere (artifact) → 1x{W/U/B/R/G}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+enhancedStepByStepGame.js:1880 🔍 [untap] BEFORE generateMana - Expected: 10 (lands:8 + artifacts:2 + creatures:0)
+enhancedStepByStepGame.js:1881 🔍 [untap] Land count: 8, Artifact count: 2, Creature count: 0
+gameEngine.js:510 🔍 [generateMana] Starting - Turn 9
+gameEngine.js:511 🔍 [generateMana] Battlefield: 8 lands, 3 artifacts, 1 creatures
+manaPool.js:554 
+💎 [PotentialPool] Building available sources...
+manaPool.js:589 ⚠️ [PotentialPool] No manifest data for artifact: Nazgûl Battle-Mace
+manaPool.js:640 💎 [PotentialPool] Found 12 available mana abilities
+manaPool.js:643    0: The Grey Havens (land) → 1x{C}
+manaPool.js:643    1: The Grey Havens (land) → 1x{W/U/B/R/G}
+manaPool.js:643    2: Underground River (land) → 1x{C}
+manaPool.js:643    3: Underground River (land) → 1x{U/B}
+manaPool.js:643    4: Rivendell (land) → 1x{U}
+manaPool.js:643    5: Barad-dûr (land) → 1x{B}
+manaPool.js:643    6: Swamp (land) → 1x{B}
+manaPool.js:643    7: Swamp (land) → 1x{B}
+manaPool.js:643    8: Sunken Hollow (land) → 1x{U/B}
+manaPool.js:643    9: Island (land) → 1x{U}
+manaPool.js:643    10: Dimir Signet (artifact) → 2x{U}{B}
+manaPool.js:643    11: Commander's Sphere (artifact) → 1x{W/U/B/R/G}
+gameEngine.js:648 🔍 [generateMana] Final total: 10 available sources
+gameEngine.js:649 🔍 [generateMana] Preview flexibility: {W: 2, U: 8, B: 8, R: 2, G: 2, …}
+enhancedStepByStepGame.js:1889 🔍 [untap] AFTER generateMana - Expected: 10, Actual: 10
+eventSystem.js:169 📤 Event Emitted: PHASE_CHANGED {source: 'unknown', queueSize: 1}
+eventSystem.js:169 📤 Event Emitted: CARD_DRAWN {source: 'Command Tower', queueSize: 1}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+manaPool.js:554 
+💎 [PotentialPool] Building available sources...
+manaPool.js:589 ⚠️ [PotentialPool] No manifest data for artifact: Nazgûl Battle-Mace
+manaPool.js:640 💎 [PotentialPool] Found 12 available mana abilities
+manaPool.js:643    0: The Grey Havens (land) → 1x{C}
+manaPool.js:643    1: The Grey Havens (land) → 1x{W/U/B/R/G}
+manaPool.js:643    2: Underground River (land) → 1x{C}
+manaPool.js:643    3: Underground River (land) → 1x{U/B}
+manaPool.js:643    4: Rivendell (land) → 1x{U}
+manaPool.js:643    5: Barad-dûr (land) → 1x{B}
+manaPool.js:643    6: Swamp (land) → 1x{B}
+manaPool.js:643    7: Swamp (land) → 1x{B}
+manaPool.js:643    8: Sunken Hollow (land) → 1x{U/B}
+manaPool.js:643    9: Island (land) → 1x{U}
+manaPool.js:643    10: Dimir Signet (artifact) → 2x{U}{B}
+manaPool.js:643    11: Commander's Sphere (artifact) → 1x{W/U/B/R/G}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+enhancedStepByStepGame.js:1880 🔍 [untap] BEFORE generateMana - Expected: 11 (lands:9 + artifacts:2 + creatures:0)
+enhancedStepByStepGame.js:1881 🔍 [untap] Land count: 9, Artifact count: 2, Creature count: 0
+gameEngine.js:510 🔍 [generateMana] Starting - Turn 10
+gameEngine.js:511 🔍 [generateMana] Battlefield: 9 lands, 3 artifacts, 1 creatures
+manaPool.js:554 
+💎 [PotentialPool] Building available sources...
+manaPool.js:589 ⚠️ [PotentialPool] No manifest data for artifact: Nazgûl Battle-Mace
+manaPool.js:640 💎 [PotentialPool] Found 13 available mana abilities
+manaPool.js:643    0: The Grey Havens (land) → 1x{C}
+manaPool.js:643    1: The Grey Havens (land) → 1x{W/U/B/R/G}
+manaPool.js:643    2: Underground River (land) → 1x{C}
+manaPool.js:643    3: Underground River (land) → 1x{U/B}
+manaPool.js:643    4: Rivendell (land) → 1x{U}
+manaPool.js:643    5: Barad-dûr (land) → 1x{B}
+manaPool.js:643    6: Swamp (land) → 1x{B}
+manaPool.js:643    7: Swamp (land) → 1x{B}
+manaPool.js:643    8: Sunken Hollow (land) → 1x{U/B}
+manaPool.js:643    9: Island (land) → 1x{U}
+manaPool.js:643    10: Bojuka Bog (land) → 1x{B}
+manaPool.js:643    11: Dimir Signet (artifact) → 2x{U}{B}
+manaPool.js:643    12: Commander's Sphere (artifact) → 1x{W/U/B/R/G}
+gameEngine.js:648 🔍 [generateMana] Final total: 11 available sources
+gameEngine.js:649 🔍 [generateMana] Preview flexibility: {W: 2, U: 8, B: 9, R: 2, G: 2, …}
+enhancedStepByStepGame.js:1889 🔍 [untap] AFTER generateMana - Expected: 11, Actual: 11
+eventSystem.js:169 📤 Event Emitted: PHASE_CHANGED {source: 'unknown', queueSize: 1}
+eventSystem.js:169 📤 Event Emitted: CARD_DRAWN {source: 'The Black Gate', queueSize: 1}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+manaPool.js:554 
+💎 [PotentialPool] Building available sources...
+manaPool.js:589 ⚠️ [PotentialPool] No manifest data for artifact: Nazgûl Battle-Mace
+manaPool.js:640 💎 [PotentialPool] Found 14 available mana abilities
+manaPool.js:643    0: The Grey Havens (land) → 1x{C}
+manaPool.js:643    1: The Grey Havens (land) → 1x{W/U/B/R/G}
+manaPool.js:643    2: Underground River (land) → 1x{C}
+manaPool.js:643    3: Underground River (land) → 1x{U/B}
+manaPool.js:643    4: Rivendell (land) → 1x{U}
+manaPool.js:643    5: Barad-dûr (land) → 1x{B}
+manaPool.js:643    6: Swamp (land) → 1x{B}
+manaPool.js:643    7: Swamp (land) → 1x{B}
+manaPool.js:643    8: Sunken Hollow (land) → 1x{U/B}
+manaPool.js:643    9: Island (land) → 1x{U}
+manaPool.js:643    10: Bojuka Bog (land) → 1x{B}
+manaPool.js:643    11: Command Tower (land) → 1x{W/U/B/R/G}
+manaPool.js:643    12: Dimir Signet (artifact) → 2x{U}{B}
+manaPool.js:643    13: Commander's Sphere (artifact) → 1x{W/U/B/R/G}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}

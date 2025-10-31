@@ -1,0 +1,216 @@
+client:745 WebSocket connection to 'wss://4bfb526c-f8d6-4438-8e29-eb9805353be8-00-rybydy69e9r8.janeway.replit.dev/?token=uFN3EvFhdR0d' failed: 
+createConnection @ client:745
+client:772 [vite] failed to connect to websocket (Error: WebSocket closed without opened.). 
+connect @ client:772
+client:423 Uncaught (in promise) Error: WebSocket closed without opened.
+    at WebSocket.<anonymous> (client:423:30)
+react-dom_client.js?v=453f8220:20103 Download the React DevTools for a better development experience: https://react.dev/link/react-devtools
+config.js:51 ✅ OpenAI API configured successfully
+config.js:52    Key prefix: sk-proj...
+config.js:53    Key length: 164 characters
+App.jsx:93 Loaded 32731 cards into database
+App.jsx:93 Loaded 32731 cards into database
+App.jsx:241 Deck Strategy Analysis: {success: true, timestamp: '2025-10-29T22:53:18.901Z', analysis: {…}, metadata: {…}}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+activatedAbilityEngine.js:116 [parseActivatedAbilities] Detected landcycling: Lórien Revealed → Island (cost: {1})
+activatedAbilityEngine.js:70 [parseActivatedAbilities] Detected fetch land: Evolving Wilds
+activatedAbilityEngine.js:116 [parseActivatedAbilities] Detected landcycling: Lórien Revealed → Island (cost: {1})
+enhancedStepByStepGame.js:675 🔍 Creating deck behavior manifest...
+enhancedStepByStepGame.js:708 ✅ Behavior manifest created: {totalManaProducers: 22, totalFetchLands: 1, totalTokenGenerators: 12, totalCardDraw: 21}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}finishReason: "stop"hasContent: truemodel: "gpt-5-mini-2025-08-07"[[Prototype]]: Object
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+enhancedStepByStepGame.js:1880 🔍 [untap] BEFORE generateMana - Expected: 0 (lands:0 + artifacts:0 + creatures:0)
+enhancedStepByStepGame.js:1881 🔍 [untap] Land count: 0, Artifact count: 0, Creature count: 0
+gameEngine.js:493 🔍 [generateMana] Starting - Turn 1
+gameEngine.js:494 🔍 [generateMana] Battlefield: 0 lands, 0 artifacts, 0 creatures
+gameEngine.js:503 🔍 [generateMana] Pool emptied
+gameEngine.js:699 🔍 [generateMana] Final total: 0
+gameEngine.js:700 🔍 [generateMana] Final pool: {W: 0, U: 0, B: 0, R: 0, G: 0, …}
+enhancedStepByStepGame.js:1889 🔍 [untap] AFTER generateMana - Expected: 0, Actual: 0
+eventSystem.js:169 📤 Event Emitted: PHASE_CHANGED {source: 'unknown', queueSize: 1}
+eventSystem.js:169 📤 Event Emitted: CARD_DRAWN {source: 'Orcish Bowmasters', queueSize: 1}
+activatedAbilityEngine.js:116 [parseActivatedAbilities] Detected landcycling: Lórien Revealed → Island (cost: {1})
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+activatedAbilityEngine.js:116 [parseActivatedAbilities] Detected landcycling: Lórien Revealed → Island (cost: {1})
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+activatedAbilityEngine.js:116 [parseActivatedAbilities] Detected landcycling: Lórien Revealed → Island (cost: {1})
+activatedAbilityEngine.js:116 [parseActivatedAbilities] Detected landcycling: Lórien Revealed → Island (cost: {1})
+activatedAbilityEngine.js:544 [activateAbilityFromHand] ✅ Cycling ability is valid
+activatedAbilityEngine.js:572 [activateAbilityFromHand] ✅ Activating Islandcycling on Lórien Revealed from hand
+activatedAbilityEngine.js:573    Cost: 1 mana
+activatedAbilityEngine.js:574    Effect: Search your library for an Island card, reveal it,...
+activatedAbilityEngine.js:583 🔄 [activateAbilityFromHand] LANDCYCLING DETECTED: Lórien Revealed
+activatedAbilityEngine.js:584    Ability: Islandcycling
+activatedAbilityEngine.js:585    Land type to fetch: Island
+cyclingEngine.js:254 🚀 [executeLandcycling] Starting landcycling execution
+cyclingEngine.js:255    Card: Lórien Revealed
+cyclingEngine.js:256    Allowed land type: Island
+cyclingEngine.js:114 🔍 [chooseBasicLandToFetch] Analyzing which basic land to fetch (allowed: Island)
+cyclingEngine.js:118 ✅ [chooseBasicLandToFetch] Fetching required type: Island
+cyclingEngine.js:260 📋 [executeLandcycling] Decision: Fetch Island
+cyclingEngine.js:212 🔍 [searchLibraryForBasicLand] Searching for: Island
+cyclingEngine.js:233 ✅ [searchLibraryForBasicLand] Found Island at index 0
+cyclingEngine.js:307 ✅ [executeLandcycling] Removed Lórien Revealed from hand
+cyclingEngine.js:311 ✅ [executeLandcycling] Lórien Revealed moved to graveyard
+cyclingEngine.js:315 ✅ [executeLandcycling] Island added to hand
+cyclingEngine.js:17 🔀 [shuffleLibrary] Library shuffled
+cyclingEngine.js:319 ✅ [executeLandcycling] Library shuffled
+cyclingEngine.js:331 🎉 [executeLandcycling] Landcycling complete!
+cyclingEngine.js:332    Hand size: 6
+cyclingEngine.js:333    Graveyard size: 1
+cyclingEngine.js:334    Library size: 91
+activatedAbilityEngine.js:597 🎉 [activateAbilityFromHand] Landcycling complete for Lórien Revealed
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+enhancedStepByStepGame.js:1880 🔍 [untap] BEFORE generateMana - Expected: 1 (lands:1 + artifacts:0 + creatures:0)
+enhancedStepByStepGame.js:1881 🔍 [untap] Land count: 1, Artifact count: 0, Creature count: 0
+gameEngine.js:493 🔍 [generateMana] Starting - Turn 2
+gameEngine.js:494 🔍 [generateMana] Battlefield: 1 lands, 0 artifacts, 0 creatures
+gameEngine.js:503 🔍 [generateMana] Pool emptied
+gameEngine.js:699 🔍 [generateMana] Final total: 1
+gameEngine.js:700 🔍 [generateMana] Final pool: {W: 0, U: 0, B: 0, R: 0, G: 0, …}
+enhancedStepByStepGame.js:1889 🔍 [untap] AFTER generateMana - Expected: 1, Actual: 1
+eventSystem.js:169 📤 Event Emitted: PHASE_CHANGED {source: 'unknown', queueSize: 1}
+eventSystem.js:169 📤 Event Emitted: CARD_DRAWN {source: 'Mordor Muster', queueSize: 1}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+gameEngine.js:926 [castSpell] Attempting to cast Arcane Signet (cost: 2)
+gameEngine.js:927 [castSpell] Current pool: {W: 0, U: 1, B: 0, R: 0, G: 0, …} Total: 2
+gameEngine.js:936 [castSpell] ✅ Affordability check PASSED - proceeding with cast
+eventSystem.js:169 📤 Event Emitted: SPELL_CAST {source: 'Arcane Signet', queueSize: 1}
+eventSystem.js:169 📤 Event Emitted: PERMANENT_ENTERS_BATTLEFIELD {source: 'Arcane Signet', queueSize: 2}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+enhancedStepByStepGame.js:1880 🔍 [untap] BEFORE generateMana - Expected: 3 (lands:2 + artifacts:1 + creatures:0)
+enhancedStepByStepGame.js:1881 🔍 [untap] Land count: 2, Artifact count: 1, Creature count: 0
+gameEngine.js:493 🔍 [generateMana] Starting - Turn 3
+gameEngine.js:494 🔍 [generateMana] Battlefield: 2 lands, 1 artifacts, 0 creatures
+gameEngine.js:503 🔍 [generateMana] Pool emptied
+gameEngine.js:699 🔍 [generateMana] Final total: 3
+gameEngine.js:700 🔍 [generateMana] Final pool: {W: 0, U: 2, B: 0, R: 0, G: 0, …}
+enhancedStepByStepGame.js:1889 🔍 [untap] AFTER generateMana - Expected: 3, Actual: 3
+eventSystem.js:169 📤 Event Emitted: PHASE_CHANGED {source: 'unknown', queueSize: 1}
+eventSystem.js:169 📤 Event Emitted: CARD_DRAWN {source: 'Island', queueSize: 1}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+gameEngine.js:926 [castSpell] Attempting to cast Swan Song (cost: 1)
+gameEngine.js:927 [castSpell] Current pool: {W: 0, U: 3, B: 0, R: 0, G: 0, …} Total: 4
+gameEngine.js:936 [castSpell] ✅ Affordability check PASSED - proceeding with cast
+eventSystem.js:169 📤 Event Emitted: SPELL_CAST {source: 'Swan Song', queueSize: 1}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+enhancedStepByStepGame.js:1880 🔍 [untap] BEFORE generateMana - Expected: 3 (lands:3 + artifacts:0 + creatures:0)
+enhancedStepByStepGame.js:1881 🔍 [untap] Land count: 3, Artifact count: 0, Creature count: 0
+gameEngine.js:493 🔍 [generateMana] Starting - Turn 4
+gameEngine.js:494 🔍 [generateMana] Battlefield: 3 lands, 1 artifacts, 0 creatures
+gameEngine.js:503 🔍 [generateMana] Pool emptied
+gameEngine.js:699 🔍 [generateMana] Final total: 3
+gameEngine.js:700 🔍 [generateMana] Final pool: {W: 0, U: 2, B: 0, R: 0, G: 0, …}
+enhancedStepByStepGame.js:1889 🔍 [untap] AFTER generateMana - Expected: 3, Actual: 3
+eventSystem.js:169 📤 Event Emitted: PHASE_CHANGED {source: 'unknown', queueSize: 1}
+eventSystem.js:169 📤 Event Emitted: CARD_DRAWN {source: 'Dimir Signet', queueSize: 1}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+gameEngine.js:926 [castSpell] Attempting to cast Dimir Signet (cost: 2)
+gameEngine.js:927 [castSpell] Current pool: {W: 0, U: 3, B: 0, R: 0, G: 0, …} Total: 4
+gameEngine.js:936 [castSpell] ✅ Affordability check PASSED - proceeding with cast
+eventSystem.js:169 📤 Event Emitted: SPELL_CAST {source: 'Dimir Signet', queueSize: 1}
+eventSystem.js:169 📤 Event Emitted: PERMANENT_ENTERS_BATTLEFIELD {source: 'Dimir Signet', queueSize: 2}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}finishReason: "stop"hasContent: truemodel: "gpt-5-mini-2025-08-07"[[Prototype]]: Object
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+enhancedStepByStepGame.js:1880 🔍 [untap] BEFORE generateMana - Expected: 5 (lands:4 + artifacts:1 + creatures:0)
+enhancedStepByStepGame.js:1881 🔍 [untap] Land count: 4, Artifact count: 1, Creature count: 0
+gameEngine.js:493 🔍 [generateMana] Starting - Turn 5
+gameEngine.js:494 🔍 [generateMana] Battlefield: 4 lands, 2 artifacts, 0 creatures
+gameEngine.js:503 🔍 [generateMana] Pool emptied
+gameEngine.js:699 🔍 [generateMana] Final total: 6
+gameEngine.js:700 🔍 [generateMana] Final pool: {W: 0, U: 4, B: 1, R: 0, G: 0, …}
+enhancedStepByStepGame.js:1889 🔍 [untap] AFTER generateMana - Expected: 5, Actual: 6
+eventSystem.js:169 📤 Event Emitted: PHASE_CHANGED {source: 'unknown', queueSize: 1}
+eventSystem.js:169 📤 Event Emitted: CARD_DRAWN {source: 'Island', queueSize: 1}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+eventSystem.js:169 📤 Event Emitted: PERMANENT_ENTERS_BATTLEFIELD {source: 'Lord of the Nazgûl', queueSize: 1}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+enhancedStepByStepGame.js:1880 🔍 [untap] BEFORE generateMana - Expected: 5 (lands:5 + artifacts:0 + creatures:0)
+enhancedStepByStepGame.js:1881 🔍 [untap] Land count: 5, Artifact count: 0, Creature count: 0
+gameEngine.js:493 🔍 [generateMana] Starting - Turn 6
+gameEngine.js:494 🔍 [generateMana] Battlefield: 5 lands, 2 artifacts, 1 creatures
+gameEngine.js:503 🔍 [generateMana] Pool emptied
+gameEngine.js:699 🔍 [generateMana] Final total: 5
+gameEngine.js:700 🔍 [generateMana] Final pool: {W: 0, U: 4, B: 0, R: 0, G: 0, …}
+enhancedStepByStepGame.js:1889 🔍 [untap] AFTER generateMana - Expected: 5, Actual: 5
+eventSystem.js:169 📤 Event Emitted: PHASE_CHANGED {source: 'unknown', queueSize: 1}
+eventSystem.js:169 📤 Event Emitted: CARD_DRAWN {source: 'Ringwraiths', queueSize: 1}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+eventSystem.js:169 📤 Event Emitted: CREATURE_ATTACKS {source: 'Lord of the Nazgûl', queueSize: 1}queueSize: 1source: "Lord of the Nazgûl"[[Prototype]]: Object
+eventSystem.js:169 📤 Event Emitted: COMBAT_DAMAGE_DEALT {source: 'unknown', queueSize: 2}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+enhancedStepByStepGame.js:1880 🔍 [untap] BEFORE generateMana - Expected: 5 (lands:5 + artifacts:0 + creatures:0)
+enhancedStepByStepGame.js:1881 🔍 [untap] Land count: 5, Artifact count: 0, Creature count: 0
+gameEngine.js:493 🔍 [generateMana] Starting - Turn 7
+gameEngine.js:494 🔍 [generateMana] Battlefield: 5 lands, 2 artifacts, 1 creatures
+gameEngine.js:503 🔍 [generateMana] Pool emptied
+gameEngine.js:699 🔍 [generateMana] Final total: 5
+gameEngine.js:700 🔍 [generateMana] Final pool: {W: 0, U: 4, B: 0, R: 0, G: 0, …}
+enhancedStepByStepGame.js:1889 🔍 [untap] AFTER generateMana - Expected: 5, Actual: 5
+eventSystem.js:169 📤 Event Emitted: PHASE_CHANGED {source: 'unknown', queueSize: 1}
+eventSystem.js:169 📤 Event Emitted: CARD_DRAWN {source: 'Borne Upon a Wind', queueSize: 1}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+gameEngine.js:926 [castSpell] Attempting to cast Borne Upon a Wind (cost: 2)
+gameEngine.js:927 [castSpell] Current pool: {W: 0, U: 4, B: 0, R: 0, G: 0, …} Total: 5
+gameEngine.js:936 [castSpell] ✅ Affordability check PASSED - proceeding with cast
+eventSystem.js:169 📤 Event Emitted: SPELL_CAST {source: 'Borne Upon a Wind', queueSize: 1}
+eventSystem.js:169 📤 Event Emitted: CARD_DRAWN {source: 'Barad-dûr', queueSize: 1}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+enhancedStepByStepGame.js:1880 🔍 [untap] BEFORE generateMana - Expected: 6 (lands:6 + artifacts:0 + creatures:0)
+enhancedStepByStepGame.js:1881 🔍 [untap] Land count: 6, Artifact count: 0, Creature count: 0
+gameEngine.js:493 🔍 [generateMana] Starting - Turn 8
+gameEngine.js:494 🔍 [generateMana] Battlefield: 6 lands, 2 artifacts, 2 creatures
+gameEngine.js:503 🔍 [generateMana] Pool emptied
+gameEngine.js:699 🔍 [generateMana] Final total: 6
+gameEngine.js:700 🔍 [generateMana] Final pool: {W: 0, U: 4, B: 1, R: 0, G: 0, …}
+enhancedStepByStepGame.js:1889 🔍 [untap] AFTER generateMana - Expected: 6, Actual: 6
+eventSystem.js:169 📤 Event Emitted: PHASE_CHANGED {source: 'unknown', queueSize: 2}
+eventSystem.js:169 📤 Event Emitted: CARD_DRAWN {source: 'The Black Gate', queueSize: 1}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+gameEngine.js:926 [castSpell] Attempting to cast Mordor Muster (cost: 2)
+gameEngine.js:927 [castSpell] Current pool: {W: 0, U: 4, B: 1, R: 0, G: 0, …} Total: 6
+gameEngine.js:936 [castSpell] ✅ Affordability check PASSED - proceeding with cast
+eventSystem.js:169 📤 Event Emitted: SPELL_CAST {source: 'Mordor Muster', queueSize: 1}
+eventSystem.js:169 📤 Event Emitted: CARD_DRAWN {source: "Shelob's Ambush", queueSize: 1}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+eventSystem.js:169 📤 Event Emitted: CREATURE_ATTACKS {source: '3/3 Black Wraith Token', queueSize: 2}
+eventSystem.js:169 📤 Event Emitted: COMBAT_DAMAGE_DEALT {source: 'unknown', queueSize: 3}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+enhancedStepByStepGame.js:1880 🔍 [untap] BEFORE generateMana - Expected: 7 (lands:7 + artifacts:0 + creatures:0)
+enhancedStepByStepGame.js:1881 🔍 [untap] Land count: 7, Artifact count: 0, Creature count: 0
+gameEngine.js:493 🔍 [generateMana] Starting - Turn 9
+gameEngine.js:494 🔍 [generateMana] Battlefield: 7 lands, 2 artifacts, 3 creatures
+gameEngine.js:503 🔍 [generateMana] Pool emptied
+gameEngine.js:699 🔍 [generateMana] Final total: 7
+gameEngine.js:700 🔍 [generateMana] Final pool: {W: 0, U: 4, B: 2, R: 0, G: 0, …}
+enhancedStepByStepGame.js:1889 🔍 [untap] AFTER generateMana - Expected: 7, Actual: 7
+eventSystem.js:169 📤 Event Emitted: PHASE_CHANGED {source: 'unknown', queueSize: 1}
+eventSystem.js:169 📤 Event Emitted: CARD_DRAWN {source: 'Evolving Wilds', queueSize: 1}
+activatedAbilityEngine.js:70 [parseActivatedAbilities] Detected fetch land: Evolving Wilds

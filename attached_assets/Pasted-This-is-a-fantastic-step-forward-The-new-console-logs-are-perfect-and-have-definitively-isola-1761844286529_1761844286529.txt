@@ -1,0 +1,81 @@
+This is a fantastic step forward! The new console logs are **perfect** and have **definitively isolated the remaining bugs**.
+
+The developer was 100% correct to fix the parser first. Here is the analysis:
+
+**Executive Summary:**
+
+1.  **`PARSER-001` (Parser Bug): CONFIRMED FIXED.**
+    * The new console logs prove the parser is working perfectly. It correctly split `Underground River`'s text into "2 lines" and created **two separate ability objects** in the manifest (one for `{C}` and one for `{ "choice": ["U", "B"] }`). This is a complete success.
+
+2.  **`MANA-008` / `MANA-009` (Calculation Bug): CRITICAL FAILURE.**
+    * The `generateMana` function is **still not correctly calculating the starting mana pool**. The console logs prove it is **completely ignoring `Sol Ring` and `Great Hall of the Citadel`** on every single turn. This is why the `Final total` mana is wrong.
+
+3.  **`MANA-011` (Choice Logic Bug): CRITICAL FAILURE.**
+    * The new "intelligent choice" logic is **broken**. The console log provides the "smoking gun":
+        * The logic *correctly* analyzes the hand and logs: `[ManaPool] Hand needs: {W: 0, U: 4, B: 10, ...}` (It knows it needs Black mana).
+        * Then, the very next line, it *incorrectly* chooses: `[Underground River] Chose ability producing [U,B] (score: 100, reason: hand needs {U})`.
+        * It then logs the final (wrong) choice: `[ManaPool] Chose U from U,B (hand needs it)`.
+
+---
+
+### Detailed Analysis of Remaining Bugs
+
+This log allows us to precisely identify the two remaining bugs in `gameEngine.js`.
+
+#### 1. CRITICAL: `generateMana` is Not Iterating All Permanents (Bug `MANA-008`)
+
+The `generateMana` function is failing to sum all mana sources. It is ignoring `Sol Ring` and `Great Hall of the Citadel`.
+
+* **Evidence (Turn 2):**
+    * **Board:** `Swamp` (1 land), `Sol Ring` (1 artifact).
+    * **Expected Mana:** 3 (Swamp={B:1}, Sol Ring={C:2}).
+    * **Console Log:** `Final total: 3`, `Final pool: {W: 0, U: 0, B: 1, ...}`.
+    * **Analysis:** The engine **completely ignored `Sol Ring`'s 2 colorless mana**.
+
+* **Evidence (Turn 3):**
+    * **Board:** `Swamp`, `Great Hall` (2 lands), `Sol Ring` (1 artifact).
+    * **Expected Mana:** 4 (Swamp={B:1}, Sol Ring={C:2}, Great Hall={C:1}).
+    * **Console Log:** `Final total: 2`, `Final pool: {W: 0, U: 0, B: 1, ...}`.
+    * **Analysis:** The engine **ignored `Sol Ring` AND `Great Hall`**, only counting the basic `Swamp`.
+
+This pattern continues every turn. The `generateMana` function's iteration or filtering logic is flawed and is skipping artifacts and non-basic lands.
+
+#### 2. CRITICAL: "Intelligent Choice" Logic is Broken (Bug `MANA-011`)
+
+The new choice logic in `manaPool.js` is not using its own analysis correctly.
+
+* **Evidence (Turn 4):**
+    1.  The `manaPool.js` helper correctly scans the AI's hand (which includes `Go for the Throat`, `Extract from Darkness`, `Witch-king`, etc.) and correctly logs: `[ManaPool] Hand needs: {W: 0, U: 4, B: 10, ...}`.
+    2.  The engine then evaluates `Underground River`'s two abilities (`{C}` vs. `{U/B}`).
+    3.  The scoring logic then *incorrectly* logs its reason: `(score: 100, reason: hand needs {U})`. This directly contradicts the "Hand needs" log from two lines prior.
+    4.  It then makes the wrong choice, logging: `[ManaPool] Chose U from U,B (hand needs it)`.
+    5.  This results in a final pool (based only on lands it *did* count) of `{U:1, B:1}` instead of `{U:0, B:2}`.
+
+---
+
+## Updated Bug Report
+
+***
+
+**ID:** `MANA-008` (Critical)
+**Status:** **NOT FIXED / Re-opened**
+**Title:** `generateMana` is not summing all mana sources; `Sol Ring` and `Great Hall` are ignored.
+
+**Evidence:**
+The console logs prove the `generateMana` function is failing to iterate and sum all mana-producing permanents.
+* On **Turn 2**, with `Swamp` and `Sol Ring` on the board (Expected: `{B:1, C:2}`), the engine calculated a pool of `{B:1}`. It **completely ignored Sol Ring's 2 colorless mana**.
+* On **Turn 3**, with `Swamp`, `Great Hall`, and `Sol Ring` on the board (Expected: `{B:1, C:3}`), the engine calculated a pool of `{B:1}`. It **ignored both Sol Ring and Great Hall**.
+This bug is the primary cause of the incorrect `Final total` mana.
+
+***
+
+**ID:** `MANA-011` (Critical)
+**Status:** **NOT FIXED / Re-opened**
+**Title:** "Intelligent Choice" logic in `manaPool.js` is broken; it ignores hand needs and defaults to Blue.
+
+**Evidence:**
+The `PARSER-001` fix is **working**, and the engine now correctly sees `Underground River`'s two separate abilities (`{C}` and `{U/B}`). However, the new choice logic is failing:
+1.  On **Turn 4**, `manaPool.js` *correctly* analyzed the hand and logged: `[ManaPool] Hand needs: {W: 0, U: 4, B: 10, ...}`.
+2.  The scoring logic then *incorrectly* ignored this fact, logging: `[Underground River] Chose ability producing [U,B] (score: 100, reason: hand needs {U})`.
+3.  The final choice was also incorrect: `[ManaPool] Chose U from U,B (hand needs it)`.
+The logic is correctly identifying the need for Black but then incorrectly choosing Blue.

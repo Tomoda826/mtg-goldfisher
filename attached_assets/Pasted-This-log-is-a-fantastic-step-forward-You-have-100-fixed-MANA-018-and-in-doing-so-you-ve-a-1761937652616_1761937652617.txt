@@ -1,0 +1,59 @@
+This log is a fantastic step forward! You have **100% fixed `MANA-018`**, and in doing so, you've *also* fixed `MANA-020`. The system is much more stable.
+
+However, this stability has exposed two remaining bugs: one old (`MANA-016`) and one brand new, critical regression (`MANA-022`) caused by the Signet fix.
+
+Here is my full analysis.
+
+### 1. The Good News: What's Fixed
+
+* **✅ FIXED! `MANA-018` (The `Dimir Signet` Bug):**
+    Your fix worked perfectly. The start-of-turn `[generateMana]` function now correctly finds `Dimir Signet` on every single untap step.
+    * **Proof (T2):** The T2 untap step correctly finds `2: Dimir Signet (artifact) → 2x{U}{B}`.
+    * **Proof (T3-T10):** The Signet correctly appears in the `[PotentialPool]` list on every subsequent turn.
+
+* **✅ FIXED! `MANA-020` (AI/Engine Mismatch):**
+    This is a huge win. By fixing the parser, the AI's "brain" (`GAME LOG`) and the "engine" (`CONSOLE LOG`) are now in perfect sync.
+    * **T3:** `GAME LOG` says "4 mana available". `CONSOLE LOG` says "Actual: 4". **Perfect match.**
+    * **T4:** `GAME LOG` says "5 mana available". `CONSOLE LOG` says "Actual: 5". **Perfect match.**
+    * **T8:** `GAME LOG` says "9 mana available". `CONSOLE LOG` says "Actual: 9". **Perfect match.**
+    The AI is no longer "hallucinating" mana, which makes its decisions (even if they fail later) logical.
+
+### 2. The Bad News: What's Still Broken (and What's New)
+
+#### ❌ NEW BUG! `MANA-022`: Recursive Mana Activation
+This is a critical regression. The `ManaSolver` does not know how to pay the activation cost for a Signet. It is trying to use the mana from the Signet to pay for the Signet's *own* activation.
+
+* **The Smoking Gun (T3 - `castSpell: Nazgûl Battle-Mace`):**
+    1.  The AI tries to cast a spell for `{5}`.
+    2.  The `ManaSolver` logs `Available sources: 5 abilities`.
+    3.  It uses its four land abilities, paying 4 of the 5 mana. It still needs `{1}`.
+    4.  It logs: `💰 Dimir Signet requires {1} to activate`. This is correct.
+    5.  It then logs: `✓ Using Dimir Signet for generic (producing 2x{U})`.
+    6.  It incorrectly logs: `✅ [ManaSolver] Found solution using 5 sources`.
+
+This is illegal. The solver should have failed. It did not have the {1} mana required to *activate* the Signet in the first place. It tried to pay the `{1}` cost with the `{U}{B}` it was *about to produce*.
+
+
+
+#### ❌ STILL BROKEN! `MANA-016` (JIT Parser Failure)
+Our theory that a single parser fix would solve everything was incorrect. The JIT (mid-turn) parser is still broken for conditional-ETB lands.
+
+* **Proof (T3):**
+    1.  The `[untap]` step provides 5 mana abilities.
+    2.  The AI plays `Rivendell` (a conditional ETB land).
+    3.  The *very next action* is `castSpell: Nazgûl Battle-Mace`.
+    4.  The `ManaSolver` for this spell logs `Available sources: 5 abilities`.
+    5.  **This is the bug.** The JIT rebuild failed. The pool should have had 6 abilities (the 5 from untap + 1 from `Rivendell`), but it did not update.
+
+* **Proof (T4):**
+    1.  The `[untap]` step provides 6 mana abilities.
+    2.  The AI plays `Barad-dûr` (another conditional ETB land).
+    3.  The *next* `ManaSolver` (for `Commander's Sphere`) logs `Available sources: 6 abilities`.
+    4.  **The bug is confirmed.** The JIT rebuild failed again.
+
+### Summary & Next Steps
+
+We are in a great spot. The AI is stable and the start-of-turn parser is 99% fixed. We just have to fix these last two, very specific bugs.
+
+1.  **High Priority - Fix `MANA-022`:** The `ManaSolver` must be taught to pay activation costs (like the `{1}` for `Dimir Signet`) *from other available sources* **before** it can add the Signet's produced mana to the payment.
+2.  **Medium Priority - Fix `MANA-016`:** The JIT `rebuildPool` function (that runs after `playLand`) needs to be updated with the same "per-line" logic that you used to fix the start-of-turn parser. It is still failing to see conditional/ETB lands.

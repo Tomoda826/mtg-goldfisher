@@ -1,0 +1,73 @@
+Okay, I have reviewed both the UI game log and the detailed console log. This combined view is very insightful!
+
+**Executive Summary:**
+
+The good news continues:
+1.  **Intra-phase mana tracking** (adding mana after `playLand`, subtracting after `castSpell`) appears **correct and functional**. Multi-spell turns work based on the available pool.
+2.  **0-cost activations** (Landcycling in this case) are working correctly in both the engine and AI logic.
+
+However, the **critical bug** (`MANA-007`) in the `Untap & Generate Mana` step **persists**. The console log definitively proves that the calculation of the starting mana pool at the beginning of each turn is incorrect and does not reflect the actual permanents on the battlefield.
+
+---
+
+### Bug Analysis: `Untap & Generate Mana` Calculation Failure (MANA-007 Still Open)
+
+The console log provides clear evidence that the `generateMana` function (between lines `gameEngine.js:493` and `gameEngine.js:700`) is the source of the incorrect starting mana pool.
+
+1.  **Incorrect Mana Totals:** The `Final total:` calculated by `generateMana` does not match the expected mana from the permanents listed in the `Battlefield:` line just before it.
+    * **Turn 3:**
+        * Console lists: 2 lands (`Great Hall`, `Island`), 1 artifact (`Arcane Signet`).
+        * Expected Mana: 2 (Island=1U, Signet=1(U/B)). `Great Hall` produces 0 passively. Total should be `{U:1 or B:1, C:1}` = 2 mana.
+        * Console Calculates: `Final total: 3`. `Final pool: {U: 2, ...}`. **(Incorrect total and color)**.
+    * **Turn 4:**
+        * Console lists: 3 lands (`GH`, `I`, `I`), 1 artifact (`AS`).
+        * Expected Mana: 3 (Island=1U, Island=1U, Signet=1(U/B)). Total should be `{U:2 or U:1+B:1, C:1}` = 3 mana.
+        * Console Calculates: `Final total: 3`. `Final pool: {U: 2, ...}`. **(Incorrect color)**.
+    * **Turn 5:**
+        * Console lists: 4 lands (`GH`, `I`, `I`, `I`), 2 artifacts (`AS`, `Dimir Signet`).
+        * Expected Mana: 5 (Island*3=3U, AS=1(U/B), DS=1(U/B)). Total should be something like `{U:3, B:2}` = 5 mana.
+        * Console Calculates: `Final total: 6`. `Final pool: {U: 4, B: 1, ...}`. **(Incorrect total and color)**.
+    * **Turn 6:**
+        * Console lists: 5 lands (`GH`, `I`, `I`, `I`, `I`), 2 artifacts (`AS`, `DS`), 1 creature (`LotN`).
+        * Expected Mana: 6 (Island*4=4U, AS=1(U/B), DS=1(U/B)). Total should be something like `{U:4, B:2}` = 6 mana.
+        * Console Calculates: `Final total: 5`. `Final pool: {U: 4, ...}`. **(Incorrect total and color)**.
+
+2.  **Inconsistent Permanent Counting (Internal Logging Bug):** The `BEFORE generateMana` line in the console log often reports incorrect counts (e.g., 0 artifacts when artifacts are present), even though the `generateMana` function itself logs the correct counts immediately after. This indicates a separate minor bug in the pre-calculation logging, but the main issue is the calculation itself within `generateMana`.
+
+3.  **UI Log Display Bug:** As noted before, the UI log's `"X lands = Y mana available"` text is misleading and doesn't reflect the console log's counts or totals.
+
+---
+
+### Status of Other Items
+
+* **Intra-Phase Mana Tracking:** **Working Correctly.** The console logs confirm mana is added after `playLand` and subtracted correctly after `castSpell`, allowing multi-spell turns based on the available (albeit incorrectly calculated starting) pool.
+* **AI Fetch/Cycling Logic:** **Working Correctly.** The AI correctly identified and used Islandcycling on `Lórien Revealed`. The fetch land bug (`AI-LOGIC-002`) could not be re-tested as `Evolving Wilds` was not played.
+
+---
+
+## Updated Bug Report
+
+***
+
+**ID:** MANA-008
+**Priority:** Critical
+**Status:** Open
+
+### Summary
+
+The **`generateMana` function (gameEngine.js)**, executed during the `Untap` step, is calculating the starting mana pool incorrectly. Console logs confirm that while the function correctly identifies the number of lands and artifacts on the battlefield, the resulting `Final total` mana and the specific `Final pool` colors often do not match the expected output based on the permanents present. It appears to be miscalculating or ignoring the mana contributions of certain permanents (potentially Signets or specific lands). This incorrect starting pool invalidates the simulation, even though the subsequent intra-phase mana tracking (adding/subtracting mana from actions) appears functional.
+
+### Evidence
+
+* **Turn 3:** Console reports 2 lands, 1 artifact. Expected mana: 2. Calculated: 3 total, pool `{U: 2, ...}`.
+* **Turn 5:** Console reports 4 lands, 2 artifacts. Expected mana: 5. Calculated: 6 total, pool `{U: 4, B: 1, ...}`.
+* **Turn 6:** Console reports 5 lands, 2 artifacts, 1 creature. Expected mana: 6. Calculated: 5 total, pool `{U: 4, ...}`.
+
+### Recommendation
+
+1.  **Debug `generateMana` Function (gameEngine.js):** Deeply inspect the logic within this function. Verify how it iterates through permanents and how it sums mana based on their parsed abilities. Pay close attention to:
+    * How Signets (`Arcane Signet`, `Dimir Signet`) contribute mana (should be 1 mana of specific colors).
+    * How lands with specific conditions (`Great Hall of the Citadel`) contribute mana (should be 0 passively).
+    * Ensure the color calculation is accurate (e.g., adding `{U}` increments the `U` count, not just the total).
+2.  **(Optional) Improve Console Logging:** Add logging within `generateMana` to show *which* permanent is contributing *what* mana (e.g., "Island added {U}, Signet added {B}") to make debugging easier.
+3.  **(Low Priority) Fix UI/Console Display Bugs:** Correct the misleading land/artifact counts in the UI log's `Untap` line and the console's `BEFORE generateMana` line after the main calculation logic is fixed.

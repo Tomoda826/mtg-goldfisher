@@ -1,0 +1,24 @@
+Updated Bug Report
+ID: MANA-007 Priority: Critical Status: Open
+
+Summary
+The Untap & Generate Mana function is still providing an incorrect starting mana pool each turn. While it now acknowledges artifacts in the log text, the actual mana calculation does not reflect the permanents on the battlefield and appears stuck at providing "3 mana" from Turn 4 onwards, ignoring newly played lands and mana from artifacts like Arcane Signet. This remains the primary blocker. The intra-phase mana tracking continues to work correctly based on this flawed starting value.
+
+ID: AI-LOGIC-002 Priority: High Status: Open
+
+Summary
+The AI's logic for activating fetch lands (Evolving Wilds) is broken. While the engine now correctly processes 0-cost activations, the AI attempts to activate Evolving Wilds repeatedly across multiple turns, long after it should have been sacrificed. It also occasionally attempts invalid activations (e.g., trying to activate a basic land from hand or using incorrect action formatting).
+
+Observed Behavior
+The AI correctly identifies the need to use Evolving Wilds early.
+
+It incorrectly attempts to activate a basic Swamp instead of Evolving Wilds initially on T1.
+
+It then attempts to activate Evolving Wilds multiple times within the same phase and across subsequent turns (T1, T2, T3, T4, T5, T6, T7), even though the fetch land should only be activated once.
+
+On T6, it uses an invalid action format (Evolving Wilds -> Island).
+
+Recommendation
+Fix Untap Mana Calculation (MANA-007): Focus entirely on making the Untap & Generate Mana function iterate through gameState.battlefield, read parsed mana abilities for all permanents (lands, artifacts, creatures), and sum the actual mana produced. Ignore heuristics.
+
+Fix AI State Tracking (AI-LOGIC-002): The AI needs to correctly track the state of permanents. Once Evolving Wilds is sacrificed via activateAbility, it should be removed from the AI's perceived list of available permanents/abilities for future turns. The AI should only attempt to activate abilities on permanents currently on the battlefield.

@@ -1,0 +1,873 @@
+
+GAME LOG:
+
+setup
+Game initialized
+Drew opening hand of 7 cards
+Island
+Sunken Hollow
+Mordor Muster
+Opt
+Ringwraiths
+Sunken Ruins
+The Grey Havens
+T0
+setup
+Token Analysis
+Deck contains 10 token-generating cards
+T0
+setup
+Scry Analysis
+Deck contains 3 scry effects (total scry 5)
+T0
+setup
+Activated Ability Analysis
+Deck contains 22 activated abilities
+T0
+setup
+🔍 DEBUG: Lórien Revealed Abilities
+Found 1 abilities on Lórien Revealed
+T0
+setup
+🧠 Deck Behavior Analysis
+Analyzed 35 card abilities
+T0
+pre-game
+Deck Analysis Complete
+Strategy: undefined | Target Win: Turn undefined
+T0
+mulligan
+Hand Evaluation
+This hand meets the lenient mulligan criteria from the playbook. You have 2–3+ early mana sources (actually 4 lands) and a cantrip (Opt), which are the core must-haves. While you don’t have a Sol Ring/Signet or immediate commander protection/removal in hand, the Opt + Mordor Muster give card selection and a small draw engine to find accelerants or protection in the next few turns. Mordor Muster also produces a creature and a card, so it’s at least a productive early play if you need board presence. Sunken Hollow may enter tapped unless you have two basics, but you still have multiple usable lands to hit your first few turns and get the commander out in a few turns to start the Wraith engine. Given the deck’s tolerance for slower starts as long as you have cantrips and land, this hand is “good enough” to execute the gameplan.
+T0
+pre-game
+Opening Hand Kept
+Starting with 7 cards
+Island
+Sunken Hollow
+Mordor Muster
+Opt
+Ringwraiths
+Sunken Ruins
+The Grey Havens
+T1
+beginning
+=== NEW TURN ===
+Starting turn 1
+T1
+untap
+Untap & Generate Mana
+All permanents untapped. 0 lands = 0 mana available.
+T1
+draw
+Draw Card
+Drew Go for the Throat (instant)
+T1
+main1
+Main Phase 1
+Executing strategy focused on our win condition
+T1
+main1
+MANA
+AI Strategic Decision
+Play The Grey Havens (index 6). It enters untapped and gives an immediate scry 1 on ETB, which is superior to a basic Island this turn because it provides card filtering plus a usable land for future turns. This advances the early-game plan (establishing reliable mana while improving card quality) without risking a tapped dual (Sunken Hollow) or waiting to activate land abilities later.
+T1
+main1
+MANA
+playLand: 6
+Played The Grey Havens
+✓
+T1
+main1
+PASS
+AI Strategic Decision
+Available mana is 1 colorless only. I've already played my land for the turn, and there are no spells in hand that cost 1 colorless (Opt and the others require colored mana or more total mana). No battlefield activated abilities are available to use. Therefore I cannot legally or productively cast anything this main phase, so the optimal play is to pass.
+T1
+main1
+PASS
+AI Strategic Decision
+You have 1 total mana (colorless) in the pool and you've already made your land drop this turn. Every spell in hand requires colored or additional mana (Opt needs {U}; Mordor Muster and Go for the Throat need {B} plus more; Ringwraiths is far too expensive). There are no 0-cost/battlefield activated abilities to use. Playing another land is illegal (land already played). Given the CRITICAL MANA RULES, no productive cast or activation is possible, so passing is the correct play to preserve tempo for next turn.
+T1
+main1
+End Phase
+Passed twice - ending phase
+T1
+combat
+Combat Phase
+Entering combat with 0 creatures and 0 tokens
+T1
+combat
+⚔️ Combat Phase
+No creatures available to attack
+✗
+T1
+main2
+Main Phase 2
+Post-combat - deploying remaining resources
+T1
+main2
+PASS
+AI Strategic Decision
+No legal plays available with the current mana. I have already played my land for the turn, and my mana pool is 1 colorless only. Every castable spell in hand requires colored mana or more total mana (Opt needs {U}; Mordor Muster and Go for the Throat need {B} plus extra; Ringwraiths is far too expensive). There are no 0-cost abilities or cycling options in hand to use. Therefore the optimal play is to pass and preserve tempo for next turn.
+T1
+main2
+PASS
+AI Strategic Decision
+No legal casts or activations are available with the current mana and board state. I have already played my land for the turn, and the pool shows 1 colorless (no colored mana). Every spell in hand requires at least one colored pip or more total mana (Opt needs {U}; Mordor Muster and Go for the Throat need {B} plus extra; Ringwraiths/commander are far too expensive). Per the critical rules I cannot (and must not) manually activate land mana abilities to try to pay costs. Therefore the only correct action is to pass and preserve resources for turn 2.
+T1
+main2
+End Phase
+Passed twice - ending phase
+T1
+end
+End Turn
+Turn 1 complete. Total damage: 0/40
+T2
+beginning
+=== NEW TURN ===
+Starting turn 2
+T2
+untap
+Untap & Generate Mana
+All permanents untapped. 1 lands = 1 mana available.
+T2
+draw
+Draw Card
+Drew Shelob's Ambush (instant)
+T2
+main1
+Main Phase 1
+Executing strategy focused on our win condition
+T2
+main1
+MANA
+AI Strategic Decision
+Primary priority is to make my land drop. Playing the Island is the safest, immediate play: it's a basic that won't enter tapped and preserves future options (it will help Sunken Hollow enter untapped later if I play it). This advances my mana base for upcoming turns and leaves my 1 mana pool untouched for instant-speed responses if needed.
+T2
+main1
+MANA
+playLand: Island
+Played Island
+✓
+T2
+main1
+ENGINE
+AI Strategic Decision
+Cast Opt (U). With 2 blue available, the best use is a cheap cantrip: it advances the early-game plan (card selection/draw toward Lord of the Nazgûl and other pieces) and is mana-efficient. It's instant-speed, so resolving it now lets me dig for answers/threats while still leaving 1 blue open for responses on opponents' turn. No other playable spells or useful activated abilities are available that improve the board more this turn.
+T2
+main1
+💰 Mana After Cast
+T2
+main1
+💰 Mana After Cast
+T2
+main1
+Scry (Spell Effect): Opt
+Scry 1: Kept 1 on top, sent 0 to bottom
+✓
+T2
+main1
+📖 Draw Effect
+Drew 1 card(s): Not Dead After All
+✓
+T2
+main1
+ENGINE
+castSpell: 2
+Cast Opt ({U})
+✓
+T2
+main1
+PASS
+AI Strategic Decision
+I have 1 blue mana available but no playable spells that require only U. All castable spells in hand require black or more total mana (Mordor Muster, Go for the Throat, Shelob's Ambush, Not Dead After All, Ringwraiths) or are lands (can't play a land this turn — land drop already used). Commander costs also unaffordable. Because nothing legal can be cast right now, the correct play is to pass and preserve the game state for my next turn.
+T2
+main1
+PASS
+AI Strategic Decision
+I have only 1 blue mana available and no legal spells or activatable hand abilities I can pay for: all non-land cards in hand require black or more total mana, and some require creature targets (which I don't have). I have already used my land drop this turn, so I cannot play a land to fix colors. Casting nothing is forced — passing preserves game state so I can play a land and/or cast ramp or Lord of the Nazgûl next turn and follows the early-game plan.
+T2
+main1
+End Phase
+Passed twice - ending phase
+T2
+combat
+Combat Phase
+Entering combat with 0 creatures and 0 tokens
+T2
+combat
+⚔️ Combat Phase
+No creatures available to attack
+✗
+T2
+main2
+Main Phase 2
+Post-combat - deploying remaining resources
+T2
+main2
+PASS
+AI Strategic Decision
+I have only 1 blue mana available and I've already played my land for the turn. None of the non-land cards in hand are castable with only {U} (they all require black or more total mana). There are no hand-activatable abilities to use. Per the critical mana rules, passing preserves the mana/state for next turn and is the correct play.
+T2
+main2
+PASS
+AI Strategic Decision
+I have only {U} available and I've already played my land this turn. None of the spells in hand can be cast with a single blue mana (they all require black or more total mana), and there are no hand-activatable abilities or battlefield activations available. Per the critical mana rules, passing preserves the game state and is the correct, mana-efficient play.
+T2
+main2
+End Phase
+Passed twice - ending phase
+T2
+end
+End Turn
+Turn 2 complete. Total damage: 0/40
+T3
+beginning
+=== NEW TURN ===
+Starting turn 3
+T3
+untap
+Untap & Generate Mana
+All permanents untapped. 2 lands = 2 mana available.
+T3
+draw
+Draw Card
+Drew Tainted Isle (land)
+T3
+main1
+Main Phase 1
+Executing strategy focused on our win condition
+T3
+main1
+MANA
+AI Strategic Decision
+First priority is a land drop. Play Sunken Ruins (hand index 3) to increase future mana options without the enter-tapped drawback Sunken Hollow would have and without the conditional restriction Tainted Isle has (needs a Swamp). Sunken Ruins gives a reliable {C} now and later can produce U/U, U/B, or B/B with its activated ability, helping enable casting Lord of the Nazgûl on the next turn and improving color flexibility for removal or commander play. No castable spells this turn (all spells in hand require black), so a land drop is the highest-impact, mana-building play.
+T3
+main1
+MANA
+playLand: 3
+Played Sunken Ruins
+✓
+T3
+main1
+PASS
+AI Strategic Decision
+No playable spells or abilities are available given the current mana/colors and that a land has already been played this turn. Available mana is 3 (U:2, C:1) and every spell in hand requires black mana ({B}). Commander requires {3}{U}{B} and is not castable. There are no 0-cost or hand-activatable abilities to use. Per the critical rules, we must not try to tap lands manually. Therefore the optimal play is to pass and preserve the mana for the next turn.
+T3
+main1
+PASS
+AI Strategic Decision
+No playable spells or abilities this main phase. Available mana is 3 (U:2, C:1) and every spell in hand (including the commander) requires at least one {B}, which we do not have. A land has already been played this turn, there are no battlefield 0-cost activations to use, and per the critical rules we must not manually activate mana abilities. Therefore the only correct play this step is to pass and preserve board state for the next turn.
+T3
+main1
+End Phase
+Passed twice - ending phase
+T3
+combat
+Combat Phase
+Entering combat with 0 creatures and 0 tokens
+T3
+combat
+⚔️ Combat Phase
+No creatures available to attack
+✗
+T3
+main2
+Main Phase 2
+Post-combat - deploying remaining resources
+T3
+main2
+PASS
+AI Strategic Decision
+No legal casts or activations available. Available mana is 3 (U:2, C:1) but every spell in hand requires at least one {B} (including the commander), and a land has already been played this turn, so no land drop is possible. There are also no battlefield activated abilities or cycling/hand activations to use. Under the critical mana rules, the correct play is to pass and preserve mana/options for the next turn.
+T3
+main2
+PASS
+AI Strategic Decision
+You have 3 mana (U:2, C:1) but every spell in hand and the commander require at least one {B}. You have already played a land this turn, and there are no battlefield or hand abilities you can activate to spend mana. Under the CRITICAL MANA RULES, you cannot generate additional mana manually and should not pass with castable options. Since nothing in hand is castable with the current pool and no activated abilities are available, the optimal play is to pass and preserve the mana/state for the opponent turn.
+T3
+main2
+End Phase
+Passed twice - ending phase
+T3
+end
+End Turn
+Turn 3 complete. Total damage: 0/40
+T4
+beginning
+=== NEW TURN ===
+Starting turn 4
+T4
+untap
+Untap & Generate Mana
+All permanents untapped. 3 lands = 3 mana available.
+T4
+draw
+Draw Card
+Drew Nazgûl (creature - has ETB effect!)
+T4
+main1
+Main Phase 1
+Executing strategy focused on our win condition
+T4
+main1
+MANA
+AI Strategic Decision
+Play Sunken Hollow (hand index 0). Priority #1 is a land drop to advance the mana base toward casting black spells (Nazgûl, removal, etc.) next turn. Sunken Hollow will give reliable U/B production going forward (even though it will enter tapped this turn because I only control one basic), which is more useful for our gameplan than Tainted Isle (which only produces U/B if we control a Swamp). We currently have no black in our available mana pool, so playing a dual that grants black next turn is the best use of this action.
+T4
+main1
+MANA
+playLand: 0
+Played Sunken Hollow
+🧠 AI Reasoning: Play Sunken Hollow (hand index 0). Priority #1 is a land drop to advance the mana base toward casting black spells (Nazgûl, removal, etc.) next turn. Sunken Hollow will give reliable U/B production going forward (even though it will enter tapped this turn because I only control one basic), which is more useful for our gameplan than Tainted Isle (which only produces U/B if we control a Swamp). We currently have no black in our available mana pool, so playing a dual that grants black next turn is the best use of this action.
+✓
+T4
+main1
+PASS
+AI Strategic Decision
+I have 3 mana (U:2, C:1) but every spell in hand requires at least one black mana. I've already taken my land drop this turn, so I cannot play Tainted Isle to enable black mana. There are no battlefield activated abilities to use. Because I cannot legally cast or activate anything productive this main phase, passing is the correct play.
+T4
+main1
+PASS
+AI Strategic Decision
+All castable spells in hand require at least one black mana. Current available mana is 3 total (U:2, C:1) with 0 black, and the land drop for this turn has already been used, so I cannot play Tainted Isle to enable black. There are no battlefield activated abilities available to use. Because I cannot legally cast or activate anything productive this main phase, passing is the correct play.
+T4
+main1
+End Phase
+Passed twice - ending phase
+T4
+combat
+Combat Phase
+Entering combat with 0 creatures and 0 tokens
+T4
+combat
+⚔️ Combat Phase
+No creatures available to attack
+✗
+T4
+main2
+Main Phase 2
+Post-combat - deploying remaining resources
+T4
+main2
+PASS
+AI Strategic Decision
+I cannot legally cast any spells — every card in hand requires at least one black mana and my pool is 3 total (U:2, C:1) with 0 black. I have already used my land drop this turn, so I cannot play Tainted Isle to try to fix colors. There are no battlefield activated abilities I can use from hand. Because no productive, legal play is available, passing is correct.
+T4
+main2
+PASS
+AI Strategic Decision
+I cannot legally cast any spells this step: every card in hand requires at least one black mana and my pool is 3 total (U:2, C:1) with 0 black. I've already used my land drop so I cannot play Tainted Isle to fix colors. There are no hand-activatable abilities or 0-cost plays available. Per the critical mana rules, I must have the required colors and sufficient total—so the only legal and correct action is to pass.
+T4
+main2
+End Phase
+Passed twice - ending phase
+T4
+end
+End Turn
+Turn 4 complete. Total damage: 0/40
+T5
+beginning
+=== NEW TURN ===
+Starting turn 5
+T5
+untap
+Untap & Generate Mana
+All permanents untapped. 4 lands = 4 mana available.
+T5
+draw
+Draw Card
+Drew Swamp (land)
+T5
+main1
+Main Phase 1
+Executing strategy focused on our win condition
+T5
+main1
+MANA
+AI Strategic Decision
+Play the Swamp from hand. You must take your land drop (Step 1) and adding a Swamp is the highest-value play: it enables black casting next turn (including Nazgûl/Lord and your black removal), and it enables Tainted Isle's {U/B} option later. You currently have no black in your pool, so playing the Swamp won't let you cast black spells this turn, but not playing a land would be a wasted opportunity. This advances the MANA plan and preserves your current mana for potential responses.
+T5
+main1
+MANA
+playLand: 7
+Played Swamp
+✓
+T5
+main1
+ENGINE
+AI Strategic Decision
+Casting Lord of the Nazgûl for {3}{U}{B} (5) uses all available mana (U:3 B:1 C:1) and exactly meets the color requirements. This is the highest-value play this turn: it advances the deck's mid-game engine (the Lord creates Wraiths when you cast instants/sorceries), fits the stated gameplan to get the commander down as soon as practical, and enables double-value plays on later turns (spamming the instants in hand to generate tokens). Casting the commander now is more impactful than any single-card play from hand (the cheaper Nazgûl creature would consume your lone black and leave little follow-up, and the other spells either need black or target creatures you don't have).
+T5
+main1
+🎯 Commander Triggers
+T5
+main1
+🔍 DEBUG: Mana After Commander Cast
+T5
+main1
+ENGINE
+castCommander: Lord of the Nazgûl
+Cast Lord of the Nazgûl (total cost: 5)
+✓
+T5
+main1
+PASS
+AI Strategic Decision
+Available Mana = 0. There are no 0-cost activated abilities to use and I already played my land and cast the commander earlier this turn, so I cannot legally cast any spells or activate battlefield abilities now. Passing is the only legal, non-wasting option this step.
+T5
+main1
+PASS
+AI Strategic Decision
+You already cast Lord of the Nazgûl earlier this main phase and spent your entire available mana (Available Mana = 0). There are no 0-cost activatable battlefield abilities or castable spells with the current mana, so the only legal, non-wasting play is to pass. Lord of the Nazgûl now establishes the engine for next turns so the optimal follow-up is to use next turn's mana to cast the cheap instants/sorceries in hand that trigger it.
+T5
+main1
+End Phase
+Passed twice - ending phase
+T5
+combat
+Combat Phase
+Entering combat with 1 creatures and 0 tokens
+T5
+combat
+⚔️ Combat Phase
+No creatures available to attack
+✗
+T5
+main2
+Main Phase 2
+Post-combat - deploying remaining resources
+T5
+main2
+PASS
+AI Strategic Decision
+Available mana = 0, so no spells or battlefield/hand abilities that require mana can be cast/activated this step. You already played a land this turn and Lord of the Nazgûl is on the battlefield (summoning sick). The optimal play is to pass and preserve the board state so you can use next turn's mana to cast cheap synergy instants/sorceries (which will trigger Lord) rather than wasting actions trying to do anything illegal or inefficient now.
+T5
+main2
+PASS
+AI Strategic Decision
+Available mana is 0 and you've already played a land this turn, so no spells or battlefield/activated abilities that require mana can be cast or activated now. Lord of the Nazgûl is summoning sick; the optimal plan is to preserve resources and wait to use next turn's mana to cast cheap instants/sorceries (which will trigger Lord and create Wraiths). Casting nothing now avoids wasting tempo or life and keeps priority to play high-synergy spells on the opponent's turn or at an untapped-mana window next turn.
+T5
+main2
+End Phase
+Passed twice - ending phase
+T5
+end
+End Turn
+Turn 5 complete. Total damage: 0/40
+T6
+beginning
+=== NEW TURN ===
+Starting turn 6
+T6
+untap
+Untap & Generate Mana
+All permanents untapped. 5 lands = 5 mana available.
+T6
+draw
+Draw Card
+Drew Frantic Search (instant)
+T6
+main1
+Main Phase 1
+Executing strategy focused on our win condition
+T6
+main1
+MANA
+AI Strategic Decision
+Follow the decision priority: play a land first. Tainted Isle fixes U/B going forward and increases available lands for upcoming spells (important for casting Ringwraiths, Frantic Search, or Nazgûl on subsequent turns). Playing the land now preserves mana efficiency and enables stronger plays on this turn or next. It also satisfies the explicit Step 1 land-drop rule in the engine guidance.
+T6
+main1
+MANA
+playLand: 5
+Played Tainted Isle
+✓
+T6
+main1
+ENGINE
+AI Strategic Decision
+Cast Frantic Search ({2}{U}). It is a high-value synergy spell (triggers Lord of the Nazgûl) that draws two cards and untaps up to three lands, enabling further spells this turn. That both creates a Wraith token now and refuels mana/card advantage so we can continue the mid-game plan (spam instants/sorceries to generate more tokens or answers). It's the most engine-efficient play with the current pool (U:1 B:3 C:2) and maximizes tempo for subsequent casts.
+T6
+main1
+💰 Mana After Cast
+T6
+main1
+💰 Mana After Cast
+T6
+main1
+📖 Draw Effect
+Drew 2 card(s): Island, Surrounded by Orcs
+✓
+T6
+main1
+🎯 Cast Trigger
+Lord of the Nazgûl triggers from casting Frantic Search
+T6
+main1
+Create Tokens: Lord of the Nazgûl
+Created 1 token(s): 3/3 Black Wraith Token
+✓
+T6
+main1
+✨ Token Generation
+Lord of the Nazgûl's trigger created tokens
+T6
+main1
+ENGINE
+castSpell: 6
+Cast Frantic Search ({2}{U})
+✓
+T6
+main1
+ENGINE
+AI Strategic Decision
+Mordor Muster ({1}{B}) is the best play this main phase: it's an ENGINE play (card draw + amass), is marked 🌟 so it triggers Lord of the Nazgûl to create additional Wraith(s), and it uses mana efficiently (2 of your 3 available). It advances the board by creating/amassing an Orc Army and draws a card for further options next step. Prioritizes synergy over deploying a non-synergistic creature and leaves 1 black available for a possible follow-up on the next decision.
+T6
+main1
+💰 Mana After Cast
+T6
+main1
+💰 Mana After Cast
+T6
+main1
+📖 Draw Effect
+Drew 1 card(s): Call of the Ring
+✓
+T6
+main1
+🎯 Cast Trigger
+Lord of the Nazgûl triggers from casting Mordor Muster
+T6
+main1
+Create Tokens: Lord of the Nazgûl
+Created 1 token(s): 3/3 Black Wraith Token
+✓
+T6
+main1
+✨ Token Generation
+Lord of the Nazgûl's trigger created tokens
+T6
+main1
+ENGINE
+castSpell0
+Cast Mordor Muster ({1}{B})
+✓
+T6
+main1
+ENGINE
+AI Strategic Decision
+Cast Shelob's Ambush ({B}) using the single available black mana. It's a 🌟 synergy play: casting an instant will trigger Lord of the Nazgûl to create another 3/3 Wraith token (immediate board growth) while also giving a creature +1/+2 and deathtouch and creating a Food. This uses your mana efficiently on an instant that furthers the deck's midgame plan of generating tokens and applying pressure. I recommend targeting Lord of the Nazgûl with the buff to increase its immediate combat value (deathtouch makes it a much more threatening blocker/attacker next turn) and to maximize the value of the spell now. You cannot cast higher-cost spells this turn with only 1 mana, so this is the highest-impact play available.
+T6
+main1
+💰 Mana After Cast
+T6
+main1
+💰 Mana After Cast
+T6
+main1
+💪 Pump Effect: Lord of the Nazgûl
+Lord of the Nazgûl gets +1/+2 until end of turn
+✓
+T6
+main1
+💚 Life Gain
+Gained 3 life (total: 43)
+✓
+T6
+main1
+🎯 Cast Trigger
+Lord of the Nazgûl triggers from casting Shelob's Ambush
+T6
+main1
+Create Tokens: Lord of the Nazgûl
+Created 1 token(s): 3/3 Black Wraith Token
+✓
+T6
+main1
+✨ Token Generation
+Lord of the Nazgûl's trigger created tokens
+T6
+main1
+ENGINE
+castSpell: 2
+Cast Shelob's Ambush ({B})
+✓
+T6
+main1
+PASS
+AI Strategic Decision
+You have 0 available mana and have already played a land this turn, so you cannot cast any spells in hand (all cost ≥ {B}). There are no 0-cost battlefield or hand-activated abilities available to use. The only legal, productive action is to pass and move to combat/end step. Passing preserves board state (Lord of the Nazgûl and three 3/3 Wraiths) and avoids illegal attempts to activate mana abilities.
+T6
+main1
+PASS
+AI Strategic Decision
+You have 0 available mana and have already played a land this turn. There are no 0-cost activated abilities in hand or on the battlefield to use. All spells in hand cost at least {B}, so casting anything is illegal. Passing preserves your board (Lord of the Nazgûl + three 3/3 Wraiths) and follows the Critical Mana Rules (never manually tap lands or attempt to activate mana abilities). If mana were available, I'd prioritize casting a synergy instant to trigger Lord (best: Not Dead After All — index 2 — if I had {B}; next Go for the Throat — index 1), but with 0 mana the only correct play is to pass.
+T6
+main1
+End Phase
+Passed twice - ending phase
+T6
+combat
+Combat Phase
+Entering combat with 1 creatures and 3 tokens
+T6
+combat
+⚔️ Combat Phase
+1 attacker(s) dealt 5 damage (keywords: flying, menace)
+✓
+T6
+combat
+⚔️ Combat Results
+1 attacker(s) dealt 5 damage (keywords: flying, menace)
+✓
+T6
+main2
+Main Phase 2
+Post-combat - deploying remaining resources
+T6
+main2
+PASS
+AI Strategic Decision
+You have 0 available mana and have already played a land this turn, so you cannot legally cast any spells or activate any battlefield abilities. There are no free/0-cost actions available. Passing preserves game rules and moves to upkeep/next turn where mana will be available again.
+T6
+main2
+PASS
+AI Strategic Decision
+Available mana = 0 and you've already played a land this turn, so no spells or activated abilities with mana costs can be paid this step. There are no 0-cost or free abilities available. Under the critical mana rules, the only legal and sensible play is to pass and preserve priority for the next turn.
+T6
+main2
+End Phase
+Passed twice - ending phase
+T6
+end
+🧹 Cleanup
+Removed 1 temporary effect(s) from end of turn
+✓
+T6
+end
+End Turn
+Turn 6 complete. Total damage: 5/40
+T7
+beginning
+=== NEW TURN ===
+Starting turn 7
+T7
+untap
+Untap & Generate Mana
+All permanents untapped. 6 lands = 6 mana available.
+T7
+draw
+Draw Card
+Drew Whispersilk Cloak (artifact)
+T7
+main1
+Main Phase 1
+Executing strategy focused on our win condition
+
+CONSOLE LOG:
+client:745 WebSocket connection to 'wss://4bfb526c-f8d6-4438-8e29-eb9805353be8-00-rybydy69e9r8.janeway.replit.dev/?token=jXztqSM9kxvO' failed: 
+createConnection @ client:745
+connect @ client:411
+connect @ client:751
+connect @ client:289
+connect @ client:373
+(anonymous) @ client:823
+client:772 [vite] failed to connect to websocket (Error: WebSocket closed without opened.). 
+connect @ client:772
+await in connect
+connect @ client:289
+connect @ client:373
+(anonymous) @ client:823
+client:423 Uncaught (in promise) Error: WebSocket closed without opened.
+    at WebSocket.<anonymous> (client:423:30)
+(anonymous) @ client:423
+react-dom_client.js?v=453f8220:20103 Download the React DevTools for a better development experience: https://react.dev/link/react-devtools
+config.js:51 ✅ OpenAI API configured successfully
+config.js:52    Key prefix: sk-proj...
+config.js:53    Key length: 164 characters
+App.jsx:93 Loaded 32731 cards into database
+App.jsx:93 Loaded 32731 cards into database
+App.jsx:241 Deck Strategy Analysis: {success: true, timestamp: '2025-10-30T16:20:22.748Z', analysis: {…}, metadata: {…}}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+activatedAbilityEngine.js:116 [parseActivatedAbilities] Detected landcycling: Lórien Revealed → Island (cost: {1})
+activatedAbilityEngine.js:70 [parseActivatedAbilities] Detected fetch land: Evolving Wilds
+activatedAbilityEngine.js:116 [parseActivatedAbilities] Detected landcycling: Lórien Revealed → Island (cost: {1})
+enhancedStepByStepGame.js:675 🔍 Creating deck behavior manifest...
+cardBehaviorAnalyzer.js:710 🔍 [PARSER] Underground River oracle text: {T}: Add {C}.\n{T}: Add {U} or {B}. This land deals 1 damage to you.
+cardBehaviorAnalyzer.js:711 🔍 [PARSER] Split into 2 lines
+cardBehaviorAnalyzer.js:713 🔍 [PARSER]   Line 0: {T}: Add {C}.
+cardBehaviorAnalyzer.js:713 🔍 [PARSER]   Line 1: {T}: Add {U} or {B}. This land deals 1 damage to you.
+enhancedStepByStepGame.js:708 ✅ Behavior manifest created: {totalManaProducers: 22, totalFetchLands: 1, totalTokenGenerators: 12, totalCardDraw: 21}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+enhancedStepByStepGame.js:1880 🔍 [untap] BEFORE generateMana - Expected: 0 (lands:0 + artifacts:0 + creatures:0)
+enhancedStepByStepGame.js:1881 🔍 [untap] Land count: 0, Artifact count: 0, Creature count: 0
+gameEngine.js:494 🔍 [generateMana] Starting - Turn 1
+gameEngine.js:495 🔍 [generateMana] Battlefield: 0 lands, 0 artifacts, 0 creatures
+gameEngine.js:504 🔍 [generateMana] Pool emptied
+gameEngine.js:747 🔍 [generateMana] Final total: 0
+gameEngine.js:748 🔍 [generateMana] Final pool: {W: 0, U: 0, B: 0, R: 0, G: 0, …}
+enhancedStepByStepGame.js:1889 🔍 [untap] AFTER generateMana - Expected: 0, Actual: 0
+eventSystem.js:169 📤 Event Emitted: PHASE_CHANGED {source: 'unknown', queueSize: 1}
+eventSystem.js:169 📤 Event Emitted: CARD_DRAWN {source: 'Go for the Throat', queueSize: 1}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+enhancedStepByStepGame.js:1880 🔍 [untap] BEFORE generateMana - Expected: 1 (lands:1 + artifacts:0 + creatures:0)
+enhancedStepByStepGame.js:1881 🔍 [untap] Land count: 1, Artifact count: 0, Creature count: 0
+gameEngine.js:494 🔍 [generateMana] Starting - Turn 2
+gameEngine.js:495 🔍 [generateMana] Battlefield: 1 lands, 0 artifacts, 0 creatures
+gameEngine.js:504 🔍 [generateMana] Pool emptied
+manaPool.js:163 🔍 [The Grey Havens] Choosing from 2 abilities
+manaPool.js:241 🔍 [The Grey Havens] Chose ability producing [W,U,B,R,G] (score: 100, reason: hand needs {U})
+manaPool.js:245 🔍 [The Grey Havens] Skipped ability producing [C] (score: 10)
+manaPool.js:266 [ManaPool] Chose U from W,U,B,R,G (hand needs it)
+gameEngine.js:747 🔍 [generateMana] Final total: 1
+gameEngine.js:748 🔍 [generateMana] Final pool: {W: 0, U: 1, B: 0, R: 0, G: 0, …}
+enhancedStepByStepGame.js:1889 🔍 [untap] AFTER generateMana - Expected: 1, Actual: 1
+eventSystem.js:169 📤 Event Emitted: PHASE_CHANGED {source: 'unknown', queueSize: 1}
+eventSystem.js:169 📤 Event Emitted: CARD_DRAWN {source: "Shelob's Ambush", queueSize: 1}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+gameEngine.js:974 [castSpell] Attempting to cast Opt (cost: 1)
+gameEngine.js:975 [castSpell] Current pool: {W: 0, U: 2, B: 0, R: 0, G: 0, …} Total: 2
+gameEngine.js:984 [castSpell] ✅ Affordability check PASSED - proceeding with cast
+eventSystem.js:169 📤 Event Emitted: SPELL_CAST {source: 'Opt', queueSize: 1}
+eventSystem.js:169 📤 Event Emitted: CARD_DRAWN {source: 'Not Dead After All', queueSize: 1}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+enhancedStepByStepGame.js:1880 🔍 [untap] BEFORE generateMana - Expected: 2 (lands:2 + artifacts:0 + creatures:0)
+enhancedStepByStepGame.js:1881 🔍 [untap] Land count: 2, Artifact count: 0, Creature count: 0
+gameEngine.js:494 🔍 [generateMana] Starting - Turn 3
+gameEngine.js:495 🔍 [generateMana] Battlefield: 2 lands, 0 artifacts, 0 creatures
+gameEngine.js:504 🔍 [generateMana] Pool emptied
+manaPool.js:163 🔍 [The Grey Havens] Choosing from 2 abilities
+manaPool.js:241 🔍 [The Grey Havens] Chose ability producing [W,U,B,R,G] (score: 100, reason: hand needs {U})
+manaPool.js:245 🔍 [The Grey Havens] Skipped ability producing [C] (score: 10)
+manaPool.js:266 [ManaPool] Chose U from W,U,B,R,G (hand needs it)
+gameEngine.js:747 🔍 [generateMana] Final total: 2
+gameEngine.js:748 🔍 [generateMana] Final pool: {W: 0, U: 2, B: 0, R: 0, G: 0, …}
+enhancedStepByStepGame.js:1889 🔍 [untap] AFTER generateMana - Expected: 2, Actual: 2
+eventSystem.js:169 📤 Event Emitted: PHASE_CHANGED {source: 'unknown', queueSize: 2}
+eventSystem.js:169 📤 Event Emitted: CARD_DRAWN {source: 'Tainted Isle', queueSize: 1}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+enhancedStepByStepGame.js:1880 🔍 [untap] BEFORE generateMana - Expected: 3 (lands:3 + artifacts:0 + creatures:0)
+enhancedStepByStepGame.js:1881 🔍 [untap] Land count: 3, Artifact count: 0, Creature count: 0
+gameEngine.js:494 🔍 [generateMana] Starting - Turn 4
+gameEngine.js:495 🔍 [generateMana] Battlefield: 3 lands, 0 artifacts, 0 creatures
+gameEngine.js:504 🔍 [generateMana] Pool emptied
+manaPool.js:163 🔍 [The Grey Havens] Choosing from 2 abilities
+manaPool.js:241 🔍 [The Grey Havens] Chose ability producing [W,U,B,R,G] (score: 100, reason: hand needs {U})
+manaPool.js:245 🔍 [The Grey Havens] Skipped ability producing [C] (score: 10)
+manaPool.js:266 [ManaPool] Chose U from W,U,B,R,G (hand needs it)
+gameEngine.js:747 🔍 [generateMana] Final total: 3
+gameEngine.js:748 🔍 [generateMana] Final pool: {W: 0, U: 2, B: 0, R: 0, G: 0, …}
+enhancedStepByStepGame.js:1889 🔍 [untap] AFTER generateMana - Expected: 3, Actual: 3
+eventSystem.js:169 📤 Event Emitted: PHASE_CHANGED {source: 'unknown', queueSize: 1}
+eventSystem.js:169 📤 Event Emitted: CARD_DRAWN {source: 'Nazgûl', queueSize: 1}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+enhancedStepByStepGame.js:1880 🔍 [untap] BEFORE generateMana - Expected: 4 (lands:4 + artifacts:0 + creatures:0)
+enhancedStepByStepGame.js:1881 🔍 [untap] Land count: 4, Artifact count: 0, Creature count: 0
+gameEngine.js:494 🔍 [generateMana] Starting - Turn 5
+gameEngine.js:495 🔍 [generateMana] Battlefield: 4 lands, 0 artifacts, 0 creatures
+gameEngine.js:504 🔍 [generateMana] Pool emptied
+manaPool.js:163 🔍 [The Grey Havens] Choosing from 2 abilities
+manaPool.js:241 🔍 [The Grey Havens] Chose ability producing [W,U,B,R,G] (score: 100, reason: hand needs {U})
+manaPool.js:245 🔍 [The Grey Havens] Skipped ability producing [C] (score: 10)
+manaPool.js:266 [ManaPool] Chose U from W,U,B,R,G (hand needs it)
+manaPool.js:266 [ManaPool] Chose U from U,B (hand needs it)
+gameEngine.js:747 🔍 [generateMana] Final total: 4
+gameEngine.js:748 🔍 [generateMana] Final pool: {W: 0, U: 3, B: 0, R: 0, G: 0, …}
+enhancedStepByStepGame.js:1889 🔍 [untap] AFTER generateMana - Expected: 4, Actual: 4
+eventSystem.js:169 📤 Event Emitted: PHASE_CHANGED {source: 'unknown', queueSize: 1}
+eventSystem.js:169 📤 Event Emitted: CARD_DRAWN {source: 'Swamp', queueSize: 1}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+eventSystem.js:169 📤 Event Emitted: PERMANENT_ENTERS_BATTLEFIELD {source: 'Lord of the Nazgûl', queueSize: 1}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+enhancedStepByStepGame.js:1880 🔍 [untap] BEFORE generateMana - Expected: 5 (lands:5 + artifacts:0 + creatures:0)
+enhancedStepByStepGame.js:1881 🔍 [untap] Land count: 5, Artifact count: 0, Creature count: 0
+gameEngine.js:494 🔍 [generateMana] Starting - Turn 6
+gameEngine.js:495 🔍 [generateMana] Battlefield: 5 lands, 0 artifacts, 1 creatures
+gameEngine.js:504 🔍 [generateMana] Pool emptied
+manaPool.js:163 🔍 [The Grey Havens] Choosing from 2 abilities
+manaPool.js:241 🔍 [The Grey Havens] Chose ability producing [W,U,B,R,G] (score: 100, reason: hand needs {B})
+manaPool.js:245 🔍 [The Grey Havens] Skipped ability producing [C] (score: 10)
+manaPool.js:266 [ManaPool] Chose B from W,U,B,R,G (hand needs it)
+manaPool.js:266 [ManaPool] Chose B from U,B (hand needs it)
+gameEngine.js:747 🔍 [generateMana] Final total: 5
+gameEngine.js:748 🔍 [generateMana] Final pool: {W: 0, U: 1, B: 3, R: 0, G: 0, …}
+enhancedStepByStepGame.js:1889 🔍 [untap] AFTER generateMana - Expected: 5, Actual: 5
+eventSystem.js:169 📤 Event Emitted: PHASE_CHANGED {source: 'unknown', queueSize: 1}
+eventSystem.js:169 📤 Event Emitted: CARD_DRAWN {source: 'Frantic Search', queueSize: 1}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+gameEngine.js:974 [castSpell] Attempting to cast Frantic Search (cost: 3)
+gameEngine.js:975 [castSpell] Current pool: {W: 0, U: 1, B: 3, R: 0, G: 0, …} Total: 6
+gameEngine.js:984 [castSpell] ✅ Affordability check PASSED - proceeding with cast
+eventSystem.js:169 📤 Event Emitted: SPELL_CAST {source: 'Frantic Search', queueSize: 1}
+eventSystem.js:169 📤 Event Emitted: CARD_DRAWN {source: 'Island', queueSize: 1}
+eventSystem.js:169 📤 Event Emitted: CARD_DRAWN {source: 'Surrounded by Orcs', queueSize: 2}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+gameEngine.js:974 [castSpell] Attempting to cast Mordor Muster (cost: 2)
+gameEngine.js:975 [castSpell] Current pool: {W: 0, U: 0, B: 3, R: 0, G: 0, …} Total: 3
+gameEngine.js:984 [castSpell] ✅ Affordability check PASSED - proceeding with cast
+eventSystem.js:169 📤 Event Emitted: SPELL_CAST {source: 'Mordor Muster', queueSize: 3}
+eventSystem.js:169 📤 Event Emitted: CARD_DRAWN {source: 'Call of the Ring', queueSize: 1}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+gameEngine.js:974 [castSpell] Attempting to cast Shelob's Ambush (cost: 1)
+gameEngine.js:975 [castSpell] Current pool: {W: 0, U: 0, B: 1, R: 0, G: 0, …} Total: 1
+gameEngine.js:984 [castSpell] ✅ Affordability check PASSED - proceeding with cast
+eventSystem.js:169 📤 Event Emitted: SPELL_CAST {source: "Shelob's Ambush", queueSize: 2}
+eventSystem.js:169 📤 Event Emitted: LIFE_GAINED {source: "Shelob's Ambush", queueSize: 1}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+eventSystem.js:169 📤 Event Emitted: CREATURE_ATTACKS {source: 'Lord of the Nazgûl', queueSize: 2}
+eventSystem.js:169 📤 Event Emitted: COMBAT_DAMAGE_DEALT {source: 'unknown', queueSize: 3}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+enhancedStepByStepGame.js:1880 🔍 [untap] BEFORE generateMana - Expected: 6 (lands:6 + artifacts:0 + creatures:0)
+enhancedStepByStepGame.js:1881 🔍 [untap] Land count: 6, Artifact count: 0, Creature count: 0
+gameEngine.js:494 🔍 [generateMana] Starting - Turn 7
+gameEngine.js:495 🔍 [generateMana] Battlefield: 6 lands, 0 artifacts, 4 creatures
+gameEngine.js:504 🔍 [generateMana] Pool emptied
+manaPool.js:163 🔍 [The Grey Havens] Choosing from 2 abilities
+manaPool.js:241 🔍 [The Grey Havens] Chose ability producing [W,U,B,R,G] (score: 100, reason: hand needs {U})
+manaPool.js:245 🔍 [The Grey Havens] Skipped ability producing [C] (score: 10)
+manaPool.js:266 [ManaPool] Chose U from W,U,B,R,G (hand needs it)
+manaPool.js:266 [ManaPool] Chose U from U,B (hand needs it)
+manaPool.js:163 🔍 [Tainted Isle] Choosing from 2 abilities
+manaPool.js:241 🔍 [Tainted Isle] Chose ability producing [U,B] (score: 100, reason: hand needs {U})
+manaPool.js:245 🔍 [Tainted Isle] Skipped ability producing [C] (score: 10)
+manaPool.js:266 [ManaPool] Chose U from U,B (hand needs it)
+gameEngine.js:747 🔍 [generateMana] Final total: 6
+gameEngine.js:748 🔍 [generateMana] Final pool: {W: 0, U: 4, B: 1, R: 0, G: 0, …}
+enhancedStepByStepGame.js:1889 🔍 [untap] AFTER generateMana - Expected: 6, Actual: 6
+eventSystem.js:169 📤 Event Emitted: PHASE_CHANGED {source: 'unknown', queueSize: 1}
+eventSystem.js:169 📤 Event Emitted: CARD_DRAWN {source: 'Whispersilk Cloak', queueSize: 1}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+gameEngine.js:974 [castSpell] Attempting to cast Surrounded by Orcs (cost: 4)
+gameEngine.js:975 [castSpell] Current pool: {W: 0, U: 5, B: 1, R: 0, G: 0, …} Total: 7
+gameEngine.js:984 [castSpell] ✅ Affordability check PASSED - proceeding with cast
+eventSystem.js:169 📤 Event Emitted: SPELL_CAST {source: 'Surrounded by Orcs', queueSize: 1}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+gameEngine.js:974 [castSpell] Attempting to cast Go for the Throat (cost: 2)
+gameEngine.js:975 [castSpell] Current pool: {W: 0, U: 2, B: 1, R: 0, G: 0, …} Total: 3
+gameEngine.js:984 [castSpell] ✅ Affordability check PASSED - proceeding with cast
+eventSystem.js:169 📤 Event Emitted: SPELL_CAST {source: 'Go for the Throat', queueSize: 1}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}

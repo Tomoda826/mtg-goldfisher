@@ -1,0 +1,70 @@
+Thank you for providing the logs. I have completed a full review of the game and console output to assess the status of `MANA-REFACTOR-001` and bug `MANA-022`.
+
+Here is the analysis of the `ManaSolver`'s behavior.
+
+### High-Level Summary
+
+The refactor is **partially successful**, but the core `MANA-022` bug is still present in a specific scenario.
+
+  * **The Good:** Your new logic *is* working correctly when evaluating complex, multi-colored costs. The AI correctly failed to cast `Ringsight` on T4, identifying it couldn't pay the spell cost *and* the Signet's activation cost.
+  * **The Bad:** The original bug still occurs when the solver pays a generic cost incrementally. It illegally cast `Lightning Greaves` on T3 by bypassing the `Dimir Signet`'s activation cost.
+
+### Evidence of `MANA-022` (Partial Fix)
+
+#### 1\. The "Success": T4 `Ringsight` (Correct Failure)
+
+This is the most important finding. Your new logic is working perfectly here.
+
+  * **Game State (T4):** After casting `Lord of the Nazgûl` and `Preordain`, the *only* untapped mana source was `Dimir Signet`.
+  * **AI Action:** The AI attempted to cast `Ringsight` for `{1}{U}{B}`.
+  * **Console Log:**
+    ```
+    manaPool.js:681 🧮 [ManaSolver] Solving cost: {1}{U}{B}
+    manaPool.js:682 🧮 [ManaSolver] Available sources: 1 abilities
+    manaPool.js:725 💰 Dimir Signet requires {1} to activate
+    manaPool.js:738 ✓ Dimir Signet produces {U}
+    manaPool.js:738 ✓ Dimir Signet produces {B}
+    manaPool.js:761 ❌ [ManaSolver] Cannot find source for generic {2}
+    manaPool.js:404 🔍 [canPay] Checking "{1}{U}{B}": NO ❌
+    ```
+  * **Analysis:** This is **correct**. The solver identified it needed `{U}` and `{B}` (which the Signet *produces*) but that it *also* needed to pay `{1}` (from `Ringsight`) + `{1}` (from the `Signet`'s activation). It correctly calculated a total generic cost of `{2}` and, finding no other sources to pay that cost, it failed. This proves the recursive/precedent cost logic is functional.
+
+#### 2\. The "Failure": T3 `Lightning Greaves` (Original Bug)
+
+This is the exact scenario from your bug report, and it failed.
+
+  * **Game State (T3):** After casting `Talisman of Dominance` (using `Island` and `Drowned Catacomb`), the remaining untapped sources were `Swamp` and `Dimir Signet`.
+  * **AI Action:** The AI cast `Lightning Greaves` for `{2}`.
+  * **Console Log:**
+    ```
+    manaPool.js:681 🧮 [ManaSolver] Solving cost: {2}
+    ...
+    manaPool.js:794 ✓ Using Swamp for generic (NET 1 after {0} cost)
+    manaPool.js:782 💰 Dimir Signet costs {1}, produces 2 → NET +1
+    manaPool.js:794 ✓ Using Dimir Signet for generic (NET 1 after {1} cost)
+    manaPool.js:797 ✅ [ManaSolver] Found solution using 2 sources
+    ...
+    gameEngine.js:1157 ✅ [castSpell] Solution found! Tapping 2 sources
+    gameEngine.js:1162 🔒 Tapped Swamp (produced {B})
+    gameEngine.js:1162 🔒 Tapped Dimir Signet (produced {U})
+    ```
+  * **Analysis:** This is **incorrect**. The log shows the `Swamp` was tapped for its `{B}` (to pay for `{1}` of the Greaves) and the `Dimir Signet` was tapped for its `{U}` (to pay the other `{1}` of the Greaves). The `{1}` mana required to *activate* the Signet was never paid by an external source. The `Swamp`'s mana was used for the *spell*, not the *activation*.
+
+### Diagnosis
+
+The `ManaSolver` appears to have two different logic paths:
+
+1.  **A "Complex Cost" Path (New Logic):** When solving for a multi-color cost like `{1}{U}{B}`, it correctly gathers all required mana (including activation costs) into a single "to-be-paid" basket (`{2}{U}{B}`) and then tries to solve for it. This new logic is working.
+2.  **A "Generic/Incremental" Path (Old Logic):** When solving for a simple generic cost like `{2}`, the solver seems to be paying it incrementally. It first used the `Swamp` to pay `{1}`, then looked for a new source to pay the *remaining* `{1}`. When it evaluated the `Dimir Signet` in this "pay {1}" context, the old, non-recursive bug (`MANA-022`) was triggered, allowing the Signet to be activated illegally.
+
+### Next Step
+
+The fix is to **ensure the new recursive sub-problem logic is applied universally**, even when solving for partial or generic-only costs.
+
+When the iterative solver picks `Dimir Signet` to pay for *any* amount of mana, it must *not* just add its output to the pool. It must first:
+
+1.  Identify the activation cost (`{1}`).
+2.  Trigger a recursive `ManaSolver` call to pay *that* `{1}` cost, using only the *other* available sources (which, in the T3 case, would be an empty list, as the `Swamp` was already allocated).
+3.  Only if that recursive call succeeds does it allow the `Dimir Signet`'s mana to be used.
+
+You are very close. The logic from the T4 failure just needs to be forced to run in the T3 scenario.

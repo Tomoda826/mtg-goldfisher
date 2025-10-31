@@ -15,6 +15,7 @@ import {
   GameEngineError, 
   logError 
 } from './errorHandler.js';
+import { ManaPool } from './manaPool.js';
 
 /**
  * Enhanced AI Main Phase - Uses OpenAI to make optimal decisions
