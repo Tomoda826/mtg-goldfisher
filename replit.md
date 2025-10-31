@@ -53,10 +53,19 @@ The application is structured around a tab-based UI (`App.jsx`) leading to dedic
   - Sol Ring and other mana artifacts now persist turn-to-turn instead of disappearing
   - This was a critical missing piece of basic MTG rules implementation
 
+**Preview/AI Data Pipeline Fixes (Oct 31, 2025)**
+- **MANA-020 Fixed**: AI preview mana totals now match ManaSolver reality
+  - Root cause: Preview was counting all abilities separately (Underground River with 2 abilities counted as 2 mana sources)
+  - Solution: Group abilities by permanent, pick best ability (considering flexibility for ties), count each permanent once
+  - Flexibility tie-breaking: When abilities produce equal mana, prefer more color options (Underground River now shows {U/B} not {C})
+  - Combination handling: Properly credits multi-symbol abilities using combination.length as fallback
+  - AI now sees accurate mana counts matching what the ManaSolver can actually use
+
 **AI Integration**
 - AI casting logic now uses mana solver for affordability checks
 - Intelligent ability selection based on hand needs (colored vs. colorless)
 - Fetch land activation prioritized for color fixing
+- AI decision-making now uses same data source as ManaSolver (single source of truth)
 
 ### Deployment and Configuration
 - **Development Environment**: React + Vite, configured for Replit (port 5000, HMR via WSS on port 443).
