@@ -33,11 +33,19 @@ The application is structured around a tab-based UI (`App.jsx`) leading to dedic
 - Fixed preview calculations to respect `production.quantity` (Sol Ring's 2×{C} counts as 2 mana)
 - Design principle: Mana sources no longer activate during untap; solver determines which sources to tap when casting spells
 
-**Parser Improvements**
-- Per-line "target" checking: Allows cards like Bojuka Bog (ETB targets) to be recognized as mana producers
+**Parser Improvements (Oct 31, 2025)**
+- Per-line "target" checking: Allows cards like Bojuka Bog, Barad-dûr (ETB targets) to be recognized as mana producers
 - Multi-ability parsing: Correctly splits oracle text on escaped newlines (`\\n`)
 - Priority-based parsing: Tries complex "choice" patterns before simple fixed mana patterns
 - Handles 0-cost abilities and mana-cost abilities correctly
+- **MANA-017 Fixed**: Changed from blanket "target" rejection to per-line check, enabling complex lands to work correctly
+
+**Solver Improvements (Oct 31, 2025)**
+- **MANA-019 Fixed**: ManaSolver now correctly handles multi-mana sources
+  - Colored payments: Always use 1 mana per source activation (prevents multi-color overuse)
+  - Generic payments: Use full quantity via `getProductionQuantity()` (Sol Ring now pays 2 for {2})
+  - Variable X quantities: Integrated with `resolveQuantity()` for accurate game-state-based resolution
+  - Handles Cabal Coffers, Nykthos, and other X producers correctly (can resolve to 0)
 
 **AI Integration**
 - AI casting logic now uses mana solver for affordability checks
