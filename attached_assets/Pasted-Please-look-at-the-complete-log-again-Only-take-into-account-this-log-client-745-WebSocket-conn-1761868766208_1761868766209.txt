@@ -1,0 +1,333 @@
+Please look at the complete log again. Only take into account this log.
+
+client:745 WebSocket connection to 'wss://4bfb526c-f8d6-4438-8e29-eb9805353be8-00-rybydy69e9r8.janeway.replit.dev/?token=ehrDxGQgYaNb' failed: 
+createConnection @ client:745
+connect @ client:411
+connect @ client:751
+connect @ client:289
+connect @ client:373
+(anonymous) @ client:823
+client:772 [vite] failed to connect to websocket (Error: WebSocket closed without opened.). 
+connect @ client:772
+await in connect
+connect @ client:289
+connect @ client:373
+(anonymous) @ client:823
+client:423 Uncaught (in promise) Error: WebSocket closed without opened.
+    at WebSocket.<anonymous> (client:423:30)
+(anonymous) @ client:423
+react-dom_client.js?v=453f8220:20103 Download the React DevTools for a better development experience: https://react.dev/link/react-devtools
+config.js:51 ✅ OpenAI API configured successfully
+config.js:52    Key prefix: sk-proj...
+config.js:53    Key length: 164 characters
+App.jsx:93 Loaded 32731 cards into database
+App.jsx:93 Loaded 32731 cards into database
+App.jsx:241 Deck Strategy Analysis: {success: true, timestamp: '2025-10-30T22:49:08.550Z', analysis: {…}, metadata: {…}}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+activatedAbilityEngine.js:116 [parseActivatedAbilities] Detected landcycling: Lórien Revealed → Island (cost: {1})
+activatedAbilityEngine.js:70 [parseActivatedAbilities] Detected fetch land: Evolving Wilds
+activatedAbilityEngine.js:116 [parseActivatedAbilities] Detected landcycling: Lórien Revealed → Island (cost: {1})
+enhancedStepByStepGame.js:675 🔍 Creating deck behavior manifest...
+cardBehaviorAnalyzer.js:710 🔍 [PARSER] Sol Ring oracle text: {T}: Add {C}{C}.
+cardBehaviorAnalyzer.js:711 🔍 [PARSER] Split into 1 lines
+cardBehaviorAnalyzer.js:713 🔍 [PARSER]   Line 0: {T}: Add {C}{C}.
+cardBehaviorAnalyzer.js:710 🔍 [PARSER] Underground River oracle text: {T}: Add {C}.\n{T}: Add {U} or {B}. This land deals 1 damage to you.
+cardBehaviorAnalyzer.js:711 🔍 [PARSER] Split into 2 lines
+cardBehaviorAnalyzer.js:713 🔍 [PARSER]   Line 0: {T}: Add {C}.
+cardBehaviorAnalyzer.js:713 🔍 [PARSER]   Line 1: {T}: Add {U} or {B}. This land deals 1 damage to you.
+enhancedStepByStepGame.js:708 ✅ Behavior manifest created: {totalManaProducers: 22, totalFetchLands: 1, totalTokenGenerators: 12, totalCardDraw: 21}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+enhancedStepByStepGame.js:1880 🔍 [untap] BEFORE generateMana - Expected: 0 (lands:0 + artifacts:0 + creatures:0)
+enhancedStepByStepGame.js:1881 🔍 [untap] Land count: 0, Artifact count: 0, Creature count: 0
+gameEngine.js:500 🔍 [generateMana] Starting - Turn 1
+gameEngine.js:501 🔍 [generateMana] Battlefield: 0 lands, 0 artifacts, 0 creatures
+manaPool.js:543 
+💎 [PotentialPool] Building available sources...
+manaPool.js:627 💎 [PotentialPool] Found 0 available mana abilities
+gameEngine.js:567 🔍 [generateMana] Final total: 0 available sources
+gameEngine.js:568 🔍 [generateMana] Preview flexibility: {W: 0, U: 0, B: 0, R: 0, G: 0, …}B: 0C: 0G: 0R: 0U: 0W: 0[[Prototype]]: Object
+enhancedStepByStepGame.js:1889 🔍 [untap] AFTER generateMana - Expected: 0, Actual: 0
+eventSystem.js:169 📤 Event Emitted: PHASE_CHANGED {source: 'unknown', queueSize: 1}
+eventSystem.js:169 📤 Event Emitted: CARD_DRAWN {source: 'Mystic Confluence', queueSize: 1}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+manaPool.js:543 
+💎 [PotentialPool] Building available sources...
+manaPool.js:627 💎 [PotentialPool] Found 1 available mana abilities
+manaPool.js:630    0: Swamp (land) → 1x{B}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+enhancedStepByStepGame.js:1880 🔍 [untap] BEFORE generateMana - Expected: 1 (lands:1 + artifacts:0 + creatures:0)
+enhancedStepByStepGame.js:1881 🔍 [untap] Land count: 1, Artifact count: 0, Creature count: 0
+gameEngine.js:500 🔍 [generateMana] Starting - Turn 2
+gameEngine.js:501 🔍 [generateMana] Battlefield: 1 lands, 0 artifacts, 0 creatures
+manaPool.js:543 
+💎 [PotentialPool] Building available sources...
+manaPool.js:627 💎 [PotentialPool] Found 1 available mana abilities
+manaPool.js:630    0: Swamp (land) → 1x{B}
+gameEngine.js:567 🔍 [generateMana] Final total: 1 available sources
+gameEngine.js:568 🔍 [generateMana] Preview flexibility: {W: 0, U: 0, B: 1, R: 0, G: 0, …}
+enhancedStepByStepGame.js:1889 🔍 [untap] AFTER generateMana - Expected: 1, Actual: 1
+eventSystem.js:169 📤 Event Emitted: PHASE_CHANGED {source: 'unknown', queueSize: 1}
+eventSystem.js:169 📤 Event Emitted: CARD_DRAWN {source: 'Ringsight', queueSize: 1}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+manaPool.js:543 
+💎 [PotentialPool] Building available sources...
+manaPool.js:627 💎 [PotentialPool] Found 3 available mana abilities
+manaPool.js:630    0: Swamp (land) → 1x{B}
+manaPool.js:630    1: Tainted Isle (land) → 1x{C}
+manaPool.js:630    2: Tainted Isle (land) → 1x{U/B}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+enhancedStepByStepGame.js:1880 🔍 [untap] BEFORE generateMana - Expected: 2 (lands:2 + artifacts:0 + creatures:0)
+enhancedStepByStepGame.js:1881 🔍 [untap] Land count: 2, Artifact count: 0, Creature count: 0
+gameEngine.js:500 🔍 [generateMana] Starting - Turn 3
+gameEngine.js:501 🔍 [generateMana] Battlefield: 2 lands, 0 artifacts, 0 creatures
+manaPool.js:543 
+💎 [PotentialPool] Building available sources...
+manaPool.js:627 💎 [PotentialPool] Found 3 available mana abilities
+manaPool.js:630    0: Swamp (land) → 1x{B}
+manaPool.js:630    1: Tainted Isle (land) → 1x{C}
+manaPool.js:630    2: Tainted Isle (land) → 1x{U/B}
+gameEngine.js:567 🔍 [generateMana] Final total: 3 available sources
+gameEngine.js:568 🔍 [generateMana] Preview flexibility: {W: 0, U: 1, B: 2, R: 0, G: 0, …}
+enhancedStepByStepGame.js:1889 🔍 [untap] AFTER generateMana - Expected: 2, Actual: 3
+eventSystem.js:169 📤 Event Emitted: PHASE_CHANGED {source: 'unknown', queueSize: 1}
+eventSystem.js:169 📤 Event Emitted: CARD_DRAWN {source: 'Borne Upon a Wind', queueSize: 1}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+manaPool.js:543 
+💎 [PotentialPool] Building available sources...
+manaPool.js:627 💎 [PotentialPool] Found 4 available mana abilities
+manaPool.js:630    0: Swamp (land) → 1x{B}
+manaPool.js:630    1: Tainted Isle (land) → 1x{C}
+manaPool.js:630    2: Tainted Isle (land) → 1x{U/B}
+manaPool.js:630    3: Island (land) → 1x{U}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+enhancedStepByStepGame.js:1880 🔍 [untap] BEFORE generateMana - Expected: 3 (lands:3 + artifacts:0 + creatures:0)
+enhancedStepByStepGame.js:1881 🔍 [untap] Land count: 3, Artifact count: 0, Creature count: 0
+gameEngine.js:500 🔍 [generateMana] Starting - Turn 4
+gameEngine.js:501 🔍 [generateMana] Battlefield: 3 lands, 0 artifacts, 0 creatures
+manaPool.js:543 
+💎 [PotentialPool] Building available sources...
+manaPool.js:627 💎 [PotentialPool] Found 4 available mana abilities
+manaPool.js:630    0: Swamp (land) → 1x{B}
+manaPool.js:630    1: Tainted Isle (land) → 1x{C}
+manaPool.js:630    2: Tainted Isle (land) → 1x{U/B}
+manaPool.js:630    3: Island (land) → 1x{U}
+gameEngine.js:567 🔍 [generateMana] Final total: 4 available sources
+gameEngine.js:568 🔍 [generateMana] Preview flexibility: {W: 0, U: 2, B: 2, R: 0, G: 0, …}B: 2C: 1G: 0R: 0U: 2W: 0[[Prototype]]: Objectconstructor: ƒ Object()hasOwnProperty: ƒ hasOwnProperty()isPrototypeOf: ƒ isPrototypeOf()propertyIsEnumerable: ƒ propertyIsEnumerable()toLocaleString: ƒ toLocaleString()toString: ƒ toString()valueOf: ƒ valueOf()__defineGetter__: ƒ __defineGetter__()__defineSetter__: ƒ __defineSetter__()__lookupGetter__: ƒ __lookupGetter__()__lookupSetter__: ƒ __lookupSetter__()__proto__: (...)get __proto__: ƒ __proto__()set __proto__: ƒ __proto__()
+enhancedStepByStepGame.js:1889 🔍 [untap] AFTER generateMana - Expected: 3, Actual: 4
+eventSystem.js:169 📤 Event Emitted: PHASE_CHANGED {source: 'unknown', queueSize: 1}
+eventSystem.js:169 📤 Event Emitted: CARD_DRAWN {source: 'Underground River', queueSize: 1}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+manaPool.js:543 
+💎 [PotentialPool] Building available sources...
+manaPool.js:627 💎 [PotentialPool] Found 6 available mana abilities
+manaPool.js:630    0: Swamp (land) → 1x{B}
+manaPool.js:630    1: Tainted Isle (land) → 1x{C}
+manaPool.js:630    2: Tainted Isle (land) → 1x{U/B}
+manaPool.js:630    3: Island (land) → 1x{U}
+manaPool.js:630    4: Underground River (land) → 1x{C}
+manaPool.js:630    5: Underground River (land) → 1x{U/B}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+enhancedStepByStepGame.js:1880 🔍 [untap] BEFORE generateMana - Expected: 4 (lands:4 + artifacts:0 + creatures:0)
+enhancedStepByStepGame.js:1881 🔍 [untap] Land count: 4, Artifact count: 0, Creature count: 0
+gameEngine.js:500 🔍 [generateMana] Starting - Turn 5
+gameEngine.js:501 🔍 [generateMana] Battlefield: 4 lands, 0 artifacts, 0 creatures
+manaPool.js:543 
+💎 [PotentialPool] Building available sources...
+manaPool.js:627 💎 [PotentialPool] Found 6 available mana abilities
+manaPool.js:630    0: Swamp (land) → 1x{B}
+manaPool.js:630    1: Tainted Isle (land) → 1x{C}
+manaPool.js:630    2: Tainted Isle (land) → 1x{U/B}
+manaPool.js:630    3: Island (land) → 1x{U}
+manaPool.js:630    4: Underground River (land) → 1x{C}
+manaPool.js:630    5: Underground River (land) → 1x{U/B}
+gameEngine.js:567 🔍 [generateMana] Final total: 6 available sources
+gameEngine.js:568 🔍 [generateMana] Preview flexibility: {W: 0, U: 3, B: 3, R: 0, G: 0, …}
+enhancedStepByStepGame.js:1889 🔍 [untap] AFTER generateMana - Expected: 4, Actual: 6
+eventSystem.js:169 📤 Event Emitted: PHASE_CHANGED {source: 'unknown', queueSize: 1}
+eventSystem.js:169 📤 Event Emitted: CARD_DRAWN {source: 'Nazgûl', queueSize: 1}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+manaPool.js:543 
+💎 [PotentialPool] Building available sources...
+manaPool.js:627 💎 [PotentialPool] Found 6 available mana abilities
+manaPool.js:630    0: Swamp (land) → 1x{B}
+manaPool.js:630    1: Tainted Isle (land) → 1x{C}
+manaPool.js:630    2: Tainted Isle (land) → 1x{U/B}
+manaPool.js:630    3: Island (land) → 1x{U}
+manaPool.js:630    4: Underground River (land) → 1x{C}
+manaPool.js:630    5: Underground River (land) → 1x{U/B}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+enhancedStepByStepGame.js:1880 🔍 [untap] BEFORE generateMana - Expected: 5 (lands:5 + artifacts:0 + creatures:0)
+enhancedStepByStepGame.js:1881 🔍 [untap] Land count: 5, Artifact count: 0, Creature count: 0
+gameEngine.js:500 🔍 [generateMana] Starting - Turn 6
+gameEngine.js:501 🔍 [generateMana] Battlefield: 5 lands, 0 artifacts, 0 creatures
+manaPool.js:543 
+💎 [PotentialPool] Building available sources...
+manaPool.js:627 💎 [PotentialPool] Found 6 available mana abilities
+manaPool.js:630    0: Swamp (land) → 1x{B}
+manaPool.js:630    1: Tainted Isle (land) → 1x{C}
+manaPool.js:630    2: Tainted Isle (land) → 1x{U/B}
+manaPool.js:630    3: Island (land) → 1x{U}
+manaPool.js:630    4: Underground River (land) → 1x{C}
+manaPool.js:630    5: Underground River (land) → 1x{U/B}
+gameEngine.js:567 🔍 [generateMana] Final total: 6 available sources
+gameEngine.js:568 🔍 [generateMana] Preview flexibility: {W: 0, U: 3, B: 3, R: 0, G: 0, …}
+enhancedStepByStepGame.js:1889 🔍 [untap] AFTER generateMana - Expected: 5, Actual: 6
+eventSystem.js:169 📤 Event Emitted: PHASE_CHANGED {source: 'unknown', queueSize: 1}
+eventSystem.js:169 📤 Event Emitted: CARD_DRAWN {source: 'Watery Grave', queueSize: 1}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+manaPool.js:543 
+💎 [PotentialPool] Building available sources...
+manaPool.js:627 💎 [PotentialPool] Found 6 available mana abilities
+manaPool.js:630    0: Swamp (land) → 1x{B}
+manaPool.js:630    1: Tainted Isle (land) → 1x{C}
+manaPool.js:630    2: Tainted Isle (land) → 1x{U/B}
+manaPool.js:630    3: Island (land) → 1x{U}
+manaPool.js:630    4: Underground River (land) → 1x{C}
+manaPool.js:630    5: Underground River (land) → 1x{U/B}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+enhancedStepByStepGame.js:1880 🔍 [untap] BEFORE generateMana - Expected: 6 (lands:6 + artifacts:0 + creatures:0)
+enhancedStepByStepGame.js:1881 🔍 [untap] Land count: 6, Artifact count: 0, Creature count: 0
+gameEngine.js:500 🔍 [generateMana] Starting - Turn 7
+gameEngine.js:501 🔍 [generateMana] Battlefield: 6 lands, 0 artifacts, 0 creatures
+manaPool.js:543 
+💎 [PotentialPool] Building available sources...
+manaPool.js:627 💎 [PotentialPool] Found 7 available mana abilities
+manaPool.js:630    0: Swamp (land) → 1x{B}
+manaPool.js:630    1: Tainted Isle (land) → 1x{C}
+manaPool.js:630    2: Tainted Isle (land) → 1x{U/B}
+manaPool.js:630    3: Island (land) → 1x{U}
+manaPool.js:630    4: Underground River (land) → 1x{C}
+manaPool.js:630    5: Underground River (land) → 1x{U/B}
+manaPool.js:630    6: Watery Grave (land) → 1x{U/B}
+gameEngine.js:567 🔍 [generateMana] Final total: 7 available sources
+gameEngine.js:568 🔍 [generateMana] Preview flexibility: {W: 0, U: 4, B: 4, R: 0, G: 0, …}
+enhancedStepByStepGame.js:1889 🔍 [untap] AFTER generateMana - Expected: 6, Actual: 7
+eventSystem.js:169 📤 Event Emitted: PHASE_CHANGED {source: 'unknown', queueSize: 1}
+eventSystem.js:169 📤 Event Emitted: CARD_DRAWN {source: 'Orcish Medicine', queueSize: 1}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+manaPool.js:543 
+💎 [PotentialPool] Building available sources...
+manaPool.js:627 💎 [PotentialPool] Found 8 available mana abilities
+manaPool.js:630    0: Swamp (land) → 1x{B}
+manaPool.js:630    1: Tainted Isle (land) → 1x{C}
+manaPool.js:630    2: Tainted Isle (land) → 1x{U/B}
+manaPool.js:630    3: Island (land) → 1x{U}
+manaPool.js:630    4: Underground River (land) → 1x{C}
+manaPool.js:630    5: Underground River (land) → 1x{U/B}
+manaPool.js:630    6: Watery Grave (land) → 1x{U/B}
+manaPool.js:630    7: Swamp (land) → 1x{B}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+enhancedStepByStepGame.js:1880 🔍 [untap] BEFORE generateMana - Expected: 7 (lands:7 + artifacts:0 + creatures:0)
+enhancedStepByStepGame.js:1881 🔍 [untap] Land count: 7, Artifact count: 0, Creature count: 0
+gameEngine.js:500 🔍 [generateMana] Starting - Turn 8
+gameEngine.js:501 🔍 [generateMana] Battlefield: 7 lands, 0 artifacts, 0 creatures
+manaPool.js:543 
+💎 [PotentialPool] Building available sources...
+manaPool.js:627 💎 [PotentialPool] Found 8 available mana abilities
+manaPool.js:630    0: Swamp (land) → 1x{B}
+manaPool.js:630    1: Tainted Isle (land) → 1x{C}
+manaPool.js:630    2: Tainted Isle (land) → 1x{U/B}
+manaPool.js:630    3: Island (land) → 1x{U}
+manaPool.js:630    4: Underground River (land) → 1x{C}
+manaPool.js:630    5: Underground River (land) → 1x{U/B}
+manaPool.js:630    6: Watery Grave (land) → 1x{U/B}
+manaPool.js:630    7: Swamp (land) → 1x{B}
+gameEngine.js:567 🔍 [generateMana] Final total: 8 available sources
+gameEngine.js:568 🔍 [generateMana] Preview flexibility: {W: 0, U: 4, B: 5, R: 0, G: 0, …}
+enhancedStepByStepGame.js:1889 🔍 [untap] AFTER generateMana - Expected: 7, Actual: 8
+eventSystem.js:169 📤 Event Emitted: PHASE_CHANGED {source: 'unknown', queueSize: 1}
+eventSystem.js:169 📤 Event Emitted: CARD_DRAWN {source: 'Countersquall', queueSize: 1}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+enhancedStepByStepGame.js:1880 🔍 [untap] BEFORE generateMana - Expected: 7 (lands:7 + artifacts:0 + creatures:0)
+enhancedStepByStepGame.js:1881 🔍 [untap] Land count: 7, Artifact count: 0, Creature count: 0
+gameEngine.js:500 🔍 [generateMana] Starting - Turn 9
+gameEngine.js:501 🔍 [generateMana] Battlefield: 7 lands, 0 artifacts, 0 creatures
+manaPool.js:543 
+💎 [PotentialPool] Building available sources...
+manaPool.js:627 💎 [PotentialPool] Found 8 available mana abilities
+manaPool.js:630    0: Swamp (land) → 1x{B}
+manaPool.js:630    1: Tainted Isle (land) → 1x{C}
+manaPool.js:630    2: Tainted Isle (land) → 1x{U/B}
+manaPool.js:630    3: Island (land) → 1x{U}
+manaPool.js:630    4: Underground River (land) → 1x{C}
+manaPool.js:630    5: Underground River (land) → 1x{U/B}
+manaPool.js:630    6: Watery Grave (land) → 1x{U/B}
+manaPool.js:630    7: Swamp (land) → 1x{B}
+gameEngine.js:567 🔍 [generateMana] Final total: 8 available sources
+gameEngine.js:568 🔍 [generateMana] Preview flexibility: {W: 0, U: 4, B: 5, R: 0, G: 0, …}
+enhancedStepByStepGame.js:1889 🔍 [untap] AFTER generateMana - Expected: 7, Actual: 8
+eventSystem.js:169 📤 Event Emitted: PHASE_CHANGED {source: 'unknown', queueSize: 1}
+eventSystem.js:169 📤 Event Emitted: CARD_DRAWN {source: 'Lórien Revealed', queueSize: 1}
+activatedAbilityEngine.js:116 [parseActivatedAbilities] Detected landcycling: Lórien Revealed → Island (cost: {1})
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+activatedAbilityEngine.js:116 [parseActivatedAbilities] Detected landcycling: Lórien Revealed → Island (cost: {1})
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+activatedAbilityEngine.js:116 [parseActivatedAbilities] Detected landcycling: Lórien Revealed → Island (cost: {1})
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+activatedAbilityEngine.js:116 [parseActivatedAbilities] Detected landcycling: Lórien Revealed → Island (cost: {1})
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+enhancedStepByStepGame.js:1880 🔍 [untap] BEFORE generateMana - Expected: 7 (lands:7 + artifacts:0 + creatures:0)
+enhancedStepByStepGame.js:1881 🔍 [untap] Land count: 7, Artifact count: 0, Creature count: 0
+gameEngine.js:500 🔍 [generateMana] Starting - Turn 10
+gameEngine.js:501 🔍 [generateMana] Battlefield: 7 lands, 0 artifacts, 0 creatures
+manaPool.js:543 
+💎 [PotentialPool] Building available sources...
+manaPool.js:627 💎 [PotentialPool] Found 8 available mana abilities
+manaPool.js:630    0: Swamp (land) → 1x{B}
+manaPool.js:630    1: Tainted Isle (land) → 1x{C}
+manaPool.js:630    2: Tainted Isle (land) → 1x{U/B}
+manaPool.js:630    3: Island (land) → 1x{U}
+manaPool.js:630    4: Underground River (land) → 1x{C}
+manaPool.js:630    5: Underground River (land) → 1x{U/B}
+manaPool.js:630    6: Watery Grave (land) → 1x{U/B}
+manaPool.js:630    7: Swamp (land) → 1x{B}
+gameEngine.js:567 🔍 [generateMana] Final total: 8 available sources
+gameEngine.js:568 🔍 [generateMana] Preview flexibility: {W: 0, U: 4, B: 5, R: 0, G: 0, …}
+enhancedStepByStepGame.js:1889 🔍 [untap] AFTER generateMana - Expected: 7, Actual: 8
+eventSystem.js:169 📤 Event Emitted: PHASE_CHANGED {source: 'unknown', queueSize: 1}
+eventSystem.js:169 📤 Event Emitted: CARD_DRAWN {source: 'Barad-dûr', queueSize: 1}
+activatedAbilityEngine.js:116 [parseActivatedAbilities] Detected landcycling: Lórien Revealed → Island (cost: {1})
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+manaPool.js:543 
+💎 [PotentialPool] Building available sources...
+manaPool.js:627 💎 [PotentialPool] Found 8 available mana abilities
+manaPool.js:630    0: Swamp (land) → 1x{B}
+manaPool.js:630    1: Tainted Isle (land) → 1x{C}
+manaPool.js:630    2: Tainted Isle (land) → 1x{U/B}
+manaPool.js:630    3: Island (land) → 1x{U}
+manaPool.js:630    4: Underground River (land) → 1x{C}
+manaPool.js:630    5: Underground River (land) → 1x{U/B}
+manaPool.js:630    6: Watery Grave (land) → 1x{U/B}
+manaPool.js:630    7: Swamp (land) → 1x{B}
+activatedAbilityEngine.js:116 [parseActivatedAbilities] Detected landcycling: Lórien Revealed → Island (cost: {1})
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+activatedAbilityEngine.js:116 [parseActivatedAbilities] Detected landcycling: Lórien Revealed → Island (cost: {1})
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+activatedAbilityEngine.js:116 [parseActivatedAbilities] Detected landcycling: Lórien Revealed → Island (cost: {1})
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}
+activatedAbilityEngine.js:116 [parseActivatedAbilities] Detected landcycling: Lórien Revealed → Island (cost: {1})
+apiClient.js:83 API Response received: {model: 'gpt-5-mini-2025-08-07', finishReason: 'stop', hasContent: true}

@@ -246,13 +246,18 @@ export const getLandManaProduction = (land, manifest) => {
 };
 
 // Check if we can pay a mana cost
-export const canPayMana = (manaPool, manaCost, actualTotalMana = null, manaPoolManager = null) => {
-  // NEW SYSTEM: Use ManaPool manager if available
+export const canPayMana = (manaPool, manaCost, actualTotalMana = null, manaPoolManager = null, state = null) => {
+  // ✨ NEW SYSTEM: Use ManaPool manager with solver
+  if (manaPoolManager && state) {
+    return manaPoolManager.canPay(manaCost, state);
+  }
+  
+  // OLD SYSTEM: Backwards compatibility (when state not available)
   if (manaPoolManager) {
     return manaPoolManager.canPay(manaCost);
   }
   
-  // OLD SYSTEM: Backwards compatibility
+  // LEGACY: Direct pool checking
   const cost = parseMana(manaCost);
   
   // Check colored requirements

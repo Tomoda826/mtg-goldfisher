@@ -390,11 +390,22 @@ export class ManaPool {
   }
   
   /**
-   * Check if we can pay a mana cost
+   * Check if we can pay a mana cost using Available Sources model
+   * @param {string} manaCost - The mana cost to check (e.g., "{2}{B}")
+   * @param {object} state - Game state with potentialManaPool
+   * @returns {boolean} True if we can pay the cost
    */
-  canPay(manaCost) {
+  canPay(manaCost, state = null) {
     if (!manaCost) return true;
     
+    // ✨ NEW SYSTEM: Use solver to check if payment is possible
+    if (state?.potentialManaPool) {
+      const solution = this.solveCost(manaCost, state.potentialManaPool, state);
+      console.log(`🔍 [canPay] Checking "${manaCost}": ${solution ? 'YES ✅' : 'NO ❌'}`);
+      return solution !== null;
+    }
+    
+    // OLD SYSTEM: Fallback for backwards compatibility
     const required = this.parseManaCostDetailed(manaCost);
     
     // Check colored requirements

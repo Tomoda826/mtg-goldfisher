@@ -1257,7 +1257,7 @@ case 'castSpell': {
   
   if (spellIndex !== -1 && spellIndex < game.hand.length) {
     const spell = game.hand[spellIndex];
-  if (canPayMana(game.manaPool, spell.mana_cost, game.actualTotalMana, game.manaPoolManager)) {
+  if (canPayMana(game.manaPool, spell.mana_cost, game.actualTotalMana, game.manaPoolManager, game)) {
       const manaSpent = spell.cmc || 0;
       
       // ✅ CRITICAL: Log mana BEFORE casting
@@ -1360,7 +1360,7 @@ case 'castCommander': {
     const totalCost = commander.cmc + taxAmount;
     const totalMana = Object.values(game.manaPool).reduce((a, b) => a + b, 0);
     
-if (totalMana >= totalCost && canPayMana(game.manaPool, commander.mana_cost, game.actualTotalMana, game.manaPoolManager)) {
+if (totalMana >= totalCost && canPayMana(game.manaPool, commander.mana_cost, game.actualTotalMana, game.manaPoolManager, game)) {
       // ✅ DEBUG: Log mana before
       const manaB4 = {...game.manaPool};
       
