@@ -561,22 +561,20 @@ export class ManaPool {
       
       if (manaAbilityData?.hasManaAbility) {
         manaAbilityData.abilities.forEach((ability, idx) => {
-          // Check if ability can be activated (cost requirements)
-          const canActivate = ability.activationCost.every(cost => {
-            if (cost === '{T}') return !land.tapped;
-            if (cost.match(/^\{.*\}$/)) return false; // Requires mana payment
-            return true;
-          });
+          // Check basic activation requirements (tapping only)
+          const requiresTap = ability.activationCost.includes('{T}');
+          if (requiresTap && land.tapped) return; // Can't tap if already tapped
           
-          if (canActivate) {
-            potentialPool.push({
-              source: 'land',
-              sourceName: land.name,
-              ability: ability,
-              permanent: land,
-              abilityIndex: idx
-            });
-          }
+          // Include ability with its activation cost tracked
+          // ManaSolver will decide if paying the cost is worth it
+          potentialPool.push({
+            source: 'land',
+            sourceName: land.name,
+            ability: ability,
+            permanent: land,
+            abilityIndex: idx,
+            activationCost: ability.activationCost // Track costs for solver
+          });
         });
       }
     });
@@ -595,21 +593,20 @@ export class ManaPool {
       
       if (manaAbilityData?.hasManaAbility) {
         manaAbilityData.abilities.forEach((ability, idx) => {
-          const canActivate = ability.activationCost.every(cost => {
-            if (cost === '{T}') return !artifact.tapped;
-            if (cost.match(/^\{.*\}$/)) return false;
-            return true;
-          });
+          // Check basic activation requirements (tapping only)
+          const requiresTap = ability.activationCost.includes('{T}');
+          if (requiresTap && artifact.tapped) return; // Can't tap if already tapped
           
-          if (canActivate) {
-            potentialPool.push({
-              source: 'artifact',
-              sourceName: artifact.name,
-              ability: ability,
-              permanent: artifact,
-              abilityIndex: idx
-            });
-          }
+          // Include ability with its activation cost tracked
+          // ManaSolver will decide if paying the cost is worth it
+          potentialPool.push({
+            source: 'artifact',
+            sourceName: artifact.name,
+            ability: ability,
+            permanent: artifact,
+            abilityIndex: idx,
+            activationCost: ability.activationCost // Track costs for solver
+          });
         });
       }
     });
@@ -622,21 +619,20 @@ export class ManaPool {
       
       if (manaAbilityData?.hasManaAbility) {
         manaAbilityData.abilities.forEach((ability, idx) => {
-          const canActivate = ability.activationCost.every(cost => {
-            if (cost === '{T}') return !creature.tapped && !creature.summoningSick;
-            if (cost.match(/^\{.*\}$/)) return false;
-            return true;
-          });
+          // Check basic activation requirements (tapping + summoning sickness)
+          const requiresTap = ability.activationCost.includes('{T}');
+          if (requiresTap && (creature.tapped || creature.summoningSick)) return;
           
-          if (canActivate) {
-            potentialPool.push({
-              source: 'creature',
-              sourceName: creature.name,
-              ability: ability,
-              permanent: creature,
-              abilityIndex: idx
-            });
-          }
+          // Include ability with its activation cost tracked
+          // ManaSolver will decide if paying the cost is worth it
+          potentialPool.push({
+            source: 'creature',
+            sourceName: creature.name,
+            ability: ability,
+            permanent: creature,
+            abilityIndex: idx,
+            activationCost: ability.activationCost // Track costs for solver
+          });
         });
       }
     });
@@ -707,11 +703,8 @@ export class ManaPool {
     
     for (const color of colorOrder) {
       while (needed[color] > 0) {
-        // Find a source that can produce this color
-        const sourceIdx = potentialPool.findIndex((entry, idx) => {
-          if (usedIndices.has(idx)) return false;
-          return this.canProduceColor(entry.ability, color);
-        });
+        // Find a source that can produce this color (prefer free sources)
+        const sourceIdx = this.findBestSourceForColor(potentialPool, color, usedIndices, needed);
         
         if (sourceIdx === -1) {
           console.log(`❌ [ManaSolver] Cannot find source for {${color}}`);
@@ -720,21 +713,49 @@ export class ManaPool {
         
         const entry = potentialPool[sourceIdx];
         
+        // Check what colors this ability produces (might be multiple!)
+        // e.g., Dimir Signet {U}{B} → produces both U and B in one activation
+        // e.g., Underground River {U} or {B} → produces U (if we're paying for U)
+        const producedColors = this.getProducedColors(entry.ability, color);
+        
+        // Handle activation cost (e.g., Dimir Signet needs {1})
+        const activationCost = this.getActivationManaCost(entry.activationCost || []);
+        if (activationCost) {
+          needed.generic += activationCost; // Add to generic requirement
+          console.log(`   💰 ${entry.sourceName} requires {${activationCost}} to activate`);
+        }
+        
+        // Mark source as used ONCE
+        usedIndices.add(sourceIdx);
+        
+        // Credit ALL colors this ability produces
+        // For Dimir Signet {U}{B}: credits both U and B
+        // For Island {U}: credits only U
+        // For Underground River {U/B}: credits the chosen color (U or B depending on request)
+        producedColors.forEach(producedColor => {
+          if (needed[producedColor] > 0) {
+            needed[producedColor]--;
+            console.log(`   ✓ ${entry.sourceName} produces {${producedColor}}`);
+          }
+        });
+        
+        // Add to solution with the primary color requested
         solution.push({
           ...entry,
           chosenColor: color,
-          reason: `colored requirement {${color}}`
+          producedColors: producedColors, // Track all colors produced
+          reason: `colored requirement (produces ${producedColors.map(c => `{${c}}`).join('')})`,
+          activationCost: activationCost || 0
         });
-        usedIndices.add(sourceIdx);
-        needed[color]--; // Colored: always pay 1 pip per source
         
-        console.log(`   ✓ Using ${entry.sourceName} for {${color}}`);
+        console.log(`   ✓ Used ${entry.sourceName} for ${producedColors.map(c => `{${c}}`).join('')}`);
       }
     }
     
     // PHASE 2: Pay generic requirement (any source)
     while (needed.generic > 0) {
-      const sourceIdx = potentialPool.findIndex((entry, idx) => !usedIndices.has(idx));
+      // Find best source (prefer free sources, avoid mana rocks unless needed)
+      const sourceIdx = this.findBestGenericSource(potentialPool, usedIndices, needed.generic);
       
       if (sourceIdx === -1) {
         console.log(`❌ [ManaSolver] Cannot find source for generic {${needed.generic}}`);
@@ -747,10 +768,18 @@ export class ManaPool {
       // ✅ FIX MANA-019: Get the quantity this ability produces (with X resolution)
       const producedQuantity = this.getProductionQuantity(entry.ability, gameState, entry.permanent);
       
+      // Handle activation cost (e.g., Dimir Signet needs {1})
+      const activationCost = this.getActivationManaCost(entry.activationCost || []);
+      if (activationCost) {
+        needed.generic += activationCost; // Add to what we still need to pay
+        console.log(`   💰 ${entry.sourceName} requires {${activationCost}} to activate`);
+      }
+      
       solution.push({
         ...entry,
         chosenColor: producedColor,
-        reason: `generic payment`
+        reason: `generic payment`,
+        activationCost: activationCost || 0
       });
       usedIndices.add(sourceIdx);
       needed.generic -= producedQuantity;
@@ -846,5 +875,131 @@ export class ManaPool {
     
     // Otherwise use first available color
     return canProduce[0] || 'C';
+  }
+  
+  /**
+   * Extract mana cost from activation cost array
+   * e.g., ['{1}', '{T}'] → 1 (generic mana needed)
+   * e.g., ['{T}'] → 0 (no mana cost)
+   * e.g., ['{2}', '{U}', '{T}'] → not yet supported (colored + generic)
+   */
+  getActivationManaCost(activationCostArray) {
+    if (!activationCostArray || activationCostArray.length === 0) return 0;
+    
+    let totalGeneric = 0;
+    
+    for (const cost of activationCostArray) {
+      // Match generic mana symbols like {1}, {2}, {3}
+      const genericMatch = cost.match(/^\{(\d+)\}$/);
+      if (genericMatch) {
+        totalGeneric += parseInt(genericMatch[1], 10);
+      }
+      // Note: Colored costs like {U}, {B} not yet supported
+      // Skip {T}, 'sacrifice', 'pay_life' etc
+    }
+    
+    return totalGeneric;
+  }
+  
+  /**
+   * Get ALL colors an ability produces in one activation
+   * @param {Object} ability - The mana ability
+   * @param {string} targetColor - The color being requested (for choice abilities)
+   * 
+   * Examples:
+   * - Dimir Signet {U}{B} (combination) → ['U', 'B'] (both produced at once)
+   * - Island {U} (fixed) → ['U'] (only one)
+   * - Underground River {U} or {B} (choice), targetColor='B' → ['B'] (chosen color)
+   * - Underground River {U} or {B} (choice), targetColor='W' → ['U'] (fall back to first)
+   */
+  getProducedColors(ability, targetColor = null) {
+    if (!ability.produces || ability.produces.length === 0) return [];
+    
+    const colors = [];
+    
+    ability.produces.forEach(production => {
+      if (!production.types) return;
+      
+      production.types.forEach(type => {
+        if (typeof type === 'string') {
+          // Fixed color: {U}, {B}, {C}, etc
+          colors.push(type);
+        } else if (type.combination) {
+          // Combination: {U}{B} produces both U and B
+          colors.push(...type.combination);
+        } else if (type.choice) {
+          // Choice: {U} or {B} - pick the target color if available
+          if (targetColor && type.choice.includes(targetColor)) {
+            colors.push(targetColor); // Use requested color
+          } else {
+            // Fall back: prefer colored over colorless
+            const colored = type.choice.filter(c => c !== 'C');
+            if (colored.length > 0) {
+              colors.push(colored[0]);
+            } else {
+              colors.push(type.choice[0]);
+            }
+          }
+        }
+      });
+    });
+    
+    return colors;
+  }
+  
+  /**
+   * Find best source for a colored requirement
+   * Prefers free sources (no mana cost) over mana rocks
+   */
+  findBestSourceForColor(potentialPool, color, usedIndices, needed) {
+    // First try: find a FREE source (no mana activation cost)
+    let sourceIdx = potentialPool.findIndex((entry, idx) => {
+      if (usedIndices.has(idx)) return false;
+      if (!this.canProduceColor(entry.ability, color)) return false;
+      
+      const manaCost = this.getActivationManaCost(entry.activationCost || []);
+      return manaCost === 0; // Free source
+    });
+    
+    if (sourceIdx !== -1) return sourceIdx;
+    
+    // Second try: allow mana rocks (have activation cost)
+    sourceIdx = potentialPool.findIndex((entry, idx) => {
+      if (usedIndices.has(idx)) return false;
+      return this.canProduceColor(entry.ability, color);
+    });
+    
+    return sourceIdx;
+  }
+  
+  /**
+   * Find best source for generic payment
+   * Prefers free sources, only uses mana rocks if beneficial
+   */
+  findBestGenericSource(potentialPool, usedIndices, neededGeneric) {
+    // First try: find a FREE source that produces enough
+    let sourceIdx = potentialPool.findIndex((entry, idx) => {
+      if (usedIndices.has(idx)) return false;
+      
+      const manaCost = this.getActivationManaCost(entry.activationCost || []);
+      return manaCost === 0; // Free source
+    });
+    
+    if (sourceIdx !== -1) return sourceIdx;
+    
+    // Second try: mana rocks that are net-positive
+    // e.g., Dimir Signet: costs {1}, produces {U}{B} (2 mana) → net +1
+    sourceIdx = potentialPool.findIndex((entry, idx) => {
+      if (usedIndices.has(idx)) return false;
+      
+      const manaCost = this.getActivationManaCost(entry.activationCost || []);
+      if (manaCost === 0) return false; // Already checked above
+      
+      // Only use if it's net-positive or we desperately need it
+      // For now, allow any mana rock (solver will handle the math)
+      return true;
+    });
+    
+    return sourceIdx;
   }
 }
