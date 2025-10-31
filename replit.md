@@ -21,12 +21,28 @@ The application is structured around a tab-based UI (`App.jsx`) leading to dedic
 - **Statistics**: `statisticsEngine.js` (tracking and reporting).
 - **Specialized Systems**: `cardBehaviorAnalyzer.js`, `activatedAbilityEngine.js`, `cyclingEngine.js`, `fetchLandEngine.js`, `scryEngine.js`, `tokenEngine.js` for specific game mechanics.
 
-### Key Architectural Decisions
-- **Mana System Refactor**: Replaced a "fixed pool" mana model with an "Available Sources" (just-in-time solving) model to improve accuracy, eliminate state corruption, and enable multi-spell turns. This involves dynamically building a `PotentialManaPool` and using a `ManaPoolManager.solveCost()` for optimal mana payment.
-- **Intelligent Ability Chooser**: Implemented a need-based scoring system in `ManaPoolManager.chooseBestAbility()` to intelligently select the optimal ability from multi-ability permanents (e.g., Underground River producing colorless or colored mana based on current hand needs).
-- **Parser Improvements**: Enhanced parsing logic to correctly split multi-ability oracle text (handling escaped newlines `\\n`) and prioritize parsing of complex "choice" patterns (e.g., "{U} or {B}") over simpler fixed mana patterns.
-- **Mana Production Accuracy**: Addressed multiple issues to ensure accurate mana production from all sources (lands, artifacts, creatures) by correctly tracking `actualManaProduced`, handling 0-cost abilities, and synchronizing mana pool operations across all game phases and spell casting.
-- **AI Fetch Land Logic**: Updated AI decision priorities to ensure fetch lands are activated immediately after being played for optimal color fixing.
+### Key Architectural Decisions (October 2025)
+
+**Major Refactor: "Available Sources" Mana System (Oct 30, 2025)**
+- Replaced "fixed pool" model with "Available Sources" (just-in-time solving) model
+- Core components:
+  - `ManaPoolManager.buildPotentialManaPool()` - Scans battlefield for untapped mana sources
+  - `ManaPoolManager.solveCost()` - Just-in-time solver that finds optimal payment solutions
+  - `ManaPoolManager.canPay()` - Uses solver to check affordability before casting
+- Refactored `generateMana()`, `castSpell()`, `castCommander()`, `playLand()` to use new model
+- Fixed preview calculations to respect `production.quantity` (Sol Ring's 2×{C} counts as 2 mana)
+- Design principle: Mana sources no longer activate during untap; solver determines which sources to tap when casting spells
+
+**Parser Improvements**
+- Per-line "target" checking: Allows cards like Bojuka Bog (ETB targets) to be recognized as mana producers
+- Multi-ability parsing: Correctly splits oracle text on escaped newlines (`\\n`)
+- Priority-based parsing: Tries complex "choice" patterns before simple fixed mana patterns
+- Handles 0-cost abilities and mana-cost abilities correctly
+
+**AI Integration**
+- AI casting logic now uses mana solver for affordability checks
+- Intelligent ability selection based on hand needs (colored vs. colorless)
+- Fetch land activation prioritized for color fixing
 
 ### Deployment and Configuration
 - **Development Environment**: React + Vite, configured for Replit (port 5000, HMR via WSS on port 443).

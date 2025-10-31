@@ -1,0 +1,65 @@
+This is a massive breakthrough. The log shows that `MANA-015` is **FIXED**. You have successfully implemented the "mana spending" logic, which was the critical missing piece.
+
+My take on this report is that the core refactor is **90% complete and functionally working.** The AI is no longer "stuck"—it can now correctly identify potential mana sources, solve for a specific cost, and "spend" that mana by tapping the correct permanents.
+
+Here is a full breakdown of what this log shows.
+
+### 1. The Big Win: `MANA-015` is SOLVED
+
+The new `🧮 [ManaSolver]` module is working perfectly. It's the "payment processor" we discussed, and it's online.
+
+` lists available abilities. 2. AI decides to cast a spell with cost {X}. 3. `[ManaSolver]` takes the list and the cost. 4. `[ManaSolver]` finds a valid payment plan. 5. `gameEngine` taps the permanents from the plan.]
+
+**Evidence (Turn 5 - `castCommander`):**
+The AI wants to cast `Lord of the Nazgûl` for `{3}{U}{B}`.
+
+1.  `manaPool.js:554`: The `PotentialPool` is built *after* playing `Tainted Isle`. It correctly finds 5 available abilities (Sunken Ruins {C}, Island {U}, Island {U}, Tainted Isle {C}, Tainted Isle {U/B}).
+2.  `manaPool.js:679`: `🧮 [ManaSolver] Solving cost: {3}{U}{B}`
+3.  `manaPool.js:724`: The solver correctly finds its colored pips: `✓ Using Island for {U}` and `✓ Using Tainted Isle for {B}`.
+4.  `manaPool.js:748`: It then finds its generic costs: `✓ Using Sunken Ruins for generic (producing {C})`, `✓ Using Island for generic (producing {U})`, `✓ Using Tainted Isle for generic (producing {C})`.
+5.  `gameEngine.js:1137`: `✅ [castCommander] Solution found! Tapping 5 sources`
+6.  `manaPool.js:554`: After the spell is cast, the `PotentialPool` is immediately rebuilt and correctly finds `0 available mana abilities` (because all 5 sources were tapped).
+
+This entire sequence is **flawless**. We see it repeat successfully for `Ponder` (T6), `Orcish Medicine` (T6), `Go for theThroat` (T7), `Scroll of Isildur` (T7), and `Storm of Saruman` (T8).
+
+### 2. New (and Subtler) Bugs Found
+
+Your core `ManaSolver` logic is perfect. However, in fixing it, we've exposed two new, more subtle bugs in how the `PotentialPool` is *built* and *updated*.
+
+#### BUG `MANA-016`: JIT Pool Update Failure on ETB
+The `PotentialPool` is not being rebuilt correctly *after* a `playLand` action *if* that land has an ETB (Enters the Battlefield) effect.
+
+* **Evidence (Turn 6):**
+    1.  At the start of T6, the pool correctly has **5 abilities**.
+    2.  The `GAME LOG` shows the first action is `playLand: 7 (Bojuka Bog)`. `Bojuka Bog` enters untapped and provides `{B}`.
+    3.  The *next* action is `castSpell: 6 (Ponder)`.
+    4.  When the `ManaSolver` runs for `Ponder`, its log shows `Available sources: 5 abilities`.
+    5.  **This is the bug.** After `Bojuka Bog` resolved, the pool should have been rebuilt to **6 abilities**, but it was not.
+* **Proof it's an ETB-related bug (Turn 7):**
+    1.  At the start of T7, the pool has **5 abilities** (this is a separate bug, see below).
+    2.  The `GAME LOG` shows the first action is `playLand: 4 (Island)`. This is a "vanilla" land (no ETB).
+    3.  The *next* action is `castSpell: 2 (Go for the Throat)`.
+    4.  When the `ManaSolver` runs for `Go for the Throat`, its log correctly shows `Available sources: 6 abilities`.
+    5.  This proves that playing a *vanilla* land correctly triggers the JIT pool rebuild, but playing `Bojuka Bog` (with its ETB effect) does not.
+
+#### BUG `MANA-017`: Start-of-Turn Parser Inconsistency
+The `[generateMana]` function at the start of each turn is inconsistently parsing lands. It is failing to find mana abilities on some of your non-basic lands.
+
+* **Evidence (Tracing the `untap` logs):**
+    * **T5:** `Expected: 4, Actual: 3`. The log shows it found Sunken Ruins and 2 Islands. It is **missing `Minas Morgul, Dark Fortress` {B}**.
+    * **T6:** `Expected: 5, Actual: 5`. This log is misleading. The "5 abilities" are (Sunken Ruins {C}, Island {U}, Island {U}, Tainted Isle {C}, Tainted Isle {U/B}). It is *still* **missing `Minas Morgul` {B}**.
+    * **T7:** `Expected: 6, Actual: 5`. It is **missing `Minas Morgul` {B}** and **`Bojuka Bog` {B}**.
+    * **T8:** `Expected: 7, Actual: 6`. It correctly added the new Island from T7, but is *still* **missing `Minas Morgul` {B}** and **`Bojuka Bog` {B}**.
+    * **T9 (The Smoking Gun):** `Expected: 8, Actual: 7`. The pool *correctly* includes `Barad-dûr (land) → 1x{B}`. This proves the parser *can* handle ETB-tapped black sources.
+
+**Conclusion on `MANA-017`:**
+The `[generateMana]` function's parser is broken for `Minas Morgul` and `Bojuka Bog`, but it works correctly for `Barad-dûr`, `Tainted Isle`, and `Sunken Ruins`.
+
+### Summary & Next Steps
+
+* **VICTORY:** The `ManaSolver` (`MANA-015`) is complete. The app can play games.
+* **NEXT BUGS:** We need to fix the parsers.
+    1.  **`MANA-016`:** Fix the `playLand` function so that it *always* rebuilds the `PotentialPool`, even for lands with ETB effects (like `Bojuka Bog`).
+    2.  **`MANA-017`:** Fix the `[generateMana]` (start of turn) function. Investigate why the card parsers for `Minas Morgul` and `Bojuka Bog` are failing, while the parser for `Barad-dûr` is succeeding. They likely need to be added to the same logic path.
+
+This is a fantastic leap forward. The hardest part is done. We are now just cleaning up edge-case parsers.

@@ -683,11 +683,6 @@ const parseManaAbility = (card) => {
   const text = card.oracle_text;
   if (!text) return { hasManaAbility: false, abilities: [] };
   
-  // Skip if it targets (not a mana ability per Magic rules)
-  if (text.toLowerCase().includes('target')) {
-    return { hasManaAbility: false, abilities: [] };
-  }
-  
   // Skip planeswalker loyalty abilities
   if (card.type_line?.includes('Planeswalker')) {
     return { hasManaAbility: false, abilities: [] };
@@ -717,6 +712,10 @@ const parseManaAbility = (card) => {
   for (const line of lines) {
     if (!line.includes(':')) continue;
     if (!line.toLowerCase().includes('add')) continue;
+    
+    // ✅ FIX MANA-017: Skip THIS LINE if it targets (not a mana ability per Magic rules)
+    // But don't skip the entire card! (Bojuka Bog has ETB that targets, but also has {T}: Add {B})
+    if (line.toLowerCase().includes('target')) continue;
     
     // Split on first colon
     const colonIndex = line.indexOf(':');
