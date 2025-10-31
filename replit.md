@@ -78,11 +78,22 @@ The application is structured around a tab-based UI (`App.jsx`) leading to dedic
   - Solver strategy: Prefer free sources first, use mana rocks when needed for colors or when net-positive
 
 - **MANA-022 Fixed**: Recursive mana activation prevented (mana rocks can't pay for their own activation)
-  - Root cause: Solver added activation cost to needed.generic, then subtracted full production, creating circular math
-  - Solution: Calculate NET production (production - activation cost) before crediting toward payment
-  - Example: Dimir Signet costs {1}, produces 2 → NET is +1 (not +2)
-  - Result: Casting {5} with 4 lands + Signet correctly FAILS (can't afford Signet's activation)
-  - Result: Casting {5} with 5 lands + Signet correctly SUCCEEDS (1 land pays for activation, Signet produces 2)
+  - **Phase 1 - NET Production** (Oct 31, 2025):
+    - Root cause: Solver added activation cost to needed.generic, then subtracted full production, creating circular math
+    - Initial fix: Calculate NET production (production - activation cost) before crediting toward payment
+    - Problem: Didn't verify activation cost could actually be paid from remaining sources
+  - **Phase 2 - Recursive Verification** (Oct 31, 2025):
+    - Complete fix: Recursively verify activation costs can be paid before using mana rocks
+    - When a source has activation cost, temporarily mark it as reserved, then recursively solve for activation payment
+    - If recursion fails, skip that source; if succeeds, merge activation solution into main solution
+  - **Phase 3 - poolIndex Tracking** (Oct 31, 2025):
+    - Final fix: Add unique `poolIndex` to each entry to prevent duplicate-name sources from being reused
+    - All usedIndices operations now use poolIndex instead of array indices
+    - Handles duplicate lands (two Islands) and mana rocks with same name correctly
+  - **Result**:
+    - Casting {2} with Swamp + Dimir Signet correctly FAILS (Swamp already used, can't pay Signet's {1})
+    - Casting {2} with Island + Swamp + Signet correctly SUCCEEDS (Island → {1}, Swamp → activation {1}, Signet → {U}{B} for final {1})
+    - Two Islands correctly tracked as separate sources (poolIndex distinguishes them)
 
 **AI Integration**
 - AI casting logic now uses mana solver for affordability checks
